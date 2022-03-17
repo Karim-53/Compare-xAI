@@ -15,7 +15,7 @@ from sklearn import preprocessing
 from sklearn.neighbors import KNeighborsRegressor,KNeighborsClassifier
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
-from src import datasets, explainer, experiments, metric, model, parse_utils
+from src import datasets, explainer, experiments, test, model, parse_utils
 from sklearn.metrics import mean_squared_error
 
 mode = "regression"
@@ -48,7 +48,7 @@ X, X_val, y, y_val = train_test_split(X, y, test_size=0.01, random_state=7)
 knn = KNeighborsRegressor(n_neighbors=1)
 #knn = KNeighborsClassifier()
 knn.fit(X,y)
-# mse = np.mean((knn.predict(X) - y)**2)
+# mse = np.mean((knn.predict(df_reference) - y)**2)
 # print('MSE: ',mse)
 mean = np.mean(X, axis=0)
 cov = np.cov(X, rowvar=False)
@@ -65,7 +65,7 @@ def make_experiment_with_dataset(dataset, models, explainers, metrics):
     explainers = [
         explainer.Explainer(expl) for expl in explainers
     ]
-    metrics = [metric.Metric(metr) for metr in metrics]
+    metrics = [test.Metric(metr) for metr in metrics]
     return experiments.Experiment(dataset, models, explainers, metrics)
 
 
@@ -78,19 +78,19 @@ parse_utils.save_results(results, results_dir)
 parse_utils.save_results_csv(results, results_dir)
 
 
-# synthetic_samples, _ = data_generator.get_dataset(num_samples=len(X))
+# synthetic_samples, _ = data_generator.get_dataset(num_samples=len(df_reference))
 # y_synthetic = knn.predict(synthetic_samples)
 
-# X, X_val = pd.DataFrame(X), pd.DataFrame(X_val)
+# df_reference, X_val = pd.DataFrame(df_reference), pd.DataFrame(X_val)
 
-# model_real = MLPRegressor().fit(X, y)
+# model_real = MLPRegressor().fit(df_reference, y)
 # model_syn = MLPRegressor().fit(synthetic_samples, y_synthetic)
 
 # def get_real_syn_explanations_mse(real, syn):
 #     return mean_squared_error(real, syn)
 
 # for explainer_name in explainers:
-#     explainer_real = explainer.Explainer(explainer_name).explainer(model_real.predict, X)
+#     explainer_real = explainer.Explainer(explainer_name).explainer(model_real.predict, df_reference)
 #     explainer_syn = explainer.Explainer(explainer_name).explainer(model_syn.predict, synthetic_samples)
 #     feature_weights_real = explainer_real.explain(X_val)
 #     feature_weights_syn = explainer_syn.explain(X_val)

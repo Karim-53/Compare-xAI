@@ -5,15 +5,15 @@ L2X (https://arxiv.org/pdf/1802.07814.pdf).
 *NOTE: code in progress*
 
 TODOs:
-- once finished, add this metric to metric.py
-- determine inputs to evaluate: (X, y) vs feature_weights vs ground_truth_weights
-- determine L2X initialization: (X, f) vs (X, y)
+- once finished, add this metric to test.py
+- determine inputs to evaluate: (df_reference, y) vs feature_weights vs ground_truth_weights
+- determine L2X initialization: (df_reference, f) vs (df_reference, y)
 
 """
 
 import numpy as np
 
-from ..custom_explainers.l2x import L2X
+from ..explainers.l2x import L2X
 
 
 class MI:
@@ -27,7 +27,7 @@ class MI:
         Set self.mi_list, where each element contains the top-k features (based on MI),
         for a k in self.k_list.
         """
-        # Initialize L2X with X, y
+        # Initialize L2X with df_reference, y
 
         self.mi_list = []
 

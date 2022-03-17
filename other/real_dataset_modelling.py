@@ -73,7 +73,7 @@ for feature in range(X.shape[1]):
     prob_synth = counts_synth/n_synth
     
 
-    axs[0,feature].hist(X[:,feature],bins=n_bins) #= sns.displot(data=X[:,feature])
+    axs[0,feature].hist(X[:,feature],bins=n_bins) #= sns.displot(data=df_reference[:,feature])
     axs[1,feature].hist(np.array(synthetic_samples)[:,feature],bins=n_bins)
     
     js = jsd(prob_real,prob_synth)

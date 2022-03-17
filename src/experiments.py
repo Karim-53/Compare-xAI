@@ -1,6 +1,6 @@
 import shap
 import numpy as np
-from custom_explainers import GroundTruthShap
+from explainers import GroundTruthShap
 from tqdm import tqdm
 import logging
 from sklearn.metrics import accuracy_score, mean_squared_error

@@ -176,7 +176,7 @@ def buildmodel(x, y, k, input_shape, n_class=2):
     st2 = st1
     activation = "selu"
     l2 = 1e-3  # default 1e-3
-    # P(S|X)
+    # P(S|df_reference)
     model_input = Input(shape=(input_shape,), dtype="float32")
 
     net = Dense(
@@ -235,7 +235,7 @@ def buildmodel(x, y, k, input_shape, n_class=2):
     #     filepath, monitor=monitor, verbose=1, save_best_only=True, mode=save_mode
     # )
     callbacks_list = []
-    # print("start training, k: {}, final nonlinearity: {}".format(k, final_activation))
+    # print("start_time training, k: {}, final nonlinearity: {}".format(k, final_activation))
     model.fit(
         x,
         y,
@@ -276,7 +276,7 @@ class L2X:
         self.models = []
         self.pred_models = []
         self.Y = self.f(X)
-        # print("X shape", X.shape)
+        # print("df_reference shape", df_reference.shape)
         for k in range(1, self.M + 1):
             model, pred_model = buildmodel(self.X, self.Y, k, self.M)
             self.models.append(model)

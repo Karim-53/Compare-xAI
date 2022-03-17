@@ -29,7 +29,7 @@ class BruteForceKernelShap:
     def explain_x(self, x):
 
         X = np.zeros((2 ** self.dim, self.dim))
-        # X[:,-1] = 1
+        # df_reference[:,-1] = 1
         weights = np.zeros(2 ** self.dim)
         V = np.zeros((2 ** self.dim, self.dim))
         for i in range(2 ** self.dim):
@@ -79,7 +79,7 @@ class GroundTruthShap:
     def explain(self, x):
 
         X = np.zeros((2 ** self.dim, self.dim))
-        # X[:,-1] = 1
+        # df_reference[:,-1] = 1
         weights = np.zeros(2 ** self.dim)
         V = np.zeros((2 ** self.dim, self.dim))
         # for i in range(2**self.dim):
