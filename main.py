@@ -15,6 +15,7 @@ logging.basicConfig(
 
 
 def run_experiment(test_class, explainer_class):
+    print(test_class.__name__, explainer_class.__name__)
     test = test_class()
 
     start_time = time.time()
@@ -29,7 +30,7 @@ def run_experiment(test_class, explainer_class):
 
 
 def sum_score(dico):
-    return sum(dico.values())
+    return sum(dico.values()) - dico['time']
 
 
 def eligible_points(dico):
@@ -49,10 +50,10 @@ if __name__ == "__main__":
     summary_df = pd.DataFrame(index=result_df.index, )
     summary_df['score'] = score_df.sum(axis='columns')
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
-    summary_df['ratio'] = summary_df['score'] / summary_df['eligible_points']
+    summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
     print(summary_df.round(2))
-
-    # logging.info(f"\nExperiment results : {json.dumps(results, indent=4)}")
+    # todo record library name and version
+    # logging.info(predict_func"\nExperiment results : {json.dumps(results, indent=4)}")
     # if not args.no_logs:
     #     parse_utils.save_experiment(experiment, os.path.join(args.results_dir, "checkpoints"), args.rho)
     #     parse_utils.save_results(results, args.results_dir)

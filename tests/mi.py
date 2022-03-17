@@ -7,7 +7,7 @@ L2X (https://arxiv.org/pdf/1802.07814.pdf).
 TODOs:
 - once finished, add this metric to test.py
 - determine inputs to evaluate: (df_reference, y) vs feature_weights vs ground_truth_weights
-- determine L2X initialization: (df_reference, f) vs (df_reference, y)
+- determine L2X initialization: (df_reference, predict_func) vs (df_reference, y)
 
 """
 

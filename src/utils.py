@@ -14,3 +14,7 @@ def plot_tree(xgb_model, filename, rankdir='UT', num_trees=0):
     data = gvz.pipe(format=format)
     with open(filename, 'wb') as f:
         f.write(data)
+
+
+def get_feature_importance(attribution_values):
+    return abs(attribution_values).mean(axis=0)

@@ -1,5 +1,5 @@
 import pandas as pd
-import xgboost as xgb
+from xgboost import XGBRegressor
 
 
 class CoughAndFever1090:  # (Metric):
@@ -18,10 +18,11 @@ class CoughAndFever1090:  # (Metric):
         self.df_reference = self.df_train
         label = [0., 0., 10., 90.] * n
         self.df_train['target'] = label
-        self.train_dataset = xgb.DMatrix(self.df_train[self.input_features], self.df_train.target)
         self.dataset_to_explain = self.df_train[self.input_features].iloc[:4]
-        parameters = {'objective': 'reg:squarederror', 'eta': 1, 'max_depth': 2, 'base_score': 0}
-        self.trained_model = xgb.train(parameters, self.train_dataset, num_boost_round=2)  # == nb of trees
+        self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0 ,base_score=0, eta=1)
+        self.X = self.df_train[self.input_features]
+        self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
+        self.predict_func = self.trained_model.predict
 
     def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size

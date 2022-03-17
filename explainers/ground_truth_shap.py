@@ -46,7 +46,7 @@ class BruteForceKernelShap:
             y_temp = self.f(x_s)
             y[i] = np.mean(y_temp)
 
-        # y = self.f(V)
+        # y = self.predict_func(V)
         tmp = np.linalg.inv(np.dot(np.dot(X.T, np.diag(weights)), X))
         coefs = np.dot(tmp, np.dot(np.dot(X.T, np.diag(weights)), y))
         expectation = y[0]
@@ -65,7 +65,7 @@ class GroundTruthShap:
         self,
         f=None,  # model to explain, if None then explain dataset
         dataset=None,  # dataset to explain
-        n=20000,  # number of samples to estimate E(f(x_1|x_2 = x* ))
+        n=20000,  # number of samples to estimate E(predict_func(x_1|x_2 = x* ))
     ):
 
         self.dataset = dataset
@@ -137,7 +137,7 @@ class GroundTruthShap:
 # x,y = b.generate(n_sample=5)
 # #print(x,y)
 # c = GroundTruthShap(dataset=b,n=2000)
-# d = KernelShap(reference=np.ones_like(x[0])*0,dataset=b,f=None)
+# d = KernelShap(reference=np.ones_like(x[0])*0,dataset=b,predict_func=None)
 # exp = c.explain(x[0])
 # exp2 = c.explain(np.ones_like(x[0])*1)
 # #exp3 = c.explain(np.ones_like(x[0])*-1)

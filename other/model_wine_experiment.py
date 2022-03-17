@@ -95,7 +95,7 @@ parse_utils.save_results_csv(results, results_dir)
 #     feature_weights_real = explainer_real.explain(X_val)
 #     feature_weights_syn = explainer_syn.explain(X_val)
 #     mse = get_real_syn_explanations_mse(feature_weights_real, feature_weights_syn)
-#     print(f"{explainer_name} mse is: {mse}")
+#     print(predict_func"{explainer_name} mse is: {mse}")
 
 
 # shap mse is: 0.0396764547060464

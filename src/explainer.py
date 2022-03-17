@@ -5,10 +5,10 @@ valid_explainers = {
     "treeshap": explainers.TreeShap,
     # "shap": explainers.Shap,
     # "shapr": explainers.ShapR,
-    # "kernelshap": explainers.KernelShap,
+    "kernelshap": explainers.KernelShap,
     # "brutekernelshap": explainers.BruteForceKernelShap,
     # "random": explainers.Random,
-    # "lime": explainers.Lime,
+    "lime": explainers.Lime,
     # "maple": explainers.Maple,
 
     # "l2x": explainers.L2X,

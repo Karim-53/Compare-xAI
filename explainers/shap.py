@@ -1,4 +1,7 @@
+import numpy as np
 import shap
+
+from src.utils import get_feature_importance
 
 
 class Shap:  # todo custom explainers should inhirit from a bigger class
@@ -6,7 +9,7 @@ class Shap:  # todo custom explainers should inhirit from a bigger class
     attribution_values = None
     feature_importance = None
 
-    def __init__(self, f, X):
+    def __init__(self, f, X, **kwargs):
         self.f = f
         self.X = X
         self.explainer = shap.Explainer(self.f, self.X)
@@ -22,18 +25,20 @@ class KernelShap:
     attribution_values = None
     feature_importance = None
 
-    def __init__(self, trained_model, df_reference, **kwargs):
+    def __init__(self, trained_model, X, **kwargs):
         self.trained_model = trained_model
-        self.f = trained_model.predict
-        self.reference_df = df_reference
-        print(type(self.reference_df))
-        self.explainer = shap.KernelExplainer(self.f, self.reference_df, **kwargs)
+        self.predict_func = trained_model.predict
+        self.reference_dataset = np.array(X)
+        print(type(self.reference_dataset))
+        print(self.reference_dataset.shape)
+        self.predict_func(self.reference_dataset)
+        self.explainer = shap.KernelExplainer(self.predict_func, self.reference_dataset, **kwargs)
 
     def explain(self, df_to_explain, **kwargs):
-        shap_values = self.explainer(df_to_explain)
-        self.expected_values = shap_values.base_values
-        self.attribution_values = shap_values.values
-        self.feature_importance = abs(self.feature_importance).mean(axis=0)
+        shap_values = self.explainer.shap_values(np.array(df_to_explain))
+        self.expected_values = self.explainer.expected_value
+        self.attribution_values = shap_values
+        self.feature_importance = get_feature_importance(self.attribution_values)
 
 
 class TreeShap:
@@ -51,4 +56,4 @@ class TreeShap:
         shap_values = self.explainer(df_to_explain, check_additivity=False)
         self.expected_values = shap_values.base_values
         self.attribution_values = shap_values.values
-        self.feature_importance = abs(self.attribution_values).mean(axis=0)
+        self.feature_importance = get_feature_importance(self.attribution_values)

@@ -1,6 +1,8 @@
 import numpy as np
 from tqdm import tqdm
 
+from src.utils import get_feature_importance
+
 try:
     import lime
     import lime.lime_tabular
@@ -75,14 +77,14 @@ class LimeTabular:
 
 
 class Lime:
-    def __init__(self, f, X, **kwargs):
-        self.f = f
+    def __init__(self, predict_func, X, **kwargs):
+        self.predict_func = predict_func
         self.X = X
-        self.explainer = LimeTabular(self.f, self.X, mode="regression", **kwargs)
+        self.explainer = LimeTabular(self.predict_func, self.X, mode="regression")
 
     def explain(self, x):
-        shap_values = self.explainer.attributions(x)
+        self.attribution_values = self.explainer.attributions(x)
         self.expected_values = np.zeros(
             x.shape[0]
         )  # TODO: maybe we might want to change this later
-        return shap_values
+        self.feature_importance = get_feature_importance(self.attribution_values)

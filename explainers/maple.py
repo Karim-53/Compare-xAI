@@ -342,7 +342,7 @@ class Maple:
             "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):
             is_tree = True
-        # elif str(type(f.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
+        # elif str(type(predict_func.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
         #     is_tree = True
         elif str(type(f.__self__)).endswith(
             "sklearn.ensemble.forest.RandomForestRegressor'>"

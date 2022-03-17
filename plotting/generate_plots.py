@@ -72,7 +72,7 @@ for metric in metrics:
             perfs = [float(model_perfs[model][r][1]) for r in rhos]
             # axs2.plot(rhos, perfs, linestyle='dashed', color='lightgrey', label='modelPerf')
             axs[data_idx][idx].set_xlabel("Rho")
-            # axs[data_idx][idx].set_ylabel(f"{metric} metric value")
+            # axs[data_idx][idx].set_ylabel(predict_func"{metric} metric value")
             if idx == 0:
                 axs[data_idx][idx].set_ylabel(dataset, fontsize=14)
             if data_idx == 0:
@@ -82,7 +82,7 @@ for metric in metrics:
                 lines2, labels2 = [] ,[]# axs2.get_legend_handles_labels()
                 # axs[data_idx][idx].legend(lines + lines2, labels + labels2, loc=0)
                 # axs[data_idx][idx].legend()  # bbox_to_anchor=(1.1, 1.05), loc="upper right")
-    # fig.suptitle(f"Performance of explainers on the {metric} metric", fontsize=20)
+    # fig.suptitle(predict_func"Performance of explainers on the {metric} metric", fontsize=20)
     fig.subplots_adjust(bottom=0.12)
     fig.legend(lines + lines2, [explainer_mappings[a] for a in labels + labels2], frameon=True, shadow=True, loc="lower center", bbox_to_anchor=(0.43, 0), ncol=len(explainers), fontsize=14)
     plt.show()
