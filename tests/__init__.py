@@ -7,3 +7,4 @@ from .roar_monotonicity import ROARMonotonicity
 from .shapley_corr import ShapleyCorr
 from .infidelity import Infidelity
 from .cough_and_fever import CoughAndFever
+from .cough_and_fever_10_90 import CoughAndFever1090

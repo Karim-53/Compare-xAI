@@ -22,10 +22,10 @@ class KernelShap:
     attribution_values = None
     feature_importance = None
 
-    def __init__(self, trained_model, reference_df, **kwargs):
+    def __init__(self, trained_model, df_reference, **kwargs):
         self.trained_model = trained_model
         self.f = trained_model.predict
-        self.reference_df = reference_df
+        self.reference_df = df_reference
         print(type(self.reference_df))
         self.explainer = shap.KernelExplainer(self.f, self.reference_df, **kwargs)
 
