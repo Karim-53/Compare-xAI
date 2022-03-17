@@ -48,6 +48,7 @@ if __name__ == "__main__":
     eligible_points_df = result_df.applymap(eligible_points)
 
     summary_df = pd.DataFrame(index=result_df.index, )
+    summary_df['time'] = result_df.apply(lambda series: sum([dico['time'] for index, dico in series.items()]), axis='columns')
     summary_df['score'] = score_df.sum(axis='columns')
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
     summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
