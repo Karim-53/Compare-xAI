@@ -1,10 +1,11 @@
 import logging
 import time
 
-# import commentjson
 import pandas as pd
 
 from src.explainer import valid_explainers
+from src.io import load_results, save_results
+from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
 from src.test import valid_tests
 
 logging.basicConfig(
@@ -16,12 +17,13 @@ logging.basicConfig(
 
 def run_experiment(test_class, explainer_class):
     print(test_class.__name__, explainer_class.__name__)
+    # todo try except
     test = test_class()
 
     start_time = time.time()
 
     _explainer = explainer_class(**test.__dict__)
-    # _explainer = explainer_class(test.trained_model, test.df_train)
+    # _explainer = explainer_class(test.predict_func, test.df_train)
     _explainer.explain(test.dataset_to_explain)
     results = test.score(**_explainer.__dict__)
 
@@ -29,31 +31,25 @@ def run_experiment(test_class, explainer_class):
     return results
 
 
-def sum_score(dico):
-    return sum(dico.values()) - dico['time']
-
-
-def eligible_points(dico):
-    return len(dico) - list(dico.values()).count(None) - 1  # 1 for the time
-
-
 if __name__ == "__main__":
-    result_df = pd.DataFrame(index=valid_explainers.keys(), columns=valid_tests.keys())
+    result_df = load_results()
+    if result_df is None:   # todo [after acceptance] move to io.py
+        result_df = pd.DataFrame(index=valid_explainers.keys(), columns=valid_tests.keys())
+
     for explainer_name, explainer_class in valid_explainers.items():
         for test_name, test_class in valid_tests.items():
             result = run_experiment(test_class, explainer_class)
             result_df.at[explainer_name, test_name] = result
+    save_results(result_df)
 
-    score_df = result_df.applymap(sum_score)
-    eligible_points_df = result_df.applymap(eligible_points)
-
-    summary_df = pd.DataFrame(index=result_df.index, )
-    summary_df['time'] = result_df.apply(lambda series: sum([dico['time'] for index, dico in series.items()]), axis='columns')
-    summary_df['score'] = score_df.sum(axis='columns')
-    summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
-    summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
+    score_df = get_score_df(result_df)
+    eligible_points_df = get_eligible_points_df(result_df)
+    summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     print(summary_df.round(2))
-    # todo record library name and version
+
+
+    # todo [after acceptance] record library name and version
+    # todo record results as csv
     # logging.info(predict_func"\nExperiment results : {json.dumps(results, indent=4)}")
     # if not args.no_logs:
     #     parse_utils.save_experiment(experiment, os.path.join(args.results_dir, "checkpoints"), args.rho)

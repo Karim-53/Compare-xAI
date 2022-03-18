@@ -4,6 +4,7 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+from src.utils import get_feature_importance
 
 
 class MapleExplainer:
@@ -84,6 +85,8 @@ class TreeMapleExplainer:
             "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):
             fe_type = "gbdt"
+        # elif str(type(model)).endswith("xgboost.sklearn.XGBRegressor'>"):
+        #     fe_type = "gbdt"  # kim: not working :(
         # elif str(type(model)).endswith("sklearn.tree.tree.DecisionTreeClassifier'>"):
         #     pass
         elif str(type(model)).endswith(
@@ -156,6 +159,7 @@ class MAPLE:
         max_features=0.5,
         min_samples_leaf=10,
         regularization=0.001,
+        **kwargs
     ):
 
         # Features and the target model response
@@ -331,28 +335,38 @@ class MAPLE:
 
 
 class Maple:
-    def __init__(self, trained_model, X, **kwargs):
+    """ Wrapper for all maple implementation. Please use this one """
+    def __init__(self, predict_func, trained_model, X, **kwargs):
+        self.predict_func = predict_func
         self.trained_model = trained_model
         self.X = X
         is_tree = False
-        if str(type(trained_model.__self__)).endswith(
+        # try:
+        #     print(predict_func)
+        #     print(type(predict_func.__self__))
+        #     print(trained_model)
+        # except:
+        #     pass
+        if str(type(predict_func.__self__)).endswith(
                 "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):
             is_tree = True
         # elif str(type(predict_func.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
         #     is_tree = True
-        elif str(type(trained_model.__self__)).endswith(
+        elif str(type(predict_func.__self__)).endswith(
                 "sklearn.ensemble.forest.RandomForestRegressor'>"
         ):
             is_tree = True
+        # elif str(type(predict_func.__self__)).endswith("xgboost.sklearn.XGBRegressor'>"):
+        #     is_tree = True  # Unfortunately it is not working :(  # todo [after submission] investigate TreeMapleExplainer
         if is_tree:
             self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)
         else:
-            self.explainer = MapleExplainer(self.trained_model, self.X, **kwargs)
+            self.explainer = MapleExplainer(self.predict_func, self.X, **kwargs)
 
     def explain(self, x):
-        shap_values = self.explainer.attributions(x.values, multiply_by_input=True)
+        self.attribution_values = self.explainer.attributions(x.values, multiply_by_input=True)
         self.expected_values = np.zeros(
             x.shape[0]
         )  # TODO: maybe we might want to change this later
-        return shap_values
+        self.feature_importance = get_feature_importance(self.attribution_values)  # todo make sure we calc feature importance in that way for maple

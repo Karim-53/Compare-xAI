@@ -1,8 +1,10 @@
 import tests
 
 valid_tests = {
-    "caugh_and_fever": tests.CoughAndFever,
-    "caugh_and_fever_10_90": tests.CoughAndFever1090,
+    "cough_and_fever": tests.CoughAndFever,
+    "cough_and_fever_10_90": tests.CoughAndFever1090,
+    
+    # not working yet
     # "faithfulness": tests.Faithfulness,
     # "roar_faithfulness": tests.ROARFaithfulness,
     # "roar_monotonicity": tests.ROARMonotonicity,
