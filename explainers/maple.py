@@ -1,6 +1,7 @@
-import shap
-
 import numpy as np
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.linear_model import Ridge
+from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
@@ -140,10 +141,6 @@ class TreeMapleExplainer:
         return out[0] if self.flat_out else out
 
 
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.linear_model import Ridge
-from sklearn.metrics import mean_squared_error
-import numpy as np
 
 
 class MAPLE:
@@ -334,24 +331,24 @@ class MAPLE:
 
 
 class Maple:
-    def __init__(self, f, X, **kwargs):
-        self.f = f
+    def __init__(self, trained_model, X, **kwargs):
+        self.trained_model = trained_model
         self.X = X
         is_tree = False
-        if str(type(f.__self__)).endswith(
-            "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
+        if str(type(trained_model.__self__)).endswith(
+                "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):
             is_tree = True
         # elif str(type(predict_func.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
         #     is_tree = True
-        elif str(type(f.__self__)).endswith(
-            "sklearn.ensemble.forest.RandomForestRegressor'>"
+        elif str(type(trained_model.__self__)).endswith(
+                "sklearn.ensemble.forest.RandomForestRegressor'>"
         ):
             is_tree = True
         if is_tree:
-            self.explainer = TreeMapleExplainer(self.f, self.X, **kwargs)
+            self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)
         else:
-            self.explainer = MapleExplainer(self.f, self.X, **kwargs)
+            self.explainer = MapleExplainer(self.trained_model, self.X, **kwargs)
 
     def explain(self, x):
         shap_values = self.explainer.attributions(x.values, multiply_by_input=True)
