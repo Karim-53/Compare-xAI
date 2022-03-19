@@ -3,6 +3,7 @@ from xgboost import XGBRegressor
 
 
 class CoughAndFever1090:  # (Metric):
+    name = 'cough_and_fever_10_90'
     input_features = ['Cough', 'Fever']
     dataset_size = 20000
     train_dataset = None

@@ -77,6 +77,8 @@ class LimeTabular:
 
 
 class Lime:
+    """ Main wrapper. please use this one"""
+    name = 'lime'
     def __init__(self, predict_func, X, **kwargs):
         self.predict_func = predict_func
         self.X = X

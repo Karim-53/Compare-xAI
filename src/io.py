@@ -12,7 +12,7 @@ def load_results() -> pd.DataFrame:
     if os.path.exists(results_file_path):
         return pd.read_csv(results_file_path, index_col=0).applymap(literal_eval)
     else:
-        return None  # return pd.DataFrame(index=valid_explainers.keys(), columns=valid_tests.keys())
+        return None  # return pd.DataFrame(index=[e.name for e in valid_explainers], columns=[t.name for t in valid_tests])
 
 
 def save_results(result_df: pd.DataFrame):

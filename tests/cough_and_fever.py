@@ -1,12 +1,15 @@
-import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
 
+from tests.util import is_feature_importance_symmetric, is_attribution_values_symmetric
+
+
 class CoughAndFever:  # (Metric):
+    name = "cough_and_fever"
     # todo add last_update = version of the release
+    # todo [after submission] refactor
     input_features = ['Cough', 'Fever']
     dataset_size = 20000
-    train_dataset = None
     dataset_to_explain = None
     trained_model = None
     predict_func = None
@@ -17,7 +20,7 @@ class CoughAndFever:  # (Metric):
         X = [[0, 0], [0, 1], [1, 0], [1, 1]] * n
 
         self.df_train = pd.DataFrame(X, columns=self.input_features)
-        self.df_reference = self.df_train
+        self.df_reference = self.df_train #  todo change it to simple numpy if needed
         label = [0., 0., 0., 80.] * n
         self.df_train['target'] = label
         self.dataset_to_explain = self.df_train[self.input_features].iloc[:4]
@@ -28,21 +31,6 @@ class CoughAndFever:  # (Metric):
 
     def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size
-        def is_feature_importance_symmetric(feature_importance=None, **kwargs):
-            if feature_importance is None:
-                return None
-            diff = abs(feature_importance[0] - feature_importance[1])
-            if diff < 1:
-                return 1. - diff  # if there is a small epsilon then it's gonna hit the score
-            else:
-                return 0.
-
-        def is_attribution_values_symmetric(attribution_values=None, **kwargs):
-            diff = np.max(np.abs(attribution_values[:, 0] - attribution_values[[0, 2, 1, 3], 1]))
-            if diff < 1:
-                return 1. - diff  # if there is a small epsilon then it's gonna hit the score
-            else:
-                return 0.
 
         return {
             'is_feature_importance_symmetric': is_feature_importance_symmetric(feature_importance=feature_importance),
@@ -53,8 +41,8 @@ class CoughAndFever:  # (Metric):
 if __name__ == "__main__":
     from src.utils import *
     test = CoughAndFever()
-    test.df_train['prediction'] = test.trained_model.predict(test.train_dataset)
+    test.df_train['prediction'] = test.trained_model.predict(test.X)
     print(test.df_train.drop_duplicates())
     filename = test.__class__.__name__ + '.png'
     plot_tree(test.trained_model, filename)
-    # todo add assert if target is different from prediction
+    # todo add assert if target is different from prediction (move it of __init__

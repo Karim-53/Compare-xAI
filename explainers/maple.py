@@ -336,6 +336,7 @@ class MAPLE:
 
 class Maple:
     """ Wrapper for all maple implementation. Please use this one """
+    name = 'maple'
     def __init__(self, predict_func, trained_model, X, **kwargs):
         self.predict_func = predict_func
         self.trained_model = trained_model

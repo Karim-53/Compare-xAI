@@ -21,6 +21,7 @@ class Shap:  # todo custom explainers should inhirit from a bigger class
 
 
 class KernelShap:
+    name = 'kernel_shap'
     expected_values = None
     attribution_values = None
     feature_importance = None
@@ -42,6 +43,7 @@ class KernelShap:
 
 
 class TreeShap:
+    name = 'tree_shap'
     expected_values = None
     attribution_values = None
     feature_importance = None

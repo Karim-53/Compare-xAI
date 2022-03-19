@@ -1,10 +1,11 @@
+import datetime
 import logging
 import time
 
 import pandas as pd
 
 from src.explainer import valid_explainers
-from src.io import load_results, save_results
+from src.io import *
 from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
 from src.test import valid_tests
 
@@ -13,6 +14,13 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt="%Y-%m-%d %H:%M:%S",
 )
+
+
+def get_empty_result(*args):
+    return {}
+    # return {'score': {},
+    #         'time': 0.,
+    #         'Last_updated': '',}
 
 
 def run_experiment(test_class, explainer_class):
@@ -25,33 +33,37 @@ def run_experiment(test_class, explainer_class):
     _explainer = explainer_class(**test.__dict__)
     # _explainer = explainer_class(test.predict_func, test.df_train)
     _explainer.explain(test.dataset_to_explain)
-    results = test.score(**_explainer.__dict__)
-
-    results['time'] = time.time() - start_time
+    print('----', _explainer.attribution_values)
+    score = test.score(**_explainer.__dict__)
+    results = {
+        'score': score,
+        'time': time.time() - start_time,
+        'Last_updated': str(datetime.datetime.now()),
+    }
     return results
 
 
 if __name__ == "__main__":
+    print(f'Explainers: {len(valid_explainers)}')
+    print(f'Tests: {len(valid_tests)}')
     result_df = load_results()
     if result_df is None:   # todo [after acceptance] move to io.py
-        result_df = pd.DataFrame(index=valid_explainers.keys(), columns=valid_tests.keys())
+        result_df = pd.DataFrame(index=[e.name for e in valid_explainers], columns=[t.name for t in valid_tests]).applymap(get_empty_result)
 
-    for explainer_name, explainer_class in valid_explainers.items():
-        for test_name, test_class in valid_tests.items():
+    for explainer_class in valid_explainers:
+        if explainer_class.name not in result_df.index:
+            result_df.loc[explainer_class.name] = [get_empty_result() for _ in range(result_df.shape[1])]
+        for test_class in valid_tests:
             result = run_experiment(test_class, explainer_class)
-            result_df.at[explainer_name, test_name] = result
-    save_results(result_df)
+            if test_class.name not in result_df.columns:   # todo [after acceptance] check if this line is really important
+                result_df[test_class.name] = [get_empty_result() for _ in range(len(result_df))]
+            result_df.at[explainer_class.name, test_class.name] = result
+    print(result_df)
+    # save_results(result_df)
 
     score_df = get_score_df(result_df)
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     print(summary_df.round(2))
 
-
     # todo [after acceptance] record library name and version
-    # todo record results as csv
-    # logging.info(predict_func"\nExperiment results : {json.dumps(results, indent=4)}")
-    # if not args.no_logs:
-    #     parse_utils.save_experiment(experiment, os.path.join(args.results_dir, "checkpoints"), args.rho)
-    #     parse_utils.save_results(results, args.results_dir)
-    #     parse_utils.save_results_csv(results, args.results_dir)
