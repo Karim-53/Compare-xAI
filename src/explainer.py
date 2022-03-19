@@ -2,12 +2,12 @@ import shap
 from explainers import *
 
 valid_explainers = (
-    Saabas,
     Random,
-    Maple,
+    Saabas,
     TreeShap,
     KernelShap,
     Lime,
+    Maple,
 )
 # not working yet
 # BreakDown,  # need cpp14
