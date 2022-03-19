@@ -1,5 +1,6 @@
 from xgboost import XGBRegressor
 import xgboost as xgb
+from src.utils import get_feature_importance
 
 class Saabas:
     name = 'saabas'

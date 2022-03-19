@@ -4,10 +4,10 @@ from explainers import *
 valid_explainers = (
     Saabas,
     Random,
-    # Maple,
+    Maple,
     TreeShap,
-    # KernelShap,
-    # Lime,
+    KernelShap,
+    Lime,
 )
 # not working yet
 # BreakDown,  # need cpp14
