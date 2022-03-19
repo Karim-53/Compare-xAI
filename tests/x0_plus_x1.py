@@ -19,9 +19,9 @@ class _X0PlusX1(Test):
                                           base_score=0, eta=1)
         self.dataset_size = len(X)
         self.df_train = pd.DataFrame(X, columns=self.input_features)
-        self.X = self.df_train
-        self.df_reference = self.df_train
         self.df_train['target'] = self.df_train.x0 + self.df_train.x1
+        self.X = self.df_train[self.input_features]
+        self.df_reference = self.df_train[self.input_features]
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
@@ -124,8 +124,17 @@ class DistributionNonUniformStatIndep(_X0PlusX1):
         super().__init__(self.X)
 
 
+
 if __name__ == "__main__":
-    pass
+    from src.utils import *
+    # todo double check the tree
+    # test = CoughAndFever()
+    # test.df_train['prediction'] = test.trained_model.predict(test.X)
+    # print(test.df_train.drop_duplicates())
+    # filename = test.__class__.__name__ + '.png'
+    # plot_tree(test.trained_model, filename)
+    # todo add assert if target is different from prediction (move it of __init__
+
     # todo [after acceptance] asset on the data distribution
     # stat = df_train[input_features].groupby(input_features).size().reset_index().rename(columns={0: 'frequency'})
     # stat['join_distribution'] = stat.frequency.astype(float) / len(df_train)
