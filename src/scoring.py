@@ -3,7 +3,8 @@ import pandas as pd
 
 def sum_score(dico):
     score = dico.get('score', {})
-    return sum(score.values())
+    score_not_none = [f for f in score.values() if isinstance(f,float)]
+    return sum(score_not_none)
 
 
 def get_score_df(result_df):
@@ -12,7 +13,8 @@ def get_score_df(result_df):
 
 def eligible_points(dico):
     score = dico.get('score', {})
-    return sum([isinstance(s, float) for s in score.values()])
+    score_not_none = [f for f in score.values() if isinstance(f,float)]
+    return len(score_not_none)
 
 
 def get_eligible_points_df(result_df):
