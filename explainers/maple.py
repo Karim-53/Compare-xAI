@@ -342,12 +342,6 @@ class Maple:
         self.trained_model = trained_model
         self.X = X
         is_tree = False
-        # try:
-        #     print(predict_func)
-        #     print(type(predict_func.__self__))
-        #     print(trained_model)
-        # except:
-        #     pass
         if str(type(predict_func.__self__)).endswith(
                 "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):

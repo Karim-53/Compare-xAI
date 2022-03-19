@@ -33,7 +33,7 @@ def run_experiment(test_class, explainer_class):
     _explainer = explainer_class(**test.__dict__)
     # _explainer = explainer_class(test.predict_func, test.df_train)
     _explainer.explain(test.dataset_to_explain)
-    print('----', _explainer.attribution_values)
+    # print('----', _explainer.attribution_values)
     score = test.score(**_explainer.__dict__)
     results = {
         'score': score,
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                 result_df[test_class.name] = [get_empty_result() for _ in range(len(result_df))]
             result_df.at[explainer_class.name, test_class.name] = result
     print(result_df)
-    # save_results(result_df)
+    save_results(result_df)
 
     score_df = get_score_df(result_df)
     eligible_points_df = get_eligible_points_df(result_df)
