@@ -33,7 +33,7 @@ class _X0PlusX1(Test):
 
 
 class DistributionNonUniformStatDep(_X0PlusX1):
-    name = _X0PlusX1.name + "_distribution_non_uniform_stat_dep"
+    name = _X0PlusX1.name + "_distrib_non_uniform_stat_dep"
     description = _X0PlusX1.description + "Distribution is non uniform and statistically dependent (both problems)."
 
     def __init__(self):
@@ -65,7 +65,7 @@ def _get_unifrom_stat_dep():
 
 
 class DistributionUniformStatDep(_X0PlusX1):
-    name = _X0PlusX1.name + "_distribution_uniform_stat_dep"
+    name = _X0PlusX1.name + "_distrib_uniform_stat_dep"
     description = _X0PlusX1.description + "Distribution is uniform but statistically dependent."
 
     def __init__(self):
@@ -120,7 +120,7 @@ def _get_non_uniform_stat_indep(q=0.75):
 
 
 class DistributionNonUniformStatIndep(_X0PlusX1):
-    name = _X0PlusX1.name + "_distribution_non_uniform_stat_indep"
+    name = _X0PlusX1.name + "_distrib_non_uniform_stat_indep"
     description = _X0PlusX1.description + "Distribution is non uniform, statistically independent."
 
     def __init__(self):
