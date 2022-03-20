@@ -9,6 +9,7 @@ valid_explainers = (
     KernelShap,
     Maple,
 )
+valid_explainers_dico = {e.name:e for e in valid_explainers}
 # not working yet
 # BreakDown,  # need cpp14
 # "shap": explainers.Shap,
