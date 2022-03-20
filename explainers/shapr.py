@@ -1,9 +1,10 @@
 # Implementation of SHAPR using empirical condtional distribution - https://arxiv.org/pdf/1903.10464.pdf
 # method has two parameters K and sigma which are passed as defaults (100, 0.1) to the functions
 
-import scipy.special
-import numpy as np
 import itertools
+
+import numpy as np
+import scipy.special
 from tqdm import tqdm
 
 

@@ -15,7 +15,7 @@ class Saabas(Explainer):
 
     def __init__(self, trained_model, **kwargs):
         self.trained_model = trained_model
-        if isinstance(trained_model, XGBRegressor): # or classifier
+        if isinstance(trained_model, XGBRegressor):  # or classifier
             self.trained_model = trained_model.get_booster()
 
     def explain(self, dataset_to_explain, **kwargs):

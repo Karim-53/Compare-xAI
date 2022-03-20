@@ -1,7 +1,7 @@
-import scipy.special
-import numpy as np
 import itertools
-import copy
+
+import numpy as np
+import scipy.special
 from tqdm import tqdm
 
 
@@ -34,7 +34,7 @@ class BruteForceKernelShap:
         V = np.zeros((2 ** self.dim, self.dim))
         for i in range(2 ** self.dim):
             V[i, :] = self.reference  # this works only with independence assumption
-        
+
         y = np.zeros(2 ** self.dim)
         for i, s in enumerate(powerset(range(self.dim))):
             s = list(s)
@@ -62,10 +62,10 @@ class BruteForceKernelShap:
 
 class GroundTruthShap:
     def __init__(
-        self,
-        f=None,  # model to explain, if None then explain dataset
-        dataset=None,  # dataset to explain
-        n=20000,  # number of samples to estimate E(predict_func(x_1|x_2 = x* ))
+            self,
+            f=None,  # model to explain, if None then explain dataset
+            dataset=None,  # dataset to explain
+            n=20000,  # number of samples to estimate E(predict_func(x_1|x_2 = x* ))
     ):
 
         self.dataset = dataset
@@ -106,7 +106,6 @@ class GroundTruthShap:
         coefs = np.dot(tmp, np.dot(np.dot(X.T, np.diag(weights)), y))
         expectation = y[0]
         return expectation, coefs
-
 
 # # test
 # N = 10

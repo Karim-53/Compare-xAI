@@ -1,23 +1,29 @@
 # todo delete
-import numpy as np
-from explainers import GroundTruthShap
-from tqdm import tqdm
 import logging
+
+import numpy as np
 from sklearn.metrics import accuracy_score, mean_squared_error
+from tqdm import tqdm
+
+from explainers import GroundTruthShap
+
 
 class DatasetAsModel():
     def __init__(self, data_class) -> None:
         self.data_class = data_class
         self.name = "dataset"
+
     def predict(self, X):
         # import pdb; pdb.set_trace()
         return self.data_class.generatetarget(X)
+
     def train(self, X, y):
         return DatasetAsModel(self.data_class)
 
+
 class Experiment:
     def __init__(
-        self, dataset, models, explainers, metrics
+            self, dataset, models, explainers, metrics
     ):
         self.dataset = dataset
         self.dataset.data[0].fillna(0, inplace=True)
@@ -48,7 +54,9 @@ class Experiment:
     def generate_explanations(self, trained_model, explainer):
         X_train = self.dataset.data[0]
         X_val = self.dataset.val_data[0]
-        explainer = explainer.explainer(trained_model, X_train) if explainer.name == "breakdown" else explainer.explainer(trained_model.predict, X_train)
+        explainer = explainer.explainer(trained_model,
+                                        X_train) if explainer.name == "breakdown" else explainer.explainer(
+            trained_model.predict, X_train)
         feature_weights = explainer.explain(X_val)
         feature_weights_train = None
         metrics_names = [m.name for m in self.metrics]
@@ -82,7 +90,7 @@ class Experiment:
         )
 
     def evaluate_explanations(
-        self, model, trained_model, metric, feature_weights, ground_truth_weights, X_train_feature_weights
+            self, model, trained_model, metric, feature_weights, ground_truth_weights, X_train_feature_weights
     ):
         X, y = self.dataset.val_data[0], self.dataset.val_data[1]
         X_train, y_train = self.dataset.data[0], self.dataset.data[1]
@@ -96,18 +104,20 @@ class Experiment:
             y_train=y_train,
             X_train_feature_weights=X_train_feature_weights
         )
-    
+
     def get_metric(self, mode, model):
         if mode == "regression":
             train_X, test_X = self.dataset.data[0], self.dataset.val_data[0]
             train_y, test_y = self.dataset.data[1], self.dataset.val_data[1]
-            train_score, test_score = mean_squared_error(model.predict(train_X), train_y), mean_squared_error(model.predict(test_X), test_y)
+            train_score, test_score = mean_squared_error(model.predict(train_X), train_y), mean_squared_error(
+                model.predict(test_X), test_y)
         else:
             train_X, test_X = self.dataset.data[0], self.dataset.val_data[0]
             train_y, test_y = self.dataset.data[1], self.dataset.val_data[1]
-            train_score, test_score = accuracy_score(model.predict(train_X), train_y), accuracy_score(model.predict(test_X), test_y)
+            train_score, test_score = accuracy_score(model.predict(train_X), train_y), accuracy_score(
+                model.predict(test_X), test_y)
         return "{:.2f}".format(train_score), "{:.2f}".format(test_score)
-    
+
     def log_model_metrics(self):
         scores = {}
         for model, trained_model in zip(self.models, self.trained_models):
@@ -115,7 +125,7 @@ class Experiment:
         return scores
 
     def get_results(self):
-        
+
         if not self.trained_models:
             self.train_models()
         results = {}
@@ -127,10 +137,10 @@ class Experiment:
         for model, trained_model in zip(self.models, self.trained_models):
             results["models"][model.name] = {}
             if model.name not in self.ground_truth_explanations:
-                ground_truth_expectations, ground_truth_weights= self.generate_ground_truth_explanations(trained_model)
+                ground_truth_expectations, ground_truth_weights = self.generate_ground_truth_explanations(trained_model)
                 self.ground_truth_explanations[model.name] = ground_truth_expectations, ground_truth_weights
                 self.explanations[model.name] = {}
-            
+
             for explainer in self.explainers:
                 logging.info(f"Explaining {model.name} with {explainer.name}")
                 if explainer.name not in self.explanations[model.name]:

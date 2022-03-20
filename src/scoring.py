@@ -3,7 +3,7 @@ import pandas as pd
 
 def sum_score(dico):
     score = dico.get('score', {})
-    score_not_none = [f for f in score.values() if isinstance(f,float)]
+    score_not_none = [f for f in score.values() if isinstance(f, float)]
     return sum(score_not_none)
 
 
@@ -13,7 +13,7 @@ def get_score_df(result_df):
 
 def eligible_points(dico):
     score = dico.get('score', {})
-    score_not_none = [f for f in score.values() if isinstance(f,float)]
+    score_not_none = [f for f in score.values() if isinstance(f, float)]
     return len(score_not_none)
 
 
@@ -24,8 +24,9 @@ def get_eligible_points_df(result_df):
 def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_points_df: pd.DataFrame) -> pd.DataFrame:
     # todo [after acceptance] eligible_points_df could be = None and infered from result_df
     summary_df = pd.DataFrame(index=result_df.index, )
-    summary_df['time'] = result_df.apply(lambda series: sum([dico.get('time', 0.) for test_name, dico in series.items()]),
-                                         axis='columns')
+    summary_df['time'] = result_df.apply(
+        lambda series: sum([dico.get('time', 0.) for test_name, dico in series.items()]),
+        axis='columns')
     summary_df['score'] = score_df.sum(axis='columns')
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
     summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']

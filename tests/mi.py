@@ -11,10 +11,6 @@ TODOs:
 
 """
 
-import numpy as np
-
-from ..explainers.l2x import L2X
-
 
 class MI:
     def __init__(self, model, trained_model, k_list=[10]):

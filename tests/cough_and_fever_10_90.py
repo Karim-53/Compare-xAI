@@ -23,7 +23,8 @@ class CoughAndFever1090:  # (Metric):
         self.df_train['target'] = label
         self.dataset_to_explain = self.df_train[self.input_features].iloc[:4]
         self.truth_to_explain = self.df_train.target.iloc[:4]
-        self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0 ,base_score=0, eta=1)
+        self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0,
+                                          base_score=0, eta=1)
         self.X = self.df_train[self.input_features]
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
@@ -47,7 +48,8 @@ class CoughAndFever1090:  # (Metric):
             else:
                 return 0.
 
-        return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(feature_importance=feature_importance),
+        return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(
+            feature_importance=feature_importance),
                 'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
                     attribution_values=attribution_values)}
         # todo add axiom_symmetry

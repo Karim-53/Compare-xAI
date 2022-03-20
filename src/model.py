@@ -4,13 +4,13 @@ from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 
 valid_models = {
     "regression": {
-        "dataset": lambda : "dataset",
+        "dataset": lambda: "dataset",
         "lr": LinearRegression,
         "mlp": MLPRegressor,
-        "dtree": DecisionTreeRegressor, 
+        "dtree": DecisionTreeRegressor,
     },
     "classification": {
-        "dataset": lambda : "dataset",
+        "dataset": lambda: "dataset",
         "lr": LinearRegression,
         "mlp": MLPClassifier,
         "dtree": DecisionTreeClassifier,
