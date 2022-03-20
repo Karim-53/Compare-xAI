@@ -9,7 +9,7 @@ class Explainer:
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
 
-    expected_values = None # keep them saved here to know what could be calculated
+    expected_values = None  # keep them saved here to know what could be calculated
     attribution_values = None
     feature_importance = None
 

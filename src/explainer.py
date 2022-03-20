@@ -1,4 +1,3 @@
-import shap
 from explainers import *
 
 valid_explainers = (

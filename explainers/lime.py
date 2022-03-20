@@ -35,14 +35,14 @@ class LimeTabular:
         if str(type(data)).endswith("pandas.core.frame.DataFrame'>"):
             data = data.values
         self.data = data
-        self.explainer = lime.lime_tabular.LimeTabularExplainer(data, mode=mode, kernel_width=kernel_width*np.sqrt(data.shape[-1]))
+        self.explainer = lime.lime_tabular.LimeTabularExplainer(data, mode=mode,
+                                                                kernel_width=kernel_width * np.sqrt(data.shape[-1]))
 
         out = self.model(data[0:1])
         if len(out.shape) == 1:
             self.out_dim = 1
             self.flat_out = True
             if mode == "classification":
-
                 def pred(X):  # assume that 1d outputs are probabilities
                     preds = self.model(X).reshape(-1, 1)
                     p0 = 1 - preds
@@ -79,6 +79,7 @@ class LimeTabular:
 class Lime:
     """ Main wrapper. please use this one"""
     name = 'lime'
+
     def __init__(self, predict_func, X, **kwargs):
         self.predict_func = predict_func
         self.X = X

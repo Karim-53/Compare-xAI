@@ -1,7 +1,7 @@
 import pandas as pd
+import sage
 
 from explainers.explainer_superclass import Explainer
-import sage
 
 
 class Sage(Explainer):
@@ -35,7 +35,8 @@ https://iancovert.com/blog/understanding-shap-sage/"""
         # Set up an imputer to handle missing features
         imputer = sage.MarginalImputer(trained_model, X[:64])  # 512
         # Set up an estimator
-        self.sage_estimator = sage.PermutationEstimator(imputer, 'mse') # todo [after submission] get the optimizer from the model or the
+        self.sage_estimator = sage.PermutationEstimator(imputer,
+                                                        'mse')  # todo [after submission] get the optimizer from the model or the
 
     def explain(self, dataset_to_explain, truth_to_explain=None, **kwargs):
         """
@@ -121,7 +122,7 @@ if __name__ == "__main__":
     feature_importance = sage_values.values
     feature_importance_std = sage_values.std  # also provides std  # todo [after acceptance] include that somewhere
 # else:
-    # from tqdm import tqdm
-    # from functools import partialmethod
-    #
-    # tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)  # keeping tqdm is failing
+# from tqdm import tqdm
+# from functools import partialmethod
+#
+# tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)  # keeping tqdm is failing

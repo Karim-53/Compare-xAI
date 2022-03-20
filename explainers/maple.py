@@ -83,7 +83,7 @@ class TreeMapleExplainer:
         self.model = model
 
         if str(type(model)).endswith(
-            "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
+                "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
         ):
             fe_type = "gbdt"
         # elif str(type(model)).endswith("xgboost.sklearn.XGBRegressor'>"):
@@ -91,7 +91,7 @@ class TreeMapleExplainer:
         # elif str(type(model)).endswith("sklearn.tree.tree.DecisionTreeClassifier'>"):
         #     pass
         elif str(type(model)).endswith(
-            "sklearn.ensemble.forest.RandomForestRegressor'>"
+                "sklearn.ensemble.forest.RandomForestRegressor'>"
         ):
             fe_type = "rf"
         # elif str(type(model)).endswith("sklearn.ensemble.forest.RandomForestClassifier'>"):
@@ -145,22 +145,20 @@ class TreeMapleExplainer:
         return out[0] if self.flat_out else out
 
 
-
-
 class MAPLE:
     def __init__(
-        self,
-        X_train,
-        MR_train,
-        X_val,
-        MR_val,
-        fe_type="rf",
-        fe=None,
-        n_estimators=200,
-        max_features=0.5,
-        min_samples_leaf=10,
-        regularization=0.001,
-        **kwargs
+            self,
+            X_train,
+            MR_train,
+            X_val,
+            MR_val,
+            fe_type="rf",
+            fe=None,
+            n_estimators=200,
+            max_features=0.5,
+            min_samples_leaf=10,
+            regularization=0.001,
+            **kwargs
     ):
 
         # Features and the target model response
@@ -245,7 +243,6 @@ class MAPLE:
             lr_predictions = np.empty([num_val], dtype=float)
 
             for i in range(num_val):
-
                 weights = self.training_point_weights(val_leaf_ids_list[i])
 
                 # Local linear model
@@ -290,7 +287,7 @@ class MAPLE:
         # Get the model coeficients
         coefs = np.zeros(self.num_features + 1)
         coefs[0] = lr_model.intercept_
-        coefs[np.sort(mostImpFeats[0 : self.retain]) + 1] = lr_model.coef_
+        coefs[np.sort(mostImpFeats[0: self.retain]) + 1] = lr_model.coef_
 
         # Get the prediction at this point
         prediction = lr_model.predict(x_p.reshape(1, -1))
@@ -319,7 +316,7 @@ class MAPLE:
         n = X.shape[0]
         pred = np.zeros(n)
         for i in range(
-            n
+                n
         ):  # The contents of this inner loop are similar to explain(): doesn't use the features selected by MAPLE or return as much information
             x = X[i, :].reshape(1, -1)
 
@@ -338,6 +335,7 @@ class MAPLE:
 class Maple:
     """ Wrapper for all maple implementation. Please use this one """
     name = 'maple'
+
     def __init__(self, predict_func, trained_model, X, **kwargs):
         self.predict_func = predict_func
         self.trained_model = trained_model

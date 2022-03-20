@@ -23,7 +23,8 @@ class Monotonicity:
         self.conditional = conditional
         assert conditional in ['observational', 'interventional']
 
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, avg=True, X_train=None, y_train=None, n_sample=100, X_train_feature_weights=None):
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, avg=True, X_train=None, y_train=None, n_sample=100,
+                 X_train_feature_weights=None):
         X = X.values
         num_datapoints, num_features = X.shape
         absolute_weights = abs(feature_weights)
@@ -39,24 +40,24 @@ class Monotonicity:
             sorted_weight_indices = np.argsort(absolute_weights[i])
             if self.version == 'dec':
                 sorted_weight_indices = sorted_weight_indices[::-1]
-            y_preds_new = np.zeros(len(X[i])+1)
+            y_preds_new = np.zeros(len(X[i]) + 1)
             y_preds_new[0] = y_preds_mean
 
             for j in sorted_weight_indices:
                 mask[j] = 1
                 if self.conditional == "observational":
                     x_sampled, _ = self.dataset.generate(mask=mask, x=X[i], n_sample=n_sample)
-                    y_preds_new[j+1] = np.mean(np.squeeze(self.trained_model.predict(x_sampled)))
+                    y_preds_new[j + 1] = np.mean(np.squeeze(self.trained_model.predict(x_sampled)))
                 elif self.conditional == "interventional":
                     x_cond = avg_feature_values
                     x_cond[mask.astype(bool)] = X[i][mask.astype(bool)]
-                    y_preds_new[j+1] = self.trained_model.predict([x_cond])[0]
+                    y_preds_new[j + 1] = self.trained_model.predict([x_cond])[0]
 
             deltas = np.abs(np.diff(y_preds_new))
             if self.version == 'dec':
                 deltas = deltas[::-1]
             if avg:
-                monotonicity = sum(np.diff(deltas) >= 0) / (num_features-1)
+                monotonicity = sum(np.diff(deltas) >= 0) / (num_features - 1)
             else:
                 monotonicity = int(np.all(np.diff(deltas) >= 0))
 

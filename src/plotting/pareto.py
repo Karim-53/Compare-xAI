@@ -30,5 +30,5 @@ if __name__ == "__main__":
                         ax=ax,
                         )
     plt.legend(['Pareto'], loc='lower right')
-    plt.ylim([0,1])
+    plt.ylim([0, 1])
     plt.show()

@@ -20,7 +20,8 @@ class Faithfulness:
         self.conditional = conditional
         assert conditional in ['observational', 'interventional']
 
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None, n_sample=100, X_train_feature_weights=None):
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None, n_sample=100,
+                 X_train_feature_weights=None):
         X = X.values
         num_datapoints, num_features = X.shape
         absolute_weights = abs(feature_weights)
@@ -55,7 +56,7 @@ class Faithfulness:
                     x_cond = avg_feature_values
                     x_cond[mask.astype(bool)] = X[i][mask.astype(bool)]
                     y_preds_new[j] = self.trained_model.predict([x_cond])[0]
-            
+
             deltas = [abs(y_pred - y_preds_new[j]) for j in range(num_features)]
             faithfulness = np.corrcoef(absolute_weights[i], deltas)[0, 1]
             if np.isnan(faithfulness) or not np.isfinite(faithfulness):

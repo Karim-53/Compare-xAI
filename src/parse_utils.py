@@ -1,13 +1,12 @@
-import argparse
-import numpy as np
-import random
-import glob
-import os
-import re
 import json
 import logging
-import pandas as pd
+import os
+import random
+
 import dill as pickle
+import numpy as np
+import pandas as pd
+
 
 def valid_string(values):
     return f"Valid choices are: {list(values)}"
@@ -44,9 +43,11 @@ def save_results_csv(results: dict, results_dir: str):
             f.write(df.to_csv())
             f.write("\n\n")
 
+
 def save_object(obj, filename):
     with open(filename, 'wb') as output:  # Overwrites any existing file.
         pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
 
 def save_experiment(experiment, checkpoint_dir: str, rho):
     if not os.path.exists(checkpoint_dir):

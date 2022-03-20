@@ -1,37 +1,48 @@
 <p align="center"><img src="img/banner.svg" width=700 /></p>
 
-`XAI-Bench` is a library for benchmarking feature attribution techniques using synthetic data. Unlike real-world datasets, synthetic datasets allow the efficient computation of conditional expected values that are needed to evaluate many explainability metrics such as ground-truth Shapley values, faithfulness, and monotonicity. This repository can be used to benchmark six different feature attribution techniques across five popular evaluation metrics.
+`XAI-Bench` is a library for benchmarking feature attribution techniques using synthetic data. Unlike real-world
+datasets, synthetic datasets allow the efficient computation of conditional expected values that are needed to evaluate
+many explainability metrics such as ground-truth Shapley values, faithfulness, and monotonicity. This repository can be
+used to benchmark six different feature attribution techniques across five popular evaluation metrics.
 
 See our NeurIPS Datasets Track paper at https://arxiv.org/abs/2106.12543.
 
 <p align="center"><img src="img/overview_figure.svg" width=700 /></p>
 
-
 ## Installation
 
-To use our package, make sure you install all the dependencies in `requirements.txt` using 
+To use our package, make sure you install all the dependencies in `requirements.txt` using
+
 ```
 pip install -r requirements.txt
 ```
 
 ## Sample Usage
 
-We use an `Experiment` to benchmark various datasets, models, explainers, metrics. This is the recommended way to access our library.
+We use an `Experiment` to benchmark various datasets, models, explainers, metrics. This is the recommended way to access
+our library.
 
-To run a sample benchmarking experiment on our `GaussianPiecewiseConstant` dataset using the sample config `configs/experiment_config.json`, run
+To run a sample benchmarking experiment on our `GaussianPiecewiseConstant` dataset using the sample
+config `configs/experiment_config.json`, run
+
 ```
 python main_driver.py --mode regression --seed 7 --experiment --experiment-json configs/experiment_config.jsonc --no-logs
 ```
+
 For running several experiments across multiple datasets, use a script as shown in,
+
 ```
 ./script.sh
 ```
-Each `Experiment` object is saved after execution for checkpointing. This way, additional experiments can be run without having to rerun previous computation.
+
+Each `Experiment` object is saved after execution for checkpointing. This way, additional experiments can be run without
+having to rerun previous computation.
 
 ---
+
 ## More details
 
-The API uses `main_driver.py` which takes in the arguments - 
+The API uses `main_driver.py` which takes in the arguments -
 
 ```
 > python main_driver.py -h
@@ -71,8 +82,10 @@ optional arguments:
                         Path to save results in csv files.
 ```
 
-## Citation 
+## Citation
+
 Please cite our work if you use code from this repo:
+
 ```bibtex
 @inproceedings{xai-bench-2021,
   title={Synthetic Benchmarks for Scientific Research in Explainable Machine Learning}, 

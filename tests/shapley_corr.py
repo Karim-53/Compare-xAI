@@ -13,7 +13,8 @@ class ShapleyCorr:
         self.dataset = dataset
         self.mode = mode
 
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None, X_train_feature_weights=None):
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None,
+                 X_train_feature_weights=None):
         corr = [np.corrcoef(a, b)[0, 1] for a, b in zip(feature_weights, ground_truth_weights)]
         corr = np.nan_to_num(corr, nan=0, posinf=0, neginf=0)
         return np.mean(corr)

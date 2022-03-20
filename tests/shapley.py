@@ -13,7 +13,8 @@ class Shapley:
         self.dataset = dataset
         self.mode = mode
 
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None, X_train_feature_weights=None):
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train=None, y_train=None,
+                 X_train_feature_weights=None):
         if self.mode == "mse":
             error = np.sum(np.square(feature_weights - ground_truth_weights))
         elif self.mode == "rmse":

@@ -4,10 +4,9 @@ Remove the features deemed most important, then remove them from the data and re
 A higher roar score is better.
 """
 
-import numpy as np
 import copy
 
-from numpy.core.numeric import indices
+import numpy as np
 
 # this is the set of cutoffs used in the ROAR paper
 CUTOFFS = [0, 0.1, 0.3, 0.5, 0.7, 0.9]
@@ -43,13 +42,14 @@ class Roar:
         self.dataset = dataset
         self.conditional = conditional
         assert conditional in ['observational', 'interventional']
-    
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, avg=True, X_train=None, y_train=None, n_sample=100, X_train_feature_weights=None):
-    # def evaluate(self, df_reference, y, feature_weights, ground_truth_weights, X_train, y_train):
+
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, avg=True, X_train=None, y_train=None, n_sample=100,
+                 X_train_feature_weights=None):
+        # def evaluate(self, df_reference, y, feature_weights, ground_truth_weights, X_train, y_train):
         X = X.values
-        
-        num_datapoints, num_features = X.shape[0]+X_train.shape[0], X.shape[1]
-        absolute_weights = abs(np.concatenate([X_train_feature_weights, feature_weights], axis = 0))
+
+        num_datapoints, num_features = X.shape[0] + X_train.shape[0], X.shape[1]
+        absolute_weights = abs(np.concatenate([X_train_feature_weights, feature_weights], axis=0))
 
         # compute the base values of each feature
         avg_feature_values = X.mean(axis=0)
@@ -58,8 +58,8 @@ class Roar:
         losses = []
         for cutoff_percent in CUTOFFS:
             cutoff = int(cutoff_percent * num_features)
-            X_new = np.concatenate([copy.deepcopy(X_train), copy.deepcopy(X)], axis = 0)
-            y_new = np.concatenate([copy.deepcopy(y_train), copy.deepcopy(y)], axis = 0)
+            X_new = np.concatenate([copy.deepcopy(X_train), copy.deepcopy(X)], axis=0)
+            y_new = np.concatenate([copy.deepcopy(y_train), copy.deepcopy(y)], axis=0)
 
             for i in range(num_datapoints):
                 """
@@ -77,7 +77,9 @@ class Roar:
                     X_new[i][~mask.astype(bool)] = avg_feature_values[~mask.astype(bool)]
 
             # train a new model and predict on the test set
-            X_train_new, y_train_new, X_test, y_test = X_new[:len(X_train)], y_new[:len(X_train)], X_new[len(X_train):], y_new[len(X_train):]
+            X_train_new, y_train_new, X_test, y_test = X_new[:len(X_train)], y_new[:len(X_train)], X_new[
+                                                                                                   len(X_train):], y_new[
+                                                                                                                   len(X_train):]
             model_new = copy.deepcopy(self.model)
             model_new = model_new.train(X_train_new, y_train_new.ravel())
             preds = model_new.predict(X_test)

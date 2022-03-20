@@ -1,35 +1,30 @@
 from __future__ import print_function
+
+import copy
+import glob
+# from bs4 import BeautifulSoup
+import os
+# import cPickle as pkl
+import re
+import time
+
 import numpy as np
 import tensorflow as tf
-import pandas as pd
-
-# import cPickle as pkl
-from collections import defaultdict
-import re
-
-# from bs4 import BeautifulSoup
-import sys
-import os
-import glob
-import time
-import copy
-from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Input, Flatten, Add, Multiply, Lambda
-from keras.layers.normalization import BatchNormalization
-from keras.models import Model, Sequential
-from keras import regularizers
 from keras import backend as K
-from keras.engine.topology import Layer
-
 # from make_data import generate_data
-import json
-import random
 from keras import optimizers
+from keras import regularizers
+from keras.engine.topology import Layer
+from keras.layers import Dense, Input, Multiply
+from keras.layers.normalization import BatchNormalization
+from keras.models import Model
 
 BATCH_SIZE = 1000
+
+
 # np.random.seed(0)
-#tf.random.set_seed(0)
-#tf.random.set_random_seed(0)
+# tf.random.set_seed(0)
+# tf.random.set_random_seed(0)
 # random.seed(0)
 
 
@@ -79,7 +74,7 @@ def compute_median_rank(scores, k, datatype_val=None):
         )
         median_ranks2 = np.median(
             ranks[datatype_val == "nonlinear_additive", :][
-                :, np.array([4, 5, 6, 7, 9])
+            :, np.array([4, 5, 6, 7, 9])
             ],
             axis=1,
         )
@@ -134,6 +129,7 @@ class Sample_Concrete(Layer):
         })
         return config
 
+
 def get_filepath():
     currentLogs = glob.glob(f"results/saved_models/*-L2X.hdf5")
     numList = [0]
@@ -148,6 +144,7 @@ def get_filepath():
     newNum = numList[-1] + 1
     return f"results/saved_models/{newNum}-L2X.hdf5"
 
+
 def buildmodel(x, y, k, input_shape, n_class=2):
     # n_class = 1: regression task
     # n_class > 1: classfication task (not implemented yet)
@@ -159,12 +156,12 @@ def buildmodel(x, y, k, input_shape, n_class=2):
     elif n_class > 1:
         print('shape')
         if len(y.shape) == 1:
-            y = np.expand_dims(y, axis=1) 
+            y = np.expand_dims(y, axis=1)
         print(y.shape)
         if y.shape[1] == 1 and n_class == 2:
-            y_new = np.zeros((y.shape[0],n_class))
-            y_new[:,0] = copy.deepcopy(np.squeeze(y))
-            y_new[:,1] = 1 - np.squeeze(y)
+            y_new = np.zeros((y.shape[0], n_class))
+            y_new[:, 0] = copy.deepcopy(np.squeeze(y))
+            y_new[:, 1] = 1 - np.squeeze(y)
             y = copy.deepcopy(y_new)
             # for i in range(y_new.shape[0]):
             #     print(y_new[i,:])
@@ -284,20 +281,20 @@ class L2X:
 
     def explain(self, x, **kwargs):
         weights = np.zeros_like(x)
-        #x = np.ones_like(x)
+        # x = np.ones_like(x)
         self.expected_values = np.ones((x.shape[0], 1)) * np.mean(self.Y)
         for i in range(len(self.models)):
             # if i == 3:
-                weights = weights + self.pred_models[i].predict(
-                    x, verbose=1, batch_size=BATCH_SIZE
-                )
+            weights = weights + self.pred_models[i].predict(
+                x, verbose=1, batch_size=BATCH_SIZE
+            )
         # normalize
         weights = weights / np.expand_dims(np.sum(weights, axis=1), 1)
-                # print('k:', i+1)
-        #print(weights[:10])
-                # print(np.sum(weights,axis=0))
-                # median_ranks = compute_median_rank(weights,4)
-                # print(np.mean(median_ranks))
+        # print('k:', i+1)
+        # print(weights[:10])
+        # print(np.sum(weights,axis=0))
+        # median_ranks = compute_median_rank(weights,4)
+        # print(np.mean(median_ranks))
         return weights
 
 

@@ -1,5 +1,4 @@
 """ In this .py we test the effect of the """
-import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
 
@@ -41,6 +40,7 @@ class DistributionNonUniformStatDep(_X0PlusX1):
         self.X = [[0, 0]] * 50 + [[1, 1]] * 100 + [[1, 0]] * 450 + [[0, 1]] * 1050
         super().__init__(self.X)
 
+
 def _get_unifrom_stat_dep():
     """ This dataset demostrate
         the problem (SHAP tree_path_dependant gives strange results)
@@ -72,7 +72,8 @@ class DistributionUniformStatDep(_X0PlusX1):
         self.X = _get_unifrom_stat_dep()
         super().__init__(self.X)
 
-def _get_non_uniform_stat_indep(q = 0.75):
+
+def _get_non_uniform_stat_indep(q=0.75):
     """ The problem with the symmetry axiom
     This dataset is supposed to create an issue but besides the difference in the distribution i dont see any other probelm
     https://arxiv.org/pdf/1910.13413.pdf   page 6
@@ -114,8 +115,9 @@ def _get_non_uniform_stat_indep(q = 0.75):
 
     assert n_0_0 + n_0_1 + n_1_0 + n_1_1 == n, "just choose (p,q) and n so that the number of datapoints correspond to the probability"
 
-    X = [[0, 0]]*n_0_0 + [[1, 1]]*n_1_1 + [[1, 0]]*n_1_0 + [[0, 1]]*n_0_1
+    X = [[0, 0]] * n_0_0 + [[1, 1]] * n_1_1 + [[1, 0]] * n_1_0 + [[0, 1]] * n_0_1
     return X
+
 
 class DistributionNonUniformStatIndep(_X0PlusX1):
     name = _X0PlusX1.name + "_distribution_non_uniform_stat_indep"
@@ -126,9 +128,8 @@ class DistributionNonUniformStatIndep(_X0PlusX1):
         super().__init__(self.X)
 
 
-
 if __name__ == "__main__":
-    from src.utils import *
+    pass
     # todo double check the tree
     # test = CoughAndFever()
     # test.df_train['prediction'] = test.trained_model.predict(test.X)

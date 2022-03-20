@@ -56,7 +56,8 @@ class TreeShap:
         self.explainer = shap.TreeExplainer(self.trained_model, self.df_reference, **kwargs)
 
     def explain(self, dataset_to_explain, **kwargs):
-        shap_values = self.explainer(dataset_to_explain, check_additivity=False) # todo after acceptance reort all problems to shap due to additivity
+        shap_values = self.explainer(dataset_to_explain,
+                                     check_additivity=False)  # todo after acceptance reort all problems to shap due to additivity
         self.expected_values = shap_values.base_values
         self.attribution_values = shap_values.values
         self.feature_importance = get_feature_importance(self.attribution_values)

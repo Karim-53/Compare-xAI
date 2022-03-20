@@ -65,13 +65,13 @@ class BreakDown:
             Object that contains influences and descriptions of each relevant attribute.
         """
         data = np.copy(self.data)
-        assert direction in ["up","down"]
-        observation = self._transform_observation(observation) #expand dims from 1D to 2D if necessary
+        assert direction in ["up", "down"]
+        observation = self._transform_observation(observation)  # expand dims from 1D to 2D if necessary
         assert len(self.colnames) == observation.shape[1]
 
-        if direction=="up":
+        if direction == "up":
             contributions, exp = self._explain_up(observation, baseline, data)
-        if direction=="down":
+        if direction == "down":
             contributions, exp = self._explain_down(observation, baseline, data)
 
         mean_prediction = np.mean(self.trained_model.predict(data))
@@ -81,7 +81,7 @@ class BreakDown:
             bcont = 0
         else:
             bcont = mean_prediction - baseline
-        
+
         exp.add_intercept(bcont)
         exp.add_baseline(baseline)
         exp.make_final_prediction()
@@ -109,11 +109,11 @@ class BreakDown:
             amax = np.argmax(yhats_diff)
             important_variables.append(amax)
             important_yhats[i] = yhats[amax]
-            data[:,amax] = new_data[:,amax]
+            data[:, amax] = new_data[:, amax]
             open_variables.remove(amax)
 
         var_names = np.array(self.colnames)[important_variables]
-        var_values = observation[0,important_variables]
+        var_values = observation[0, important_variables]
         means = self._get_means_from_yhats(important_yhats)
         means.appendleft(baseline_yhat)
         contributions = np.diff(means)
@@ -131,7 +131,7 @@ class BreakDown:
         for i in range(0, data.shape[1]):
             yhats = {}
             yhats_diff = np.repeat(float('inf'), data.shape[1])
-            
+
             for variable in open_variables:
                 tmp_data = np.copy(new_data)
                 tmp_data[:, variable] = data[:, variable]
@@ -141,17 +141,17 @@ class BreakDown:
             amin = np.argmin(yhats_diff)
             important_variables.append(amin)
             important_yhats[i] = yhats[amin]
-            new_data[:,amin] = data[:,amin]
+            new_data[:, amin] = data[:, amin]
             open_variables.remove(amin)
 
         important_variables.reverse()
         var_names = np.array(self.colnames)[important_variables]
-        var_values = observation[0,important_variables]
+        var_values = observation[0, important_variables]
         means = self._get_means_from_yhats(important_yhats)
         means.appendleft(target_yhat[0])
         means.reverse()
         contributions = np.diff(means)
-        
+
         return contributions, e.Explanation(var_names, var_values, contributions, e.ExplainerDirection.Down)
 
     def _get_means_from_yhats(self, important_yhats):

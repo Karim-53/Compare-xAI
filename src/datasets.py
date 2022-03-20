@@ -1,12 +1,6 @@
 # Originally from SHAP official repo: https://github.com/slundberg/shap
 
-import pandas as pd
-import numpy as np
-import sklearn.datasets
-from sklearn.datasets import fetch_openml
-import os
 import synthetic_datasets
-from numpy import array
 
 try:
     from urllib.request import urlretrieve

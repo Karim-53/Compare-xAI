@@ -10,9 +10,8 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-from synthetic_datasets import GaussianLinearRegression, GaussianLinearBinary
 from sklearn import preprocessing
-from sklearn.neighbors import KNeighborsRegressor,KNeighborsClassifier
+from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 from src import datasets, explainer, experiments, test, model, parse_utils
@@ -22,11 +21,11 @@ mode = "regression"
 results_dir = f"results/{mode}/thurs/exp-model-wine-shapr-3/"
 
 models = ["lr",
-    "dtree",
-    "mlp"
-]
+          "dtree",
+          "mlp"
+          ]
 
-explainers = [ #"shap",
+explainers = [  # "shap",
     "shapr",
     # "kernelshap",
     # "brutekernelshap",
@@ -46,15 +45,15 @@ y = df['quality']
 
 X, X_val, y, y_val = train_test_split(X, y, test_size=0.01, random_state=7)
 knn = KNeighborsRegressor(n_neighbors=1)
-#knn = KNeighborsClassifier()
-knn.fit(X,y)
+# knn = KNeighborsClassifier()
+knn.fit(X, y)
 # mse = np.mean((knn.predict(df_reference) - y)**2)
 # print('MSE: ',mse)
 mean = np.mean(X, axis=0)
 cov = np.cov(X, rowvar=False)
 
-data_generator = datasets.Data("gaussianLinear", mode=mode, mu=repr(mean), dim=len(mean), noise=0.01, 
-                                            sigma=repr(cov), weight=repr(np.ones(len(mean))))
+data_generator = datasets.Data("gaussianLinear", mode=mode, mu=repr(mean), dim=len(mean), noise=0.01,
+                               sigma=repr(cov), weight=repr(np.ones(len(mean))))
 
 
 def make_experiment_with_dataset(dataset, models, explainers, metrics):
@@ -76,7 +75,6 @@ logging.info(f"\nExperiment results : {json.dumps(results, indent=4)}")
 parse_utils.save_experiment(experiment, os.path.join(results_dir, "checkpoints"), "na")
 parse_utils.save_results(results, results_dir)
 parse_utils.save_results_csv(results, results_dir)
-
 
 # synthetic_samples, _ = data_generator.get_dataset(num_samples=len(df_reference))
 # y_synthetic = knn.predict(synthetic_samples)
