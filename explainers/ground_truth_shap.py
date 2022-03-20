@@ -52,7 +52,7 @@ class BruteForceKernelShap:
         expectation = y[0]
         return expectation, coefs
 
-    def explain(self, X):
+    def explain(self, X, **kwargs):
         self.expected_values = np.zeros((X.shape[0], 1))
         shap_values = np.zeros((X.shape[0], self.dim))
         for idx, x in tqdm(enumerate(X.values)):
@@ -76,7 +76,7 @@ class GroundTruthShap:
         if f is None:
             print("No model passed, explaining dataset!")
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):
 
         X = np.zeros((2 ** self.dim, self.dim))
         # df_reference[:,-1] = 1

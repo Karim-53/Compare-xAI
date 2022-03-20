@@ -6,7 +6,7 @@ import pandas as pd
 from src.utils import root
 
 RESULTS_FILE_PATH = root + '/results/results.csv'
-RESULTS_TMP_FILE_PATH = root + '/results/results.csv'
+RESULTS_TMP_FILE_PATH = root + '/results/results_tmp.csv'
 
 
 def load_results(results_file_path = RESULTS_FILE_PATH) -> pd.DataFrame:

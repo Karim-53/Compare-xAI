@@ -5,8 +5,9 @@ valid_explainers = (
     Random,
     Saabas,
     TreeShap,
-    KernelShap,
+    Sage,
     Lime,
+    KernelShap,
     Maple,
 )
 # not working yet

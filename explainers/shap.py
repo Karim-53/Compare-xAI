@@ -14,7 +14,7 @@ class Shap:  # todo custom explainers should inhirit from a bigger class
         self.X = X
         self.explainer = shap.Explainer(self.f, self.X)
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):
         shap_values = self.explainer(x)
         self.expected_values, shap_values = shap_values.base_values, shap_values.values
         return shap_values
@@ -30,13 +30,14 @@ class KernelShap:
         self.trained_model = trained_model
         self.predict_func = trained_model.predict
         self.reference_dataset = np.array(X)
+        # todo find a way to restrict reference dataset size
         print(type(self.reference_dataset))
         print(self.reference_dataset.shape)
         self.predict_func(self.reference_dataset)
         self.explainer = shap.KernelExplainer(self.predict_func, self.reference_dataset, **kwargs)
 
-    def explain(self, df_to_explain, **kwargs):
-        shap_values = self.explainer.shap_values(np.array(df_to_explain))
+    def explain(self, dataset_to_explain, **kwargs):
+        shap_values = self.explainer.shap_values(np.array(dataset_to_explain))
         self.expected_values = self.explainer.expected_value
         self.attribution_values = shap_values
         self.feature_importance = get_feature_importance(self.attribution_values)
@@ -54,8 +55,8 @@ class TreeShap:
         self.df_reference = df_reference
         self.explainer = shap.TreeExplainer(self.trained_model, self.df_reference, **kwargs)
 
-    def explain(self, df_to_explain, **kwargs):
-        shap_values = self.explainer(df_to_explain, check_additivity=False) # todo after acceptance reort all problems to shap due to additivity
+    def explain(self, dataset_to_explain, **kwargs):
+        shap_values = self.explainer(dataset_to_explain, check_additivity=False) # todo after acceptance reort all problems to shap due to additivity
         self.expected_values = shap_values.base_values
         self.attribution_values = shap_values.values
         self.feature_importance = get_feature_importance(self.attribution_values)

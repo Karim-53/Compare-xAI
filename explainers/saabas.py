@@ -1,12 +1,13 @@
-from xgboost import XGBRegressor
 import xgboost as xgb
+from xgboost import XGBRegressor
+
+from explainers.explainer_superclass import Explainer
 from src.utils import get_feature_importance
 
-class Saabas:
+
+class Saabas(Explainer):
     name = 'saabas'
     # requirements = {'generic_xgboost':True}
-
-
 
     expected_values = None
     attribution_values = None
@@ -17,8 +18,8 @@ class Saabas:
         if isinstance(trained_model, XGBRegressor): # or classifier
             self.trained_model = trained_model.get_booster()
 
-    def explain(self, df_to_explain, **kwargs):
-        dmatrix_to_explain = xgb.DMatrix(df_to_explain)
+    def explain(self, dataset_to_explain, **kwargs):
+        dmatrix_to_explain = xgb.DMatrix(dataset_to_explain)
         saabas_values_3 = self.trained_model.predict(dmatrix_to_explain, pred_contribs=True, approx_contribs=True)
         self.attribution_values = saabas_values_3[:, :-1]
 

@@ -282,7 +282,7 @@ class L2X:
             self.models.append(model)
             self.pred_models.append(pred_model)
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):
         weights = np.zeros_like(x)
         #x = np.ones_like(x)
         self.expected_values = np.ones((x.shape[0], 1)) * np.mean(self.Y)

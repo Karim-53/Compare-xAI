@@ -32,9 +32,9 @@ def run_experiment(test_class, explainer_class):
 
     _explainer = explainer_class(**test.__dict__)
     # _explainer = explainer_class(test.predict_func, test.df_train)
-    _explainer.explain(test.dataset_to_explain)
+    _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
     # print('----', _explainer.attribution_values)
-    score = test.score(**_explainer.__dict__)
+    score = test.score(attribution_values=_explainer.attribution_values, feature_importance=_explainer.feature_importance)
     results = {
         'score': score,
         'time': time.time() - start_time,

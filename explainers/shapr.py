@@ -67,7 +67,7 @@ class ShapR:
         self.M = X.shape[1]
         self.sigma = 0.4 if 'sigma' not in kwargs else kwargs['sigma']
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):
         phi = np.zeros((x.shape[0], self.M + 1))
         for idx, x in tqdm(enumerate(x.values)):
             phi[idx] = kernel_shapr(self.f, x, self.X, self.M, self.sigma)

@@ -13,7 +13,8 @@ class Explainer:
     attribution_values = None
     feature_importance = None
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):  # todo [after acceptance] change this to __call__ ?
+        from src.explainer import valid_explainers
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
         )
@@ -30,9 +31,9 @@ class Random(Explainer):
     def __init__(self, **kwargs):
         pass  # todo [after acceptance] do I really need that
 
-    def explain(self, x):
+    def explain(self, dataset_to_explain, **kwargs):
         # todo [after acceptance] with np seed = 0
-        arr = np.array(x)
+        arr = np.array(dataset_to_explain)
         self.expected_values = np.random.randn(arr.shape[0])
         self.attribution_values = np.random.randn(*arr.shape)
         self.feature_importance = np.random.randn(arr.shape[1])

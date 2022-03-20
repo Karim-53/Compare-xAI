@@ -82,11 +82,11 @@ class Lime:
     def __init__(self, predict_func, X, **kwargs):
         self.predict_func = predict_func
         self.X = X
-        self.explainer = LimeTabular(self.predict_func, self.X, mode="regression")
+        self.lime_explainer = LimeTabular(self.predict_func, self.X, mode="regression")
 
-    def explain(self, x):
-        self.attribution_values = self.explainer.attributions(x)
+    def explain(self, dataset_to_explain, **kwargs):
+        self.attribution_values = self.lime_explainer.attributions(dataset_to_explain)
         self.expected_values = np.zeros(
-            x.shape[0]
+            dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
         self.feature_importance = get_feature_importance(self.attribution_values)

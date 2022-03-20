@@ -24,6 +24,7 @@ class CoughAndFever:  # (Metric):
         label = [0., 0., 0., 80.] * n
         self.df_train['target'] = label
         self.dataset_to_explain = self.df_train[self.input_features].iloc[:4]
+        self.truth_to_explain = self.df_train.target.iloc[:4]
         self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0 ,base_score=0, eta=1)
         self.X = self.df_train[self.input_features]
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
@@ -31,7 +32,6 @@ class CoughAndFever:  # (Metric):
 
     def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size
-
         return {
             'is_feature_importance_symmetric': is_feature_importance_symmetric(feature_importance=feature_importance),
             'is_attribution_values_symmetric': is_attribution_values_symmetric(attribution_values=attribution_values)}

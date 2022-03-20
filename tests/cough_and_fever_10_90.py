@@ -1,6 +1,8 @@
 import pandas as pd
 from xgboost import XGBRegressor
 
+from tests.util import is_ok
+
 
 class CoughAndFever1090:  # (Metric):
     name = 'cough_and_fever_10_90'
@@ -20,6 +22,7 @@ class CoughAndFever1090:  # (Metric):
         label = [0., 0., 10., 90.] * n
         self.df_train['target'] = label
         self.dataset_to_explain = self.df_train[self.input_features].iloc[:4]
+        self.truth_to_explain = self.df_train.target.iloc[:4]
         self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0 ,base_score=0, eta=1)
         self.X = self.df_train[self.input_features]
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
@@ -28,7 +31,7 @@ class CoughAndFever1090:  # (Metric):
     def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size
         def is_cough_more_important_than_fever(feature_importance=None, **kwargs):
-            if feature_importance is None:
+            if not is_ok(feature_importance):
                 return None
 
             if feature_importance[0] > feature_importance[1]:
@@ -37,14 +40,16 @@ class CoughAndFever1090:  # (Metric):
                 return 0.
 
         def is_cough_attribution_higher_than_fever_attribution(attribution_values=None, **kwargs):
+            if not is_ok(attribution_values):
+                return None
             if attribution_values[3, 0] > attribution_values[3, 1]:
                 return 1.
             else:
                 return 0.
 
-        return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(**locals()),
+        return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(feature_importance=feature_importance),
                 'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
-                    **locals())}
+                    attribution_values=attribution_values)}
         # todo add axiom_symmetry
 
 

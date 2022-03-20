@@ -36,11 +36,11 @@ class BreakDown:
         assert observation.ndim == 2 and observation.shape[0] == 1
         return np.repeat(observation, repeats=data.shape[0], axis=0)
 
-    def explain(self, df_to_explain, **kwargs):
-        self.expected_values = np.zeros(df_to_explain.shape[0])
+    def explain(self, dataset_to_explain, **kwargs):
+        self.expected_values = np.zeros(dataset_to_explain.shape[0])
 
-        self.attribution_values = np.zeros((df_to_explain.shape[0], self.dim))
-        for idx, x in tqdm(enumerate(df_to_explain.values)):
+        self.attribution_values = np.zeros((dataset_to_explain.shape[0], self.dim))
+        for idx, x in tqdm(enumerate(dataset_to_explain.values)):
             self.attribution_values[idx], _ = self.explain_x(x, direction="down", useIntercept=False, baseline=0)
 
         self.feature_importance = get_feature_importance(self.attribution_values)

@@ -13,6 +13,7 @@ class _X0PlusX1(Test):
     description = "We test the effect of the train_dataset 's distribution on the explanation.\n"
     input_features = ['x0', 'x1']
     dataset_to_explain = pd.DataFrame([[0, 0], [0, 1], [1, 0], [1, 1]], columns=input_features)
+    truth_to_explain = pd.Series([0, 1, 1, 2], name='target')
 
     def __init__(self, X):
         self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=1, max_depth=2, random_state=0,
@@ -25,10 +26,11 @@ class _X0PlusX1(Test):
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
-    def score(self, **kwargs):
+    def score(self, attribution_values=None, feature_importance=None, **kwargs):
+        # todo assert attribution_values feature_importance size
         return {
-            'is_feature_importance_symmetric': is_feature_importance_symmetric(**kwargs),
-            'is_attribution_values_symmetric': is_attribution_values_symmetric(**kwargs)}
+            'is_feature_importance_symmetric': is_feature_importance_symmetric(feature_importance=feature_importance),
+            'is_attribution_values_symmetric': is_attribution_values_symmetric(attribution_values=attribution_values)}
 
 
 class DistributionNonUniformStatDep(_X0PlusX1):

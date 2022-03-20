@@ -4,6 +4,7 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+
 from src.utils import get_feature_importance
 
 
@@ -272,12 +273,12 @@ class MAPLE:
                 weights[PNNs_Leaf_Node] += 1.0 / len(PNNs_Leaf_Node)
         return weights
 
-    def explain(self, x):
+    def explain(self, x, **kwargs):
 
         x = x.reshape(1, -1)
 
         mostImpFeats = np.argsort(-self.feature_scores)
-        x_p = np.delete(x, mostImpFeats[self.retain :], axis=1)
+        x_p = np.delete(x, mostImpFeats[self.retain:], axis=1)
 
         curr_leaf_ids = self.fe.apply(x)[0]
         weights = self.training_point_weights(curr_leaf_ids)
@@ -359,9 +360,10 @@ class Maple:
         else:
             self.explainer = MapleExplainer(self.predict_func, self.X, **kwargs)
 
-    def explain(self, x):
-        self.attribution_values = self.explainer.attributions(x.values, multiply_by_input=True)
+    def explain(self, dataset_to_explain, **kwargs):
+        self.attribution_values = self.explainer.attributions(dataset_to_explain.values, multiply_by_input=True)
         self.expected_values = np.zeros(
-            x.shape[0]
+            dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
-        self.feature_importance = get_feature_importance(self.attribution_values)  # todo make sure we calc feature importance in that way for maple
+        self.feature_importance = get_feature_importance(
+            self.attribution_values)  # todo make sure we calc feature importance in that way for maple

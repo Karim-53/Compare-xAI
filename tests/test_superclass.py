@@ -8,6 +8,6 @@ class Test:
     trained_model = None
     predict_func = None
 
-    def score(self, **kwargs):
+    def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size
         raise NotImplementedError("The scoring method of this test is not implemented at the moment.")
