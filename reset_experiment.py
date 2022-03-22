@@ -36,9 +36,10 @@ def time_limit(seconds, msg=''):
 
 def get_empty_result(*args):
     return {}
-    # return {'score': {},
-    #         'time': 0.,
-    #         'Last_updated': '',}
+
+def empty_results(_len):
+    return [get_empty_result() for _ in range(_len)]
+
 
 TIME_LIMIT = 5 # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
 def run_experiment(test_class, explainer_class):
@@ -81,11 +82,11 @@ if __name__ == "__main__":
     try:
         for explainer_class in valid_explainers:
             if explainer_class.name not in result_df.index:
-                result_df.loc[explainer_class.name] = [get_empty_result() for _ in range(result_df.shape[1])]
+                result_df.loc[explainer_class.name] = empty_results(result_df.shape[1])
             for test_class in valid_tests:
                 result = run_experiment(test_class, explainer_class)
                 if test_class.name not in result_df.columns:  # todo [after acceptance] check if this line is really important
-                    result_df[test_class.name] = [get_empty_result() for _ in range(len(result_df))]
+                    result_df[test_class.name] = empty_results(len(result_df))
                 result_df.at[explainer_class.name, test_class.name] = result
     except KeyboardInterrupt:
         pass
