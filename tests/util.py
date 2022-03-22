@@ -16,7 +16,7 @@ def is_ok(values, dim=None):
         return values.shape == dim
 
 
-def is_feature_importance_symmetric(feature_importance):  # feature_importance=None,
+def importance_symmetric(feature_importance):  # feature_importance=None,
     if not is_ok(feature_importance):
         return None
     diff = abs(feature_importance[0] - feature_importance[1])

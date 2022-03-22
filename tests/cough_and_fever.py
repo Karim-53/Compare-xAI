@@ -1,7 +1,7 @@
 import pandas as pd
 from xgboost import XGBRegressor
 
-from tests.util import is_feature_importance_symmetric, is_attribution_values_symmetric
+from tests.util import importance_symmetric, is_attribution_values_symmetric
 
 
 class CoughAndFever:  # (Metric):
@@ -33,7 +33,7 @@ class CoughAndFever:  # (Metric):
     def score(self, attribution_values=None, feature_importance=None, **kwargs):
         # todo assert attribution_values feature_importance size
         return {
-            'is_feature_importance_symmetric': is_feature_importance_symmetric(feature_importance=feature_importance),
+            'importance_symmetric': importance_symmetric(feature_importance=feature_importance),
             'is_attribution_values_symmetric': is_attribution_values_symmetric(attribution_values=attribution_values)}
         # todo add axiom_symmetry
 
