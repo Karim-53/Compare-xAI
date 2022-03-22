@@ -1,3 +1,5 @@
+from typing import Dict
+
 import pandas as pd
 
 
@@ -31,3 +33,72 @@ def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_poi
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
     summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
     return summary_df
+
+
+def get_details(result_df):
+    score_df = get_score_df(result_df)
+    eligible_points_df = get_eligible_points_df(result_df)
+    summary_df = get_summary_df(result_df, score_df, eligible_points_df)
+    print(summary_df.round(2))
+    return summary_df, eligible_points_df, score_df
+
+
+def keep_sub_test(k: str, criteria):
+    for w in ['importance', 'attribution', 'interaction']:
+        if criteria.get(w, True) and k.startswith(w):
+            return True
+    return False
+
+
+def restrict_tests(result_df: pd.DataFrame, criteria: Dict[str, bool] = {},
+                   supported_model: str = None) -> pd.DataFrame:
+    from src.test import valid_tests_dico
+
+    """
+
+    :param result_df:
+    :param criteria:
+    :param supported_model: None: any (no restriction), 'model-agnostic', 'tree-based'
+
+    :return:
+    """
+
+    def _restrict_tests(test_column):
+        if supported_model is not None:
+            if supported_model not in valid_tests_dico[test_column.name].supported_models_developed:
+                return None  # no need to keep the column as the model is not considered
+        restricted_results = []
+        for dico in test_column:
+            sub_tests = dico.get('score', {})
+            new_score = {}
+            for k, v in sub_tests.items():
+                if keep_sub_test(k, criteria):
+                    new_score[k] = v
+            if len(new_score):
+                new_result = {
+                    'score': new_score,
+                    'time': dico.get('time', 0.)
+                }
+            else:
+                new_result = {}
+            restricted_results.append(new_result)
+        return pd.Series(restricted_results, name=test_column.name, index=result_df.index)
+
+    result_df_restricted = result_df.apply(_restrict_tests)
+    # pd.DataFrame(columns=result_df.columns, index=result_df.index)
+
+    return result_df_restricted
+
+
+if __name__ == "__main__":
+    from src.io import load_results
+
+    result_df = load_results()
+    summary_df, eligible_points_df, score_df  = get_details(result_df)
+
+    result_df_restricted = restrict_tests(result_df,
+                                          criteria={'importance': True,
+                                                    'attribution': False,
+                                                    'interaction': False, },
+                                          supported_model=None)
+    summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)
