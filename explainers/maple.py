@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
@@ -362,7 +363,9 @@ class Maple:
             self.explainer = MapleExplainer(self.predict_func, self.X_reference, **kwargs)
 
     def explain(self, dataset_to_explain, **kwargs):
-        self.attribution_values = self.explainer.attributions(dataset_to_explain.values, multiply_by_input=True)
+        if isinstance(dataset_to_explain,pd.DataFrame):
+            dataset_to_explain = dataset_to_explain.values
+        self.attribution_values = self.explainer.attributions(dataset_to_explain, multiply_by_input=True)
         self.expected_values = np.zeros(
             dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
