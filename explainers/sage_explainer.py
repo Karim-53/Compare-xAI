@@ -42,7 +42,6 @@ https://iancovert.com/blog/understanding-shap-sage/"""
         self.sage_estimator = sage.PermutationEstimator(imputer, 'mse')
         # todo [after submission] get the optimizer from the model or the
 
-
     def explain(self, dataset_to_explain, truth_to_explain=None, **kwargs):
         """
 

@@ -50,8 +50,8 @@ class CoughAndFever1090:  # (Metric):
 
         return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(
             feature_importance=feature_importance),
-                'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
-                    attribution_values=attribution_values)}
+            'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
+                attribution_values=attribution_values)}
         # todo add axiom_symmetry
 
 

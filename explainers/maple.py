@@ -363,7 +363,7 @@ class Maple:
             self.explainer = MapleExplainer(self.predict_func, self.X_reference, **kwargs)
 
     def explain(self, dataset_to_explain, **kwargs):
-        if isinstance(dataset_to_explain,pd.DataFrame):
+        if isinstance(dataset_to_explain, pd.DataFrame):
             dataset_to_explain = dataset_to_explain.values
         self.attribution_values = self.explainer.attributions(dataset_to_explain, multiply_by_input=True)
         self.expected_values = np.zeros(

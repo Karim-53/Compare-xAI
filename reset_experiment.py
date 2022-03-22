@@ -16,9 +16,11 @@ from contextlib import contextmanager
 import threading
 import _thread
 
+
 class TimeoutException(Exception):
     def __init__(self, msg=''):
         self.msg = msg
+
 
 @contextmanager
 def time_limit(seconds, msg=''):
@@ -33,15 +35,17 @@ def time_limit(seconds, msg=''):
         timer.cancel()
 
 
-
 def get_empty_result(*args):
     return {}
+
 
 def empty_results(_len):
     return [get_empty_result() for _ in range(_len)]
 
 
-TIME_LIMIT = 5 # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
+TIME_LIMIT = 5  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
+
+
 def run_experiment(test_class, explainer_class):
     print(test_class.__name__, explainer_class.__name__)
     # todo try except
@@ -58,9 +62,9 @@ def run_experiment(test_class, explainer_class):
         if _explainer.expected_values is None:
             _explainer.expected_values = f'Time out {TIME_LIMIT}'
         if _explainer.attribution_values is None:
-            _explainer.attribution_values =  f'Time out {TIME_LIMIT}'
+            _explainer.attribution_values = f'Time out {TIME_LIMIT}'
         if _explainer.feature_importance is None:
-            _explainer.feature_importance =  f'Time out {TIME_LIMIT}'
+            _explainer.feature_importance = f'Time out {TIME_LIMIT}'
 
     score = test.score(attribution_values=_explainer.attribution_values,
                        feature_importance=_explainer.feature_importance)
