@@ -1,4 +1,4 @@
-""" In this .py we test the effect of the """
+""" In this .py we test the effect of the distribution on the explanation"""
 import pandas as pd
 from xgboost import XGBRegressor
 

@@ -1,12 +1,12 @@
 from explainers import *
 
 valid_explainers = (
-    Random,
-    Saabas,
-    TreeShap,
-    Sage,
-    Lime,
-    KernelShap,
+    # Random,
+    # Saabas,
+    # TreeShap,
+    # Sage,
+    # Lime,
+    # KernelShap,
     Maple,
 )
 valid_explainers_dico = {e.name:e for e in valid_explainers}

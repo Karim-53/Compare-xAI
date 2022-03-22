@@ -35,3 +35,8 @@ def is_attribution_values_symmetric(attribution_values):
         return 1. - diff  # if there is a small epsilon then it's gonna hit the score
     else:
         return 0.
+def attributions_dummy(attribution_values, dummy_features):
+    if not is_ok(attribution_values):
+        return None
+    max_attributions = attribution_values.__abs__().max(axis=0)
+    return sum([a == 0. for a in max_attributions[dummy_features]]) / len(dummy_features)

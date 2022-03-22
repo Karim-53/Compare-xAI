@@ -80,10 +80,12 @@ class Lime:
     """ Main wrapper. please use this one"""
     name = 'lime'
 
-    def __init__(self, predict_func, X, **kwargs):
+    def __init__(self, predict_func, X, X_reference=None, **kwargs):
+        super().__init__()
         self.predict_func = predict_func
-        self.X = X
-        self.lime_explainer = LimeTabular(self.predict_func, self.X, mode="regression")
+        self.X_reference = X_reference if X_reference is not None else X
+
+        self.lime_explainer = LimeTabular(self.predict_func, self.X_reference, mode="regression")
 
     def explain(self, dataset_to_explain, **kwargs):
         self.attribution_values = self.lime_explainer.attributions(dataset_to_explain)

@@ -9,3 +9,4 @@ from .roar_monotonicity import ROARMonotonicity
 from .shapley import Shapley
 from .shapley_corr import ShapleyCorr
 from .x0_plus_x1 import DistributionNonUniformStatDep, DistributionUniformStatDep, DistributionNonUniformStatIndep
+from .mnist import Mnist

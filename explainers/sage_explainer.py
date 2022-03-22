@@ -30,13 +30,18 @@ https://iancovert.com/blog/understanding-shap-sage/"""
     attribution_values = 'Can not be calculated'
     feature_importance = None
 
-    def __init__(self, trained_model, X, **kwargs):
+    def __init__(self, trained_model, X, X_reference=None, **kwargs):
+        super().__init__()
         # self.input_names = input_names
         # Set up an imputer to handle missing features
-        imputer = sage.MarginalImputer(trained_model, X[:64])  # 512
+        if X_reference is None:
+            X_reference = X
+        reference_max_len = min(16, len(X_reference))  # 512 was the default value but I for faster results we use 16
+        imputer = sage.MarginalImputer(trained_model, X_reference[:reference_max_len])
         # Set up an estimator
-        self.sage_estimator = sage.PermutationEstimator(imputer,
-                                                        'mse')  # todo [after submission] get the optimizer from the model or the
+        self.sage_estimator = sage.PermutationEstimator(imputer, 'mse')
+        # todo [after submission] get the optimizer from the model or the
+
 
     def explain(self, dataset_to_explain, truth_to_explain=None, **kwargs):
         """
@@ -62,8 +67,8 @@ https://iancovert.com/blog/understanding-shap-sage/"""
                                           thresh=.85,
                                           )
         self.feature_importance = sage_values.values
-        expected_values = 'Can not be calculated'
-        attribution_values = 'Can not be calculated'
+        self.expected_values = 'Can not be calculated'
+        self.attribution_values = 'Can not be calculated'
         # sage_values.plot(feature_names)
         # print(sage_values)
 

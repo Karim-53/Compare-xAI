@@ -29,7 +29,7 @@ class Random(Explainer):
     feature_importance = None
 
     def __init__(self, **kwargs):
-        pass  # todo [after acceptance] do I really need that
+        super().__init__()
 
     def explain(self, dataset_to_explain, **kwargs):
         # todo [after acceptance] with np seed = 0

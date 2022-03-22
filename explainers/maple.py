@@ -336,10 +336,13 @@ class Maple:
     """ Wrapper for all maple implementation. Please use this one """
     name = 'maple'
 
-    def __init__(self, predict_func, trained_model, X, **kwargs):
+    def __init__(self, predict_func, trained_model, X, X_reference=None, **kwargs):
+        super().__init__()
         self.predict_func = predict_func
         self.trained_model = trained_model
         self.X = X
+        self.X_reference = X_reference if X_reference is not None else X
+
         is_tree = False
         if str(type(predict_func.__self__)).endswith(
                 "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
@@ -356,7 +359,7 @@ class Maple:
         if is_tree:
             self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)
         else:
-            self.explainer = MapleExplainer(self.predict_func, self.X, **kwargs)
+            self.explainer = MapleExplainer(self.predict_func, self.X_reference, **kwargs)
 
     def explain(self, dataset_to_explain, **kwargs):
         self.attribution_values = self.explainer.attributions(dataset_to_explain.values, multiply_by_input=True)
