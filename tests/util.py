@@ -35,6 +35,14 @@ def is_attribution_values_symmetric(attribution_values):
         return 1. - diff  # if there is a small epsilon then it's gonna hit the score
     else:
         return 0.
+
+
+def importance_dummy(feature_importance, dummy_features: list):
+    if not is_ok(feature_importance):
+        return None
+    return sum([fi == 0. for fi in feature_importance[dummy_features] ]) / len(dummy_features)
+
+
 def attributions_dummy(attribution_values, dummy_features):
     if not is_ok(attribution_values):
         return None
