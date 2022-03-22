@@ -1,9 +1,23 @@
 import numpy as np
+from sklearn import neural_network
 
+MODELS = ['tree_based', 'neural_network']
+EXTENDED_MODELS = {'model_agnostic': MODELS}
+
+
+def supported_models_developed(supported_models):
+    _supported_models_developed = list(supported_models)
+    for e in supported_models:
+        _supported_models_developed += EXTENDED_MODELS.get(e, [])
+    return _supported_models_developed
 
 class Explainer:
     name = None
     description = None
+    supported_models = ()
+
+
+
     # todo [after acceptance] add complexity as str
     # todo [after acceptance] add last_update = version of the release of this repo
     # todo add source paper just the bibtex tag
@@ -23,7 +37,7 @@ class Explainer:
 class Random(Explainer):
     name = 'baseline_random'
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
-
+    supported_models = ('model_agnostic',)
     expected_values = None
     attribution_values = None
     feature_importance = None

@@ -26,6 +26,7 @@ class Shap(Explainer):  # todo custom explainers should inhirit from a bigger cl
 
 class KernelShap(Explainer):
     name = 'kernel_shap'
+    supported_models = ('model_agnostic',)
     expected_values = None
     attribution_values = None
     feature_importance = None
@@ -63,6 +64,7 @@ class KernelShap(Explainer):
 
 class TreeShap(Explainer):
     name = 'tree_shap'
+    supported_models = ('tree_based',)
     expected_values = None
     attribution_values = None
     feature_importance = None

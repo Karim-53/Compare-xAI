@@ -3,6 +3,7 @@ from typing import Dict
 import pandas as pd
 
 
+
 def sum_score(dico):
     score = dico.get('score', {})
     score_not_none = [f for f in score.values() if isinstance(f, float)]
@@ -50,10 +51,11 @@ def keep_sub_test(k: str, criteria):
     return False
 
 
-def restrict_tests(result_df: pd.DataFrame, criteria: Dict[str, bool] = {},
-                   supported_model: str = None) -> pd.DataFrame:
-    from src.test import valid_tests_dico
-
+def restrict_tests(
+        result_df: pd.DataFrame,
+        criteria: Dict[str, bool] = {},
+        supported_model: str = None,
+) -> pd.DataFrame:
     """
 
     :param result_df:
@@ -62,13 +64,15 @@ def restrict_tests(result_df: pd.DataFrame, criteria: Dict[str, bool] = {},
 
     :return:
     """
+    from src.explainer import valid_explainers_dico
+    from explainers.explainer_superclass import supported_models_developed
 
-    def _restrict_tests(test_column):
+    def _restrict_tests(row):
         if supported_model is not None:
-            if supported_model not in valid_tests_dico[test_column.name].supported_models_developed:
+            if supported_model not in supported_models_developed(valid_explainers_dico[row.name].supported_models):
                 return None  # no need to keep the column as the model is not considered
         restricted_results = []
-        for dico in test_column:
+        for dico in row:
             sub_tests = dico.get('score', {})
             new_score = {}
             for k, v in sub_tests.items():
@@ -82,9 +86,9 @@ def restrict_tests(result_df: pd.DataFrame, criteria: Dict[str, bool] = {},
             else:
                 new_result = {}
             restricted_results.append(new_result)
-        return pd.Series(restricted_results, name=test_column.name, index=result_df.index)
+        return pd.Series(restricted_results, name=row.name, index=result_df.columns)
 
-    result_df_restricted = result_df.apply(_restrict_tests)
+    result_df_restricted = result_df.apply(_restrict_tests, axis=1)
     # pd.DataFrame(columns=result_df.columns, index=result_df.index)
 
     return result_df_restricted
@@ -96,9 +100,18 @@ if __name__ == "__main__":
     result_df = load_results()
     summary_df, eligible_points_df, score_df  = get_details(result_df)
 
+    print('Best XAI for feature importance')
     result_df_restricted = restrict_tests(result_df,
                                           criteria={'importance': True,
                                                     'attribution': False,
                                                     'interaction': False, },
                                           supported_model=None)
+    summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)
+
+    print('Best XAI for explaining tree models')
+    result_df_restricted = restrict_tests(result_df,
+                                          criteria={'importance': True,
+                                                    'attribution': False,
+                                                    'interaction': False, },
+                                          supported_model='tree_based')
     summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)

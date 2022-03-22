@@ -6,6 +6,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
+from explainers.explainer_superclass import Explainer
 from src.utils import get_feature_importance
 
 
@@ -333,9 +334,10 @@ class MAPLE:
         return pred
 
 
-class Maple:
+class Maple(Explainer):
     """ Wrapper for all maple implementation. Please use this one """
     name = 'maple'
+    supported_models = ('model_agnostic',)
 
     def __init__(self, predict_func, trained_model, X, X_reference=None, **kwargs):
         super().__init__()
