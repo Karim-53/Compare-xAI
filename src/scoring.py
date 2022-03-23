@@ -67,10 +67,14 @@ def restrict_tests(
     from src.explainer import valid_explainers_dico
     from explainers.explainer_superclass import supported_models_developed
 
+    if supported_model is not None:
+        xai_supporting_slected_models = [xai for xai in result_df.index if supported_model in supported_models_developed(valid_explainers_dico[xai].supported_models) ]
+    else:
+        xai_supporting_slected_models = result_df.index
     def _restrict_tests(row):
-        if supported_model is not None:
-            if supported_model not in supported_models_developed(valid_explainers_dico[row.name].supported_models):
-                return None  # no need to keep the column as the model is not considered
+        # if supported_model is not None:
+        #     if supported_model not in supported_models_developed(valid_explainers_dico[row.name].supported_models):
+        #         return None  # no need to keep the column as the model is not considered
         restricted_results = []
         for dico in row:
             sub_tests = dico.get('score', {})
@@ -88,7 +92,8 @@ def restrict_tests(
             restricted_results.append(new_result)
         return pd.Series(restricted_results, name=row.name, index=result_df.columns)
 
-    result_df_restricted = result_df.apply(_restrict_tests, axis=1)
+    _result_df = result_df.loc[xai_supporting_slected_models]
+    result_df_restricted = _result_df.apply(_restrict_tests, axis=1)
     # pd.DataFrame(columns=result_df.columns, index=result_df.index)
 
     return result_df_restricted
@@ -108,10 +113,16 @@ if __name__ == "__main__":
                                           supported_model=None)
     summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)
 
-    print('Best XAI for explaining tree models')
+    print('Best XAI for explaining feature importance of tree models')
     result_df_restricted = restrict_tests(result_df,
                                           criteria={'importance': True,
                                                     'attribution': False,
                                                     'interaction': False, },
                                           supported_model='tree_based')
+    summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)
+
+    print('Best model-agnostic XAI')
+    result_df_restricted = restrict_tests(result_df,
+                                          criteria={},
+                                          supported_model='model_agnostic')
     summary_df_restricted, eligible_points_df_restricted, score_df_restricted  = get_details(result_df_restricted)
