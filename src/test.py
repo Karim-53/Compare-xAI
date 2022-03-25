@@ -7,6 +7,8 @@ valid_tests = (
     DistributionUniformStatDep,
     DistributionNonUniformStatIndep,
 )
+valid_tests_dico = {e.name: e for e in valid_tests}
+
 # not working yet
 # "faithfulness": tests.Faithfulness,
 # "roar_faithfulness": tests.ROARFaithfulness,
