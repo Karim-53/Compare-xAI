@@ -50,11 +50,16 @@ https://iancovert.com/blog/understanding-shap-sage/"""
         :param truth_to_explain: optionnal
         :param kwargs:
         """
-        assert truth_to_explain is not None
+        self.expected_values = 'Can not be calculated'
+        self.attribution_values = 'Can not be calculated'
+        if truth_to_explain is None:
+            self.feature_importance = 'Can not be calculated'
+            return
         # if truth_to_explain is not None:
         #     print('explanation_type = SAGE')
         # else:
         #     print('explanation_type = Shapley Effects')
+        # todo [after acceptance] re read the sage paper to check the difference
 
         if isinstance(dataset_to_explain, pd.DataFrame):
             dataset_to_explain = dataset_to_explain.to_numpy()
@@ -67,8 +72,6 @@ https://iancovert.com/blog/understanding-shap-sage/"""
                                           thresh=.85,
                                           )
         self.feature_importance = sage_values.values
-        self.expected_values = 'Can not be calculated'
-        self.attribution_values = 'Can not be calculated'
         # sage_values.plot(feature_names)
         # print(sage_values)
 

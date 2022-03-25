@@ -1,10 +1,8 @@
-import math
-import random
-from itertools import chain, combinations
-
 import numpy as np
+from itertools import chain, combinations
+import math, random
 
-from explainers.explainer_superclass import InteractionExplainer
+from explainers.explainer_superclass import Explainer, InteractionExplainer
 
 
 def powerset(iterable):
@@ -22,21 +20,22 @@ def random_subset(s):
     return tuple(out)
 
 
-class SiExplainer(Explainer):
+class SiExplainer(InteractionExplainer):
+    """ wrapper from Archipelago repo """
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=False,
-        seed=None,
-    ):
-        Explainer.__init__(
             self,
-            model,
+            trained_model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+    ):
+        output_indices=0
+        batch_size=20
+        verbose = True
+        seed = None
+        InteractionExplainer.__init__(
+            self,
+            trained_model,
             input,
             baseline,
             data_xformer,
@@ -198,3 +197,31 @@ class SiExplainer(Explainer):
                 res.append(att)
 
             return np.array(res)
+
+
+class ShapInteraction(Explainer):
+    """ Main wrapper. please use this one """
+    name = 'shap_interaction'
+    is_affected_by_seed = True
+
+    def __init__(self, trained_model, X, nb_features=None, **kwargs):
+        super().__init__()
+        self.nb_features = nb_features
+        if self.nb_features is None:
+            self.nb_features = X.shape[1]
+        self.si_method = SiExplainer(trained_model, input=list(X[0]), baseline=list(X[1]),)
+
+    def explain(self, **kwargs):
+        self.expected_values = None
+        self.attribution_values = 'Can not be calculated'
+        self.feature_importance = 'Can not be calculated'
+
+        num_T = 20
+        inter_scores = []
+        for i in range(self.nb_features):
+            for j in range(i + 1, self.nb_features):
+                S = (i, j)
+                att = self.si_method.attribution(S, num_T)  # todo [after acceptance] find the tqdm and delete it
+                inter_scores.append((S, att ** 2))
+        print('inter_scores',inter_scores)
+        self.interaction = inter_scores

@@ -2,6 +2,7 @@ from explainers import *
 
 valid_explainers = (
     Random,
+    ShapInteraction,
     Saabas,
     TreeShap,
     Sage,

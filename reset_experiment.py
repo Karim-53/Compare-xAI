@@ -39,20 +39,41 @@ def get_empty_result(*args):
     return {}
 
 
-def empty_results(_len):
-    return [get_empty_result() for _ in range(_len)]
+def empty_results(_iterable):
+    return [get_empty_result() for _ in _iterable]
 
 
-TIME_LIMIT = 5  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
+def append_empty_row(result_df, name):
+    empty_row_df = pd.DataFrame(
+        [empty_results(result_df.columns)],
+        index=[name],
+        columns=result_df.columns,
+    )
+    return pd.concat([result_df, empty_row_df])
+
+
+TIME_LIMIT = 255  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
+
+
+def compatible(test_class, explainer_class):
+    """ test if the xai generate the kind of explanation expected from the test """
+    for explanation in ['importance', 'attribution', 'interaction']
+    pass
 
 
 def run_experiment(test_class, explainer_class):
     print(test_class.__name__, explainer_class.__name__)
-    # todo try except
+    if not compatible(test_class, explainer_class):
+        return {
+        # 'score': score,
+        'Last_updated': str(datetime.datetime.now()),
+    }
+    # todo try except to catch error from XAI alg
     test = test_class()
 
     start_time = time.time()
 
+    # print(test.__dict__)
     _explainer = explainer_class(**test.__dict__)
     try:
         with time_limit(TIME_LIMIT, 'sleep'):
@@ -67,7 +88,9 @@ def run_experiment(test_class, explainer_class):
             _explainer.feature_importance = f'Time out {TIME_LIMIT}'
 
     score = test.score(attribution_values=_explainer.attribution_values,
-                       feature_importance=_explainer.feature_importance)
+                       feature_importance=_explainer.feature_importance,
+                       interaction=_explainer.interaction,
+                       )
     results = {
         'score': score,
         'time': time.time() - start_time,
@@ -86,12 +109,14 @@ if __name__ == "__main__":
     try:
         for explainer_class in valid_explainers:
             if explainer_class.name not in result_df.index:
-                result_df.loc[explainer_class.name] = empty_results(result_df.shape[1])
+                result_df = append_empty_row(result_df, explainer_class.name)
             for test_class in valid_tests:
-                result = run_experiment(test_class, explainer_class)
                 if test_class.name not in result_df.columns:  # todo [after acceptance] check if this line is really important
-                    result_df[test_class.name] = empty_results(len(result_df))
+                    result_df[test_class.name] = empty_results(result_df.index)
+                result = run_experiment(test_class, explainer_class)
+                print('old result', result_df.loc[explainer_class.name, test_class.name])
                 result_df.at[explainer_class.name, test_class.name] = result
+                print('new result', result_df.loc[explainer_class.name, test_class.name])
     except KeyboardInterrupt:
         pass
     print(result_df)

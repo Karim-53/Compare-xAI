@@ -69,16 +69,18 @@ class TreeShap(Explainer):
     attribution_values = None
     feature_importance = None
 
-    def __init__(self, trained_model, X, **kwargs):
+    def __init__(self, trained_model, X, predict_func=None, **kwargs):
         super().__init__()
         self.trained_model = trained_model
-        self.f = trained_model.predict
+        self.f = predict_func
+        if self.f is None:
+            self.f = trained_model.predict
         self.df_reference = X
         self.model_supported = True
         try:
             self.explainer = shap.TreeExplainer(self.trained_model, self.df_reference, **kwargs)
         except Exception as e:
-            if str(e).startswith('Model type not yet supported by TreeExplainer'):
+            if str(e).startswith('Model type not yet supported by TreeExplainer') or str(e).startswith('Unsupported masker type'):
                 self.model_supported = False
 
     def explain(self, dataset_to_explain, **kwargs):
