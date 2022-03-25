@@ -1,5 +1,6 @@
 import os
 import pathlib
+import collections
 
 root = ''
 for root_relative_dir in [r'./', r'../', r'../../', r'../../../']:
@@ -33,3 +34,10 @@ def plot_tree(xgb_model, filename, rankdir='UT', num_trees=0):
 def get_importance(attribution):
     return abs(attribution).mean(axis=0)
 
+def are_class_names_unique(class_list):
+    names = [e.name for e in class_list]
+    if len(names) == len(set(names)):
+        return True
+    else:
+        print("Duplicates:", [item for item, count in collections.Counter(names).items() if count > 1])
+        return False

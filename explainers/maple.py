@@ -338,6 +338,8 @@ class Maple(Explainer):
     """ Wrapper for all maple implementation. Please use this one """
     name = 'maple'
     supported_models = ('model_agnostic',)
+    attribution = True
+    importance = True
 
     def __init__(self, predict_func, trained_model, X, X_reference=None, **kwargs):
         super().__init__()

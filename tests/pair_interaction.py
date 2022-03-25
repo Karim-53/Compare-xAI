@@ -164,7 +164,7 @@ input_value, base_value = 1, -1
 
 class DetectInteraction(Test):
     """ this is only a subclass please do not use directly """
-    name = 'detect_interaction'
+    name = 'detect_interaction' # todo detail if it is pair interaction or multi
     description = 'Is the XAI able to detect all pairs of binary features interacting'
 
 
@@ -173,7 +173,6 @@ class DetectInteraction(Test):
         Get Data and Synthetic Function
         :param function_id: value in [0, 4]
         """
-        self.name = DetectInteraction.name + str(function_id)
         self.trained_model = synth_model(function_id, input_value, base_value)
         self.predict_func = self.trained_model  # because it is instance.__call__
         self.nb_features = 40  # num features
@@ -195,34 +194,49 @@ class DetectInteraction(Test):
         """
         if interaction is None:
             return {}
+        print('received feature interaction', interaction)
         interaction_sparse = sparse_format(interaction)
         gts = self.trained_model.get_gts(self.nb_features)
         auc = get_auc(interaction_sparse, gts)
-        return {'interaction_detection': (auc - .5) * 2.}
-
+        _score = (auc - .5) * 2.
+        if _score < 0.:
+            print('Negative AUC!')
+            _score = max(_score, 0.) # with random values it is possible to get a negative score
+        return {'interaction_detection': _score}
 
 
 
 class DetectInteraction0(DetectInteraction):
-    def __init__(self):
-        super().__init__(function_id=0)
+    function_id = 0
+    name = DetectInteraction.name + str(function_id)
 
+    def __init__(self):
+        super().__init__(function_id=self.function_id)
 
 class DetectInteraction1(DetectInteraction):
-    def __init__(self):
-        super().__init__(function_id=1)
+    function_id = 1
+    name = DetectInteraction.name + str(function_id)
 
+    def __init__(self):
+        super().__init__(function_id=self.function_id)
 
 class DetectInteraction2(DetectInteraction):
-    def __init__(self):
-        super().__init__(function_id=2)
+    function_id = 2
+    name = DetectInteraction.name + str(function_id)
 
+    def __init__(self):
+        super().__init__(function_id=self.function_id)
 
 class DetectInteraction3(DetectInteraction):
-    def __init__(self):
-        super().__init__(function_id=3)
+    function_id = 3
+    name = DetectInteraction.name + str(function_id)
 
+    def __init__(self):
+        super().__init__(function_id=self.function_id)
 
 class DetectInteraction4(DetectInteraction):
+    function_id = 4
+    name = DetectInteraction.name + str(function_id)
+
     def __init__(self):
-        super().__init__(function_id=4)
+        super().__init__(function_id=self.function_id)

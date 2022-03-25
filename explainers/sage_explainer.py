@@ -27,9 +27,7 @@ rather than their marginal distribution p(X^{\bar S})p(XS¯  ). (Using the condi
 feature's absence, whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
 https://iancovert.com/blog/understanding-shap-sage/"""
 
-    expected_values = 'Can not be calculated'
-    attribution = 'Can not be calculated'
-    importance = None
+    importance = True
 
     def __init__(self, trained_model, X, X_reference=None, **kwargs):
         super().__init__()

@@ -11,9 +11,8 @@ class Saabas(Explainer):
     supported_models = ('tree_based',)
     # requirements = {'generic_xgboost':True}
 
-    expected_values = None
-    attribution = None
-    importance = None
+    attribution = True
+    importance = True  # infered
 
     def __init__(self, trained_model, **kwargs):
         super().__init__()

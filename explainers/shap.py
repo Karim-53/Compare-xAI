@@ -27,9 +27,8 @@ class Shap(Explainer):  # todo custom explainers should inhirit from a bigger cl
 class KernelShap(Explainer):
     name = 'kernel_shap'
     supported_models = ('model_agnostic',)
-    expected_values = None
-    attribution = None
-    importance = None
+    attribution = True
+    importance = True  # inferred
 
     def __init__(self, trained_model, X, **kwargs):
         super().__init__()
@@ -65,9 +64,8 @@ class KernelShap(Explainer):
 class TreeShap(Explainer):
     name = 'tree_shap'
     supported_models = ('tree_based',)
-    expected_values = None
-    attribution = None
-    importance = None
+    attribution = True
+    importance = True  # inferred
 
     def __init__(self, trained_model, X, predict_func=None, **kwargs):
         super().__init__()

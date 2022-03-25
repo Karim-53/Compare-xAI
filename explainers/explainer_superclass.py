@@ -18,15 +18,15 @@ class Explainer:
 
 
 
-    # todo [after acceptance] add complexity as str
+    # todo [after acceptance] add complexity as str, is_affected_by_seed
     # todo [after acceptance] add last_update = version of the release of this repo
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
 
-    expected_values = None  # keep them saved here to know what could be calculated
-    attribution = None
-    importance = None
-    interaction = None
+    # Know what could be calculated
+    attribution = False
+    importance = False
+    interaction = False
 
     def explain(self, x, **kwargs):  # todo [after acceptance] change this to __call__ ?
         from src.explainer import valid_explainers
@@ -125,9 +125,9 @@ class Random(Explainer):
     name = 'baseline_random'
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
     supported_models = ('model_agnostic',)
-    expected_values = None
-    attribution = None
-    importance = None
+    attribution = True
+    importance = True
+    interaction = True
 
     def __init__(self, **kwargs):
         super().__init__()

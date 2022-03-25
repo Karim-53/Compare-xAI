@@ -202,6 +202,7 @@ class SiExplainer(InteractionExplainer):
 class ShapInteraction(Explainer):
     """ Main wrapper. please use this one """
     name = 'shap_interaction'
+    interaction = True
     is_affected_by_seed = True
 
     def __init__(self, trained_model, X, nb_features=None, **kwargs):
