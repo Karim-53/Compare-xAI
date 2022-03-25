@@ -5,13 +5,13 @@ import numpy as np
 import shap
 
 from explainers.explainer_superclass import Explainer
-from src.utils import get_feature_importance
+from src.utils import get_importance
 
 
 class Shap(Explainer):  # todo custom explainers should inhirit from a bigger class
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, f, X, **kwargs):
         self.f = f
@@ -28,8 +28,8 @@ class KernelShap(Explainer):
     name = 'kernel_shap'
     supported_models = ('model_agnostic',)
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, trained_model, X, **kwargs):
         super().__init__()
@@ -52,22 +52,22 @@ class KernelShap(Explainer):
     def explain(self, dataset_to_explain, **kwargs):
         if not self.model_supported:
             self.expected_values = None
-            self.attribution_values = None
-            self.feature_importance = None
+            self.attribution = None
+            self.importance = None
             return
 
         shap_values = self.explainer.shap_values(np.array(dataset_to_explain))
         self.expected_values = self.explainer.expected_value
-        self.attribution_values = shap_values
-        self.feature_importance = get_feature_importance(self.attribution_values)
+        self.attribution = shap_values
+        self.importance = get_importance(self.attribution)
 
 
 class TreeShap(Explainer):
     name = 'tree_shap'
     supported_models = ('tree_based',)
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, trained_model, X, predict_func=None, **kwargs):
         super().__init__()
@@ -86,12 +86,12 @@ class TreeShap(Explainer):
     def explain(self, dataset_to_explain, **kwargs):
         if not self.model_supported:
             self.expected_values = None
-            self.attribution_values = None
-            self.feature_importance = None
+            self.attribution = None
+            self.importance = None
             return
 
         shap_values = self.explainer(dataset_to_explain,
                                      check_additivity=False)  # todo after acceptance reort all problems to shap due to additivity
         self.expected_values = shap_values.base_values
-        self.attribution_values = shap_values.values
-        self.feature_importance = get_feature_importance(self.attribution_values)
+        self.attribution = shap_values.values
+        self.importance = get_importance(self.attribution)

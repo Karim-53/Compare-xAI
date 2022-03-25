@@ -10,6 +10,6 @@ class Test:
 
     # todo add init with var check
 
-    def score(self, attribution_values=None, feature_importance=None, **kwargs):
-        # todo assert attribution_values feature_importance size
+    def score(self, attribution=None, importance=None, **kwargs):
+        # todo assert attribution importance size
         raise NotImplementedError("The scoring method of this test is not implemented at the moment.")

@@ -3,7 +3,7 @@ Contains the base class for the two explainer objects.
 """
 
 
-class Explainer:
+class Explainer:  #  ma7ahtekch beha maghir mat3aytelha
     """
     A superclass for all explainer objects.
     This (somewhat) matches the SHAP
@@ -24,6 +24,7 @@ class Explainer:
         A function that returns the path attributions for the
         given inputs.
         """
+        print('ma7ahtekch beha maghir mat3aytelha')
         raise Exception(
             "Attributions have not been implemented "
             + "for this class. Likely, you have imported "
@@ -45,6 +46,7 @@ class Explainer:
         A function that returns the path interactions for the
         given inputs.
         """
+        print('ma7ahtekch beha maghir mat3aytelha')
         raise Exception(
             "Interactions have not been implemented "
             + "for this class. Likely, you have imported "

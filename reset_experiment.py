@@ -1,4 +1,5 @@
 import datetime
+import inspect
 import logging
 import time
 
@@ -57,8 +58,11 @@ TIME_LIMIT = 255  # 250  # src https://stackoverflow.com/questions/366682/how-to
 
 def compatible(test_class, explainer_class):
     """ test if the xai generate the kind of explanation expected from the test """
-    for explanation in ['importance', 'attribution', 'interaction']
-    pass
+    for explanation in ['importance', 'attribution', 'interaction']:
+        if explanation in inspect.getfullargspec(test_class.score).args and explainer_class.__dict__.get(explanation, False):
+            return True
+    else:
+        return False
 
 
 def run_experiment(test_class, explainer_class):
@@ -82,13 +86,13 @@ def run_experiment(test_class, explainer_class):
         print("Timed out!")
         if _explainer.expected_values is None:
             _explainer.expected_values = f'Time out {TIME_LIMIT}'
-        if _explainer.attribution_values is None:
-            _explainer.attribution_values = f'Time out {TIME_LIMIT}'
-        if _explainer.feature_importance is None:
-            _explainer.feature_importance = f'Time out {TIME_LIMIT}'
+        if _explainer.attribution is None:
+            _explainer.attribution = f'Time out {TIME_LIMIT}'
+        if _explainer.importance is None:
+            _explainer.importance = f'Time out {TIME_LIMIT}'
 
-    score = test.score(attribution_values=_explainer.attribution_values,
-                       feature_importance=_explainer.feature_importance,
+    score = test.score(attribution=_explainer.attribution,
+                       importance=_explainer.importance,
                        interaction=_explainer.interaction,
                        )
     results = {

@@ -24,8 +24,8 @@ class Explainer:
     # todo add a pretty way to print the class
 
     expected_values = None  # keep them saved here to know what could be calculated
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
     interaction = None
 
     def explain(self, x, **kwargs):  # todo [after acceptance] change this to __call__ ?
@@ -126,8 +126,8 @@ class Random(Explainer):
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
     supported_models = ('model_agnostic',)
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -139,7 +139,7 @@ class Random(Explainer):
         if len(_shape)== 1:
             _shape = (1, _shape[0])
         self.expected_values = np.random.randn(_shape[0])
-        self.attribution_values = np.random.randn(*_shape)
-        self.feature_importance = np.random.randn(_shape[1])
+        self.attribution = np.random.randn(*_shape)
+        self.importance = np.random.randn(_shape[1])
 
         self.interaction = np.random.randn( _shape[1], _shape[1] )

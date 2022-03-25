@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 
-from src.utils import get_feature_importance
+from src.utils import get_importance
 
 try:
     import lime
@@ -88,8 +88,8 @@ class Lime:
         self.lime_explainer = LimeTabular(self.predict_func, self.X_reference, mode="regression")
 
     def explain(self, dataset_to_explain, **kwargs):
-        self.attribution_values = self.lime_explainer.attributions(dataset_to_explain)
+        self.attribution = self.lime_explainer.attributions(dataset_to_explain)
         self.expected_values = np.zeros(
             dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
-        self.feature_importance = get_feature_importance(self.attribution_values)
+        self.importance = get_importance(self.attribution)

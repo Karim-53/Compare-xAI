@@ -28,8 +28,8 @@ feature's absence, whereas using the marginal breaks feature dependencies and pr
 https://iancovert.com/blog/understanding-shap-sage/"""
 
     expected_values = 'Can not be calculated'
-    attribution_values = 'Can not be calculated'
-    feature_importance = None
+    attribution = 'Can not be calculated'
+    importance = None
 
     def __init__(self, trained_model, X, X_reference=None, **kwargs):
         super().__init__()
@@ -51,9 +51,9 @@ https://iancovert.com/blog/understanding-shap-sage/"""
         :param kwargs:
         """
         self.expected_values = 'Can not be calculated'
-        self.attribution_values = 'Can not be calculated'
+        self.attribution = 'Can not be calculated'
         if truth_to_explain is None:
-            self.feature_importance = 'Can not be calculated'
+            self.importance = 'Can not be calculated'
             return
         # if truth_to_explain is not None:
         #     print('explanation_type = SAGE')
@@ -71,7 +71,7 @@ https://iancovert.com/blog/understanding-shap-sage/"""
                                           verbose=True, bar=False,
                                           thresh=.85,
                                           )
-        self.feature_importance = sage_values.values
+        self.importance = sage_values.values
         # sage_values.plot(feature_names)
         # print(sage_values)
 
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     imputer = sage.MarginalImputer(model, test[:16])
     estimator = sage.PermutationEstimator(imputer, 'mse')
     sage_values = estimator(test, Y_test, bar=False)
-    feature_importance = sage_values.values
-    feature_importance_std = sage_values.std  # also provides std  # todo [after acceptance] include that somewhere
+    importance = sage_values.values
+    importance_std = sage_values.std  # also provides std  # todo [after acceptance] include that somewhere
 # else:
 # from tqdm import tqdm
 # from functools import partialmethod

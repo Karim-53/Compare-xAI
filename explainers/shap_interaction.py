@@ -213,8 +213,8 @@ class ShapInteraction(Explainer):
 
     def explain(self, **kwargs):
         self.expected_values = None
-        self.attribution_values = 'Can not be calculated'
-        self.feature_importance = 'Can not be calculated'
+        self.attribution = 'Can not be calculated'
+        self.importance = 'Can not be calculated'
 
         num_T = 20
         inter_scores = []

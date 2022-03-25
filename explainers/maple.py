@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from explainers.explainer_superclass import Explainer
-from src.utils import get_feature_importance
+from src.utils import get_importance
 
 
 class MapleExplainer:
@@ -367,9 +367,9 @@ class Maple(Explainer):
     def explain(self, dataset_to_explain, **kwargs):
         if isinstance(dataset_to_explain, pd.DataFrame):
             dataset_to_explain = dataset_to_explain.values
-        self.attribution_values = self.explainer.attributions(dataset_to_explain, multiply_by_input=True)
+        self.attribution = self.explainer.attributions(dataset_to_explain, multiply_by_input=True)
         self.expected_values = np.zeros(
             dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
-        self.feature_importance = get_feature_importance(
-            self.attribution_values)  # todo make sure we calc feature importance in that way for maple
+        self.importance = get_importance(
+            self.attribution)  # todo make sure we calc feature importance in that way for maple

@@ -13,8 +13,8 @@ from tqdm import tqdm
 class BreakDown:
     name = 'breakdown'
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, trained_model, df_reference, input_names=None, **kwargs):
         if input_names:
@@ -39,11 +39,11 @@ class BreakDown:
     def explain(self, dataset_to_explain, **kwargs):
         self.expected_values = np.zeros(dataset_to_explain.shape[0])
 
-        self.attribution_values = np.zeros((dataset_to_explain.shape[0], self.dim))
+        self.attribution = np.zeros((dataset_to_explain.shape[0], self.dim))
         for idx, x in tqdm(enumerate(dataset_to_explain.values)):
-            self.attribution_values[idx], _ = self.explain_x(x, direction="down", useIntercept=False, baseline=0)
+            self.attribution[idx], _ = self.explain_x(x, direction="down", useIntercept=False, baseline=0)
 
-        self.feature_importance = get_feature_importance(self.attribution_values)
+        self.importance = get_importance(self.attribution)
 
     def explain_x(self, observation, direction, useIntercept=False, baseline=0):
         """

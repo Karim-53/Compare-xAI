@@ -29,29 +29,29 @@ class CoughAndFever1090:  # (Metric):
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
-    def score(self, attribution_values=None, feature_importance=None, **kwargs):
-        # todo assert attribution_values feature_importance size
-        def is_cough_more_important_than_fever(feature_importance=None, **kwargs):
-            if not is_ok(feature_importance):
+    def score(self, attribution=None, importance=None, **kwargs):
+        # todo assert attribution importance size
+        def is_cough_more_important_than_fever(importance=None, **kwargs):
+            if not is_ok(importance):
                 return None
 
-            if feature_importance[0] > feature_importance[1]:
+            if importance[0] > importance[1]:
                 return 1.
             else:
                 return 0.
 
-        def is_cough_attribution_higher_than_fever_attribution(attribution_values=None, **kwargs):
-            if not is_ok(attribution_values):
+        def is_cough_attribution_higher_than_fever_attribution(attribution=None, **kwargs):
+            if not is_ok(attribution):
                 return None
-            if attribution_values[3, 0] > attribution_values[3, 1]:
+            if attribution[3, 0] > attribution[3, 1]:
                 return 1.
             else:
                 return 0.
 
         return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(
-            feature_importance=feature_importance),
+            importance=importance),
             'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
-                attribution_values=attribution_values)}
+                attribution=attribution)}
         # todo add axiom_symmetry
 
 

@@ -71,11 +71,11 @@ class Mnist(Test):
         self.predict_func = self.trained_model.predict
         # self.dataset_size = len(self.X)
 
-    def score(self, attribution_values=None, feature_importance=None, **kwargs):
-        # todo assert attribution_values feature_importance size
+    def score(self, attribution=None, importance=None, **kwargs):
+        # todo assert attribution importance size
         dummy_features = self.X.max(axis=0) == 0.
         return {
-            'importance_dummy': importance_dummy(feature_importance=feature_importance, dummy_features=dummy_features),
-            'attributions_dummy': attributions_dummy(attribution_values=attribution_values,
+            'importance_dummy': importance_dummy(importance=importance, dummy_features=dummy_features),
+            'attributions_dummy': attributions_dummy(attribution=attribution,
                                                      dummy_features=dummy_features)
         }

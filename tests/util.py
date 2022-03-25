@@ -16,35 +16,35 @@ def is_ok(values, dim=None):
         return values.shape == dim
 
 
-def importance_symmetric(feature_importance):  # feature_importance=None,
-    if not is_ok(feature_importance):
+def importance_symmetric(importance):  # importance=None,
+    if not is_ok(importance):
         return None
-    diff = abs(feature_importance[0] - feature_importance[1])
+    diff = abs(importance[0] - importance[1])
     if diff < 1:
         return 1. - diff  # if there is a small epsilon then it's gonna hit the score
     else:
         return 0.
 
 
-def is_attribution_values_symmetric(attribution_values):
-    if not is_ok(attribution_values):
+def is_attribution_symmetric(attribution):
+    if not is_ok(attribution):
         return None
-    print(attribution_values)
-    diff = np.max(np.abs(attribution_values[:, 0] - attribution_values[[0, 2, 1, 3], 1]))
+    print(attribution)
+    diff = np.max(np.abs(attribution[:, 0] - attribution[[0, 2, 1, 3], 1]))
     if diff < 1:
         return 1. - diff  # if there is a small epsilon then it's gonna hit the score
     else:
         return 0.
 
 
-def importance_dummy(feature_importance, dummy_features: list):
-    if not is_ok(feature_importance):
+def importance_dummy(importance, dummy_features: list):
+    if not is_ok(importance):
         return None
-    return sum([fi == 0. for fi in feature_importance[dummy_features]]) / len(dummy_features)
+    return sum([fi == 0. for fi in importance[dummy_features]]) / len(dummy_features)
 
 
-def attributions_dummy(attribution_values, dummy_features):
-    if not is_ok(attribution_values):
+def attributions_dummy(attribution, dummy_features):
+    if not is_ok(attribution):
         return None
-    max_attributions = attribution_values.__abs__().max(axis=0)
+    max_attributions = attribution.__abs__().max(axis=0)
     return sum([a == 0. for a in max_attributions[dummy_features]]) / len(dummy_features)

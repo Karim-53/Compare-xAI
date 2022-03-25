@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 
 from explainers.explainer_superclass import Explainer
-from src.utils import get_feature_importance
+from src.utils import get_importance
 
 
 class Saabas(Explainer):
@@ -12,8 +12,8 @@ class Saabas(Explainer):
     # requirements = {'generic_xgboost':True}
 
     expected_values = None
-    attribution_values = None
-    feature_importance = None
+    attribution = None
+    importance = None
 
     def __init__(self, trained_model, **kwargs):
         super().__init__()
@@ -25,10 +25,10 @@ class Saabas(Explainer):
         if isinstance(self.trained_model, xgb.core.Booster):
             dmatrix_to_explain = xgb.DMatrix(dataset_to_explain)
             saabas_values_3 = self.trained_model.predict(dmatrix_to_explain, pred_contribs=True, approx_contribs=True)
-            self.attribution_values = saabas_values_3[:, :-1]
+            self.attribution = saabas_values_3[:, :-1]
 
             # self.expected_values = shap_values.base_values  # todo [after acceptance] get the base value from the xgboost
-            self.feature_importance = get_feature_importance(self.attribution_values)
+            self.importance = get_importance(self.attribution)
         elif isinstance(self.trained_model, RandomForestRegressor):
             raise 'not implemented'
             # from treeinterpreter import treeinterpreter as ti, utils
@@ -41,6 +41,6 @@ class Saabas(Explainer):
             # aggregated_contributions = utils.aggregated_contribution(contributions)
         else:
             print('####### Saabas #', type(self.trained_model))
-            self.feature_importance = 'Saabas works only with tree-based model'
-            self.attribution_values = None
+            self.importance = 'Saabas works only with tree-based model'
+            self.attribution = None
 # todo if random forest :

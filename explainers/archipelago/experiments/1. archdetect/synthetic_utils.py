@@ -114,6 +114,8 @@ def get_auc(inter_scores, gts):
     for inter in inter_scores:
         # inter = ( (i,j) interaction_score )
         pred_vec.append(inter[1])
+        # todo [after acceptance] check if this should be changed as below
+        #  pred_vec.append(0. if inter[1] == 0. else 1.)  # badaltha 5ater moch mo9tana3 XD
         if inter[0] in gts:
             gt_vec.append(1)
         else:
@@ -121,6 +123,15 @@ def get_auc(inter_scores, gts):
 
     fpr, tpr, thresholds = metrics.roc_curve(gt_vec, pred_vec, pos_label=1)
     auc = metrics.auc(fpr, tpr)
+    import matplotlib.pyplot as plt
+    plt.plot(
+        fpr,
+        tpr,
+        # color="darkorange",
+        # lw=lw,
+        # label="ROC curve (area = %0.2f)" % roc_auc[2],
+    )
+    plt.show()
     return auc
 
 

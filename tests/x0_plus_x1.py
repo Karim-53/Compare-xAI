@@ -3,7 +3,7 @@ import pandas as pd
 from xgboost import XGBRegressor
 
 from tests.test_superclass import Test
-from tests.util import importance_symmetric, is_attribution_values_symmetric
+from tests.util import importance_symmetric, is_attribution_symmetric
 
 
 class _X0PlusX1(Test):
@@ -25,11 +25,11 @@ class _X0PlusX1(Test):
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
-    def score(self, attribution_values=None, feature_importance=None, **kwargs):
-        # todo assert attribution_values feature_importance size
+    def score(self, attribution=None, importance=None, **kwargs):
+        # todo assert attribution importance size
         return {
-            'importance_symmetric': importance_symmetric(feature_importance=feature_importance),
-            'is_attribution_values_symmetric': is_attribution_values_symmetric(attribution_values=attribution_values)}
+            'importance_symmetric': importance_symmetric(importance=importance),
+            'is_attribution_symmetric': is_attribution_symmetric(attribution=attribution)}
 
 
 class DistributionNonUniformStatDep(_X0PlusX1):

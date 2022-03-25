@@ -2,7 +2,8 @@ import argparse
 import requests
 import os
 import shutil
-
+# this module was imported from archipelago repo
+# todo [after acceptance] let's clean it and just keep the unit tests imported
 
 def str2bool(v):
     if isinstance(v, bool):
