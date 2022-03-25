@@ -1,10 +1,8 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib as mpl
-import viz.colors as colors
 import matplotlib.patches as patches
-from viz.rec import _set_axis_config
-
+import matplotlib.pyplot as plt
+import numpy as np
+import viz.colors as colors
 
 stixfont = {"fontname": "STIXGeneral"}
 
@@ -21,23 +19,23 @@ def get_fig(fig=None, figsize=None, fontsize=10):
 
 
 def viz_text(
-    explanation,
-    tokens,
-    fig=None,
-    figsize=None,
-    axis=None,
-    shift=0,
-    fontweight=500,
-    fontsize=12,
-    spacing=0.018,
-    empty_spacing=0.007,
-    cbar_pos=None,
-    cbar_fontsize=20,
-    show_colorbar=False,
-    max_magn=None,
-    size_ratio=None,
-    clearfig=True,
-    **kwargs,
+        explanation,
+        tokens,
+        fig=None,
+        figsize=None,
+        axis=None,
+        shift=0,
+        fontweight=500,
+        fontsize=12,
+        spacing=0.018,
+        empty_spacing=0.007,
+        cbar_pos=None,
+        cbar_fontsize=20,
+        show_colorbar=False,
+        max_magn=None,
+        size_ratio=None,
+        clearfig=True,
+        **kwargs,
 ):
     fig = get_fig(fig=fig, figsize=figsize, fontsize=fontsize)
     if clearfig:
@@ -146,17 +144,17 @@ def viz_text(
 
 
 def draw_interaction_arrows(
-    axis,
-    interaction_effects,
-    token_pos,
-    fontsize,
-    size_ratio,
-    arrow_shift=0.2,
-    arrow_base_level=20,
-    arrow_ext_const=6.5,
-    arrow_head_width=3,
-    arrow_head_length=6,
-    arrow_linewidth=1,
+        axis,
+        interaction_effects,
+        token_pos,
+        fontsize,
+        size_ratio,
+        arrow_shift=0.2,
+        arrow_base_level=20,
+        arrow_ext_const=6.5,
+        arrow_head_width=3,
+        arrow_head_length=6,
+        arrow_linewidth=1,
 ):
     if len(interaction_effects) == 1:
         if len(list(interaction_effects.keys())[0]) == len(token_pos):
@@ -169,10 +167,10 @@ def draw_interaction_arrows(
     arrow_base_level = 4 + (arrow_base_level - 4) * size_ratio
     arrow_ext_const *= size_ratio
     style = (
-        "<|-|>,head_width="
-        + str(arrow_head_width)
-        + ",head_length="
-        + str(arrow_head_length)
+            "<|-|>,head_width="
+            + str(arrow_head_width)
+            + ",head_length="
+            + str(arrow_head_length)
     )  # +",linewidth=0.5" #tail_width=0.5,
     kw = dict(arrowstyle=style, color="k", lw=arrow_linewidth)
 
@@ -193,7 +191,7 @@ def draw_interaction_arrows(
                         first_overlap_found = False
                     break
                 elif any(
-                    inter[0] < v < inter[-1] for v in inter2
+                        inter[0] < v < inter[-1] for v in inter2
                 ):  # TODO: what about multiple overlap cases?
                     if first_overlap_found:
                         ext = len(used_ext) + 1
@@ -204,7 +202,7 @@ def draw_interaction_arrows(
                         found_loop = i
 
         for j in range(len(inter) - 1):
-            a, b = inter[j : j + 2]
+            a, b = inter[j: j + 2]
             pa = token_pos[a]
             pb = token_pos[b]
             h = arrow_base_level + arrow_ext_const * ext
@@ -229,15 +227,15 @@ def draw_interaction_arrows(
 
 
 def interactive_viz_text(
-    exps,
-    tokens,
-    process_stop_words,
-    init_k=3,
-    fontsize=10,
-    fig=None,
-    figsize=None,
-    max_magn=None,
-    **kwargs,
+        exps,
+        tokens,
+        process_stop_words,
+        init_k=3,
+        fontsize=10,
+        fig=None,
+        figsize=None,
+        max_magn=None,
+        **kwargs,
 ):
     from ipywidgets import widgets, interact
 

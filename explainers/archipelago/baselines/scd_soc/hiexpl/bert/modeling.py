@@ -23,22 +23,19 @@ import logging
 import math
 import os
 import shutil
+import sys
 import tarfile
 import tempfile
-import sys
 from io import open
 
 import torch
-from torch import nn
-from torch.nn import CrossEntropyLoss
 import torch.nn.functional as F
-
-import numpy as np
+from torch import nn
+from torch.distributions import Categorical
+from torch.nn import CrossEntropyLoss
 
 from .file_utils import cached_path
 from .global_state import global_state_dict
-import random
-from torch.distributions import Categorical
 
 logger = logging.getLogger(__name__)
 
@@ -150,18 +147,18 @@ class BertConfig(object):
     """Configuration class to store the configuration of a `BertModel`."""
 
     def __init__(
-        self,
-        vocab_size_or_config_json_file,
-        hidden_size=768,
-        num_hidden_layers=12,
-        num_attention_heads=12,
-        intermediate_size=3072,
-        hidden_act="gelu",
-        hidden_dropout_prob=0.1,
-        attention_probs_dropout_prob=0.1,
-        max_position_embeddings=512,
-        type_vocab_size=2,
-        initializer_range=0.02,
+            self,
+            vocab_size_or_config_json_file,
+            hidden_size=768,
+            num_hidden_layers=12,
+            num_attention_heads=12,
+            intermediate_size=3072,
+            hidden_act="gelu",
+            hidden_dropout_prob=0.1,
+            attention_probs_dropout_prob=0.1,
+            max_position_embeddings=512,
+            type_vocab_size=2,
+            initializer_range=0.02,
     ):
         """Constructs BertConfig.
 
@@ -188,8 +185,8 @@ class BertConfig(object):
                 initializing all weight matrices.
         """
         if isinstance(vocab_size_or_config_json_file, str) or (
-            sys.version_info[0] == 2
-            and isinstance(vocab_size_or_config_json_file, unicode)
+                sys.version_info[0] == 2
+                and isinstance(vocab_size_or_config_json_file, unicode)
         ):
             with open(vocab_size_or_config_json_file, "r", encoding="utf-8") as reader:
                 json_config = json.loads(reader.read())
@@ -248,6 +245,7 @@ except ImportError:
         "Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex."
     )
 
+
     class BertLayerNorm(nn.Module):
         def __init__(self, hidden_size, eps=1e-12):
             """Construct a layernorm module in the TF style (epsilon inside the square root)."""
@@ -280,8 +278,8 @@ except ImportError:
             # m_rel = dense_bias * (abs(rel_x_nb) + EPS) / (abs(rel_x_nb) + abs(irrel_x_nb) + EPS)
             # m_irrel = dense_bias * abs(irrel_x_nb) / (abs(rel_x_nb) + abs(irrel_x_nb) + EPS)
             bias_ratio = (
-                global_state_dict.rel_span_len - 1
-            ) / global_state_dict.total_span_len  # * (abs(rel_x_nb) + EPS) / (abs(rel_x_nb) + abs(irrel_x_nb) + EPS)
+                                 global_state_dict.rel_span_len - 1
+                         ) / global_state_dict.total_span_len  # * (abs(rel_x_nb) + EPS) / (abs(rel_x_nb) + abs(irrel_x_nb) + EPS)
             # return rel_x_nb + bias_ratio * dense_bias, irrel_x_nb + (1 - bias_ratio) * dense_bias
             rel_1, irrel_1 = rel_x_nb, irrel_x_nb + dense_bias
 
@@ -300,7 +298,7 @@ except ImportError:
 
                 # cd 2018
                 rel_2 = 0.5 * (
-                    self.forward(rel_x + irrel_x) - self.forward(irrel_x)
+                        self.forward(rel_x + irrel_x) - self.forward(irrel_x)
                 ) + 0.5 * (self.forward(rel_x) - self.forward(rel_x - rel_x))
                 # irrel_2 = self.forward(rel_x + irrel_x) - rel_2
             else:
@@ -314,7 +312,7 @@ except ImportError:
             gate = 0 if bias_ratio < 0.2 or not states else 1
 
             return (1 - gate) * rel_1 + gate * rel_2, (
-                1 - gate
+                    1 - gate
             ) * irrel_1 + gate * irrel_2
 
 
@@ -391,7 +389,7 @@ def activation_decompose(rel_input, irrel_input, activation, layer=-1):
         # rel_hidden = activation(rel_input)  - activation(rel_input - rel_input)
         # cd 2018
         rel_hidden = 0.5 * (
-            activation(rel_input + irrel_input) - activation(irrel_input)
+                activation(rel_input + irrel_input) - activation(irrel_input)
         ) + 0.5 * (activation(rel_input) - activation(rel_input - rel_input))
         irrel_hidden = activation(rel_input + irrel_input) - rel_hidden
     else:
@@ -556,7 +554,7 @@ class BertIntermediate(nn.Module):
         super(BertIntermediate, self).__init__()
         self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
         if isinstance(config.hidden_act, str) or (
-            sys.version_info[0] == 2 and isinstance(config.hidden_act, unicode)
+                sys.version_info[0] == 2 and isinstance(config.hidden_act, unicode)
         ):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
@@ -642,7 +640,7 @@ class BertEncoder(nn.Module):
         return all_encoder_layers
 
     def decompose_forward(
-        self, rel_hidden, irrel_hidden, attention_mask, output_all_encoded_layers=True
+            self, rel_hidden, irrel_hidden, attention_mask, output_all_encoded_layers=True
     ):
         all_encoder_layers = []
         for layer_num, layer_module in enumerate(self.layer):
@@ -684,7 +682,7 @@ class BertPredictionHeadTransform(nn.Module):
         super(BertPredictionHeadTransform, self).__init__()
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         if isinstance(config.hidden_act, str) or (
-            sys.version_info[0] == 2 and isinstance(config.hidden_act, unicode)
+                sys.version_info[0] == 2 and isinstance(config.hidden_act, unicode)
         ):
             self.transform_act_fn = ACT2FN[config.hidden_act]
         else:
@@ -808,13 +806,13 @@ class BertPreTrainedModel(nn.Module):
 
     @classmethod
     def from_pretrained(
-        cls,
-        pretrained_model_name_or_path,
-        state_dict=None,
-        cache_dir=None,
-        from_tf=False,
-        *inputs,
-        **kwargs
+            cls,
+            pretrained_model_name_or_path,
+            state_dict=None,
+            cache_dir=None,
+            from_tf=False,
+            *inputs,
+            **kwargs
     ):
         """
         Instantiate a BertPreTrainedModel from a pre-trained model file or a pytorch state dict.
@@ -942,7 +940,7 @@ class BertPreTrainedModel(nn.Module):
 
         start_prefix = ""
         if not hasattr(model, "bert") and any(
-            s.startswith("bert.") for s in state_dict.keys()
+                s.startswith("bert.") for s in state_dict.keys()
         ):
             start_prefix = "bert."
         load(model, prefix=start_prefix)
@@ -1020,11 +1018,11 @@ class BertModel(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(
-        self,
-        input_ids,
-        token_type_ids=None,
-        attention_mask=None,
-        output_all_encoded_layers=True,
+            self,
+            input_ids,
+            token_type_ids=None,
+            attention_mask=None,
+            output_all_encoded_layers=True,
     ):
         if attention_mask is None:
             attention_mask = torch.ones_like(input_ids)
@@ -1063,12 +1061,12 @@ class BertModel(BertPreTrainedModel):
         return encoded_layers, pooled_output
 
     def decompose_forward(
-        self,
-        input_ids,
-        rel_intervals,
-        token_type_ids=None,
-        attention_mask=None,
-        output_all_encoded_layers=True,
+            self,
+            input_ids,
+            rel_intervals,
+            token_type_ids=None,
+            attention_mask=None,
+            output_all_encoded_layers=True,
     ):
         """
 
@@ -1185,12 +1183,12 @@ class BertForPreTraining(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(
-        self,
-        input_ids,
-        token_type_ids=None,
-        attention_mask=None,
-        masked_lm_labels=None,
-        next_sentence_label=None,
+            self,
+            input_ids,
+            token_type_ids=None,
+            attention_mask=None,
+            masked_lm_labels=None,
+            next_sentence_label=None,
     ):
         sequence_output, pooled_output = self.bert(
             input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False
@@ -1214,13 +1212,13 @@ class BertForPreTraining(BertPreTrainedModel):
             return prediction_scores, seq_relationship_score
 
     def predict_and_explain(
-        self,
-        input_ids,
-        rel_intervals,
-        token_type_ids=None,
-        attention_mask=None,
-        mask_lm_labels=None,
-        next_sentence_label=None,
+            self,
+            input_ids,
+            rel_intervals,
+            token_type_ids=None,
+            attention_mask=None,
+            mask_lm_labels=None,
+            next_sentence_label=None,
     ):
         (
             (rel_seq_out, irrel_seq_out),
@@ -1252,15 +1250,15 @@ class BertForPreTraining(BertPreTrainedModel):
         return self.mask_
 
     def naive_sampling(
-        self,
-        input_ids,
-        token_type_ids,
-        attention_mask,
-        fw_pos,
-        bw_pos,
-        sample_len,
-        sample_num,
-        feasible_bert_ids,
+            self,
+            input_ids,
+            token_type_ids,
+            attention_mask,
+            fw_pos,
+            bw_pos,
+            sample_len,
+            sample_num,
+            feasible_bert_ids,
     ):
 
         sequence_output, pooled_output = self.bert(
@@ -1294,7 +1292,7 @@ class BertForPreTraining(BertPreTrainedModel):
         return idx  # [B]
 
     def gibbs_sampling(
-        self, input_ids_bak, token_type_ids, attention_mask, fw_pos, bw_pos, sample_len
+            self, input_ids_bak, token_type_ids, attention_mask, fw_pos, bw_pos, sample_len
     ):
         input_ids = torch.from_numpy(copy.copy(input_ids_bak.cpu().numpy())).to(
             input_ids_bak.device
@@ -1327,14 +1325,14 @@ class BertForPreTraining(BertPreTrainedModel):
         return input_ids
 
     def gibbs_sampling_k(
-        self,
-        input_ids,
-        token_type_ids,
-        attention_mask,
-        fw_pos,
-        bw_pos,
-        sample_len,
-        sample_num,
+            self,
+            input_ids,
+            token_type_ids,
+            attention_mask,
+            fw_pos,
+            bw_pos,
+            sample_len,
+            sample_num,
     ):
         input_ids = input_ids.repeat(sample_num, 1)
         token_type_ids = token_type_ids.repeat(sample_num, 1)
@@ -1395,7 +1393,7 @@ class BertForMaskedLM(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(
-        self, input_ids, token_type_ids=None, attention_mask=None, masked_lm_labels=None
+            self, input_ids, token_type_ids=None, attention_mask=None, masked_lm_labels=None
     ):
         sequence_output, _ = self.bert(
             input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False
@@ -1464,11 +1462,11 @@ class BertForNextSentencePrediction(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(
-        self,
-        input_ids,
-        token_type_ids=None,
-        attention_mask=None,
-        next_sentence_label=None,
+            self,
+            input_ids,
+            token_type_ids=None,
+            attention_mask=None,
+            next_sentence_label=None,
     ):
         _, pooled_output = self.bert(
             input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False
@@ -1554,7 +1552,7 @@ class BertForSequenceClassification(BertPreTrainedModel):
             return logits
 
     def predict_and_explain(
-        self, input_ids, rel_intervals, token_type_ids=None, attention_mask=None
+            self, input_ids, rel_intervals, token_type_ids=None, attention_mask=None
     ):
         #         batch_size = 2
         #         num_batches = int(np.ceil(input_ids.shape[0] / batch_size))
@@ -1805,12 +1803,12 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(
-        self,
-        input_ids,
-        token_type_ids=None,
-        attention_mask=None,
-        start_positions=None,
-        end_positions=None,
+            self,
+            input_ids,
+            token_type_ids=None,
+            attention_mask=None,
+            start_positions=None,
+            end_positions=None,
     ):
         sequence_output, _ = self.bert(
             input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False

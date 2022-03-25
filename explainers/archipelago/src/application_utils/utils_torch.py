@@ -1,8 +1,4 @@
 import torch
-import torch.nn as nn
-from torch.utils import data
-import numpy as np
-import torch.optim as optim
 
 
 class ModelWrapperTorch:

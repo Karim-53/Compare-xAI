@@ -1,8 +1,9 @@
-import pandas as pd
-import numpy as np
-import logging
 import json
+import logging
 import os
+
+import numpy as np
+import pandas as pd
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -11,11 +12,9 @@ logging.basicConfig(
 )
 
 from sklearn import preprocessing
-from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
-from sklearn.neural_network import MLPRegressor
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import train_test_split
 from src import datasets, explainer, experiments, test, model, parse_utils
-from sklearn.metrics import mean_squared_error
 
 mode = "regression"
 results_dir = f"results/{mode}/thurs/exp-model-wine-shapr-3/"

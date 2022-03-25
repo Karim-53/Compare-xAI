@@ -1,8 +1,9 @@
 # import torch
 # import torch.nn as nn
 # import torch.optim as optim
-import numpy as np
 import itertools
+
+import numpy as np
 from sklearn import metrics
 
 

@@ -1,15 +1,13 @@
-from torchvision import transforms
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 import requests
 from PIL import Image
 from skimage.segmentation import mark_boundaries
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
+from torchvision import transforms
 
 matplotlib.rcParams["mathtext.fontset"] = "cm"
 matplotlib.rcParams["font.family"] = "STIXGeneral"
-
 
 # image pre-processing needed for ResNet
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -24,9 +22,9 @@ preprocess = transforms.Compose(
 
 
 def get_image_and_labels(
-    image_path,
-    device,
-    labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
+        image_path,
+        device,
+        labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
 ):
     """
     Loads image instance and labels
@@ -43,10 +41,10 @@ def get_image_and_labels(
         image = image.convert("RGB")
     image_tensor = preprocess(image)
     image = (
-        image_tensor.cpu().numpy().transpose(1, 2, 0) / image_tensor.abs().max().item()
+            image_tensor.cpu().numpy().transpose(1, 2, 0) / image_tensor.abs().max().item()
     )
     image_tensor = (
-        image_tensor.unsqueeze_(0).to(device) / image_tensor.abs().max().item()
+            image_tensor.unsqueeze_(0).to(device) / image_tensor.abs().max().item()
     )
     labels = {
         int(key): value for (key, value) in requests.get(labels_url).json().items()
@@ -93,7 +91,7 @@ def plot_explanations(img_arrays, figsize=0.4, spacing=0.15, savepath=""):
 
 
 def show_explanations(
-    inter_sets, image, segments, figsize=0.4, spacing=0.15, lime_atts=None, savepath=""
+        inter_sets, image, segments, figsize=0.4, spacing=0.15, lime_atts=None, savepath=""
 ):
     def get_interaction_img(inter):
         temp = (np.ones(image.shape, image.dtype) - 0.5) * 1

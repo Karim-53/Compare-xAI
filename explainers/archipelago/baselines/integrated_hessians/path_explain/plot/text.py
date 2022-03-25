@@ -2,23 +2,24 @@
 This module contains functions for plotting
 attributions on text data.
 """
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+
 from . import colors
 from .scatter import _set_axis_config
 
 
 def text_plot(
-    word_array,
-    attributions,
-    include_legend=False,
-    vmin=None,
-    vmax=None,
-    interaction_matrix=None,
-    interaction_index=None,
-    zero_diagonals=True,
-    **kwargs
+        word_array,
+        attributions,
+        include_legend=False,
+        vmin=None,
+        vmax=None,
+        interaction_matrix=None,
+        interaction_index=None,
+        zero_diagonals=True,
+        **kwargs
 ):
     """
     A function to plot attributions on text data.
@@ -123,13 +124,13 @@ def text_plot(
 
 
 def matrix_interaction_plot(
-    interaction_matrix,
-    tokens,
-    axis=None,
-    cbar_kw=None,
-    cbarlabel="Interaction Value",
-    zero_diagonals=True,
-    **kwargs
+        interaction_matrix,
+        tokens,
+        axis=None,
+        cbar_kw=None,
+        cbarlabel="Interaction Value",
+        zero_diagonals=True,
+        **kwargs
 ):
     """
     A function to plot the text interaction matrix.
@@ -208,13 +209,13 @@ def matrix_interaction_plot(
 
 
 def bar_interaction_plot(
-    interaction_matrix,
-    tokens,
-    top_k=5,
-    text_kwargs=None,
-    pair_indices=None,
-    zero_diagonals=True,
-    **kwargs
+        interaction_matrix,
+        tokens,
+        top_k=5,
+        text_kwargs=None,
+        pair_indices=None,
+        zero_diagonals=True,
+        **kwargs
 ):
     """
     A function to plot the word pairs with the largest
@@ -243,8 +244,8 @@ def bar_interaction_plot(
 
     if pair_indices is None:
         pair_indices = np.argsort((np.triu(np.abs(interaction_matrix))).flatten())[
-            ::-1
-        ][:top_k]
+                       ::-1
+                       ][:top_k]
         pair_indices = np.vstack(
             np.unravel_index(pair_indices, interaction_matrix.shape)
         ).T

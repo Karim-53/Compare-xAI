@@ -21,9 +21,8 @@ import os
 import sys
 from io import open
 
-import torch
-
 import pytorch_pretrained_bert.tokenization_transfo_xl as data_utils
+import torch
 from pytorch_pretrained_bert.modeling_transfo_xl import (
     CONFIG_NAME,
     WEIGHTS_NAME,
@@ -47,10 +46,10 @@ sys.modules["vocabulary"] = data_utils
 
 
 def convert_transfo_xl_checkpoint_to_pytorch(
-    tf_checkpoint_path,
-    transfo_xl_config_file,
-    pytorch_dump_folder_path,
-    transfo_xl_dataset_file,
+        tf_checkpoint_path,
+        transfo_xl_config_file,
+        pytorch_dump_folder_path,
+        transfo_xl_dataset_file,
 ):
     if transfo_xl_dataset_file:
         # Convert a pre-processed corpus (see original TensorFlow repo)
@@ -125,7 +124,7 @@ if __name__ == "__main__":
         default="",
         type=str,
         help="An optional config json file corresponding to the pre-trained BERT model. \n"
-        "This specifies the model architecture.",
+             "This specifies the model architecture.",
     )
     parser.add_argument(
         "--transfo_xl_dataset_file",

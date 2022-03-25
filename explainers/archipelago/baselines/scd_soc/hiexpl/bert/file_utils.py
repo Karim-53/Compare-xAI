@@ -9,10 +9,10 @@ import json
 import logging
 import os
 import shutil
+import sys
 import tempfile
 from functools import wraps
 from hashlib import sha256
-import sys
 from io import open
 
 import boto3

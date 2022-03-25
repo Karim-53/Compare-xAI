@@ -2,10 +2,11 @@
 Defines a function to plot individual feature-level importances
 across a dataset.
 """
-import pandas as pd
-import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 from . import colors
 
 
@@ -52,20 +53,20 @@ def _clean_input(feature_index, color_by, feature_names, attributions):
 
 
 def scatter_plot(
-    attributions,
-    feature_values,
-    feature_index,
-    interactions=None,
-    color_by=None,
-    feature_names=None,
-    scale_x_ind=False,
-    scale_y_ind=False,
-    plot_main=True,
-    figsize=5,
-    dpi=150,
-    add_random_noise_x=False,
-    add_random_noise_y=False,
-    **kwargs
+        attributions,
+        feature_values,
+        feature_index,
+        interactions=None,
+        color_by=None,
+        feature_names=None,
+        scale_x_ind=False,
+        scale_y_ind=False,
+        plot_main=True,
+        figsize=5,
+        dpi=150,
+        add_random_noise_x=False,
+        add_random_noise_y=False,
+        **kwargs
 ):
     """
     Function to draw a scatter plot of
@@ -133,8 +134,8 @@ def scatter_plot(
             interaction_column = 2.0 * interactions[:, color_by]
         else:
             interaction_column = (
-                interactions[:, feature_index, color_by]
-                + interactions[:, color_by, feature_index]
+                    interactions[:, feature_index, color_by]
+                    + interactions[:, color_by, feature_index]
             )
 
         inter_name = "Interaction between {} and {}".format(
@@ -151,18 +152,18 @@ def scatter_plot(
         )
         if add_random_noise_x:
             inter_df[x_name] += (
-                np.random.randn(feature_values.shape[0])
-                * np.std(inter_df[x_name])
-                * 0.05
+                    np.random.randn(feature_values.shape[0])
+                    * np.std(inter_df[x_name])
+                    * 0.05
             )
 
     if add_random_noise_x:
         data_df[x_name] += (
-            np.random.randn(feature_values.shape[0]) * np.std(data_df[x_name]) * 0.05
+                np.random.randn(feature_values.shape[0]) * np.std(data_df[x_name]) * 0.05
         )
     if add_random_noise_y:
         data_df[y_name] += (
-            np.random.randn(feature_values.shape[0]) * np.std(data_df[y_name]) * 0.05
+                np.random.randn(feature_values.shape[0]) * np.std(data_df[y_name]) * 0.05
         )
 
     if color_by is not None:
@@ -263,7 +264,7 @@ def _color_bar(fig, vmin, vmax, color_name, ticks=True, label_size=14, **kwargs)
 
 
 def _single_scatter(
-    axis, data, x_name, y_name, color_name=None, x_limits=None, y_limits=None, **kwargs
+        axis, data, x_name, y_name, color_name=None, x_limits=None, y_limits=None, **kwargs
 ):
     """
     Helper function. Generates a scatter plot with some custom
@@ -294,7 +295,7 @@ def _single_scatter(
 
 
 def _set_axis_config(
-    axis, linewidths=(0.0, 0.0, 0.0, 0.0), clear_y_ticks=False, clear_x_ticks=False
+        axis, linewidths=(0.0, 0.0, 0.0, 0.0), clear_y_ticks=False, clear_x_ticks=False
 ):
     """
     Helper function to do some basic matplotlib cleaning.

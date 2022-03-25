@@ -1,15 +1,14 @@
-from torchvision import transforms
-import requests
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+import requests
+from torchvision import transforms
 
 matplotlib.rcParams["mathtext.fontset"] = "cm"
 matplotlib.rcParams["font.family"] = "STIXGeneral"
 from application_utils.common_utils import get_efficient_mask_indices
 from PIL import Image
 from skimage.segmentation import find_boundaries
-from skimage.segmentation import quickshift, watershed, slic
 from skimage.morphology import dilation, square
 from skimage.util import img_as_float
 
@@ -41,9 +40,9 @@ class ImageXformer:  # (data_xformer):
 
 
 def get_image_and_labels(
-    image_path,
-    device,
-    labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
+        image_path,
+        device,
+        labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
 ):
     """
     Loads image instance and labels
@@ -73,7 +72,7 @@ def get_image_and_labels(
         image = image.convert("RGB")
     image_tensor = preprocess(image)
     image = (
-        image_tensor.cpu().numpy().transpose(1, 2, 0) / image_tensor.abs().max().item()
+            image_tensor.cpu().numpy().transpose(1, 2, 0) / image_tensor.abs().max().item()
     )
     labels = {
         int(key): value for (key, value) in requests.get(labels_url).json().items()
@@ -133,13 +132,13 @@ def get_set_img(image, segments, set_indices_instance, set_atts_instance, max_at
 
 
 def show_image_explanation(
-    inter_effects,
-    image,
-    segments,
-    figsize=0.4,
-    spacing=0.15,
-    main_effects=None,
-    savepath="",
+        inter_effects,
+        image,
+        segments,
+        figsize=0.4,
+        spacing=0.15,
+        main_effects=None,
+        savepath="",
 ):
     """
     Format image visualizations for plotting
@@ -186,13 +185,13 @@ def show_image_explanation(
 
 
 def custom_mark_boundaries(
-    image,
-    label_img,
-    color=(1, 1, 0),
-    outline_color=None,
-    mode="outer",
-    background_label=0,
-    outline_thickness=2,
+        image,
+        label_img,
+        color=(1, 1, 0),
+        outline_color=None,
+        mode="outer",
+        background_label=0,
+        outline_thickness=2,
 ):
     """Return image with boundaries between labeled regions highlighted.
     Parameters

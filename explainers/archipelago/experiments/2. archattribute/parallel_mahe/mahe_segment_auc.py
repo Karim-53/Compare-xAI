@@ -14,7 +14,6 @@ from application_utils.image_utils import *
 
 sys.path.append("../../../baselines/mahe_madex/madex/")
 sys.path.append("../../../baselines/mahe_madex/mahe/")
-from utils.general_utils import set_seed, proprocess_data
 from sampling_and_inference import generate_perturbation_dataset_image
 from deps.interaction_explainer import learn_hierarchical_gam
 import torch.multiprocessing as multiprocessing
@@ -31,8 +30,6 @@ mlp_device = torch.device("cuda:0")
 from pycocotools.coco import COCO
 import skimage.io as io
 from skimage.color import gray2rgb
-import pylab
-
 
 num_processes = 6
 softmax = False
@@ -40,7 +37,6 @@ softmax = False
 img_exp_path = "../"
 save_path = img_exp_path + "analysis/results/segment_auc_mahe.pickle"
 coco_to_i1k_path = img_exp_path + "processed_data/image_data/coco_to_i1k_map.pickle"
-
 
 data_dir = "/meladyfs/newyork/datasets/mscoco"
 data_type = "val2017"
@@ -122,7 +118,7 @@ def run():
             )
 
             if imgId in results and all(
-                len(results[imgId]["est"][m]) == len(annIds) for m in ["mahe", "mahe2"]
+                    len(results[imgId]["est"][m]) == len(annIds) for m in ["mahe", "mahe2"]
             ):  #### here i set the number of anns
                 continue
 

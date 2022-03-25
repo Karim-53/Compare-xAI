@@ -1,7 +1,8 @@
+import copy
+import pickle
+
 import numpy as np
 from application_utils.common_utils import get_efficient_mask_indices
-import pickle
-import copy
 
 
 class TextXformer:

@@ -3,14 +3,14 @@ import numpy as np
 
 class Explainer:
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=False,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            verbose=False,
     ):
 
         input, baseline = self.arg_checks(input, baseline, data_xformer)
@@ -44,7 +44,7 @@ class Explainer:
             return iterable
 
     def batch_set_inference(
-        self, set_indices, context, insertion_target, include_context=False
+            self, set_indices, context, insertion_target, include_context=False
     ):
         """
         Creates archipelago type data instances and runs batch inference on them
@@ -55,7 +55,7 @@ class Explainer:
 
         scores = {}
         for b in self.verbose_iterable(range(num_batches)):
-            batch_sets = set_indices[b * self.batch_size : (b + 1) * self.batch_size]
+            batch_sets = set_indices[b * self.batch_size: (b + 1) * self.batch_size]
             data_batch = []
             for index_tuple in batch_sets:
                 new_instance = context.copy()
@@ -88,15 +88,15 @@ class Explainer:
 
 class Archipelago(Explainer):
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        interactive=False,
-        verbose=False,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            interactive=False,
+            verbose=False,
     ):
         Explainer.__init__(
             self,
@@ -133,11 +133,11 @@ class Archipelago(Explainer):
         return set_scores
 
     def archdetect(
-        self,
-        get_main_effects=True,
-        get_pairwise_effects=True,
-        single_context=False,
-        weights=[0.5, 0.5],
+            self,
+            get_main_effects=True,
+            get_pairwise_effects=True,
+            single_context=False,
+            weights=[0.5, 0.5],
     ):
         """
         Detects interactions and sorts them
@@ -162,7 +162,7 @@ class Archipelago(Explainer):
                 inter_strengths[pair] = inter_b[pair] ** 2
             else:
                 inter_strengths[pair] = (
-                    weights[1] * inter_a[pair] ** 2 + weights[0] * inter_b[pair] ** 2
+                        weights[1] * inter_a[pair] ** 2 + weights[0] * inter_b[pair] ** 2
                 )
         sorted_scores = sorted(inter_strengths.items(), key=lambda kv: -kv[1])
 
@@ -209,12 +209,12 @@ class Archipelago(Explainer):
         return merged_explanation
 
     def search_feature_sets(
-        self,
-        context,
-        insertion_target,
-        get_interactions=True,
-        get_main_effects=False,
-        get_pairwise_effects=False,
+            self,
+            context,
+            insertion_target,
+            get_interactions=True,
+            get_main_effects=False,
+            get_pairwise_effects=False,
     ):
         """
         Gets optional pairwise interaction strengths, optional main effects, and optional pairwise effects
@@ -251,10 +251,10 @@ class Archipelago(Explainer):
                 f_b = idv_scores[(i,)]
                 f_c = idv_scores[(j,)]
                 f_d = pair_scores[(i, j)]
-                
+
                 numerator = f_a - f_b - f_c + f_d
                 denominator = ell_i * ell_j
-                
+
                 # The numerator should theorecially be zero when there aren't interactions 
                 # in the function f. However, it is possible that the numerator is not 
                 # exactly zero due to precision issues in the function call. Here, if all 
@@ -262,14 +262,14 @@ class Archipelago(Explainer):
                 # then we set the numerator to zero
                 if np.abs(numerator) / np.min(np.abs(np.array([f_a, f_b, f_c, f_d]))) < 1e-5:
                     numerator = 0.0
-                    
+
                 if denominator == 0.0:
                     inter_scores[(i, j)] = 0.0
                 else:
                     inter_scores[(i, j)] = numerator / denominator
 
                 if (
-                    get_pairwise_effects
+                        get_pairwise_effects
                 ):  # leverage existing function calls to compute pairwise effects
                     pairwise_effects[(i, j)] = pair_scores[(i, j)] - context_score
 

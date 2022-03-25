@@ -22,8 +22,6 @@ import re
 import sys
 from io import open
 
-from tqdm import tqdm
-
 from .file_utils import cached_path
 from .tokenization import BasicTokenizer
 
@@ -86,7 +84,7 @@ class OpenAIGPTTokenizer(object):
 
     @classmethod
     def from_pretrained(
-        cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
+            cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
     ):
         """
         Instantiate a PreTrainedBertModel from a pre-trained model file.
@@ -130,8 +128,8 @@ class OpenAIGPTTokenizer(object):
                 )
             )
         if (
-            pretrained_model_name_or_path
-            in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
+                pretrained_model_name_or_path
+                in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
         ):
             # if we're using a pretrained model, ensure the tokenizer wont index sequences longer
             # than the number of positional embeddings
@@ -254,7 +252,7 @@ class OpenAIGPTTokenizer(object):
         """ Converts a sequence of tokens into ids using the vocab. """
         ids = []
         if isinstance(tokens, str) or (
-            sys.version_info[0] == 2 and isinstance(tokens, unicode)
+                sys.version_info[0] == 2 and isinstance(tokens, unicode)
         ):
             if tokens in self.special_tokens:
                 return self.special_tokens[tokens]
@@ -287,7 +285,7 @@ class OpenAIGPTTokenizer(object):
         return tokens
 
     def decode(
-        self, ids, skip_special_tokens=False, clean_up_tokenization_spaces=False
+            self, ids, skip_special_tokens=False, clean_up_tokenization_spaces=False
     ):
         """Converts a sequence of ids in a string."""
         tokens = self.convert_ids_to_tokens(
@@ -298,18 +296,18 @@ class OpenAIGPTTokenizer(object):
             out_string = out_string.replace("<unk>", "")
             out_string = (
                 out_string.replace(" .", ".")
-                .replace(" ?", "?")
-                .replace(" !", "!")
-                .replace(" ,", ",")
-                .replace(" ,", ",")
-                .replace(" n't", "n't")
-                .replace(" 'm", "'m")
-                .replace(" 're", "'re")
-                .replace(" do not", " don't")
-                .replace(" 's", "'s")
-                .replace(" t ", "'t ")
-                .replace(" s ", "'s ")
-                .replace(" m ", "'m ")
-                .replace(" 've", "'ve")
+                    .replace(" ?", "?")
+                    .replace(" !", "!")
+                    .replace(" ,", ",")
+                    .replace(" ,", ",")
+                    .replace(" n't", "n't")
+                    .replace(" 'm", "'m")
+                    .replace(" 're", "'re")
+                    .replace(" do not", " don't")
+                    .replace(" 's", "'s")
+                    .replace(" t ", "'t ")
+                    .replace(" s ", "'s ")
+                    .replace(" m ", "'m ")
+                    .replace(" 've", "'ve")
             )
         return out_string

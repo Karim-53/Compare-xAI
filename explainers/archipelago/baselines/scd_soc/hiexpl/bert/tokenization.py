@@ -19,8 +19,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import collections
 import logging
 import os
-import unicodedata
 from io import open
+
+import unicodedata
 
 from .file_utils import cached_path
 
@@ -75,12 +76,12 @@ class BertTokenizer(object):
     """Runs end-to-end tokenization: punctuation splitting + wordpiece"""
 
     def __init__(
-        self,
-        vocab_file,
-        do_lower_case=True,
-        max_len=None,
-        do_basic_tokenize=True,
-        never_split=("[UNK]", "[SEP]", "[PAD]", "[CLS]", "[MASK]"),
+            self,
+            vocab_file,
+            do_lower_case=True,
+            max_len=None,
+            do_basic_tokenize=True,
+            never_split=("[UNK]", "[SEP]", "[PAD]", "[CLS]", "[MASK]"),
     ):
         """Constructs a BertTokenizer.
 
@@ -161,7 +162,7 @@ class BertTokenizer(object):
 
     @classmethod
     def from_pretrained(
-        cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
+            cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
     ):
         """
         Instantiate a PreTrainedBertModel from a pre-trained model file.
@@ -196,8 +197,8 @@ class BertTokenizer(object):
                 )
             )
         if (
-            pretrained_model_name_or_path
-            in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
+                pretrained_model_name_or_path
+                in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
         ):
             # if we're using a pretrained model, ensure the tokenizer wont index sequences longer
             # than the number of positional embeddings
@@ -214,9 +215,9 @@ class BasicTokenizer(object):
     """Runs basic tokenization (punctuation splitting, lower casing, etc.)."""
 
     def __init__(
-        self,
-        do_lower_case=True,
-        never_split=("[UNK]", "[SEP]", "[PAD]", "[CLS]", "[MASK]"),
+            self,
+            do_lower_case=True,
+            never_split=("[UNK]", "[SEP]", "[PAD]", "[CLS]", "[MASK]"),
     ):
         """Constructs a BasicTokenizer.
 
@@ -304,14 +305,14 @@ class BasicTokenizer(object):
         # space-separated words, so they are not treated specially and handled
         # like the all of the other languages.
         if (
-            (cp >= 0x4E00 and cp <= 0x9FFF)
-            or (cp >= 0x3400 and cp <= 0x4DBF)  #
-            or (cp >= 0x20000 and cp <= 0x2A6DF)  #
-            or (cp >= 0x2A700 and cp <= 0x2B73F)  #
-            or (cp >= 0x2B740 and cp <= 0x2B81F)  #
-            or (cp >= 0x2B820 and cp <= 0x2CEAF)  #
-            or (cp >= 0xF900 and cp <= 0xFAFF)
-            or (cp >= 0x2F800 and cp <= 0x2FA1F)  #
+                (cp >= 0x4E00 and cp <= 0x9FFF)
+                or (cp >= 0x3400 and cp <= 0x4DBF)  #
+                or (cp >= 0x20000 and cp <= 0x2A6DF)  #
+                or (cp >= 0x2A700 and cp <= 0x2B73F)  #
+                or (cp >= 0x2B740 and cp <= 0x2B81F)  #
+                or (cp >= 0x2B820 and cp <= 0x2CEAF)  #
+                or (cp >= 0xF900 and cp <= 0xFAFF)
+                or (cp >= 0x2F800 and cp <= 0x2FA1F)  #
         ):  #
             return True
 
@@ -423,10 +424,10 @@ def _is_punctuation(char):
     # Punctuation class but we treat them as punctuation anyways, for
     # consistency.
     if (
-        (cp >= 33 and cp <= 47)
-        or (cp >= 58 and cp <= 64)
-        or (cp >= 91 and cp <= 96)
-        or (cp >= 123 and cp <= 126)
+            (cp >= 33 and cp <= 47)
+            or (cp >= 58 and cp <= 64)
+            or (cp >= 91 and cp <= 96)
+            or (cp >= 123 and cp <= 126)
     ):
         return True
     cat = unicodedata.category(char)

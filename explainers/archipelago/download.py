@@ -1,7 +1,10 @@
 import argparse
-import requests
 import os
 import shutil
+
+import requests
+
+
 # this module was imported from archipelago repo
 # todo [after acceptance] let's clean it and just keep the unit tests imported
 
@@ -89,7 +92,6 @@ parser.add_argument(
     help="Name of downloads folder. All default code points to 'downloads'",
 )
 
-
 args = parser.parse_args()
 quick_demo = args.quick_demo
 demos = args.demos
@@ -105,7 +107,6 @@ if not any(all_options):
 if sum(all_options) > 1:
     raise ValueError("Cannot enable multiple options.")
 
-
 pretrained_model_ids = {
     "bert": "1sUqMqCqoZEjEuNEt6MQZQ2obJVm_r4Vt",
     "covid_net": "1aoZ9RTJeuAxPEMYo1ytYbmyQAJkaYIHo",
@@ -120,7 +121,6 @@ data_ids = {
 
 destination = "/home/myusername/work/myfile.ext"
 
-
 if quick_demo:
     keys = ["bert", "sst"]
 
@@ -134,7 +134,6 @@ elif download_all:
     keys = ["bert", "covid_net", "hiexpl_lm", "autoint", "sst", "avazu"]
 else:
     raise ValueError
-
 
 if not os.path.exists(downloads_folder):
     os.makedirs(downloads_folder)

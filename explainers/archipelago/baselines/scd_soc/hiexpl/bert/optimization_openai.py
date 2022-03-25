@@ -14,12 +14,13 @@
 # limitations under the License.
 """PyTorch optimization for OpenAI GPT model."""
 
+import logging
 import math
+
 import torch
+from torch.nn.utils import clip_grad_norm_
 from torch.optim import Optimizer
 from torch.optim.optimizer import required
-from torch.nn.utils import clip_grad_norm_
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -57,19 +58,19 @@ class OpenAIAdam(Optimizer):
     """Implements Open AI version of Adam algorithm with weight decay fix."""
 
     def __init__(
-        self,
-        params,
-        lr=required,
-        schedule="warmup_linear",
-        warmup=-1,
-        t_total=-1,
-        b1=0.9,
-        b2=0.999,
-        e=1e-8,
-        weight_decay=0,
-        vector_l2=False,
-        max_grad_norm=-1,
-        **kwargs
+            self,
+            params,
+            lr=required,
+            schedule="warmup_linear",
+            warmup=-1,
+            t_total=-1,
+            b1=0.9,
+            b2=0.999,
+            e=1e-8,
+            weight_decay=0,
+            vector_l2=False,
+            max_grad_norm=-1,
+            **kwargs
     ):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {} - should be >= 0.0".format(lr))
@@ -172,9 +173,9 @@ class OpenAIAdam(Optimizer):
                     lr_scheduled = group["lr"] * schedule_fct(progress, group["warmup"])
                     # warning for exceeding t_total (only active with warmup_linear
                     if (
-                        group["schedule"] == "warmup_linear"
-                        and progress > 1.0
-                        and not warned_for_t_total
+                            group["schedule"] == "warmup_linear"
+                            and progress > 1.0
+                            and not warned_for_t_total
                     ):
                         logger.warning(
                             "Training beyond specified 't_total' steps with schedule '{}'. Learning rate set to {}. "
@@ -188,7 +189,7 @@ class OpenAIAdam(Optimizer):
                     lr_scheduled = group["lr"]
 
                 step_size = (
-                    lr_scheduled * math.sqrt(bias_correction2) / bias_correction1
+                        lr_scheduled * math.sqrt(bias_correction2) / bias_correction1
                 )
 
                 p.data.addcdiv_(-step_size, exp_avg, denom)

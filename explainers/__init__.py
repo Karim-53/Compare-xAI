@@ -5,7 +5,7 @@ from .maple import Maple
 from .saabas import Saabas
 from .sage_explainer import Sage
 from .shap import Shap, KernelShap, TreeShap
-from .shapr import ShapR
 from .shap_interaction import ShapInteraction
+from .shapr import ShapR
 # from .breakdown import BreakDown  # need cpp14
 # from .l2x import L2X

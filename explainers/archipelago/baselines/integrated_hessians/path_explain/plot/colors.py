@@ -2,8 +2,8 @@
 A place for defining the default color scheme.
 """
 
-import numpy as np
 import matplotlib as mpl
+import numpy as np
 
 
 def green_gold():
@@ -37,13 +37,13 @@ def maroon_white_aqua():
         15 / 256, 1.0, int(color_map_size / 2)
     )
 
-    vals[int(color_map_size / 2) :, 0] = np.linspace(
+    vals[int(color_map_size / 2):, 0] = np.linspace(
         1.0, 0 / 256, int(color_map_size / 2)
     )
-    vals[int(color_map_size / 2) :, 1] = np.linspace(
+    vals[int(color_map_size / 2):, 1] = np.linspace(
         1.0, 220 / 256, int(color_map_size / 2)
     )
-    vals[int(color_map_size / 2) :, 2] = np.linspace(
+    vals[int(color_map_size / 2):, 2] = np.linspace(
         1.0, 170 / 256, int(color_map_size / 2)
     )
     cmap = mpl.colors.ListedColormap(vals)

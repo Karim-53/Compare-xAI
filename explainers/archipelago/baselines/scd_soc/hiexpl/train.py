@@ -1,13 +1,12 @@
-import time
 import glob
+import random
+import time
 
 import torch.optim as O
 
 from nns.model import *
 from utils.reader import *
 from utils.tacred_f1 import score as tacred_f1_score
-
-import random
 
 random.seed(0)
 
@@ -86,7 +85,7 @@ def do_train():
             # calculate accuracy of predictions in the current batch
             label = batch.label if not config.use_gpu else batch.label.cuda()
             n_correct += (
-                torch.max(answer, 1)[1].view(label.size()).data == label.data
+                    torch.max(answer, 1)[1].view(label.size()).data == label.data
             ).sum()
             n_total += batch.batch_size
             train_acc = 100.0 * n_correct / n_total
@@ -103,10 +102,10 @@ def do_train():
             if iterations % args.save_every == 0:
                 snapshot_prefix = os.path.join(args.save_path, "snapshot")
                 snapshot_path = (
-                    snapshot_prefix
-                    + "_acc_{:.4f}_loss_{:.6f}_iter_{}_model.pt".format(
-                        train_acc, loss.item(), iterations
-                    )
+                        snapshot_prefix
+                        + "_acc_{:.4f}_loss_{:.6f}_iter_{}_model.pt".format(
+                    train_acc, loss.item(), iterations
+                )
                 )
                 torch.save(model.state_dict(), snapshot_path)
                 for f in glob.glob(snapshot_prefix + "*"):
@@ -133,7 +132,7 @@ def do_train():
                         )
                         pred = torch.max(answer, 1)[1]
                         n_dev_correct += (
-                            pred.view(dev_label.size()).data == dev_label.data
+                                pred.view(dev_label.size()).data == dev_label.data
                         ).sum()
                         dev_loss = criterion(answer, dev_label)
                         for l_i in range(dev_label.size(0)):
@@ -164,10 +163,10 @@ def do_train():
                     best_dev_acc = dev_acc
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
                     snapshot_path = (
-                        snapshot_prefix
-                        + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
-                            dev_acc, dev_loss.item(), iterations
-                        )
+                            snapshot_prefix
+                            + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
+                        dev_acc, dev_loss.item(), iterations
+                    )
                     )
 
                     # save model, delete previous 'best_snapshot' files
@@ -212,7 +211,7 @@ def do_test():
         # calculate accuracy of predictions in the current batch
         label = batch.label if not config.use_gpu else batch.label.cuda()
         n_correct += (
-            torch.max(answer, 1)[1].view(label.size()).data == label.data
+                torch.max(answer, 1)[1].view(label.size()).data == label.data
         ).sum()
         n_total += batch.batch_size
         acc = 100.0 * n_correct / n_total

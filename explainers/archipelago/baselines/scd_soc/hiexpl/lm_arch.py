@@ -1,7 +1,8 @@
 from torch.distributions import Categorical
+from torch.nn import functional as F
+
 from nns.layers import *
 from utils.args import get_args
-from torch.nn import functional as F
 
 args = get_args()
 
@@ -33,7 +34,7 @@ class LSTMLanguageModel(nn.Module):
         output = self.encoder(inp, inp_len_np)
         fw_output, bw_output = (
             output[:, :, : self.hidden_size],
-            output[:, :, self.hidden_size :],
+            output[:, :, self.hidden_size:],
         )
         fw_proj, bw_proj = self.fw_proj(fw_output), self.bw_proj(bw_output)
 
@@ -48,7 +49,7 @@ class LSTMLanguageModel(nn.Module):
         return fw_loss, bw_loss
 
     def _sample_n_sequences(
-        self, method, direction, token_inp, hidden, length, sample_num
+            self, method, direction, token_inp, hidden, length, sample_num
     ):
         outputs = []
         token_inp = token_inp.repeat(1, sample_num)  # [1, N]
@@ -62,7 +63,7 @@ class LSTMLanguageModel(nn.Module):
             if direction == "fw":
                 proj = self.fw_proj(output[:, :, : self.hidden_size])
             elif direction == "bw":
-                proj = self.bw_proj(output[:, :, self.hidden_size :])
+                proj = self.bw_proj(output[:, :, self.hidden_size:])
             proj = proj.squeeze(0)
             if method == "max":
                 _, token_inp = torch.max(proj, -1)

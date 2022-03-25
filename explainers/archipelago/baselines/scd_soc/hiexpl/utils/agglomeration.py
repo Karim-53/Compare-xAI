@@ -61,8 +61,8 @@ def collapse_tree(lists):
                 # if >1 match, take highest level + 1
                 else:
                     level = (
-                        np.max([comp_levels_list[i - 1][match] for match in matches])
-                        + 1
+                            np.max([comp_levels_list[i - 1][match] for match in matches])
+                            + 1
                     )
 
                 comp_levels_list[i][comp_num] = level
@@ -128,7 +128,7 @@ def gen_tile_from_comp(text_orig, comp_tile, method, fill=0):
 
 # generate tiles around component
 def gen_tiles_around_baseline(
-    text_orig, comp_tile, method="build_up", sweep_dim=1, fill=0
+        text_orig, comp_tile, method="build_up", sweep_dim=1, fill=0
 ):
     L = text_orig.shape[0]
     left = 0
@@ -171,7 +171,6 @@ def tiles_to_cd(tiles):
 
 
 def lists_to_tabs(lists, num_words):
-
     num_iters = len(lists["comps_list"])
     data = np.empty(shape=(num_iters, num_words))
     data[:] = np.nan

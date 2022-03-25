@@ -1,6 +1,8 @@
-import numpy as np
+import math
+import random
 from itertools import chain, combinations
-import math, random
+
+import numpy as np
 
 from explainers.explainer_superclass import Explainer, InteractionExplainer
 
@@ -22,6 +24,7 @@ def random_subset(s):
 
 class SiExplainer(InteractionExplainer):
     """ wrapper from Archipelago repo """
+
     def __init__(
             self,
             trained_model,
@@ -29,8 +32,8 @@ class SiExplainer(InteractionExplainer):
             baseline=None,
             data_xformer=None,
     ):
-        output_indices=0
-        batch_size=20
+        output_indices = 0
+        batch_size = 20
         verbose = True
         seed = None
         InteractionExplainer.__init__(
@@ -210,7 +213,7 @@ class ShapInteraction(Explainer):
         self.nb_features = nb_features
         if self.nb_features is None:
             self.nb_features = X.shape[1]
-        self.si_method = SiExplainer(trained_model, input=list(X[0]), baseline=list(X[1]),)
+        self.si_method = SiExplainer(trained_model, input=list(X[0]), baseline=list(X[1]), )
 
     def explain(self, **kwargs):
         self.expected_values = None
@@ -224,5 +227,5 @@ class ShapInteraction(Explainer):
                 S = (i, j)
                 att = self.si_method.attribution(S, num_T)  # todo [after acceptance] find the tqdm and delete it
                 inter_scores.append((S, att ** 2))
-        print('inter_scores',inter_scores)
+        print('inter_scores', inter_scores)
         self.interaction = inter_scores

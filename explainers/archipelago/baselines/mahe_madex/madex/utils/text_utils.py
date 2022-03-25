@@ -3,27 +3,21 @@
 #     https://github.com/huggingface/transformers/blob/master/src/transformers/pipelines.py
 #############################################################################################
 
-import torch
-import numpy as np
+from typing import Optional, Union
 
+import torch
 from transformers import Pipeline
-from typing import Dict, List, Optional, Tuple, Union
-from transformers.configuration_utils import PretrainedConfig
-from transformers.tokenization_utils import PreTrainedTokenizer
-from transformers.modelcard import ModelCard
-from transformers.tokenization_auto import AutoTokenizer
 from transformers.configuration_auto import (
     ALL_PRETRAINED_CONFIG_ARCHIVE_MAP,
     AutoConfig,
 )
-
+from transformers.configuration_utils import PretrainedConfig
+from transformers.modelcard import ModelCard
 from transformers.modeling_auto import (
-    AutoModel,
     AutoModelForSequenceClassification,
-    AutoModelForQuestionAnswering,
-    AutoModelForTokenClassification,
-    AutoModelWithLMHead,
 )
+from transformers.tokenization_auto import AutoTokenizer
+from transformers.tokenization_utils import PreTrainedTokenizer
 
 
 def split_words(word_ids, sort=True):
@@ -57,13 +51,13 @@ class TextClassificationPipelineMod(Pipeline):
 
 
 def pipeline(
-    task: str,
-    model: Optional = None,
-    config: Optional[Union[str, PretrainedConfig]] = None,
-    tokenizer: Optional[Union[str, PreTrainedTokenizer]] = None,
-    modelcard: Optional[Union[str, ModelCard]] = None,
-    device=torch.device("cpu"),
-    **kwargs
+        task: str,
+        model: Optional = None,
+        config: Optional[Union[str, PretrainedConfig]] = None,
+        tokenizer: Optional[Union[str, PreTrainedTokenizer]] = None,
+        modelcard: Optional[Union[str, ModelCard]] = None,
+        device=torch.device("cpu"),
+        **kwargs
 ) -> Pipeline:
     """
     Utility factory method to build a pipeline.

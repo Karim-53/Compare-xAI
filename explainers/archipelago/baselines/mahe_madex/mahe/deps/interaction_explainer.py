@@ -1,13 +1,10 @@
+import copy
+
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
 import torch.utils.data as data_utils
-import torch.optim as optim
 from torch.nn.parameter import Parameter
-from functools import reduce
-import operator as op
-import copy
 from utils.general_utils import train, get_sample_weights, set_seed, force_float
 
 
@@ -17,12 +14,12 @@ def include_sws(loss, sws):
 
 
 def evaluate_net(
-    net,
-    data_loader,
-    device,
-    criterion=nn.MSELoss(reduction="none"),
-    printout="",
-    display=True,
+        net,
+        data_loader,
+        device,
+        criterion=nn.MSELoss(reduction="none"),
+        printout="",
+        display=True,
 ):
     losses = []
     sws = []
@@ -58,14 +55,14 @@ class MLP2(nn.Module):
 
 class Additive_MLP(nn.Module):
     def __init__(
-        self,
-        n_out,
-        hidden_units,
-        interactions,
-        univariates,
-        out_bias=True,
-        linear=True,
-        **kwargs
+            self,
+            n_out,
+            hidden_units,
+            interactions,
+            univariates,
+            out_bias=True,
+            linear=True,
+            **kwargs
     ):
         super(Additive_MLP, self).__init__()
 
@@ -157,20 +154,20 @@ class Additive_MLP(nn.Module):
 
 
 def get_importance_scores(
-    data_loaders,
-    interactions,
-    hierarchy_stepsize,
-    truncation_mode,
-    num_steps,
-    device,
-    verbose=False,
-    out_bias=True,
-    use_linear=True,
-    stopping=True,
-    hierarchical_patience=0,
-    seed=None,
-    skip_end=False,
-    **kwargs
+        data_loaders,
+        interactions,
+        hierarchy_stepsize,
+        truncation_mode,
+        num_steps,
+        device,
+        verbose=False,
+        out_bias=True,
+        use_linear=True,
+        stopping=True,
+        hierarchical_patience=0,
+        seed=None,
+        skip_end=False,
+        **kwargs
 ):
     if seed is not None:
         set_seed(seed)
@@ -397,25 +394,24 @@ def get_importance_scores(
 
 
 def learn_hierarchical_gam(
-    Xd,
-    Yd,
-    interactions,
-    device,
-    verbose=False,
-    hierarchy_stepsize=1,
-    truncation_mode="fixed_num_steps",
-    num_steps=1,
-    weight_samples=None,
-    out_bias=True,
-    batch_size=100,
-    get_gams=False,
-    use_linear=True,
-    stopping=True,
-    hierarchical_patience=0,
-    skip_end=False,
-    **kwargs
+        Xd,
+        Yd,
+        interactions,
+        device,
+        verbose=False,
+        hierarchy_stepsize=1,
+        truncation_mode="fixed_num_steps",
+        num_steps=1,
+        weight_samples=None,
+        out_bias=True,
+        batch_size=100,
+        get_gams=False,
+        use_linear=True,
+        stopping=True,
+        hierarchical_patience=0,
+        skip_end=False,
+        **kwargs
 ):
-
     Wd = get_sample_weights(Xd, enable=weight_samples, **kwargs)
 
     data_loaders = {}

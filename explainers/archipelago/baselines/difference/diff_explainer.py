@@ -3,13 +3,13 @@ from explainer import Archipelago
 
 class DiffExplainer(Archipelago):
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=2,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=2,
     ):
         Archipelago.__init__(
             self, model, input, baseline, data_xformer, output_indices, batch_size

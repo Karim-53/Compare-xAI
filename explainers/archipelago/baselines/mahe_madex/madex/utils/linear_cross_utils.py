@@ -1,7 +1,7 @@
-import torch
-import numpy as np
 import copy
-from sklearn.linear_model import Ridge, base
+
+import numpy as np
+from sklearn.linear_model import Ridge
 from utils.general_utils import *
 
 
@@ -24,17 +24,17 @@ def update_cross_features(Xs_in, interactions):
 
 
 def fit_linear_cross_models(
-    Xs,
-    Ys,
-    interactions,
-    hierarchy_stepsize=1,
-    max_steps=1,
-    hierarchy_patience=0,
-    stopping=False,
-    verbose=False,
-    weight_samples=False,
-    flat=False,
-    **kwargs
+        Xs,
+        Ys,
+        interactions,
+        hierarchy_stepsize=1,
+        max_steps=1,
+        hierarchy_patience=0,
+        stopping=False,
+        verbose=False,
+        weight_samples=False,
+        flat=False,
+        **kwargs
 ):
     """
     Trains an MLP and interprets interactions from its weights
@@ -138,8 +138,8 @@ def fit_linear_cross_models(
 
         performance_improvement = prediction_score > best_score
         if (not stopping) or (
-            stopping
-            and (performance_improvement or patience_counter < hierarchy_patience)
+                stopping
+                and (performance_improvement or patience_counter < hierarchy_patience)
         ):
             interaction_attributions = []
             for inter_i, inter in enumerate(active_interactions2):

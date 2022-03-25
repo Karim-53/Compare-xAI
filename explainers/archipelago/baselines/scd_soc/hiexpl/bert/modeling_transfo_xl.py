@@ -18,27 +18,20 @@
     In particular https://github.com/kimiyoung/transformer-xl/blob/master/pytorch/mem_transformer.py
 """
 
-import os
 import copy
 import json
-import math
 import logging
-import tarfile
-import tempfile
-import shutil
-import collections
+import os
 import sys
 from io import open
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.nn import CrossEntropyLoss
-from torch.nn.parameter import Parameter
 
+from .file_utils import cached_path
 from .modeling import BertLayerNorm as LayerNorm
 from .modeling_transfo_xl_utilities import ProjectedAdaptiveLogSoftmax, sample_logits
-from .file_utils import cached_path
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +61,7 @@ def build_tf_to_pytorch_map(model, config):
             }
         )
         for i, (out_l, proj_l, tie_proj) in enumerate(
-            zip(model.crit.out_layers, model.crit.out_projs, config.tie_projs)
+                zip(model.crit.out_layers, model.crit.out_projs, config.tie_projs)
         ):
             layer_str = "transformer/adaptive_softmax/cutoff_%d/" % i
             if config.tie_weight:
@@ -89,7 +82,7 @@ def build_tf_to_pytorch_map(model, config):
 
     # Embeddings
     for i, (embed_l, proj_l) in enumerate(
-        zip(model.word_emb.emb_layers, model.word_emb.emb_projs)
+            zip(model.word_emb.emb_layers, model.word_emb.emb_projs)
     ):
         layer_str = "transformer/adaptive_embed/cutoff_%d/" % i
         tf_to_pt_map.update(
@@ -194,34 +187,34 @@ class TransfoXLConfig(object):
     """Configuration class to store the configuration of a `TransfoXLModel`."""
 
     def __init__(
-        self,
-        vocab_size_or_config_json_file=267735,
-        cutoffs=[20000, 40000, 200000],
-        d_model=1024,
-        d_embed=1024,
-        n_head=16,
-        d_head=64,
-        d_inner=4096,
-        div_val=4,
-        pre_lnorm=False,
-        n_layer=18,
-        tgt_len=128,
-        ext_len=0,
-        mem_len=1600,
-        clamp_len=1000,
-        same_length=True,
-        proj_share_all_but_first=True,
-        attn_type=0,
-        sample_softmax=-1,
-        adaptive=True,
-        tie_weight=True,
-        dropout=0.1,
-        dropatt=0.0,
-        untie_r=True,
-        init="normal",
-        init_range=0.01,
-        proj_init_std=0.01,
-        init_std=0.02,
+            self,
+            vocab_size_or_config_json_file=267735,
+            cutoffs=[20000, 40000, 200000],
+            d_model=1024,
+            d_embed=1024,
+            n_head=16,
+            d_head=64,
+            d_inner=4096,
+            div_val=4,
+            pre_lnorm=False,
+            n_layer=18,
+            tgt_len=128,
+            ext_len=0,
+            mem_len=1600,
+            clamp_len=1000,
+            same_length=True,
+            proj_share_all_but_first=True,
+            attn_type=0,
+            sample_softmax=-1,
+            adaptive=True,
+            tie_weight=True,
+            dropout=0.1,
+            dropatt=0.0,
+            untie_r=True,
+            init="normal",
+            init_range=0.01,
+            proj_init_std=0.01,
+            init_std=0.02,
     ):
         """Constructs TransfoXLConfig.
 
@@ -258,8 +251,8 @@ class TransfoXLConfig(object):
             init_std: parameters initialized by N(0, init_std)
         """
         if isinstance(vocab_size_or_config_json_file, str) or (
-            sys.version_info[0] == 2
-            and isinstance(vocab_size_or_config_json_file, unicode)
+                sys.version_info[0] == 2
+                and isinstance(vocab_size_or_config_json_file, unicode)
         ):
             with open(vocab_size_or_config_json_file, "r", encoding="utf-8") as reader:
                 json_config = json.loads(reader.read())
@@ -389,15 +382,15 @@ class PositionwiseFF(nn.Module):
 
 class MultiHeadAttn(nn.Module):
     def __init__(
-        self,
-        n_head,
-        d_model,
-        d_head,
-        dropout,
-        dropatt=0,
-        pre_lnorm=False,
-        r_r_bias=None,
-        r_w_bias=None,
+            self,
+            n_head,
+            d_model,
+            d_head,
+            dropout,
+            dropatt=0,
+            pre_lnorm=False,
+            r_r_bias=None,
+            r_w_bias=None,
     ):
         super(MultiHeadAttn, self).__init__()
 
@@ -481,18 +474,18 @@ class MultiHeadAttn(nn.Module):
 
 class RelMultiHeadAttn(nn.Module):
     def __init__(
-        self,
-        n_head,
-        d_model,
-        d_head,
-        dropout,
-        dropatt=0,
-        tgt_len=None,
-        ext_len=None,
-        mem_len=None,
-        pre_lnorm=False,
-        r_r_bias=None,
-        r_w_bias=None,
+            self,
+            n_head,
+            d_model,
+            d_head,
+            dropout,
+            dropatt=0,
+            tgt_len=None,
+            ext_len=None,
+            mem_len=None,
+            pre_lnorm=False,
+            r_r_bias=None,
+            r_w_bias=None,
     ):
         super(RelMultiHeadAttn, self).__init__()
 
@@ -638,14 +631,14 @@ class RelPartialLearnableMultiHeadAttn(RelMultiHeadAttn):
             if attn_mask.dim() == 2:
                 attn_score = (
                     attn_score.float()
-                    .masked_fill(attn_mask[None, :, :, None], -1e30)
-                    .type_as(attn_score)
+                        .masked_fill(attn_mask[None, :, :, None], -1e30)
+                        .type_as(attn_score)
                 )
             elif attn_mask.dim() == 3:
                 attn_score = (
                     attn_score.float()
-                    .masked_fill(attn_mask[:, :, :, None], -1e30)
-                    .type_as(attn_score)
+                        .masked_fill(attn_mask[:, :, :, None], -1e30)
+                        .type_as(attn_score)
                 )
 
         # [qlen x klen x bsz x n_head]
@@ -775,7 +768,6 @@ class DecoderLayer(nn.Module):
         )
 
     def forward(self, dec_inp, dec_attn_mask=None, mems=None):
-
         output = self.dec_attn(dec_inp, attn_mask=dec_attn_mask, mems=mems)
         output = self.pos_ff(output)
 
@@ -794,7 +786,6 @@ class RelLearnableDecoderLayer(nn.Module):
         )
 
     def forward(self, dec_inp, r_emb, r_w_bias, r_bias, dec_attn_mask=None, mems=None):
-
         output = self.dec_attn(
             dec_inp, r_emb, r_w_bias, r_bias, attn_mask=dec_attn_mask, mems=mems
         )
@@ -815,7 +806,6 @@ class RelPartialLearnableDecoderLayer(nn.Module):
         )
 
     def forward(self, dec_inp, r, dec_attn_mask=None, mems=None):
-
         output = self.dec_attn(dec_inp, r, attn_mask=dec_attn_mask, mems=mems)
         output = self.pos_ff(output)
 
@@ -824,7 +814,7 @@ class RelPartialLearnableDecoderLayer(nn.Module):
 
 class AdaptiveEmbedding(nn.Module):
     def __init__(
-        self, n_token, d_embed, d_proj, cutoffs, div_val=1, sample_softmax=False
+            self, n_token, d_embed, d_proj, cutoffs, div_val=1, sample_softmax=False
     ):
         super(AdaptiveEmbedding, self).__init__()
 
@@ -959,13 +949,13 @@ class TransfoXLPreTrainedModel(nn.Module):
 
     @classmethod
     def from_pretrained(
-        cls,
-        pretrained_model_name_or_path,
-        state_dict=None,
-        cache_dir=None,
-        from_tf=False,
-        *inputs,
-        **kwargs
+            cls,
+            pretrained_model_name_or_path,
+            state_dict=None,
+            cache_dir=None,
+            from_tf=False,
+            *inputs,
+            **kwargs
     ):
         """
         Instantiate a TransfoXLPreTrainedModel from a pre-trained model file or a pytorch state dict.
@@ -1011,8 +1001,8 @@ class TransfoXLPreTrainedModel(nn.Module):
             )
             return None
         if (
-            resolved_archive_file == archive_file
-            and resolved_config_file == config_file
+                resolved_archive_file == archive_file
+                and resolved_config_file == config_file
         ):
             logger.info("loading weights file {}".format(archive_file))
             logger.info("loading configuration file {}".format(config_file))
@@ -1069,7 +1059,7 @@ class TransfoXLPreTrainedModel(nn.Module):
 
         start_prefix = ""
         if not hasattr(model, "transformer") and any(
-            s.startswith("transformer.") for s in state_dict.keys()
+                s.startswith("transformer.") for s in state_dict.keys()
         ):
             start_prefix = "transformer."
         load(model, prefix=start_prefix)
@@ -1288,7 +1278,6 @@ class TransfoXLModel(TransfoXLPreTrainedModel):
             end_idx = mlen + max(0, qlen - 0 - self.ext_len)
             beg_idx = max(0, end_idx - self.mem_len)
             for i in range(len(hids)):
-
                 cat = torch.cat([mems[i], hids[i]], dim=0)
                 new_mems.append(cat[beg_idx:end_idx].detach())
 
@@ -1309,10 +1298,10 @@ class TransfoXLModel(TransfoXLPreTrainedModel):
             else:
                 mask_shift_len = qlen
             dec_attn_mask = (
-                torch.triu(all_ones, 1 + mlen) + torch.tril(all_ones, -mask_shift_len)
-            ).byte()[
-                :, :, None
-            ]  # -1
+                                    torch.triu(all_ones, 1 + mlen) + torch.tril(all_ones, -mask_shift_len)
+                            ).byte()[
+                            :, :, None
+                            ]  # -1
         else:
             dec_attn_mask = torch.triu(
                 word_emb.new_ones(qlen, klen), diagonal=1 + mlen
@@ -1341,8 +1330,8 @@ class TransfoXLModel(TransfoXLPreTrainedModel):
             for i, layer in enumerate(self.layers):
                 hids.append(core_out)
                 if self.clamp_len > 0:
-                    r_emb = self.r_emb[i][-self.clamp_len :]
-                    r_bias = self.r_bias[i][-self.clamp_len :]
+                    r_emb = self.r_emb[i][-self.clamp_len:]
+                    r_bias = self.r_bias[i][-self.clamp_len:]
                 else:
                     r_emb, r_bias = self.r_emb[i], self.r_bias[i]
 
@@ -1510,9 +1499,9 @@ class TransfoXLLMHeadModel(TransfoXLPreTrainedModel):
             if self.config.tie_projs:
                 for i, tie_proj in enumerate(self.config.tie_projs):
                     if (
-                        tie_proj
-                        and self.config.div_val == 1
-                        and self.config.d_model != self.config.d_embed
+                            tie_proj
+                            and self.config.div_val == 1
+                            and self.config.d_model != self.config.d_embed
                     ):
                         self.crit.out_projs[i] = self.transformer.word_emb.emb_projs[0]
                     elif tie_proj and self.config.div_val != 1:

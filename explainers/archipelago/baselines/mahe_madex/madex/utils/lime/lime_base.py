@@ -6,11 +6,11 @@
 Contains abstract functionality for learning locally linear sparse model.
 """
 from __future__ import print_function
+
 import numpy as np
 from sklearn.linear_model import Ridge, lars_path
-from sklearn.utils import check_random_state
-import copy
 from sklearn.metrics import mean_squared_error
+from sklearn.utils import check_random_state
 
 
 class LimeBase(object):
@@ -90,8 +90,8 @@ class LimeBase(object):
             return np.array([x[0] for x in feature_weights[:num_features]])
         elif method == "lasso_path":
             weighted_data = (
-                data - np.average(data, axis=0, weights=weights)
-            ) * np.sqrt(weights[:, np.newaxis])
+                                    data - np.average(data, axis=0, weights=weights)
+                            ) * np.sqrt(weights[:, np.newaxis])
             weighted_labels = (labels - np.average(labels, weights=weights)) * np.sqrt(
                 weights
             )
@@ -111,14 +111,14 @@ class LimeBase(object):
             return self.feature_selection(data, labels, weights, num_features, n_method)
 
     def explain_instance_with_data(
-        self,
-        neighborhood_data,
-        neighborhood_labels,
-        distances,
-        label,
-        num_features,
-        feature_selection="auto",
-        model_regressor=None,
+            self,
+            neighborhood_data,
+            neighborhood_labels,
+            distances,
+            label,
+            num_features,
+            feature_selection="auto",
+            model_regressor=None,
     ):
         """Takes perturbed data, labels and distances, returns explanation.
 

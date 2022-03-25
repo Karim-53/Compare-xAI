@@ -37,9 +37,9 @@ from .modeling import (
     WEIGHTS_NAME,
     CONFIG_NAME,
 )
-from .tokenization import BertTokenizer
 from .optimization import BertAdam, warmup_linear
 from .tacred_f1 import score as tacred_f1_score
+from .tokenization import BertTokenizer
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -377,8 +377,8 @@ def main():
         type=str,
         required=True,
         help="Bert pre-trained model selected in the list: bert-base-uncased, "
-        "bert-large-uncased, bert-base-cased, bert-large-cased, bert-base-multilingual-uncased, "
-        "bert-base-multilingual-cased, bert-base-chinese.",
+             "bert-large-uncased, bert-base-cased, bert-large-cased, bert-base-multilingual-uncased, "
+             "bert-base-multilingual-cased, bert-base-chinese.",
     )
     parser.add_argument(
         "--task_name",
@@ -407,8 +407,8 @@ def main():
         default=128,
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
-        "Sequences longer than this will be truncated, and sequences shorter \n"
-        "than this will be padded.",
+             "Sequences longer than this will be truncated, and sequences shorter \n"
+             "than this will be padded.",
     )
     parser.add_argument(
         "--do_train", action="store_true", help="Whether to run training."
@@ -447,7 +447,7 @@ def main():
         default=0.1,
         type=float,
         help="Proportion of training to perform linear learning rate warmup for. "
-        "E.g., 0.1 = 10%% of training.",
+             "E.g., 0.1 = 10%% of training.",
     )
     parser.add_argument(
         "--no_cuda", action="store_true", help="Whether not to use CUDA when available"
@@ -477,8 +477,8 @@ def main():
         type=float,
         default=0,
         help="Loss scaling to improve fp16 numeric stability. Only used when fp16 set to True.\n"
-        "0 (default value): dynamic loss scaling.\n"
-        "Positive power of 2: static loss scaling value.\n",
+             "0 (default value): dynamic loss scaling.\n"
+             "Positive power of 2: static loss scaling value.\n",
     )
     parser.add_argument(
         "--do_explain", action="store_true", help="explain outputs with decomposition"
@@ -555,9 +555,9 @@ def main():
         raise ValueError("At least one of `do_train` or `do_eval` must be True.")
 
     if (
-        os.path.exists(args.output_dir)
-        and os.listdir(args.output_dir)
-        and args.do_train
+            os.path.exists(args.output_dir)
+            and os.listdir(args.output_dir)
+            and args.do_train
     ):
         raise ValueError(
             "Output directory ({}) already exists and is not empty.".format(
@@ -585,16 +585,16 @@ def main():
     if args.do_train:
         train_examples = processor.get_train_examples(args.data_dir)
         num_train_optimization_steps = (
-            int(
-                len(train_examples)
-                / args.train_batch_size
-                / args.gradient_accumulation_steps
-            )
-            * args.num_train_epochs
+                int(
+                    len(train_examples)
+                    / args.train_batch_size
+                    / args.gradient_accumulation_steps
+                )
+                * args.num_train_epochs
         )
         if args.local_rank != -1:
             num_train_optimization_steps = (
-                num_train_optimization_steps // torch.distributed.get_world_size()
+                    num_train_optimization_steps // torch.distributed.get_world_size()
             )
 
     # Prepare model
@@ -801,7 +801,7 @@ def main():
         all_pred, all_truth = [], []
 
         for input_ids, input_mask, segment_ids, label_ids in tqdm(
-            eval_dataloader, desc="Evaluating"
+                eval_dataloader, desc="Evaluating"
         ):
             input_ids = input_ids.to(device)
             input_mask = input_mask.to(device)
@@ -863,15 +863,15 @@ def main():
 
 
 def predict_and_explain_wrapper_unbatched_interactive(
-    model, input_ids, segment_ids, input_mask, label_ids, tokenizer
+        model, input_ids, segment_ids, input_mask, label_ids, tokenizer
 ):
     # one instance at a time
     bs = input_ids.size(0)
     for b in range(bs):
-        input_id = input_ids[b : b + 1, :]
-        segment_id = segment_ids[b : b + 1, :] if segment_ids is not None else None
-        input_mask_single = input_mask[b : b + 1, :] if input_mask is not None else None
-        label_id = label_ids[b : b + 1] if label_ids is not None else None
+        input_id = input_ids[b: b + 1, :]
+        segment_id = segment_ids[b: b + 1, :] if segment_ids is not None else None
+        input_mask_single = input_mask[b: b + 1, :] if input_mask is not None else None
+        label_id = label_ids[b: b + 1] if label_ids is not None else None
         origin_id = input_id.view(-1).cpu().numpy().tolist()
         token_list = tokenizer.convert_ids_to_tokens(origin_id)
         print([(i, x) for i, x in enumerate(token_list)])
@@ -889,14 +889,14 @@ def predict_and_explain_wrapper_unbatched_interactive(
 
 
 def predict_and_explain_wrapper_unbatched(
-    model, input_ids, segment_ids, input_mask, region, normalizer=None, label=None
+        model, input_ids, segment_ids, input_mask, region, normalizer=None, label=None
 ):
     # one instance at a time
     bs = input_ids.size(0)
     for b in range(bs):
-        input_id = input_ids[b : b + 1, :]
-        segment_id = segment_ids[b : b + 1, :] if segment_ids is not None else None
-        input_mask_single = input_mask[b : b + 1, :] if input_mask is not None else None
+        input_id = input_ids[b: b + 1, :]
+        segment_id = segment_ids[b: b + 1, :] if segment_ids is not None else None
+        input_mask_single = input_mask[b: b + 1, :] if input_mask is not None else None
         rel_logits, irrel_logits = model.predict_and_explain(
             input_id, [[region]], segment_id, input_mask_single
         )

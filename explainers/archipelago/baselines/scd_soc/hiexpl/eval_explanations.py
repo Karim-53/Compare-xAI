@@ -1,14 +1,15 @@
-from utils.args import get_args
-import torch
-import numpy as np
-from utils.reader import load_vocab
-from bert.tokenization import BertTokenizer
-from utils.parser import get_span_to_node_mapping, parse_tree
-import csv, pickle
+import csv
+import pickle
 from collections import defaultdict
+
+import numpy as np
+import torch
+
+from bert.tokenization import BertTokenizer
+from utils.args import get_args
 from utils.args import get_best_snapshot
-from nns.linear_model import BOWRegression, BOWRegressionMulti
-import argparse
+from utils.parser import get_span_to_node_mapping, parse_tree
+from utils.reader import load_vocab
 
 args = get_args()
 tokenizer = BertTokenizer.from_pretrained(

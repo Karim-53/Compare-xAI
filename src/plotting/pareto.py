@@ -3,7 +3,6 @@ from paretoset import paretoset
 
 from src.io import load_results
 
-
 if __name__ == "__main__":
     """ Pareto with matplotlib (depricated) """
     from src.scoring import get_score_df, get_eligible_points_df, get_summary_df

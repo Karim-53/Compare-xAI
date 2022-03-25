@@ -1,11 +1,11 @@
-from utils.pretrained.model_gcn import *
-from collections import defaultdict
-import numpy as np
 import copy
+from collections import defaultdict
+
+import numpy as np
+from utils.pretrained.model_gcn import *
 
 
 def get_graph_model(model_folder):
-
     meta = torch.load(model_folder + "/gcn_cora.pt")
 
     n_hops = meta["n_hops"]

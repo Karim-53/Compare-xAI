@@ -1,23 +1,23 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import viz.colors as colors
 from textwrap import wrap
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import viz.colors as colors
 
 
 def viz_bar_chart(
-    data,
-    top_k=5,
-    figsize=(10, 4),
-    save_file=None,
-    max_label_size=100,
-    remove_space=False,
-    y_label="Feature Set",
-    sort_again=True,
-    bounds=None,
-    **kwargs
+        data,
+        top_k=5,
+        figsize=(10, 4),
+        save_file=None,
+        max_label_size=100,
+        remove_space=False,
+        y_label="Feature Set",
+        sort_again=True,
+        bounds=None,
+        **kwargs
 ):
-
     feature_labels, attributions = zip(*data)
     if top_k > len(attributions):
         top_k = len(attributions)
@@ -79,7 +79,7 @@ def viz_bar_chart(
 
 
 def _set_axis_config(
-    axis, linewidths=(0.0, 0.0, 0.0, 0.0), clear_y_ticks=False, clear_x_ticks=False
+        axis, linewidths=(0.0, 0.0, 0.0, 0.0), clear_y_ticks=False, clear_x_ticks=False
 ):
     """
     Source: Integrated Hessians Code Repo

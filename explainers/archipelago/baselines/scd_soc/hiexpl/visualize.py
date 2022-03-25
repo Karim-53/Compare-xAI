@@ -1,10 +1,11 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import csv
-from utils.parser import get_span_to_node_mapping, parse_tree
-import pickle
 import argparse
 import os
+import pickle
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from utils.parser import get_span_to_node_mapping, parse_tree
 
 
 def len_span(span):
@@ -20,10 +21,10 @@ def compact_layer(layers):
     skip_flg = False
     for i, layer in enumerate(layers):
         if (
-            i != len(layers) - 1
-            and len(layers[i]) == 1
-            and len(layers[i + 1]) == 1
-            and not skip_flg
+                i != len(layers) - 1
+                and len(layers[i]) == 1
+                and len(layers[i + 1]) == 1
+                and not skip_flg
         ):
             entry1, entry2 = layers[i][0], layers[i + 1][0]
             score1, score2 = entry1[3], entry2[3]
@@ -75,13 +76,13 @@ def plot_score_array(layers, score_array, sent_words):
             for j in range(score_array.shape[1]):
                 if score_array[i, j] != 0:
                     if sent_words[j].startswith("SUBJ") or sent_words[j].startswith(
-                        "OBJ"
+                            "OBJ"
                     ):
                         sent_words[j] = (
                             sent_words[j]
-                            .replace("SUBJ-", "S-")
-                            .replace("OBJ-", "O-")
-                            .upper()
+                                .replace("SUBJ-", "S-")
+                                .replace("OBJ-", "O-")
+                                .upper()
                         )
                     fontsize = 12
                     if len(sent_words[j]) >= 8:
@@ -137,7 +138,7 @@ def draw_tree_from_line(s, tree_s):
         arr = np.zeros(len(sent_words))
         for entry in layers[layer]:
             start, stop = entry[2] - len(entry[1]) + 1, entry[2]  # closed interval
-            arr[start : stop + 1] = entry[3]
+            arr[start: stop + 1] = entry[3]
         score_array.append(arr)
 
     score_array = np.stack(score_array)
@@ -186,7 +187,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--use_gt_trees",
         help="whether use ground truth parsing trees (sst)"
-        "if true, --file should be .txt",
+             "if true, --file should be .txt",
         action="store_true",
     )
     parser.add_argument("--gt_tree_path", default=".data/sst/trees/%s.txt" % "test")

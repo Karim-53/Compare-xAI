@@ -4,8 +4,6 @@ from itertools import chain, combinations
 
 import numpy as np
 
-from explainers.explainer_superclass import InteractionExplainer
-
 
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
@@ -24,15 +22,15 @@ def random_subset(s):
 
 class SiExplainer(Explainer):
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=False,
-        seed=None,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            verbose=False,
+            seed=None,
     ):
         Explainer.__init__(
             self,

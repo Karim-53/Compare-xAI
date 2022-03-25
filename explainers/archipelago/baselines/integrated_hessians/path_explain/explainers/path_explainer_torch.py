@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import functools
 import operator
+
+import numpy as np
 import torch
 from torch.autograd import grad
-import numpy as np
 from tqdm import *
 
 
@@ -81,8 +82,8 @@ class PathExplainerTorch(object):
             # Grab a [batch_size, k]-sized interpolation sample
             t_tensor = (
                 torch.FloatTensor(batch_size, num_samples)
-                .uniform_(0, 1)
-                .to(reference_tensor.device)
+                    .uniform_(0, 1)
+                    .to(reference_tensor.device)
             )
             shape = [batch_size, num_samples] + [1] * num_input_dims
             interp_coef = t_tensor.view(*shape)
@@ -150,12 +151,12 @@ class PathExplainerTorch(object):
         return grad_tensor
 
     def attributions(
-        self,
-        input_tensor,
-        baseline,
-        num_samples=50,
-        use_expectation=True,
-        output_indices=None,
+            self,
+            input_tensor,
+            baseline,
+            num_samples=50,
+            use_expectation=True,
+            output_indices=None,
     ):
         """
         Calculate either Expected or Integrated Gradients approximation of
@@ -207,14 +208,14 @@ class PathExplainerTorch(object):
         return attributions
 
     def interactions(
-        self,
-        input_tensor,
-        baseline,
-        num_samples=50,
-        use_expectation=True,
-        output_indices=None,
-        interaction_index=None,
-        verbose=True,
+            self,
+            input_tensor,
+            baseline,
+            num_samples=50,
+            use_expectation=True,
+            output_indices=None,
+            interaction_index=None,
+            verbose=True,
     ):
         """
         samples_input: A tensor of shape (batch, k, features)

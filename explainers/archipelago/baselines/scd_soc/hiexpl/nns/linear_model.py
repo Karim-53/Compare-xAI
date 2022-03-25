@@ -1,7 +1,8 @@
-from torch import nn
-import time
 import glob
 import sys
+import time
+
+from torch import nn
 
 sys.path.append("../")
 
@@ -146,10 +147,10 @@ def do_train():
             if iterations % args.save_every == 0:
                 snapshot_prefix = os.path.join(args.save_path, "snapshot")
                 snapshot_path = (
-                    snapshot_prefix
-                    + "_acc_{:.4f}_loss_{:.6f}_iter_{}_model.pt".format(
-                        train_acc, loss.item(), iterations
-                    )
+                        snapshot_prefix
+                        + "_acc_{:.4f}_loss_{:.6f}_iter_{}_model.pt".format(
+                    train_acc, loss.item(), iterations
+                )
                 )
                 torch.save(model, snapshot_path)
                 for f in glob.glob(snapshot_prefix + "*"):
@@ -213,10 +214,10 @@ def do_train():
                     best_dev_loss = avg_dev_loss
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
                     snapshot_path = (
-                        snapshot_prefix
-                        + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
-                            dev_acc, dev_loss.item(), iterations
-                        )
+                            snapshot_prefix
+                            + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
+                        dev_acc, dev_loss.item(), iterations
+                    )
                     )
 
                     # save model, delete previous 'best_snapshot' files

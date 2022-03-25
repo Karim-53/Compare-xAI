@@ -1,11 +1,12 @@
 import bisect
 import operator
-import numpy as np
+
 import torch
-from torch.utils import data
 import torch.nn as nn
-from utils.general_utils import *
 from torch import autograd
+from torch.utils import data
+
+from utils.general_utils import *
 
 
 def preprocess_weights(weights):
@@ -73,7 +74,6 @@ def get_higher_order_grad(inter, model, x, device):
 
 
 def get_second_order_grad(model, x, device):
-
     x = torch.FloatTensor(x).to(device)
 
     if x.nelement() < 2:
@@ -156,20 +156,20 @@ def prune_redundant_interactions(interaction_ranking, max_interactions=100):
 
 
 def detect_interactions(
-    Xs,
-    Ys,
-    detector="NID",
-    x_instance_representation=None,
-    arch=[256, 128, 64],
-    batch_size=100,
-    device=torch.device("cpu"),
-    weight_samples=False,
-    add_linear=False,
-    l1_const=None,
-    grad_gpu=-1,
-    seed=None,
-    pairwise=False,
-    **kwargs
+        Xs,
+        Ys,
+        detector="NID",
+        x_instance_representation=None,
+        arch=[256, 128, 64],
+        batch_size=100,
+        device=torch.device("cpu"),
+        weight_samples=False,
+        add_linear=False,
+        l1_const=None,
+        grad_gpu=-1,
+        seed=None,
+        pairwise=False,
+        **kwargs
 ):
     def get_weights(model):
         weights = []

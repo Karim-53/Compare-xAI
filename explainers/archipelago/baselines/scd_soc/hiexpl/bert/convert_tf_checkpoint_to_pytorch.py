@@ -18,13 +18,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os
-import re
 import argparse
-import tensorflow as tf
-import torch
-import numpy as np
 
+import torch
 from pytorch_pretrained_bert.modeling import (
     BertConfig,
     BertForPreTraining,
@@ -33,7 +29,7 @@ from pytorch_pretrained_bert.modeling import (
 
 
 def convert_tf_checkpoint_to_pytorch(
-    tf_checkpoint_path, bert_config_file, pytorch_dump_path
+        tf_checkpoint_path, bert_config_file, pytorch_dump_path
 ):
     # Initialise PyTorch model
     config = BertConfig.from_json_file(bert_config_file)
@@ -64,7 +60,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         help="The config json file corresponding to the pre-trained BERT model. \n"
-        "This specifies the model architecture.",
+             "This specifies the model architecture.",
     )
     parser.add_argument(
         "--pytorch_dump_path",

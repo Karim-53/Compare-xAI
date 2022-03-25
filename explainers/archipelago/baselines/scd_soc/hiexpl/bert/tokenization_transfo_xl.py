@@ -24,10 +24,10 @@ import os
 import sys
 from collections import Counter, OrderedDict
 from io import open
-import unicodedata
 
-import torch
 import numpy as np
+import torch
+import unicodedata
 
 from .file_utils import cached_path
 
@@ -35,7 +35,6 @@ if sys.version_info[0] == 2:
     import cPickle as pickle
 else:
     import pickle
-
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +56,7 @@ class TransfoXLTokenizer(object):
 
     @classmethod
     def from_pretrained(
-        cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
+            cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
     ):
         """
         Instantiate a TransfoXLTokenizer.
@@ -99,14 +98,14 @@ class TransfoXLTokenizer(object):
         return tokenizer
 
     def __init__(
-        self,
-        special=[],
-        min_freq=0,
-        max_size=None,
-        lower_case=False,
-        delimiter=None,
-        vocab_file=None,
-        never_split=("<unk>", "<eos>", "<formula>"),
+            self,
+            special=[],
+            min_freq=0,
+            max_size=None,
+            lower_case=False,
+            delimiter=None,
+            vocab_file=None,
+            never_split=("<unk>", "<eos>", "<formula>"),
     ):
         self.counter = Counter()
         self.special = special
@@ -188,7 +187,7 @@ class TransfoXLTokenizer(object):
             )
 
     def encode_file(
-        self, path, ordered=False, verbose=False, add_eos=True, add_double_eos=False
+            self, path, ordered=False, verbose=False, add_eos=True, add_double_eos=False
     ):
         if verbose:
             print("encoding file {} ...".format(path))
@@ -388,7 +387,7 @@ class LMOrderedIterator(object):
         beg_idx = max(0, i - self.ext_len)
 
         data = self.data[beg_idx:end_idx]
-        target = self.data[i + 1 : i + 1 + seq_len]
+        target = self.data[i + 1: i + 1 + seq_len]
 
         data_out = data.transpose(0, 1).contiguous().to(self.device)
         target_out = target.transpose(0, 1).contiguous().to(self.device)
@@ -468,11 +467,11 @@ class LMShuffledIterator(object):
                         n_new = min(len(streams[i]) - 1, self.bptt - n_filled)
                         # first n_retain tokens are retained from last batch
                         data[
-                            n_retain + n_filled : n_retain + n_filled + n_new, i
+                        n_retain + n_filled: n_retain + n_filled + n_new, i
                         ] = streams[i][:n_new]
-                        target[n_filled : n_filled + n_new, i] = streams[i][
-                            1 : n_new + 1
-                        ]
+                        target[n_filled: n_filled + n_new, i] = streams[i][
+                                                                1: n_new + 1
+                                                                ]
                         streams[i] = streams[i][n_new:]
                         n_filled += n_new
                 except StopIteration:
@@ -502,7 +501,7 @@ class LMShuffledIterator(object):
 
 class LMMultiFileIterator(LMShuffledIterator):
     def __init__(
-        self, paths, vocab, bsz, bptt, device="cpu", ext_len=None, shuffle=False
+            self, paths, vocab, bsz, bptt, device="cpu", ext_len=None, shuffle=False
     ):
 
         self.paths = paths
@@ -537,7 +536,7 @@ class LMMultiFileIterator(LMShuffledIterator):
 class TransfoXLCorpus(object):
     @classmethod
     def from_pretrained(
-        cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
+            cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
     ):
         """
         Instantiate a pre-processed corpus.
@@ -725,10 +724,10 @@ def _is_punctuation(char):
     # Punctuation class but we treat them as punctuation anyways, for
     # consistency.
     if (
-        (cp >= 33 and cp <= 47)
-        or (cp >= 58 and cp <= 64)
-        or (cp >= 91 and cp <= 96)
-        or (cp >= 123 and cp <= 126)
+            (cp >= 33 and cp <= 47)
+            or (cp >= 58 and cp <= 64)
+            or (cp >= 91 and cp <= 96)
+            or (cp >= 123 and cp <= 126)
     ):
         return True
     cat = unicodedata.category(char)

@@ -25,18 +25,15 @@ from io import open
 
 import numpy as np
 import torch
-from torch import nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader, Dataset, RandomSampler
+from torch.utils.data import DataLoader, RandomSampler
+from torch.utils.data import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm, trange
 
 from .modeling import BertForPreTraining
+from .optimization import BertAdam
 from .tokenization import BertTokenizer
-from .optimization import BertAdam, warmup_linear
-
-from torch.utils.data import Dataset
-import random
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -48,13 +45,13 @@ logger = logging.getLogger(__name__)
 
 class BERTDataset(Dataset):
     def __init__(
-        self,
-        corpus_path,
-        tokenizer,
-        seq_len,
-        encoding="utf-8",
-        corpus_lines=None,
-        on_memory=True,
+            self,
+            corpus_path,
+            tokenizer,
+            seq_len,
+            encoding="utf-8",
+            corpus_lines=None,
+            on_memory=True,
     ):
         self.vocab = tokenizer.vocab
         self.tokenizer = tokenizer
@@ -440,7 +437,7 @@ def main():
         type=str,
         required=True,
         help="Bert pre-trained model selected in the list: bert-base-uncased, "
-        "bert-large-uncased, bert-base-cased, bert-base-multilingual, bert-base-chinese.",
+             "bert-large-uncased, bert-base-cased, bert-base-multilingual, bert-base-chinese.",
     )
     parser.add_argument(
         "--output_dir",
@@ -456,8 +453,8 @@ def main():
         default=128,
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
-        "Sequences longer than this will be truncated, and sequences shorter \n"
-        "than this will be padded.",
+             "Sequences longer than this will be truncated, and sequences shorter \n"
+             "than this will be padded.",
     )
     parser.add_argument(
         "--do_train", action="store_true", help="Whether to run training."
@@ -488,7 +485,7 @@ def main():
         default=0.1,
         type=float,
         help="Proportion of training to perform linear learning rate warmup for. "
-        "E.g., 0.1 = 10%% of training.",
+             "E.g., 0.1 = 10%% of training.",
     )
     parser.add_argument(
         "--no_cuda", action="store_true", help="Whether not to use CUDA when available"
@@ -528,8 +525,8 @@ def main():
         type=float,
         default=0,
         help="Loss scaling to improve fp16 numeric stability. Only used when fp16 set to True.\n"
-        "0 (default value): dynamic loss scaling.\n"
-        "Positive power of 2: static loss scaling value.\n",
+             "0 (default value): dynamic loss scaling.\n"
+             "Positive power of 2: static loss scaling value.\n",
     )
 
     args = parser.parse_args()
@@ -594,16 +591,16 @@ def main():
             on_memory=args.on_memory,
         )
         num_train_optimization_steps = (
-            int(
-                len(train_dataset)
-                / args.train_batch_size
-                / args.gradient_accumulation_steps
-            )
-            * args.num_train_epochs
+                int(
+                    len(train_dataset)
+                    / args.train_batch_size
+                    / args.gradient_accumulation_steps
+                )
+                * args.num_train_epochs
         )
         if args.local_rank != -1:
             num_train_optimization_steps = (
-                num_train_optimization_steps // torch.distributed.get_world_size()
+                    num_train_optimization_steps // torch.distributed.get_world_size()
             )
 
     # Prepare model
@@ -746,17 +743,17 @@ def mask_and_predict(model, input_id, segment_id, interval_a, interval_b, tokeni
     masked_input_a = torch.zeros(1, input_id.size(1)).long().cuda()
     masked_input_b = torch.zeros(1, input_id.size(1)).long().cuda()
     input_mask = torch.zeros(1, input_id.size(1)).cuda()
-    input_mask[0, interval_a[0] : interval_a[1]] = 1.0
-    input_mask[0, interval_b[0] : interval_b[1]] = 1.0
+    input_mask[0, interval_a[0]: interval_a[1]] = 1.0
+    input_mask[0, interval_b[0]: interval_b[1]] = 1.0
 
-    masked_input_a[0, interval_a[0] : interval_a[1]] = input_id[
-        0, interval_a[0] : interval_a[1]
-    ]
-    masked_input_b[0, interval_b[0] : interval_b[1]] = input_id[
-        0, interval_b[0] : interval_b[1]
-    ]
-    masked_input_a[0, interval_b[0] : interval_b[1]] = tokenizer.vocab["[MASK]"]
-    masked_input_b[0, interval_a[0] : interval_a[1]] = tokenizer.vocab["[MASK]"]
+    masked_input_a[0, interval_a[0]: interval_a[1]] = input_id[
+                                                      0, interval_a[0]: interval_a[1]
+                                                      ]
+    masked_input_b[0, interval_b[0]: interval_b[1]] = input_id[
+                                                      0, interval_b[0]: interval_b[1]
+                                                      ]
+    masked_input_a[0, interval_b[0]: interval_b[1]] = tokenizer.vocab["[MASK]"]
+    masked_input_b[0, interval_a[0]: interval_a[1]] = tokenizer.vocab["[MASK]"]
 
     pred_scores_a, _ = model(masked_input_a, segment_id, input_mask)
     pred_scores_b, _ = model(masked_input_b, segment_id, input_mask)
@@ -767,25 +764,25 @@ def mask_and_predict(model, input_id, segment_id, interval_a, interval_b, tokeni
     log_prob_sum_a, log_prob_sum_b = 0, 0
     for i in range(interval_b[0], interval_b[1]):
         log_prob_sum_a += pred_scores_a[0, i, input_id[0, i]].item() / (
-            interval_a[1] - interval_a[0]
+                interval_a[1] - interval_a[0]
         )
     for i in range(interval_a[0], interval_a[1]):
         log_prob_sum_b += pred_scores_b[0, i, input_id[0, i]].item() / (
-            interval_b[1] - interval_b[0]
+                interval_b[1] - interval_b[0]
         )
 
     return log_prob_sum_a, log_prob_sum_a
 
 
 def build_tree_by_leave_out(
-    model, input_ids, segment_ids, input_mask, lm_label_ids, tokenizer
+        model, input_ids, segment_ids, input_mask, lm_label_ids, tokenizer
 ):
     bs = input_ids.size(1)
     for b in range(bs):
-        input_id = input_ids[b : b + 1]
-        input_mask_single = input_mask[b : b + 1]
-        segment_id = segment_ids[b : b + 1]
-        lm_label_id = lm_label_ids[b : b + 1]
+        input_id = input_ids[b: b + 1]
+        input_mask_single = input_mask[b: b + 1]
+        segment_id = segment_ids[b: b + 1]
+        lm_label_id = lm_label_ids[b: b + 1]
         origin_id = input_id.view(-1).cpu().numpy().tolist()
         token_list = tokenizer.convert_ids_to_tokens(origin_id)
         print([(i, x) for i, x in enumerate(token_list)])
@@ -799,7 +796,7 @@ def build_tree_by_leave_out(
                     model, input_id, segment_id, pr_queue[i], pr_queue[i + 1], tokenizer
                 )
                 prob_incre = (
-                    log_prob_a + log_prob_b - pr_queue[i][2] - pr_queue[i + 1][2]
+                        log_prob_a + log_prob_b - pr_queue[i][2] - pr_queue[i + 1][2]
                 )
                 scores.append(prob_incre)
                 if prob_incre > max_score:
@@ -813,15 +810,15 @@ def build_tree_by_leave_out(
 
 
 def predict_and_explain_unbatched(
-    model, input_ids, segment_ids, input_mask, lm_label_ids, is_next, tokenizer
+        model, input_ids, segment_ids, input_mask, lm_label_ids, is_next, tokenizer
 ):
     # one instance at a time
     bs = input_ids.size(-1)
     for b in range(bs):
-        input_id = input_ids[b : b + 1]
-        input_mask_single = input_mask[b : b + 1]
-        segment_id = segment_ids[b : b + 1]
-        lm_label_id = lm_label_ids[b : b + 1]
+        input_id = input_ids[b: b + 1]
+        input_mask_single = input_mask[b: b + 1]
+        segment_id = segment_ids[b: b + 1]
+        lm_label_id = lm_label_ids[b: b + 1]
         origin_id = input_id.view(-1).cpu().numpy().tolist()
         token_list = tokenizer.convert_ids_to_tokens(origin_id)
         print([(i, x) for i, x in enumerate(token_list)])

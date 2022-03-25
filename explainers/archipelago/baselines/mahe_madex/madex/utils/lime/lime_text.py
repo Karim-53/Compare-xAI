@@ -2,8 +2,9 @@
 # Based on the LIME code repo
 ################################
 
-import numpy as np
 import re
+
+import numpy as np
 
 
 class TextDomainMapper:
@@ -45,7 +46,7 @@ class TextDomainMapper:
         return exp
 
     def visualize_instance_html(
-        self, exp, label, div_name, exp_object_name, text=True, opacity=True
+            self, exp, label, div_name, exp_object_name, text=True, opacity=True
     ):
         """Adds text with highlighted words to visualization.
 
@@ -61,8 +62,8 @@ class TextDomainMapper:
             return ""
         text = (
             self.indexed_string.raw_string()
-            .encode("utf-8", "xmlcharrefreplace")
-            .decode("utf-8")
+                .encode("utf-8", "xmlcharrefreplace")
+                .decode("utf-8")
         )
         text = re.sub(r"[<>&]", "|", text)
         exp = [

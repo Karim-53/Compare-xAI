@@ -1,8 +1,7 @@
-import torch
-import torch.nn.functional as F
-
 # import cv2
 import numpy as np
+import torch
+import torch.nn.functional as F
 
 
 def get_gradients(scaled_inputs, model, target_label_idx, device, softmax=False):

@@ -1,11 +1,14 @@
-import torchtext as tt
-from nltk import Tree
-import pickle, random
-import torch
-from utils.args import get_args, makedirs
+import csv
+import json
 import os
+import pickle
+import random
+
+import torch
+import torchtext as tt
 from bert.tokenization import BertTokenizer
-import csv, json
+from nltk import Tree
+from utils.args import get_args, makedirs
 
 args = get_args()
 
@@ -23,7 +26,7 @@ def load_vocab(path):
 
 
 def handle_vocab(
-    vocab_path, field, datasets, vector_cache="", train_lm=False, max_size=None
+        vocab_path, field, datasets, vector_cache="", train_lm=False, max_size=None
 ):
     create_vocab = False
     if os.path.isfile(vocab_path):
@@ -52,8 +55,8 @@ def handle_vocab(
                 field.vocab.load_vectors(args.word_vectors)
                 for i in range(field.vocab.vectors.size(0)):
                     if (
-                        field.vocab.vectors[i, 0].item() == 0
-                        and field.vocab.vectors[i, 1].item() == 0
+                            field.vocab.vectors[i, 0].item() == 0
+                            and field.vocab.vectors[i, 1].item() == 0
                     ):
                         field.vocab.vectors[i].uniform_(-1, 1)
                 makedirs(os.path.dirname(vector_cache))

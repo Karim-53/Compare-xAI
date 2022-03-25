@@ -1,9 +1,5 @@
-from torchtext import datasets, data
-import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
-import sklearn
-from time import time
 
 from pipeline_mod import pipeline
 
@@ -20,7 +16,6 @@ import pickle
 import torch.multiprocessing as multiprocessing
 from itertools import repeat
 import h5py as h5
-
 
 from utils.dna_utils import *
 from utils.text_utils import *
@@ -53,7 +48,6 @@ parser.add_argument("--add_linear", type=int, default=0)
 parser.add_argument("--model", type=str, default="default")
 parser.add_argument("--gpu", type=int, default=0)
 parser.add_argument("--mlp_gpu", type=int, default=1)
-
 
 args = parser.parse_args()
 
@@ -130,7 +124,6 @@ def par_experiment(progress_id, index, preprocess_dict, num_trials):
 
 
 def get_model_and_data(experiment, device, model_selector):
-
     vectorizer = None
     misc = None
 
@@ -189,7 +182,6 @@ def get_model_and_data(experiment, device, model_selector):
 
 
 def run():
-
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
     save_path = save_folder + "/" + out_file
@@ -216,7 +208,7 @@ def run():
     num_par_batches = int(np.ceil(len(indexes) / par_batch_size))
 
     for b in range(num_par_batches):
-        index_batch = indexes[b * par_batch_size : (b + 1) * par_batch_size]
+        index_batch = indexes[b * par_batch_size: (b + 1) * par_batch_size]
         progress_ids = list(
             range(b * par_batch_size, b * par_batch_size + len(index_batch))
         )

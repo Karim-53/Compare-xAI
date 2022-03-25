@@ -1,3 +1,5 @@
+import copy
+
 import torch
 from algo.cd_func import CD
 from algo.scd_func import CD_gpu, get_lstm_states
@@ -8,7 +10,6 @@ from algo.soc_lstm import (
     append_extra_input,
     normalize_logit,
 )
-import copy
 from utils.args import get_args
 
 args = get_args()
@@ -16,15 +17,15 @@ args = get_args()
 
 class CDForLSTM(ExplanationBase):
     def __init__(
-        self,
-        target_model,
-        data_iterator,
-        vocab,
-        pad_variation,
-        tree_path,
-        output_path,
-        config,
-        pad_idx=1,
+            self,
+            target_model,
+            data_iterator,
+            vocab,
+            pad_variation,
+            tree_path,
+            output_path,
+            config,
+            pad_idx=1,
     ):
         super().__init__(
             target_model, data_iterator, vocab, tree_path, output_path, config, pad_idx
@@ -57,15 +58,15 @@ class CDForLSTM(ExplanationBase):
 
 class SCDForLSTM(SOCForLSTM):
     def __init__(
-        self,
-        target_model,
-        lm_model,
-        data_iterator,
-        vocab,
-        tree_path,
-        output_path,
-        config,
-        pad_idx=1,
+            self,
+            target_model,
+            lm_model,
+            data_iterator,
+            vocab,
+            tree_path,
+            output_path,
+            config,
+            pad_idx=1,
     ):
         super().__init__(
             target_model,
@@ -91,8 +92,8 @@ class SCDForLSTM(SOCForLSTM):
         inp_lm = copy.copy(inp)
         for i in range(len(inp_lm)):
             if (
-                nb_region[0] <= i <= nb_region[1]
-                and not x_region[0] <= i <= x_region[1]
+                    nb_region[0] <= i <= nb_region[1]
+                    and not x_region[0] <= i <= x_region[1]
             ):
                 inp_lm[i] = 1
         inp_th = torch.from_numpy(inp_lm).long().view(-1, 1)
@@ -126,11 +127,11 @@ class SCDForLSTM(SOCForLSTM):
                 len_bw = x_region[0] - nb_region[0]
                 len_fw = nb_region[1] - x_region[1]
                 if len_bw > 0:
-                    filled_inp[nb_region[0] : x_region[0]] = bw_sample_seq[-len_bw:]
+                    filled_inp[nb_region[0]: x_region[0]] = bw_sample_seq[-len_bw:]
                 if len_fw > 0:
-                    filled_inp[x_region[1] + 1 : nb_region[1] + 1] = fw_sample_seq[
-                        :len_fw
-                    ]
+                    filled_inp[x_region[1] + 1: nb_region[1] + 1] = fw_sample_seq[
+                                                                    :len_fw
+                                                                    ]
 
                 filled_inp = torch.from_numpy(filled_inp).long()
                 if self.gpu >= 0:

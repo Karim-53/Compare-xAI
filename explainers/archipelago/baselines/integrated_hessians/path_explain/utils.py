@@ -3,8 +3,9 @@ A module for setting up tensorflow gpu
 environments.
 """
 import os
-import tensorflow as tf
+
 import numpy as np
+import tensorflow as tf
 
 
 def set_up_environment(mem_frac=None, visible_devices=None, min_log_level="3"):
@@ -64,7 +65,7 @@ def _find_sublist(super_list, sub_list):
     """
     indices = []
     for i in range(len(super_list)):
-        if super_list[i : i + len(sub_list)] == sub_list:
+        if super_list[i: i + len(sub_list)] == sub_list:
             indices.append([i + j for j in range(len(sub_list))])
     return indices
 
@@ -93,7 +94,7 @@ def fold_array(array, join_ranges):
     array = array.copy()
     delete_slices = []
     for join_range in join_ranges:
-        array[join_range[0]] = np.sum(array[join_range[0] : join_range[1]])
+        array[join_range[0]] = np.sum(array[join_range[0]: join_range[1]])
         delete_slices.append(np.arange(join_range[0] + 1, join_range[1]))
     delete_slices = np.concatenate(delete_slices, axis=0)
 
@@ -109,10 +110,10 @@ def fold_matrix(array, join_ranges):
     delete_slices = []
     for join_range in join_ranges:
         array[join_range[0], :] = np.sum(
-            array[join_range[0] : join_range[1], :], axis=0
+            array[join_range[0]: join_range[1], :], axis=0
         )
         array[:, join_range[0]] = np.sum(
-            array[:, join_range[0] : join_range[1]], axis=1
+            array[:, join_range[0]: join_range[1]], axis=1
         )
 
         delete_slices.append(np.arange(join_range[0] + 1, join_range[1]))
@@ -129,7 +130,7 @@ def fold_tokens(array, join_ranges, join_string="##"):
     """
     delete_slices = []
     for join_range in join_ranges:
-        replace_string = "".join(list(array[join_range[0] : join_range[1]])).replace(
+        replace_string = "".join(list(array[join_range[0]: join_range[1]])).replace(
             join_string, ""
         )
         array[join_range[0]] = replace_string
@@ -141,13 +142,13 @@ def fold_tokens(array, join_ranges, join_string="##"):
 
 
 def strip_tokens(
-    tokens,
-    attributions,
-    interactions,
-    start_character="[CLS]",
-    end_character="[SEP]",
-    join_string="##",
-    special_strings=[["n", "'", "t"], ["'", "s"]],
+        tokens,
+        attributions,
+        interactions,
+        start_character="[CLS]",
+        end_character="[SEP]",
+        join_string="##",
+        special_strings=[["n", "'", "t"], ["'", "s"]],
 ):
     """
     A helper function to strip and re-arrange attributions generated

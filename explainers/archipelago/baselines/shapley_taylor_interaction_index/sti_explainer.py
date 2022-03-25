@@ -1,6 +1,6 @@
-import numpy as np
-from tqdm import tqdm
 from itertools import chain, combinations
+
+import numpy as np
 from explainer import Explainer
 
 
@@ -12,14 +12,14 @@ def powerset(iterable):
 
 class StiExplainer(Explainer):
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=False,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            verbose=False,
     ):
         Explainer.__init__(
             self,
@@ -57,7 +57,7 @@ class StiExplainer(Explainer):
         return att
 
     def batch_attribution(
-        self, num_orderings, main_effects=False, pairwise=True, seed=None, max_order=2
+            self, num_orderings, main_effects=False, pairwise=True, seed=None, max_order=2
     ):
         def collect_att(S, S_T_Z_dict, Z_score_dict, n):
             s = len(S)

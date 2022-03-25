@@ -1,16 +1,14 @@
 import torch
-import numpy as np
 from tqdm import tqdm
-import copy
-from utils.general_utils import *
-from utils.text_utils import *
-from utils.graph_utils import *
+
 from utils.dna_utils import *
+from utils.general_utils import *
+from utils.graph_utils import *
 from utils.lime.lime_text import *
 
 
 def generate_binary_perturbations(
-    num_feat, num_samples=100, init_on=True, perturbed_features=None
+        num_feat, num_samples=100, init_on=True, perturbed_features=None
 ):
     if perturbed_features == None:
         perturbed_features = {"indices": np.array(range(num_feat))}
@@ -31,13 +29,13 @@ def generate_binary_perturbations(
 
 
 def generate_perturbation_dataset_autoint(
-    data_inst,
-    model,
-    dense_feat_indices,
-    sparse_feat_indices,
-    num_samples=6000,
-    seed=None,
-    **kwargs
+        data_inst,
+        model,
+        dense_feat_indices,
+        sparse_feat_indices,
+        num_samples=6000,
+        seed=None,
+        **kwargs
 ):
     if seed is not None:
         set_seed(seed)
@@ -77,14 +75,14 @@ def generate_perturbation_dataset_autoint(
 
 
 def generate_perturbation_dataset_image(
-    data_inst,
-    model,
-    class_idx,
-    device,
-    num_samples=6000,
-    batch_size=100,
-    seed=None,
-    **kwargs
+        data_inst,
+        model,
+        class_idx,
+        device,
+        num_samples=6000,
+        batch_size=100,
+        seed=None,
+        **kwargs
 ):
     # Based on LIME image: https://github.com/marcotcr/lime/blob/master/lime/lime_image.py
 
@@ -110,7 +108,7 @@ def generate_perturbation_dataset_image(
     samples_labels = []
     for i in tqdm(range(n_batches)):
 
-        samples_binary_batch = samples_binary[i * batch_size : (i + 1) * batch_size]
+        samples_binary_batch = samples_binary[i * batch_size: (i + 1) * batch_size]
 
         perturbed_imgs = []
         for sample_binary in samples_binary_batch:
@@ -137,15 +135,15 @@ def generate_perturbation_dataset_image(
 
 
 def generate_perturbation_dataset_text(
-    data_inst,
-    model,
-    class_idx,
-    device,
-    num_samples=6000,
-    batch_size=100,
-    seed=None,
-    model_id=None,
-    **kwargs
+        data_inst,
+        model,
+        class_idx,
+        device,
+        num_samples=6000,
+        batch_size=100,
+        seed=None,
+        model_id=None,
+        **kwargs
 ):
     # Based on LIME image: https://github.com/marcotcr/lime/blob/master/lime/lime_text.py
 
@@ -166,7 +164,7 @@ def generate_perturbation_dataset_text(
     samples_labels = []
     for i in tqdm(range(n_batches)):
 
-        samples_binary_batch = samples_binary[i * batch_size : (i + 1) * batch_size]
+        samples_binary_batch = samples_binary[i * batch_size: (i + 1) * batch_size]
 
         perturbed_text = []
         for sample_binary in samples_binary_batch:
@@ -201,15 +199,15 @@ def generate_perturbation_dataset_text(
 
 
 def generate_perturbation_dataset_graph(
-    data_inst,
-    model,
-    target_idx,
-    n_hops,
-    device,
-    num_samples=6000,
-    batch_size=500,
-    seed=None,
-    **kwargs
+        data_inst,
+        model,
+        target_idx,
+        n_hops,
+        device,
+        num_samples=6000,
+        batch_size=500,
+        seed=None,
+        **kwargs
 ):
     def get_output(x, da):
         return model(x, da)[test_idxs].detach().cpu()
@@ -277,9 +275,8 @@ def generate_perturbation_dataset_graph(
 
 
 def generate_perturbation_dataset_dna(
-    data_inst, model, device, num_samples=6000, batch_size=100, seed=None, **kwargs
+        data_inst, model, device, num_samples=6000, batch_size=100, seed=None, **kwargs
 ):
-
     if seed is not None:
         set_seed(seed)
 
@@ -297,11 +294,10 @@ def generate_perturbation_dataset_dna(
     samples_labels = []
     for i in tqdm(range(n_batches)):
 
-        samples_binary_batch = samples_binary[i * batch_size : (i + 1) * batch_size]
+        samples_binary_batch = samples_binary[i * batch_size: (i + 1) * batch_size]
 
         perturbed_seqs = []
         for sample_binary in samples_binary_batch:
-
             indices2invert = np.argwhere(sample_binary == 0).squeeze()
             inv = indexed_seq.perturb_nucleotide(indices2invert)
             ex = vectorizer(inv)

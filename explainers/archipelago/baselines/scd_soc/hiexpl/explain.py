@@ -1,18 +1,21 @@
-from algo.soc_lstm import SOCForLSTM
-from algo.scd_lstm import CDForLSTM, SCDForLSTM
-from algo.soc_transformer import SOCForTransformer
-from algo.scd_transformer import CDForTransformer, SCDForTransformer
-import torch
 import argparse
+import os
+import random
+
+import torch
+
+from algo.scd_lstm import SCDForLSTM
+from algo.scd_transformer import SCDForTransformer
+from algo.soc_lstm import SOCForLSTM
+from algo.soc_transformer import SOCForTransformer
+from bert.run_classifier import BertConfig, BertForSequenceClassification
+from nns.model import LSTMMeanRE, LSTMMeanSentiment, LSTMSentiment
 from utils.args import get_args
 from utils.reader import (
     get_data_iterators_sst_flatten,
     get_data_iterators_yelp,
     get_data_iterators_tacred,
 )
-import random, os
-from bert.run_classifier import BertConfig, BertForSequenceClassification
-from nns.model import LSTMMeanRE, LSTMMeanSentiment, LSTMSentiment
 
 
 def get_args_exp():
@@ -109,8 +112,8 @@ if __name__ == "__main__":
                 config=args,
                 vocab=text_field.vocab,
                 output_path="outputs/"
-                + args.task
-                + "/soc_results/soc%s.txt" % args.exp_name,
+                            + args.task
+                            + "/soc_results/soc%s.txt" % args.exp_name,
             )
         elif args.method == "scd":
             lm_model = torch.load(
@@ -127,8 +130,8 @@ if __name__ == "__main__":
                 config=args,
                 vocab=text_field.vocab,
                 output_path="outputs/"
-                + args.task
-                + "/scd_results/scd%s.txt" % args.exp_name,
+                            + args.task
+                            + "/scd_results/scd%s.txt" % args.exp_name,
             )
         else:
             raise ValueError("unknown method")
@@ -158,8 +161,8 @@ if __name__ == "__main__":
                 lm_model,
                 tree_path=tree_path % args.dataset,
                 output_path="outputs/"
-                + args.task
-                + "/soc_bert_results/soc%s.txt" % args.exp_name,
+                            + args.task
+                            + "/soc_bert_results/soc%s.txt" % args.exp_name,
                 config=args,
                 vocab=text_field.vocab,
             )
@@ -175,8 +178,8 @@ if __name__ == "__main__":
                 lm_model,
                 tree_path=tree_path % args.dataset,
                 output_path="outputs/"
-                + args.task
-                + "/scd_bert_results/scd%s.txt" % args.exp_name,
+                            + args.task
+                            + "/scd_bert_results/scd%s.txt" % args.exp_name,
                 config=args,
                 vocab=text_field.vocab,
             )

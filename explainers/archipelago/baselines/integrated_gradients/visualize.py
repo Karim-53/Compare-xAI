@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 G = [0, 255, 0]
 R = [255, 0, 0]
@@ -10,11 +9,11 @@ def convert_to_gray_scale(attributions):
 
 
 def linear_transform(
-    attributions,
-    clip_above_percentile=99.9,
-    clip_below_percentile=70.0,
-    low=0.2,
-    plot_distribution=False,
+        attributions,
+        clip_above_percentile=99.9,
+        clip_below_percentile=70.0,
+        low=0.2,
+        plot_distribution=False,
 ):
     m = compute_threshold_by_top_percentage(
         attributions,
@@ -34,7 +33,7 @@ def linear_transform(
 
 
 def compute_threshold_by_top_percentage(
-    attributions, percentage=60, plot_distribution=True
+        attributions, percentage=60, plot_distribution=True
 ):
     if percentage < 0 or percentage > 100:
         raise ValueError("percentage must be in [0, 100]")
@@ -65,20 +64,20 @@ def overlay_function(attributions, image):
 
 
 def visualize(
-    attributions,
-    image,
-    positive_channel=G,
-    negative_channel=R,
-    polarity="positive",
-    clip_above_percentile=99.9,
-    clip_below_percentile=0,
-    morphological_cleanup=False,
-    structure=np.ones((3, 3)),
-    outlines=False,
-    outlines_component_percentage=90,
-    overlay=True,
-    mask_mode=False,
-    plot_distribution=False,
+        attributions,
+        image,
+        positive_channel=G,
+        negative_channel=R,
+        polarity="positive",
+        clip_above_percentile=99.9,
+        clip_below_percentile=0,
+        morphological_cleanup=False,
+        structure=np.ones((3, 3)),
+        outlines=False,
+        outlines_component_percentage=90,
+        overlay=True,
+        mask_mode=False,
+        plot_distribution=False,
 ):
     if polarity == "both":
         raise NotImplementedError

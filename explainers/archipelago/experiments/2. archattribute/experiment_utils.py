@@ -1,19 +1,20 @@
-import sys
-import numpy as np
 import pickle
+import sys
+
+import numpy as np
 import requests
-from PIL import Image
 import torch
+from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
 
 
 def prep_imagenet_coco_conversion(
-    coco,
-    i1k_labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
-    data_dir="/meladyfs/newyork/datasets/mscoco",
-    data_type="val2017",
-    coco_to_i1k_path="processed_data/image_data/coco_to_i1k_map.pickle",
+        coco,
+        i1k_labels_url="https://s3.amazonaws.com/outcome-blog/imagenet/labels.json",
+        data_dir="/meladyfs/newyork/datasets/mscoco",
+        data_type="val2017",
+        coco_to_i1k_path="processed_data/image_data/coco_to_i1k_map.pickle",
 ):
     # get imagenet labels
     i1k_labels = {
@@ -92,15 +93,15 @@ def match_segments_and_mask(segments, mask_orig, ratio_threshold=0.5):
 
 
 def generate_perturbation_dataset_bert(
-    data_inst,
-    model,
-    class_idx,
-    device,
-    num_samples=6000,
-    batch_size=100,
-    seed=None,
-    model_id=None,
-    **kwargs
+        data_inst,
+        model,
+        class_idx,
+        device,
+        num_samples=6000,
+        batch_size=100,
+        seed=None,
+        model_id=None,
+        **kwargs
 ):
     sys.path.append("../../../baselines/mahe_madex/madex/")
     from utils.general_utils import set_seed, proprocess_data
@@ -115,7 +116,7 @@ def generate_perturbation_dataset_bert(
     n_batches = int(np.ceil(num_samples / batch_size))
     samples_labels = []
     for i in tqdm(range(n_batches)):
-        samples_binary_batch = samples_binary[i * batch_size : (i + 1) * batch_size]
+        samples_binary_batch = samples_binary[i * batch_size: (i + 1) * batch_size]
         perturbed_text = []
         for sample_binary in samples_binary_batch:
             vec = target_ids.copy()
@@ -124,8 +125,8 @@ def generate_perturbation_dataset_bert(
             perturbed_text.append(vec)
         preds = (
             model(torch.LongTensor(np.stack(perturbed_text)).to(device))[0]
-            .data.cpu()
-            .numpy()
+                .data.cpu()
+                .numpy()
         )
         samples_labels.append(preds)
     samples_labels = np.concatenate(samples_labels)

@@ -1,9 +1,12 @@
+import copy
+
+import numpy as np
+import torch
 from algo.soc_transformer import (
     ExplanationBaseForTransformer,
     SOCForTransformer,
     normalize_logit,
 )
-from bert.run_classifier import BertTokenizer, predict_and_explain_wrapper_unbatched
 from algo.soc_transformer import (
     get_data_iterator_bert,
     bert_id_to_lm_id,
@@ -11,9 +14,7 @@ from algo.soc_transformer import (
     Batch,
 )
 from bert.modeling import global_state_dict
-import torch
-import copy
-import numpy as np
+from bert.run_classifier import predict_and_explain_wrapper_unbatched
 from utils.args import get_args
 
 args = get_args()
@@ -32,7 +33,7 @@ class CDForTransformer(ExplanationBaseForTransformer):
         )
 
     def explain_single_transformer(
-        self, input_ids, input_mask, segment_ids, region, label=None
+            self, input_ids, input_mask, segment_ids, region, label=None
     ):
         if self.gpu >= 0:
             input_ids, input_mask, segment_ids = (
@@ -59,7 +60,7 @@ class CDForTransformer(ExplanationBaseForTransformer):
 
 class SCDForTransformer(SOCForTransformer):
     def __init__(
-        self, target_model, lm_model, vocab, tree_path, output_path, config, tokenizer
+            self, target_model, lm_model, vocab, tree_path, output_path, config, tokenizer
     ):
         super().__init__(
             target_model, lm_model, vocab, tree_path, output_path, config, tokenizer
@@ -84,8 +85,8 @@ class SCDForTransformer(SOCForTransformer):
         inp_lm = copy.copy(inp)
         for i in range(len(inp_lm)):
             if (
-                nb_region[0] <= i <= nb_region[1]
-                and not x_region[0] <= i <= x_region[1]
+                    nb_region[0] <= i <= nb_region[1]
+                    and not x_region[0] <= i <= x_region[1]
             ):
                 inp_lm[i] = self.tokenizer.vocab["[PAD]"]
 
@@ -93,11 +94,11 @@ class SCDForTransformer(SOCForTransformer):
             inp_th = (
                 torch.from_numpy(
                     bert_id_to_lm_id(
-                        inp_lm[1 : inp_length - 1], self.tokenizer, self.vocab
+                        inp_lm[1: inp_length - 1], self.tokenizer, self.vocab
                     )
                 )
-                .long()
-                .view(-1, 1)
+                    .long()
+                    .view(-1, 1)
             )
             inp_length = torch.LongTensor([inp_length - 2])
             fw_pos = torch.LongTensor([min(x_region[1] + 1 - 1, len(inp) - 2)])
@@ -108,8 +109,8 @@ class SCDForTransformer(SOCForTransformer):
                 torch.from_numpy(
                     bert_id_to_lm_id(inp_lm[:inp_length], self.tokenizer, self.vocab)
                 )
-                .long()
-                .view(-1, 1)
+                    .long()
+                    .view(-1, 1)
             )
             inp_length = torch.LongTensor([inp_length])
             fw_pos = torch.LongTensor([min(x_region[1] + 1, inp_length.item() - 1)])
@@ -146,11 +147,11 @@ class SCDForTransformer(SOCForTransformer):
                 len_bw = x_region[0] - nb_region[0]
                 len_fw = nb_region[1] - x_region[1]
                 if len_bw > 0:
-                    filled_inp[nb_region[0] : x_region[0]] = lm_id_to_bert_id(
+                    filled_inp[nb_region[0]: x_region[0]] = lm_id_to_bert_id(
                         bw_sample_seq[-len_bw:], self.tokenizer, self.vocab
                     )
                 if len_fw > 0:
-                    filled_inp[x_region[1] + 1 : nb_region[1] + 1] = lm_id_to_bert_id(
+                    filled_inp[x_region[1] + 1: nb_region[1] + 1] = lm_id_to_bert_id(
                         fw_sample_seq[:len_fw], self.tokenizer, self.vocab
                     )
                 inp_enb.append(filled_inp)
@@ -184,7 +185,7 @@ class SCDForTransformer(SOCForTransformer):
         return
 
     def explain_single_transformer(
-        self, input_ids, input_mask, segment_ids, region, label=None
+            self, input_ids, input_mask, segment_ids, region, label=None
     ):
         inp_flatten = input_ids.view(-1).cpu().numpy()
         inp_mask_flatten = input_mask.view(-1).cpu().numpy()

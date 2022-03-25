@@ -1,17 +1,18 @@
-from explainer import Archipelago
 import copy
+
+from explainer import Archipelago
 
 
 class ContextExplainer(Archipelago):
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=True,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            verbose=True,
     ):
         super().__init__(
             model, input, baseline, data_xformer, output_indices, batch_size, verbose

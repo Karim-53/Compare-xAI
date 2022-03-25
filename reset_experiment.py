@@ -59,7 +59,8 @@ TIME_LIMIT = 255  # 250  # src https://stackoverflow.com/questions/366682/how-to
 def compatible(test_class, explainer_class):
     """ test if the xai generate the kind of explanation expected from the test """
     for explanation in ['importance', 'attribution', 'interaction']:
-        if explanation in inspect.getfullargspec(test_class.score).args and explainer_class.__dict__.get(explanation, False):
+        if explanation in inspect.getfullargspec(test_class.score).args and explainer_class.__dict__.get(explanation,
+                                                                                                         False):
             return True
     else:
         return False
@@ -69,9 +70,9 @@ def run_experiment(test_class, explainer_class):
     print(test_class.__name__, explainer_class.__name__)
     if not compatible(test_class, explainer_class):
         return {
-        # 'score': score,
-        'Last_updated': str(datetime.datetime.now()),
-    }
+            # 'score': score,
+            'Last_updated': str(datetime.datetime.now()),
+        }
     # todo try except to catch error from XAI alg
     test = test_class()
 

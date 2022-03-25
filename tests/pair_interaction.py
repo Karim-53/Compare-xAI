@@ -18,6 +18,7 @@ def sparse_format(interaction):
     else:
         return interaction
 
+
 class synth_model:
     def __init__(self, test_id, input_value, base_value):
         self.test_id = test_id
@@ -164,9 +165,8 @@ input_value, base_value = 1, -1
 
 class DetectInteraction(Test):
     """ this is only a subclass please do not use directly """
-    name = 'detect_interaction' # todo detail if it is pair interaction or multi
+    name = 'detect_interaction'  # todo detail if it is pair interaction or multi
     description = 'Is the XAI able to detect all pairs of binary features interacting'
-
 
     def __init__(self, function_id=0):
         """
@@ -201,9 +201,8 @@ class DetectInteraction(Test):
         _score = (auc - .5) * 2.
         if _score < 0.:
             print('Negative AUC!')
-            _score = max(_score, 0.) # with random values it is possible to get a negative score
+            _score = max(_score, 0.)  # with random values it is possible to get a negative score
         return {'interaction_detection': _score}
-
 
 
 class DetectInteraction0(DetectInteraction):
@@ -213,12 +212,14 @@ class DetectInteraction0(DetectInteraction):
     def __init__(self):
         super().__init__(function_id=self.function_id)
 
+
 class DetectInteraction1(DetectInteraction):
     function_id = 1
     name = DetectInteraction.name + str(function_id)
 
     def __init__(self):
         super().__init__(function_id=self.function_id)
+
 
 class DetectInteraction2(DetectInteraction):
     function_id = 2
@@ -227,12 +228,14 @@ class DetectInteraction2(DetectInteraction):
     def __init__(self):
         super().__init__(function_id=self.function_id)
 
+
 class DetectInteraction3(DetectInteraction):
     function_id = 3
     name = DetectInteraction.name + str(function_id)
 
     def __init__(self):
         super().__init__(function_id=self.function_id)
+
 
 class DetectInteraction4(DetectInteraction):
     function_id = 4

@@ -14,12 +14,13 @@
 # limitations under the License.
 """PyTorch optimization for BERT model."""
 
+import logging
 import math
+
 import torch
+from torch.nn.utils import clip_grad_norm_
 from torch.optim import Optimizer
 from torch.optim.optimizer import required
-from torch.nn.utils import clip_grad_norm_
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -69,17 +70,17 @@ class BertAdam(Optimizer):
     """
 
     def __init__(
-        self,
-        params,
-        lr=required,
-        warmup=-1,
-        t_total=-1,
-        schedule="warmup_linear",
-        b1=0.9,
-        b2=0.999,
-        e=1e-6,
-        weight_decay=0.01,
-        max_grad_norm=1.0,
+            self,
+            params,
+            lr=required,
+            warmup=-1,
+            t_total=-1,
+            schedule="warmup_linear",
+            b1=0.9,
+            b2=0.999,
+            e=1e-6,
+            weight_decay=0.01,
+            max_grad_norm=1.0,
     ):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {} - should be >= 0.0".format(lr))
@@ -191,9 +192,9 @@ class BertAdam(Optimizer):
                     lr_scheduled = group["lr"] * schedule_fct(progress, group["warmup"])
                     # warning for exceeding t_total (only active with warmup_linear
                     if (
-                        group["schedule"] == "warmup_linear"
-                        and progress > 1.0
-                        and not warned_for_t_total
+                            group["schedule"] == "warmup_linear"
+                            and progress > 1.0
+                            and not warned_for_t_total
                     ):
                         logger.warning(
                             "Training beyond specified 't_total' steps with schedule '{}'. Learning rate set to {}. "

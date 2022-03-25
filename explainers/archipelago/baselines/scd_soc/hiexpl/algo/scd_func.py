@@ -1,6 +1,7 @@
-from utils.args import *
-import torch.nn.functional as F
 import torch
+import torch.nn.functional as F
+from utils.args import *
+
 from .cd_func import is_in_intervals, sigmoid, tanh
 
 args = get_args()
@@ -286,7 +287,7 @@ def decomp_activation_two_with_states(a, b, activation, states, state_key, t):
 
 
 def decomp_activation_three_with_states(
-    rel_x, irrel_x, bias_x, activation, states, state_key, t, bias_in_rel
+        rel_x, irrel_x, bias_x, activation, states, state_key, t, bias_in_rel
 ):
     rel = 0
     if states is None or not states["c"]:
@@ -308,17 +309,17 @@ def decomp_activation_three_with_states(
 
 
 def mult_terms(
-    rel_a,
-    irrel_a,
-    bias_a,
-    rel_b,
-    irrel_b,
-    bias_b,
-    states,
-    state_key_a,
-    state_key_b,
-    t,
-    bias_in_rel,
+        rel_a,
+        irrel_a,
+        bias_a,
+        rel_b,
+        irrel_b,
+        bias_b,
+        states,
+        state_key_a,
+        state_key_b,
+        t,
+        bias_in_rel,
 ):
     rel = 0
 

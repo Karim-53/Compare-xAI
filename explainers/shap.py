@@ -78,7 +78,8 @@ class TreeShap(Explainer):
         try:
             self.explainer = shap.TreeExplainer(self.trained_model, self.df_reference, **kwargs)
         except Exception as e:
-            if str(e).startswith('Model type not yet supported by TreeExplainer') or str(e).startswith('Unsupported masker type'):
+            if str(e).startswith('Model type not yet supported by TreeExplainer') or str(e).startswith(
+                    'Unsupported masker type'):
                 self.model_supported = False
 
     def explain(self, dataset_to_explain, **kwargs):

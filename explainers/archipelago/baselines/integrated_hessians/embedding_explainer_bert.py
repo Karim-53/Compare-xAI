@@ -2,10 +2,11 @@
 A module that sub-classes the original explainer to explain language
 models through an embedding layer.
 """
-import tensorflow as tf
 import numpy as np
-from path_explain.explainers.path_explainer_tf import PathExplainerTF
+import tensorflow as tf
 from tqdm import tqdm
+
+from path_explain.explainers.path_explainer_tf import PathExplainerTF
 
 
 class EmbeddingExplainerTF(PathExplainerTF):
@@ -37,15 +38,15 @@ class EmbeddingExplainerTF(PathExplainerTF):
             pass
 
     def _single_attribution(
-        self,
-        current_input,
-        current_baseline,
-        current_alphas,
-        num_samples,
-        batch_size,
-        use_expectation,
-        output_index,
-        attention_mask,
+            self,
+            current_input,
+            current_baseline,
+            current_alphas,
+            num_samples,
+            batch_size,
+            use_expectation,
+            output_index,
+            attention_mask,
     ):
         """
         A helper function to compute path
@@ -74,7 +75,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
             batch_baseline = self._sample_baseline(
                 current_baseline, number_to_draw, use_expectation
             )
-            batch_alphas = current_alphas[j : min(j + batch_size, num_samples)]
+            batch_alphas = current_alphas[j: min(j + batch_size, num_samples)]
 
             reps = np.ones(len(current_input.shape)).astype(int)
             reps[0] = number_to_draw
@@ -96,15 +97,15 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return attributions
 
     def attributions(
-        self,
-        inputs,
-        baseline,
-        batch_size=50,
-        num_samples=100,
-        use_expectation=True,
-        output_indices=None,
-        verbose=False,
-        attention_mask=None,
+            self,
+            inputs,
+            baseline,
+            batch_size=50,
+            num_samples=100,
+            use_expectation=True,
+            output_indices=None,
+            verbose=False,
+            attention_mask=None,
     ):
         """
         A function to compute path attributions on the given
@@ -195,14 +196,14 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return attributions
 
     def accumulation_function(
-        self,
-        batch_input,
-        batch_baseline,
-        batch_alphas,
-        output_index=None,
-        second_order=False,
-        interaction_index=None,
-        attention_mask=None,
+            self,
+            batch_input,
+            batch_baseline,
+            batch_alphas,
+            output_index=None,
+            second_order=False,
+            interaction_index=None,
+            attention_mask=None,
     ):
         """
         A function that computes the logic of combining gradients and
@@ -213,7 +214,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         if not second_order:
             batch_difference = batch_input - batch_baseline
             batch_interpolated = (
-                batch_alphas * batch_input + (1.0 - batch_alphas) * batch_baseline
+                    batch_alphas * batch_input + (1.0 - batch_alphas) * batch_baseline
             )
 
             with tf.GradientTape() as tape:
@@ -238,7 +239,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         batch_alpha, batch_beta = batch_alphas
         batch_difference = batch_input - batch_baseline
         batch_interpolated_beta = (
-            batch_beta * batch_input + (1.0 - batch_beta) * batch_baseline
+                batch_beta * batch_input + (1.0 - batch_beta) * batch_baseline
         )
 
         with tf.GradientTape() as second_order_tape:
@@ -246,8 +247,8 @@ class EmbeddingExplainerTF(PathExplainerTF):
 
             batch_difference_beta = batch_interpolated_beta - batch_baseline
             batch_interpolated_alpha = (
-                batch_alpha * batch_interpolated_beta
-                + (1.0 - batch_alpha) * batch_baseline
+                    batch_alpha * batch_interpolated_beta
+                    + (1.0 - batch_alpha) * batch_baseline
             )
             with tf.GradientTape() as first_order_tape:
                 first_order_tape.watch(batch_interpolated_alpha)
@@ -351,16 +352,16 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return batch_interactions
 
     def _single_interaction(
-        self,
-        current_input,
-        current_baseline,
-        current_alphas,
-        num_samples,
-        batch_size,
-        use_expectation,
-        output_index,
-        interaction_index,
-        attention_mask,
+            self,
+            current_input,
+            current_baseline,
+            current_alphas,
+            num_samples,
+            batch_size,
+            use_expectation,
+            output_index,
+            interaction_index,
+            attention_mask,
     ):
         """
         A helper function to compute path
@@ -393,8 +394,8 @@ class EmbeddingExplainerTF(PathExplainerTF):
             batch_baseline = self._sample_baseline(
                 current_baseline, number_to_draw, use_expectation
             )
-            batch_alpha = current_alpha[j : min(j + batch_size, num_samples)]
-            batch_beta = current_beta[j : min(j + batch_size, num_samples)]
+            batch_alpha = current_alpha[j: min(j + batch_size, num_samples)]
+            batch_beta = current_beta[j: min(j + batch_size, num_samples)]
 
             reps = np.ones(len(current_input.shape)).astype(int)
             reps[0] = number_to_draw
@@ -418,16 +419,16 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return attributions
 
     def interactions(
-        self,
-        inputs,
-        baseline,
-        batch_size=50,
-        num_samples=100,
-        use_expectation=True,
-        output_indices=None,
-        verbose=False,
-        interaction_index=None,
-        attention_mask=None,
+            self,
+            inputs,
+            baseline,
+            batch_size=50,
+            num_samples=100,
+            use_expectation=True,
+            output_indices=None,
+            verbose=False,
+            interaction_index=None,
+            attention_mask=None,
     ):
         """
         A function to compute path interactions (attributions of
@@ -543,12 +544,12 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return self.model(inputs[0:1], attention_mask[0:1])
 
     def _init_array(
-        self,
-        inputs,
-        output_indices,
-        attention_mask,
-        interaction_index=None,
-        as_interactions=False,
+            self,
+            inputs,
+            output_indices,
+            attention_mask,
+            interaction_index=None,
+            as_interactions=False,
     ):
         """
         Internal helper function to get an

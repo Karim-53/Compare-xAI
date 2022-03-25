@@ -13,8 +13,8 @@
 # limitations under the License.
 
 
-from collections import Counter
 import sys
+from collections import Counter
 
 NO_RELATION = 0
 

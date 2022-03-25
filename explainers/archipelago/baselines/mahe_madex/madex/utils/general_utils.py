@@ -1,11 +1,13 @@
 # import torch
-import numpy as np
-from lime import lime_base
-import sklearn
-from sklearn.preprocessing import StandardScaler
 # import torch.nn as nn
 # import torch.optim as optim
 import copy
+
+import numpy as np
+import sklearn
+from sklearn.preprocessing import StandardScaler
+
+from lime import lime_base
 
 
 def set_seed(seed=42):
@@ -20,22 +22,21 @@ def force_float(X_numpy):
 
 
 def proprocess_data(
-    X, Y, valid_size=500, test_size=500, std_scale=False, std_scale_X=False
+        X, Y, valid_size=500, test_size=500, std_scale=False, std_scale_X=False
 ):
-
     n, p = X.shape
     ## Make dataset splits
     ntrain, nval, ntest = n - valid_size - test_size, valid_size, test_size
 
     Xs = {
         "train": X[:ntrain],
-        "val": X[ntrain : ntrain + nval],
-        "test": X[ntrain + nval : ntrain + nval + ntest],
+        "val": X[ntrain: ntrain + nval],
+        "test": X[ntrain + nval: ntrain + nval + ntest],
     }
     Ys = {
         "train": np.expand_dims(Y[:ntrain], axis=1),
-        "val": np.expand_dims(Y[ntrain : ntrain + nval], axis=1),
-        "test": np.expand_dims(Y[ntrain + nval : ntrain + nval + ntest], axis=1),
+        "val": np.expand_dims(Y[ntrain: ntrain + nval], axis=1),
+        "test": np.expand_dims(Y[ntrain + nval: ntrain + nval + ntest], axis=1),
     }
 
     for k in Xs:
@@ -100,19 +101,19 @@ def create_mlp(layer_sizes, out_bias=True, act_func=nn.ReLU()):
 
 
 def train(
-    net,
-    data_loaders,
-    criterion=nn.MSELoss(reduction="none"),
-    nepochs=100,
-    verbose=False,
-    early_stopping=True,
-    patience=5,
-    l1_const=1e-4,
-    l2_const=0,
-    learning_rate=0.01,
-    opt_func=optim.Adam,
-    device=torch.device("cpu"),
-    **kwargs
+        net,
+        data_loaders,
+        criterion=nn.MSELoss(reduction="none"),
+        nepochs=100,
+        verbose=False,
+        early_stopping=True,
+        patience=5,
+        l1_const=1e-4,
+        l2_const=0,
+        learning_rate=0.01,
+        opt_func=optim.Adam,
+        device=torch.device("cpu"),
+        **kwargs
 ):
     optimizer = opt_func(net.parameters(), lr=learning_rate, weight_decay=l2_const)
 
@@ -204,12 +205,12 @@ def train(
 
 
 def merge_overlapping_sets(
-    prediction_scores,
-    interaction_atts,
-    overlap_thresh=0.5,
-    rel_gain_threshold=0,
-    patience=1,
-    num_features=None,
+        prediction_scores,
+        interaction_atts,
+        overlap_thresh=0.5,
+        rel_gain_threshold=0,
+        patience=1,
+        num_features=None,
 ):
     def overlap_coef(A, B):
         A = set(A)
@@ -305,7 +306,7 @@ def get_sample_weights(Xs, kernel_width=0.25, enable=True, **kwargs):
 
 
 def get_lime_attributions(
-    Xs, Ys, max_features=10000, kernel_width=0.25, weight_samples=True, sort=True
+        Xs, Ys, max_features=10000, kernel_width=0.25, weight_samples=True, sort=True
 ):
     def kernel(d):
         return np.sqrt(np.exp(-(d ** 2) / kernel_width ** 2))

@@ -82,6 +82,7 @@ class Lime:
     supported_models = ('model_agnostic',)
     attribution = True
     importance = True
+
     def __init__(self, predict_func, X, X_reference=None, **kwargs):
         super().__init__()
         self.predict_func = predict_func

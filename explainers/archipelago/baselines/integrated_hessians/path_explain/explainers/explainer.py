@@ -3,7 +3,7 @@ Contains the base class for the two explainer objects.
 """
 
 
-class Explainer:  #  ma7ahtekch beha maghir mat3aytelha
+class Explainer:  # ma7ahtekch beha maghir mat3aytelha
     """
     A superclass for all explainer objects.
     This (somewhat) matches the SHAP
@@ -11,14 +11,14 @@ class Explainer:  #  ma7ahtekch beha maghir mat3aytelha
     """
 
     def attributions(
-        self,
-        inputs,
-        baseline,
-        batch_size=50,
-        num_samples=100,
-        use_expectation=True,
-        output_indices=None,
-        verbose=False,
+            self,
+            inputs,
+            baseline,
+            batch_size=50,
+            num_samples=100,
+            use_expectation=True,
+            output_indices=None,
+            verbose=False,
     ):
         """
         A function that returns the path attributions for the
@@ -32,15 +32,15 @@ class Explainer:  #  ma7ahtekch beha maghir mat3aytelha
         )
 
     def interactions(
-        self,
-        inputs,
-        baseline,
-        batch_size=50,
-        num_samples=100,
-        use_expectation=True,
-        output_indices=None,
-        verbose=False,
-        interaction_index=None,
+            self,
+            inputs,
+            baseline,
+            batch_size=50,
+            num_samples=100,
+            use_expectation=True,
+            output_indices=None,
+            verbose=False,
+            interaction_index=None,
     ):
         """
         A function that returns the path interactions for the

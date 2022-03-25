@@ -1,7 +1,6 @@
-import time
 import glob
-
 import sys
+import time
 
 sys.path.append("../")
 
@@ -9,7 +8,6 @@ import torch.optim as O
 
 from lm_arch import LSTMLanguageModel
 from utils.reader import *
-
 
 import random
 
@@ -119,8 +117,8 @@ def do_train(model):
                     best_dev_nll = dev_loss
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
                     snapshot_path = (
-                        snapshot_prefix
-                        + "_devloss_{}_iter_{}_model.pt".format(dev_loss, iterations)
+                            snapshot_prefix
+                            + "_devloss_{}_iter_{}_model.pt".format(dev_loss, iterations)
                     )
 
                     # save model, delete previous 'best_snapshot' files

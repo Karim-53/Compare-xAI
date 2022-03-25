@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn import neural_network
 
 MODELS = ['tree_based', 'neural_network']
 EXTENDED_MODELS = {'model_agnostic': MODELS}
@@ -11,12 +10,11 @@ def supported_models_developed(supported_models):
         _supported_models_developed += EXTENDED_MODELS.get(e, [])
     return _supported_models_developed
 
+
 class Explainer:
     name = None
     description = None
     supported_models = ()
-
-
 
     # todo [after acceptance] add complexity as str, is_affected_by_seed
     # todo [after acceptance] add last_update = version of the release of this repo
@@ -37,14 +35,14 @@ class Explainer:
 
 class InteractionExplainer:
     def __init__(
-        self,
-        model,
-        input=None,
-        baseline=None,
-        data_xformer=None,
-        output_indices=0,
-        batch_size=20,
-        verbose=False,
+            self,
+            model,
+            input=None,
+            baseline=None,
+            data_xformer=None,
+            output_indices=0,
+            batch_size=20,
+            verbose=False,
     ):
 
         input, baseline = self.arg_checks(input, baseline, data_xformer)
@@ -78,7 +76,7 @@ class InteractionExplainer:
             return iterable
 
     def batch_set_inference(
-        self, set_indices, context, insertion_target, include_context=False
+            self, set_indices, context, insertion_target, include_context=False
     ):
         """
         Creates archipelago type data instances and runs batch inference on them
@@ -89,7 +87,7 @@ class InteractionExplainer:
 
         scores = {}
         for b in self.verbose_iterable(range(num_batches)):
-            batch_sets = set_indices[b * self.batch_size : (b + 1) * self.batch_size]
+            batch_sets = set_indices[b * self.batch_size: (b + 1) * self.batch_size]
             data_batch = []
             for index_tuple in batch_sets:
                 new_instance = context.copy()
@@ -120,7 +118,6 @@ class InteractionExplainer:
         return output
 
 
-
 class Random(Explainer):
     name = 'baseline_random'
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
@@ -136,10 +133,10 @@ class Random(Explainer):
         # todo [after acceptance] with np seed = 0
         arr = np.array(dataset_to_explain)
         _shape = arr.shape
-        if len(_shape)== 1:
+        if len(_shape) == 1:
             _shape = (1, _shape[0])
         self.expected_values = np.random.randn(_shape[0])
         self.attribution = np.random.randn(*_shape)
         self.importance = np.random.randn(_shape[1])
 
-        self.interaction = np.random.randn( _shape[1], _shape[1] )
+        self.interaction = np.random.randn(_shape[1], _shape[1])

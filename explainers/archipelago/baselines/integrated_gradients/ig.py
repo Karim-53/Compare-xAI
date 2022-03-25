@@ -2,14 +2,14 @@ import numpy as np
 
 
 def integrated_gradients(
-    inputs,
-    model,
-    target_label_idx,
-    get_gradients,
-    baseline,
-    device,
-    steps=50,
-    softmax=False,
+        inputs,
+        model,
+        target_label_idx,
+        get_gradients,
+        baseline,
+        device,
+        steps=50,
+        softmax=False,
 ):
     if baseline is None:
         baseline = 0 * inputs

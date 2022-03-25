@@ -1,11 +1,10 @@
-import torch
-from utils.args import get_args
 import copy
-from utils.parser import read_trees_from_corpus, get_span_to_node_mapping
-import pickle
-from utils.agglomeration import *
-from skimage import measure
 import os
+
+import torch
+from utils.agglomeration import *
+from utils.args import get_args
+from utils.parser import read_trees_from_corpus, get_span_to_node_mapping
 
 args = get_args()
 
@@ -49,14 +48,14 @@ class Batch:
 
 class ExplanationBase:
     def __init__(
-        self,
-        target_model,
-        data_iterator,
-        vocab,
-        tree_path,
-        output_path,
-        config,
-        pad_idx=1,
+            self,
+            target_model,
+            data_iterator,
+            vocab,
+            tree_path,
+            output_path,
+            config,
+            pad_idx=1,
     ):
         self.model = target_model
         self.iterator = data_iterator
@@ -138,7 +137,7 @@ class ExplanationBase:
         assert len(spans) == len(contribs)
         for span, contrib in zip(spans, contribs):
             if type(span) is tuple:
-                outputs.append((" ".join(tokens[span[0] : span[1] + 1]), contrib))
+                outputs.append((" ".join(tokens[span[0]: span[1] + 1]), contrib))
             else:
                 outputs.append((tokens[span], contrib))
         output_str = " ".join(["%s %.6f\t" % (x, y) for x, y in outputs])
@@ -405,15 +404,15 @@ class ExplanationBase:
 
 class SOCForLSTM(ExplanationBase):
     def __init__(
-        self,
-        target_model,
-        lm_model,
-        data_iterator,
-        vocab,
-        tree_path,
-        output_path,
-        config,
-        pad_idx=1,
+            self,
+            target_model,
+            lm_model,
+            data_iterator,
+            vocab,
+            tree_path,
+            output_path,
+            config,
+            pad_idx=1,
     ):
         super().__init__(
             target_model, data_iterator, vocab, tree_path, output_path, config, pad_idx
@@ -430,8 +429,8 @@ class SOCForLSTM(ExplanationBase):
         inp_lm = copy.copy(inp)
         for i in range(len(inp_lm)):
             if (
-                nb_region[0] <= i <= nb_region[1]
-                and not x_region[0] <= i <= x_region[1]
+                    nb_region[0] <= i <= nb_region[1]
+                    and not x_region[0] <= i <= x_region[1]
             ):
                 inp_lm[i] = 1
 
@@ -451,7 +450,6 @@ class SOCForLSTM(ExplanationBase):
         inp_enb, inp_ex = [], []
         max_sample_length = self.nb_range + 1
         if self.sample_num > 0:
-
             # sample token ids..
             fw_sample_outputs, bw_sample_outputs = self.lm_model.sample_n(
                 "random",
@@ -469,9 +467,9 @@ class SOCForLSTM(ExplanationBase):
             len_fw = nb_region[1] - x_region[1]
             # insert token id samples into spaces before and after target phrase ids
             if len_bw > 0:
-                filled_inp[nb_region[0] : x_region[0]] = bw_sample_seq[-len_bw:]
+                filled_inp[nb_region[0]: x_region[0]] = bw_sample_seq[-len_bw:]
             if len_fw > 0:
-                filled_inp[x_region[1] + 1 : nb_region[1] + 1] = fw_sample_seq[:len_fw]
+                filled_inp[x_region[1] + 1: nb_region[1] + 1] = fw_sample_seq[:len_fw]
 
             filled_ex = []
             for i in range(len(inp)):

@@ -2,12 +2,13 @@
 Defines a function to plot individual feature-level importances
 in a summary plot.
 """
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib as mpl
-from .scatter import _get_bounds, _color_bar, _get_shared_limits, _set_axis_config
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 from . import colors
+from .scatter import _get_bounds, _color_bar, _get_shared_limits, _set_axis_config
 
 
 def _get_jitter_array(feature_values, select_attributions):
@@ -43,12 +44,12 @@ def _get_jitter_array(feature_values, select_attributions):
 
 
 def _get_jitter_df(
-    interactions,
-    feature_values,
-    select_attributions,
-    attributions,
-    interaction_feature,
-    feature_order,
+        interactions,
+        feature_values,
+        select_attributions,
+        attributions,
+        interaction_feature,
+        feature_order,
 ):
     """
     Helper function to call the jitter matrix function.
@@ -71,18 +72,18 @@ def _get_jitter_df(
 
 
 def summary_plot(
-    attributions,
-    feature_values,
-    interactions=None,
-    interaction_feature=None,
-    feature_names=None,
-    plot_top_k=None,
-    standardize_features=True,
-    scale_x_ind=False,
-    scale_y_ind=False,
-    figsize=(8, 4),
-    dpi=150,
-    **kwargs
+        attributions,
+        feature_values,
+        interactions=None,
+        interaction_feature=None,
+        feature_names=None,
+        plot_top_k=None,
+        standardize_features=True,
+        scale_x_ind=False,
+        scale_y_ind=False,
+        figsize=(8, 4),
+        dpi=150,
+        **kwargs
 ):
     """
     Function to draw an interactive scatter plot of
@@ -131,7 +132,7 @@ def summary_plot(
             feature_values, axis=0, keepdims=True
         )
         standardized_feature_values = standardized_feature_values / (
-            np.std(standardized_feature_values, axis=0, keepdims=True) + 1e7
+                np.std(standardized_feature_values, axis=0, keepdims=True) + 1e7
         )
     else:
         standardized_feature_values = feature_values

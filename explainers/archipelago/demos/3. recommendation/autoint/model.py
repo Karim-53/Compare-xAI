@@ -6,14 +6,13 @@ email: chenceshi@pku.edu.cn
 """
 
 import os
-import numpy as np
 
+import numpy as np
 # import tensorflow as tf
 import tensorflow.compat.v1 as tf
 
 tf.compat.v1.disable_eager_execution()
 from time import time
-from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import roc_auc_score, log_loss
 from tensorflow.keras.layers import BatchNormalization as batch_norm
 
@@ -48,16 +47,15 @@ def normalize(inputs, epsilon=1e-8):
 
 
 def multihead_attention(
-    queries,
-    keys,
-    values,
-    num_units=None,
-    num_heads=1,
-    dropout_keep_prob=1,
-    is_training=True,
-    has_residual=True,
+        queries,
+        keys,
+        values,
+        num_units=None,
+        num_heads=1,
+        dropout_keep_prob=1,
+        is_training=True,
+        has_residual=True,
 ):
-
     if num_units is None:
         num_units = queries.get_shape().as_list[-1]
 
@@ -285,7 +283,7 @@ class AutoInt:
                     var_list2 = self.var2
                     grads = tf.gradients(self.loss, var_list1 + var_list2)
                     grads1 = grads[: len(var_list1)]
-                    grads2 = grads[len(var_list1) :]
+                    grads2 = grads[len(var_list1):]
                     train_op1 = optimizer1.apply_gradients(
                         zip(grads1, var_list1), global_step=self.global_step
                     )
@@ -457,16 +455,16 @@ class AutoInt:
     # Since the train data is very large, they can not be fit into the memory at the same time.
     # We separate the whole train data into several files and call "fit_once" for each file.
     def fit_once(
-        self,
-        Xi_train,
-        Xv_train,
-        y_train,
-        epoch,
-        file_count,
-        Xi_valid=None,
-        Xv_valid=None,
-        y_valid=None,
-        early_stopping=False,
+            self,
+            Xi_train,
+            Xv_train,
+            y_train,
+            epoch,
+            file_count,
+            Xi_valid=None,
+            Xv_valid=None,
+            y_valid=None,
+            early_stopping=False,
     ):
 
         has_valid = Xv_valid is not None
@@ -528,18 +526,18 @@ class AutoInt:
         if len(valid_result) > 5:
             if self.greater_is_better:
                 if (
-                    valid_result[-1] < valid_result[-2]
-                    and valid_result[-2] < valid_result[-3]
-                    and valid_result[-3] < valid_result[-4]
-                    and valid_result[-4] < valid_result[-5]
+                        valid_result[-1] < valid_result[-2]
+                        and valid_result[-2] < valid_result[-3]
+                        and valid_result[-3] < valid_result[-4]
+                        and valid_result[-4] < valid_result[-5]
                 ):
                     return True
             else:
                 if (
-                    valid_result[-1] > valid_result[-2]
-                    and valid_result[-2] > valid_result[-3]
-                    and valid_result[-3] > valid_result[-4]
-                    and valid_result[-4] > valid_result[-5]
+                        valid_result[-1] > valid_result[-2]
+                        and valid_result[-2] > valid_result[-3]
+                        and valid_result[-3] > valid_result[-4]
+                        and valid_result[-4] > valid_result[-5]
                 ):
                     return True
         return False

@@ -2,8 +2,8 @@
 A module that sub-classes the original explainer to explain language
 models through an embedding layer.
 """
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 from path_explain.path_explainer_tf import PathExplainerTF
 
 
@@ -36,13 +36,13 @@ class EmbeddingExplainerTF(PathExplainerTF):
             pass
 
     def accumulation_function(
-        self,
-        batch_input,
-        batch_baseline,
-        batch_alphas,
-        output_index=None,
-        second_order=False,
-        interaction_index=None,
+            self,
+            batch_input,
+            batch_baseline,
+            batch_alphas,
+            output_index=None,
+            second_order=False,
+            interaction_index=None,
     ):
         """
         A function that computes the logic of combining gradients and
@@ -53,7 +53,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         if not second_order:
             batch_difference = batch_input - batch_baseline
             batch_interpolated = (
-                batch_alphas * batch_input + (1.0 - batch_alphas) * batch_baseline
+                    batch_alphas * batch_input + (1.0 - batch_alphas) * batch_baseline
             )
 
             with tf.GradientTape() as tape:
@@ -78,7 +78,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         batch_alpha, batch_beta = batch_alphas
         batch_difference = batch_input - batch_baseline
         batch_interpolated_beta = (
-            batch_beta * batch_input + (1.0 - batch_beta) * batch_baseline
+                batch_beta * batch_input + (1.0 - batch_beta) * batch_baseline
         )
 
         with tf.GradientTape() as second_order_tape:
@@ -86,8 +86,8 @@ class EmbeddingExplainerTF(PathExplainerTF):
 
             batch_difference_beta = batch_interpolated_beta - batch_baseline
             batch_interpolated_alpha = (
-                batch_alpha * batch_interpolated_beta
-                + (1.0 - batch_alpha) * batch_baseline
+                    batch_alpha * batch_interpolated_beta
+                    + (1.0 - batch_alpha) * batch_baseline
             )
             with tf.GradientTape() as first_order_tape:
                 first_order_tape.watch(batch_interpolated_alpha)
@@ -148,7 +148,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         return batch_interactions
 
     def _init_array(
-        self, inputs, output_indices, interaction_index=None, as_interactions=False
+            self, inputs, output_indices, interaction_index=None, as_interactions=False
     ):
         """
         Internal helper function to get an

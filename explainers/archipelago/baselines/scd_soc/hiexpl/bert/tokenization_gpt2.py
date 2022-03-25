@@ -18,8 +18,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 import logging
 import os
-import regex as re
 from io import open
+
+import regex as re
 
 try:
     from functools import lru_cache
@@ -28,7 +29,6 @@ except ImportError:
     # because honestly I don't want to support a byte-level unicode BPE tokenizer on python 2 right now.
     def lru_cache():
         return lambda func: func
-
 
 from .file_utils import cached_path
 
@@ -59,9 +59,9 @@ def bytes_to_unicode():
     And avoids mapping to whitespace/control characters the bpe code barfs on.
     """
     bs = (
-        list(range(ord("!"), ord("~") + 1))
-        + list(range(ord("¡"), ord("¬") + 1))
-        + list(range(ord("®"), ord("ÿ") + 1))
+            list(range(ord("!"), ord("~") + 1))
+            + list(range(ord("¡"), ord("¬") + 1))
+            + list(range(ord("®"), ord("ÿ") + 1))
     )
     cs = bs[:]
     n = 0
@@ -95,7 +95,7 @@ class GPT2Tokenizer(object):
 
     @classmethod
     def from_pretrained(
-        cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
+            cls, pretrained_model_name_or_path, cache_dir=None, *inputs, **kwargs
     ):
         """
         Instantiate a PreTrainedBertModel from a pre-trained model file.
@@ -139,8 +139,8 @@ class GPT2Tokenizer(object):
                 )
             )
         if (
-            pretrained_model_name_or_path
-            in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
+                pretrained_model_name_or_path
+                in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP
         ):
             # if we're using a pretrained model, ensure the tokenizer wont index sequences longer
             # than the number of positional embeddings

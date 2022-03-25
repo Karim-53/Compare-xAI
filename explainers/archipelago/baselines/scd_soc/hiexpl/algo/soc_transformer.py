@@ -1,18 +1,18 @@
+import copy
+import pickle
+
+import numpy as np
+import torch
 from algo.soc_lstm import *
 from bert.run_classifier import (
-    BertTokenizer,
     TensorDataset,
     SequentialSampler,
     DataLoader,
 )
 from bert.run_lm_finetuning import BertForPreTraining
-import torch
+from utils.args import get_args
 from utils.parser import get_span_to_node_mapping
 from utils.reader import get_examples_sst, get_examples_yelp, get_examples_tacred
-import numpy as np
-import copy
-import pickle
-from utils.args import get_args
 
 DotDict = Batch
 args = get_args()
@@ -86,7 +86,7 @@ def lm_id_to_bert_id(arr, bert_tokenizer, lm_vocab):
 
 
 def get_data_iterator_bert(
-    tree_path, tokenizer, max_seq_length, batch_size, label_vocab=None
+        tree_path, tokenizer, max_seq_length, batch_size, label_vocab=None
 ):
     if args.task == "sst":
         eval_examples = get_examples_sst(
@@ -151,9 +151,9 @@ class ExplanationBaseForTransformer(ExplanationBase):
     def occlude_input_with_masks(self, inp, inp_mask, x_regions, nb_regions):
         region_indicator = np.zeros(len(inp), dtype=np.int32)
         for region in nb_regions:
-            region_indicator[region[0] : region[1] + 1] = 2
+            region_indicator[region[0]: region[1] + 1] = 2
         for region in x_regions:
-            region_indicator[region[0] : region[1] + 1] = 1
+            region_indicator[region[0]: region[1] + 1] = 1
         # input expectation over neighbourhood
         inp_enb = copy.copy(inp)
         inp_mask_enb = copy.copy(inp_mask)
@@ -205,7 +205,7 @@ class ExplanationBaseForTransformer(ExplanationBase):
             )
 
     def explain_single_transformer(
-        self, input_ids, input_mask, segment_ids, region, label=None
+            self, input_ids, input_mask, segment_ids, region, label=None
     ):
         inp_flatten = input_ids.view(-1).cpu().numpy()
         inp_mask_flatten = input_mask.view(-1).cpu().numpy()
@@ -242,16 +242,16 @@ class ExplanationBaseForTransformer(ExplanationBase):
         return contrib_score.item()
 
     def agglomerate(
-        self,
-        inputs,
-        percentile_include,
-        method,
-        sweep_dim,
-        dataset,
-        num_iters=5,
-        subtract=True,
-        absolute=True,
-        label=None,
+            self,
+            inputs,
+            percentile_include,
+            method,
+            sweep_dim,
+            dataset,
+            num_iters=5,
+            subtract=True,
+            absolute=True,
+            label=None,
     ):
         text_orig = inputs[0].cpu().clone().numpy().transpose((1, 0))
         for t in range(text_orig.shape[0]):
@@ -362,12 +362,12 @@ class ExplanationBaseForTransformer(ExplanationBase):
         all_contribs = []
         cnt = 0
         for batch_idx, (
-            input_ids,
-            input_mask,
-            segment_ids,
-            label_ids,
-            offsets,
-            mappings,
+                input_ids,
+                input_mask,
+                segment_ids,
+                label_ids,
+                offsets,
+                mappings,
         ) in enumerate(self.iterator):
             if batch_idx < self.batch_start:
                 continue
@@ -411,12 +411,12 @@ class ExplanationBaseForTransformer(ExplanationBase):
         all_tabs = []
 
         for batch_idx, (
-            input_ids,
-            input_mask,
-            segment_ids,
-            label_ids,
-            offsets,
-            mappings,
+                input_ids,
+                input_mask,
+                segment_ids,
+                label_ids,
+                offsets,
+                mappings,
         ) in enumerate(self.iterator):
             if batch_idx < self.batch_start:
                 continue
@@ -458,12 +458,12 @@ class ExplanationBaseForTransformer(ExplanationBase):
         all_contribs = []
         cnt = 0
         for batch_idx, (
-            input_ids,
-            input_mask,
-            segment_ids,
-            label_ids,
-            offsets,
-            mappings,
+                input_ids,
+                input_mask,
+                segment_ids,
+                label_ids,
+                offsets,
+                mappings,
         ) in enumerate(self.iterator):
             if batch_idx < self.batch_start:
                 continue
@@ -528,12 +528,12 @@ class ExplanationBaseForTransformer(ExplanationBase):
         outputs = []
         assert len(spans) == len(contribs)
         for span, contrib in zip(spans, contribs):
-            outputs.append((" ".join(tokens[span[0] + 1 : span[1] + 2]), contrib))
+            outputs.append((" ".join(tokens[span[0] + 1: span[1] + 2]), contrib))
         output_str = " ".join(["%s %.6f\t" % (x, y) for x, y in outputs])
         if (
-            label is not None
-            and hasattr(self, "label_vocab")
-            and self.label_vocab is not None
+                label is not None
+                and hasattr(self, "label_vocab")
+                and self.label_vocab is not None
         ):
             output_str = self.label_vocab.itos[label] + "\t" + output_str
         return output_str
@@ -546,8 +546,8 @@ class ExplanationBaseForTransformer(ExplanationBase):
             inp_word_id = self.tokenizer.convert_tokens_to_ids(inp_word)
             inp = (
                 torch.from_numpy(np.array(inp_word_id, dtype=np.int32))
-                .long()
-                .view(1, -1)
+                    .long()
+                    .view(1, -1)
             )
             input_mask = torch.ones_like(inp).long().view(1, -1)
             segment_ids = torch.zeros_like(inp).view(1, -1).to(self.gpu).long()
@@ -568,7 +568,7 @@ class ExplanationBaseForTransformer(ExplanationBase):
 
 class SOCForTransformer(ExplanationBaseForTransformer):
     def __init__(
-        self, target_model, lm_model, vocab, tree_path, output_path, config, tokenizer
+            self, target_model, lm_model, vocab, tree_path, output_path, config, tokenizer
     ):
         super().__init__(target_model, tree_path, output_path, config, tokenizer)
         self.model = target_model
@@ -616,17 +616,17 @@ class SOCForTransformer(ExplanationBaseForTransformer):
         inp_lm = copy.copy(inp)
         for i in range(len(inp_lm)):
             if (
-                nb_region[0] <= i <= nb_region[1]
-                and not x_region[0] <= i <= x_region[1]
+                    nb_region[0] <= i <= nb_region[1]
+                    and not x_region[0] <= i <= x_region[1]
             ):
                 inp_lm[i] = self.tokenizer.vocab["[PAD]"]
 
         inp_th = (
             torch.from_numpy(
-                bert_id_to_lm_id(inp_lm[1 : inp_length - 1], self.tokenizer, self.vocab)
+                bert_id_to_lm_id(inp_lm[1: inp_length - 1], self.tokenizer, self.vocab)
             )
-            .long()
-            .view(-1, 1)
+                .long()
+                .view(-1, 1)
         )
         inp_length = torch.LongTensor([inp_length - 2])
         fw_pos = torch.LongTensor([min(x_region[1] + 1 - 1, len(inp) - 2)])
@@ -662,11 +662,11 @@ class SOCForTransformer(ExplanationBaseForTransformer):
             len_bw = x_region[0] - nb_region[0]
             len_fw = nb_region[1] - x_region[1]
             if len_bw > 0:
-                filled_inp[nb_region[0] : x_region[0]] = lm_id_to_bert_id(
+                filled_inp[nb_region[0]: x_region[0]] = lm_id_to_bert_id(
                     bw_sample_seq[-len_bw:], self.tokenizer, self.vocab
                 )
             if len_fw > 0:
-                filled_inp[x_region[1] + 1 : nb_region[1] + 1] = lm_id_to_bert_id(
+                filled_inp[x_region[1] + 1: nb_region[1] + 1] = lm_id_to_bert_id(
                     fw_sample_seq[:len_fw], self.tokenizer, self.vocab
                 )
             inp_enb.append(filled_inp)
@@ -710,13 +710,13 @@ class SOCForTransformer(ExplanationBaseForTransformer):
         logits_ex = []
 
         for i in range(num_batches):
-            batch_enb = inp_enb[i * batch_size : (i + 1) * batch_size].to(self.gpu)
-            batch_ex = inp_ex[i * batch_size : (i + 1) * batch_size].to(self.gpu)
-            batch_seg = segment_ids[i * batch_size : (i + 1) * batch_size].to(self.gpu)
-            batch_enb_mask = inp_enb_mask[i * batch_size : (i + 1) * batch_size].to(
+            batch_enb = inp_enb[i * batch_size: (i + 1) * batch_size].to(self.gpu)
+            batch_ex = inp_ex[i * batch_size: (i + 1) * batch_size].to(self.gpu)
+            batch_seg = segment_ids[i * batch_size: (i + 1) * batch_size].to(self.gpu)
+            batch_enb_mask = inp_enb_mask[i * batch_size: (i + 1) * batch_size].to(
                 self.gpu
             )
-            batch_ex_mask = inp_enb_mask[i * batch_size : (i + 1) * batch_size].to(
+            batch_ex_mask = inp_enb_mask[i * batch_size: (i + 1) * batch_size].to(
                 self.gpu
             )
 
@@ -744,7 +744,7 @@ class SOCForTransformer(ExplanationBaseForTransformer):
         return contrib_score.item()
 
     def explain_single_transformer(
-        self, input_ids, input_mask, segment_ids, region, label=None
+            self, input_ids, input_mask, segment_ids, region, label=None
     ):
         inp_flatten = input_ids.view(-1).cpu().numpy()
         inp_mask_flatten = input_mask.view(-1).cpu().numpy()

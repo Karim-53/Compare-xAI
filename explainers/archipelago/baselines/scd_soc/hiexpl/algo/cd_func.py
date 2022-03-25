@@ -13,13 +13,12 @@
 # copies or substantial portions of the Software.
 
 
-import os
-import pdb
-import torch
-import numpy as np
-from torchtext import data, datasets
 import random
 from math import e
+
+import numpy as np
+import torch
+from torchtext import data, datasets
 from utils.args import args
 
 
@@ -209,12 +208,12 @@ def CD(batch, model, intervals):
         # print(i_value[:10], g_value[:10])
 
         relevant[i] = (
-            rel_contrib_i * (rel_contrib_g + bias_contrib_g)
-            + bias_contrib_i * rel_contrib_g
+                rel_contrib_i * (rel_contrib_g + bias_contrib_g)
+                + bias_contrib_i * rel_contrib_g
         )
         irrelevant[i] = (
-            irrel_contrib_i * (rel_contrib_g + irrel_contrib_g + bias_contrib_g)
-            + (rel_contrib_i + bias_contrib_i) * irrel_contrib_g
+                irrel_contrib_i * (rel_contrib_g + irrel_contrib_g + bias_contrib_g)
+                + (rel_contrib_i + bias_contrib_i) * irrel_contrib_g
         )
 
         if is_in_intervals(i, intervals):
@@ -231,8 +230,8 @@ def CD(batch, model, intervals):
             )
             relevant[i] += (rel_contrib_f + bias_contrib_f) * relevant[i - 1]
             irrelevant[i] += (
-                rel_contrib_f + irrel_contrib_f + bias_contrib_f
-            ) * irrelevant[i - 1] + irrel_contrib_f * relevant[i - 1]
+                                     rel_contrib_f + irrel_contrib_f + bias_contrib_f
+                             ) * irrelevant[i - 1] + irrel_contrib_f * relevant[i - 1]
 
         # c = relevant[i] + irrelevant[i]
         # print(c[:10])
@@ -255,9 +254,9 @@ def CD(batch, model, intervals):
     if args.task == "tacred":
         relevant_h[T - 1] = (
             model.drop(torch.from_numpy(relevant_h[T - 1]).view(1, -1).cuda())
-            .view(-1)
-            .cpu()
-            .numpy()
+                .view(-1)
+                .cpu()
+                .numpy()
         )
     # Sanity check: scores + irrel_scores should equal the LSTM's output minus model.hidden_to_label.bias
     if not args.mean_hidden:
@@ -272,7 +271,7 @@ def CD(batch, model, intervals):
 
 def decomp_three(a, b, c, activation):
     a_contrib = 0.5 * (activation(a + c) - activation(c)) + 0.5 * (
-        activation(a + b + c) - activation(b + c)
+            activation(a + b + c) - activation(b + c)
     )
     c_contrib = activation(c)
     b_contrib = activation(a + b + c) - a_contrib - c_contrib
@@ -281,7 +280,7 @@ def decomp_three(a, b, c, activation):
 
 def decomp_tanh_two(a, b):
     return 0.5 * (np.tanh(a) + (np.tanh(a + b) - np.tanh(b))), 0.5 * (
-        np.tanh(b) + (np.tanh(a + b) - np.tanh(a))
+            np.tanh(b) + (np.tanh(a + b) - np.tanh(a))
     )
 
 
@@ -293,7 +292,7 @@ def decomp_activation_two_pad(a, b, activation):
 
 def decomp_three_pad(a, b, c, activation):
     a_contrib = 1 / 2 * (activation(a + c) - activation(c)) + 1 / 2 * (
-        activation(a + b + c) - activation(b + c)
+            activation(a + b + c) - activation(b + c)
     )
     c_contrib = activation(c)
     b_contrib = activation(a + b + c) - a_contrib - c_contrib

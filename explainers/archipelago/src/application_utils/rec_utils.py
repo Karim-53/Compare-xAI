@@ -1,10 +1,11 @@
-from autoint.model import AutoInt
-from application_utils.common_utils import get_efficient_mask_indices
 import os
+import pickle
+
 import numpy as np
+from application_utils.common_utils import get_efficient_mask_indices
+from autoint.model import AutoInt
 from sklearn.metrics import roc_auc_score
 from tqdm import tqdm
-import pickle
 
 
 class AutoIntWrapper:
@@ -49,8 +50,8 @@ def evaluate(model, data, batch_size=1000):
 
     preds = []
     for i in tqdm(range(num_batches)):
-        Xi_batch = data["Xi"][i * batch_size : (i + 1) * batch_size]
-        Xv_batch = data["Xv"][i * batch_size : (i + 1) * batch_size]
+        Xi_batch = data["Xi"][i * batch_size: (i + 1) * batch_size]
+        Xv_batch = data["Xv"][i * batch_size: (i + 1) * batch_size]
         pred_batch = model.predict(Xi_batch, Xv_batch)
         preds.append(pred_batch)
 
@@ -61,16 +62,16 @@ def evaluate(model, data, batch_size=1000):
 
 
 def get_example(data, index):
-    Xv_inst = data["Xv"][index : index + 1]
-    Xi_inst = data["Xi"][index : index + 1]
+    Xv_inst = data["Xv"][index: index + 1]
+    Xi_inst = data["Xi"][index: index + 1]
     return Xv_inst, Xi_inst
 
 
 def get_autoint_and_data(
-    dataset=None,
-    data_path=None,
-    save_path=None,
-    feature_size=1544489,
+        dataset=None,
+        data_path=None,
+        save_path=None,
+        feature_size=1544489,
 ):
     args = parse_args(dataset, data_path, save_path)
 

@@ -15,15 +15,11 @@
 # limitations under the License.
 """PyTorch OpenAI GPT-2 model."""
 
-import collections
 import copy
 import json
 import logging
 import math
 import os
-import shutil
-import tarfile
-import tempfile
 import sys
 from io import open
 
@@ -105,9 +101,9 @@ def load_tf_weights_in_gpt2(model, gpt2_checkpoint_path):
 
 def gelu(x):
     return (
-        0.5
-        * x
-        * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
+            0.5
+            * x
+            * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
     )
 
 
@@ -115,15 +111,15 @@ class GPT2Config(object):
     """Configuration class to store the configuration of a `GPT2Model`."""
 
     def __init__(
-        self,
-        vocab_size_or_config_json_file=50257,
-        n_positions=1024,
-        n_ctx=1024,
-        n_embd=768,
-        n_layer=12,
-        n_head=12,
-        layer_norm_epsilon=1e-5,
-        initializer_range=0.02,
+            self,
+            vocab_size_or_config_json_file=50257,
+            n_positions=1024,
+            n_ctx=1024,
+            n_embd=768,
+            n_layer=12,
+            n_head=12,
+            layer_norm_epsilon=1e-5,
+            initializer_range=0.02,
     ):
         """Constructs GPT2Config.
 
@@ -140,8 +136,8 @@ class GPT2Config(object):
                 initializing all weight matrices.
         """
         if isinstance(vocab_size_or_config_json_file, str) or (
-            sys.version_info[0] == 2
-            and isinstance(vocab_size_or_config_json_file, unicode)
+                sys.version_info[0] == 2
+                and isinstance(vocab_size_or_config_json_file, unicode)
         ):
             with open(vocab_size_or_config_json_file, "r", encoding="utf-8") as reader:
                 json_config = json.loads(reader.read())
@@ -226,7 +222,7 @@ class Attention(nn.Module):
         if self.scale:
             w = w / math.sqrt(v.size(-1))
         nd, ns = w.size(-2), w.size(-1)
-        b = self.bias[:, :, ns - nd : ns, :ns]
+        b = self.bias[:, :, ns - nd: ns, :ns]
         w = w * b - 1e10 * (1 - b)
 
         w = nn.Softmax(dim=-1)(w)
@@ -335,8 +331,8 @@ class GPT2MultipleChoiceHead(nn.Module):
         # mc_token_ids (bsz, num_choices)
         mc_token_ids = (
             mc_token_ids.unsqueeze(-1)
-            .unsqueeze(-1)
-            .expand(-1, -1, -1, hidden_states.size(-1))
+                .unsqueeze(-1)
+                .expand(-1, -1, -1, hidden_states.size(-1))
         )
         # (bsz, num_choices, 1, hidden_size)
         multiple_choice_h = hidden_states.gather(2, mc_token_ids).squeeze(2)
@@ -380,13 +376,13 @@ class GPT2PreTrainedModel(nn.Module):
 
     @classmethod
     def from_pretrained(
-        cls,
-        pretrained_model_name_or_path,
-        state_dict=None,
-        cache_dir=None,
-        from_tf=False,
-        *inputs,
-        **kwargs
+            cls,
+            pretrained_model_name_or_path,
+            state_dict=None,
+            cache_dir=None,
+            from_tf=False,
+            *inputs,
+            **kwargs
     ):
         """
         Instantiate a GPT2PreTrainedModel from a pre-trained model file or a pytorch state dict.
@@ -431,8 +427,8 @@ class GPT2PreTrainedModel(nn.Module):
             )
             return None
         if (
-            resolved_archive_file == archive_file
-            and resolved_config_file == config_file
+                resolved_archive_file == archive_file
+                and resolved_config_file == config_file
         ):
             logger.info("loading weights file {}".format(archive_file))
             logger.info("loading configuration file {}".format(config_file))
@@ -503,7 +499,7 @@ class GPT2PreTrainedModel(nn.Module):
 
         start_model = model
         if hasattr(model, "transformer") and all(
-            not s.startswith("transformer.") for s in state_dict.keys()
+                not s.startswith("transformer.") for s in state_dict.keys()
         ):
             start_model = model.transformer
         load(start_model, prefix="")
@@ -672,12 +668,12 @@ class GPT2LMHeadModel(GPT2PreTrainedModel):
         self.lm_head.set_embeddings_weights(self.transformer.wte.weight)
 
     def forward(
-        self,
-        input_ids,
-        position_ids=None,
-        token_type_ids=None,
-        lm_labels=None,
-        past=None,
+            self,
+            input_ids,
+            position_ids=None,
+            token_type_ids=None,
+            lm_labels=None,
+            past=None,
     ):
         hidden_states, presents = self.transformer(
             input_ids, position_ids, token_type_ids, past
@@ -751,14 +747,14 @@ class GPT2DoubleHeadsModel(GPT2PreTrainedModel):
         self.lm_head.set_embeddings_weights(self.transformer.wte.weight)
 
     def forward(
-        self,
-        input_ids,
-        mc_token_ids,
-        lm_labels=None,
-        mc_labels=None,
-        token_type_ids=None,
-        position_ids=None,
-        past=None,
+            self,
+            input_ids,
+            mc_token_ids,
+            lm_labels=None,
+            mc_labels=None,
+            token_type_ids=None,
+            position_ids=None,
+            past=None,
     ):
         hidden_states, presents = self.transformer(
             input_ids, position_ids, token_type_ids, past

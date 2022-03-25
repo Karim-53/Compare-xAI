@@ -1,10 +1,12 @@
-import sys, os
+import os
 import pickle
-import torch
-from transformers import *
-import torch.multiprocessing as multiprocessing
+import sys
 from itertools import repeat
+
+import torch
+import torch.multiprocessing as multiprocessing
 from tqdm import tqdm
+from transformers import *
 
 sys.path.append("..")
 from experiment_utils import *
@@ -15,7 +17,6 @@ from application_utils.text_utils import *
 sys.path.append("../../../baselines/mahe_madex/madex/")
 sys.path.append("../../../baselines/mahe_madex/mahe/")
 from deps.interaction_explainer import learn_hierarchical_gam
-
 
 gt_file = "../processed_data/text_data/subtree_allphrase_nosentencelabel.pickle"
 save_path = "../analysis/results/phrase_corr_mahe.pickle"
@@ -67,7 +68,6 @@ def par_experiment(index, Xd, Yd, interaction, mlp_device):
 
 
 def run():
-
     multiprocessing.set_start_method("spawn", force=True)
 
     with open(gt_file, "rb") as handle:

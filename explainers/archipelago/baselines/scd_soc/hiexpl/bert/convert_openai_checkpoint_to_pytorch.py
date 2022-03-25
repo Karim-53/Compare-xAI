@@ -20,7 +20,6 @@ import argparse
 from io import open
 
 import torch
-
 from pytorch_pretrained_bert.modeling_openai import (
     CONFIG_NAME,
     WEIGHTS_NAME,
@@ -31,7 +30,7 @@ from pytorch_pretrained_bert.modeling_openai import (
 
 
 def convert_openai_checkpoint_to_pytorch(
-    openai_checkpoint_folder_path, openai_config_file, pytorch_dump_folder_path
+        openai_checkpoint_folder_path, openai_config_file, pytorch_dump_folder_path
 ):
     # Construct model
     if openai_config_file == "":
@@ -75,7 +74,7 @@ if __name__ == "__main__":
         default="",
         type=str,
         help="An optional config json file corresponding to the pre-trained OpenAI model. \n"
-        "This specifies the model architecture.",
+             "This specifies the model architecture.",
     )
     args = parser.parse_args()
     convert_openai_checkpoint_to_pytorch(

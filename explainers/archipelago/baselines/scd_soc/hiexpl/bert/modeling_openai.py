@@ -15,15 +15,11 @@
 # limitations under the License.
 """PyTorch OpenAI GPT model."""
 
-import collections
 import copy
 import json
 import logging
 import math
 import os
-import shutil
-import tarfile
-import tempfile
 import sys
 from io import open
 
@@ -95,7 +91,7 @@ def load_tf_weights_in_openai_gpt(model, openai_checkpoint_folder_path):
     init_params.pop(0)
 
     for name, array in zip(
-        names, init_params
+            names, init_params
     ):  # names[1:n_transfer], init_params[1:n_transfer]):
         name = name[6:]  # skip "model/"
         assert name[-2:] == ":0"
@@ -135,9 +131,9 @@ def load_tf_weights_in_openai_gpt(model, openai_checkpoint_folder_path):
 
 def gelu(x):
     return (
-        0.5
-        * x
-        * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
+            0.5
+            * x
+            * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
     )
 
 
@@ -152,20 +148,20 @@ class OpenAIGPTConfig(object):
     """Configuration class to store the configuration of a `OpenAIGPTModel`."""
 
     def __init__(
-        self,
-        vocab_size_or_config_json_file=40478,
-        n_special=0,
-        n_positions=512,
-        n_ctx=512,
-        n_embd=768,
-        n_layer=12,
-        n_head=12,
-        afn="gelu",
-        resid_pdrop=0.1,
-        embd_pdrop=0.1,
-        attn_pdrop=0.1,
-        layer_norm_epsilon=1e-5,
-        initializer_range=0.02,
+            self,
+            vocab_size_or_config_json_file=40478,
+            n_special=0,
+            n_positions=512,
+            n_ctx=512,
+            n_embd=768,
+            n_layer=12,
+            n_head=12,
+            afn="gelu",
+            resid_pdrop=0.1,
+            embd_pdrop=0.1,
+            attn_pdrop=0.1,
+            layer_norm_epsilon=1e-5,
+            initializer_range=0.02,
     ):
         """Constructs OpenAIGPTConfig.
 
@@ -190,8 +186,8 @@ class OpenAIGPTConfig(object):
                 initializing all weight matrices.
         """
         if isinstance(vocab_size_or_config_json_file, str) or (
-            sys.version_info[0] == 2
-            and isinstance(vocab_size_or_config_json_file, unicode)
+                sys.version_info[0] == 2
+                and isinstance(vocab_size_or_config_json_file, unicode)
         ):
             with open(vocab_size_or_config_json_file, "r", encoding="utf-8") as reader:
                 json_config = json.loads(reader.read())
@@ -401,8 +397,8 @@ class OpenAIGPTMultipleChoiceHead(nn.Module):
         # mc_token_ids (bsz, num_choices)
         mc_token_ids = (
             mc_token_ids.unsqueeze(-1)
-            .unsqueeze(-1)
-            .expand(-1, -1, -1, hidden_states.size(-1))
+                .unsqueeze(-1)
+                .expand(-1, -1, -1, hidden_states.size(-1))
         )
         # (bsz, num_choices, 1, hidden_size)
         multiple_choice_h = hidden_states.gather(2, mc_token_ids).squeeze(2)
@@ -446,14 +442,14 @@ class OpenAIGPTPreTrainedModel(nn.Module):
 
     @classmethod
     def from_pretrained(
-        cls,
-        pretrained_model_name_or_path,
-        num_special_tokens=None,
-        state_dict=None,
-        cache_dir=None,
-        from_tf=False,
-        *inputs,
-        **kwargs
+            cls,
+            pretrained_model_name_or_path,
+            num_special_tokens=None,
+            state_dict=None,
+            cache_dir=None,
+            from_tf=False,
+            *inputs,
+            **kwargs
     ):
         """
         Instantiate a OpenAIGPTPreTrainedModel from a pre-trained model file or a pytorch state dict.
@@ -499,8 +495,8 @@ class OpenAIGPTPreTrainedModel(nn.Module):
             )
             return None
         if (
-            resolved_archive_file == archive_file
-            and resolved_config_file == config_file
+                resolved_archive_file == archive_file
+                and resolved_config_file == config_file
         ):
             logger.info("loading weights file {}".format(archive_file))
             logger.info("loading configuration file {}".format(config_file))
@@ -571,7 +567,7 @@ class OpenAIGPTPreTrainedModel(nn.Module):
 
         start_model = model
         if hasattr(model, "transformer") and all(
-            not s.startswith("transformer.") for s in state_dict.keys()
+                not s.startswith("transformer.") for s in state_dict.keys()
         ):
             start_model = model.transformer
         load(start_model, prefix="")
@@ -681,11 +677,11 @@ class OpenAIGPTModel(OpenAIGPTPreTrainedModel):
         self.init_weights(self.tokens_embed)
         # Copy word and positional embeddings from the previous weights
         self.tokens_embed.weight.data[
-            : self.config.vocab_size, :
+        : self.config.vocab_size, :
         ] = old_embed.weight.data[: self.config.vocab_size, :]
         self.tokens_embed.weight.data[
-            -self.config.n_positions :, :
-        ] = old_embed.weight.data[-self.config.n_positions :, :]
+        -self.config.n_positions:, :
+        ] = old_embed.weight.data[-self.config.n_positions:, :]
 
     def forward(self, input_ids, position_ids=None, token_type_ids=None):
         if position_ids is None:
@@ -788,7 +784,7 @@ class OpenAIGPTLMHeadModel(OpenAIGPTPreTrainedModel):
         self.lm_head.set_embeddings_weights(self.transformer.tokens_embed.weight)
 
     def forward(
-        self, input_ids, position_ids=None, token_type_ids=None, lm_labels=None
+            self, input_ids, position_ids=None, token_type_ids=None, lm_labels=None
     ):
         hidden_states = self.transformer(input_ids, position_ids, token_type_ids)
         lm_logits = self.lm_head(hidden_states)
@@ -875,13 +871,13 @@ class OpenAIGPTDoubleHeadsModel(OpenAIGPTPreTrainedModel):
         self.lm_head.set_embeddings_weights(self.transformer.tokens_embed.weight)
 
     def forward(
-        self,
-        input_ids,
-        mc_token_ids,
-        lm_labels=None,
-        mc_labels=None,
-        token_type_ids=None,
-        position_ids=None,
+            self,
+            input_ids,
+            mc_token_ids,
+            lm_labels=None,
+            mc_labels=None,
+            token_type_ids=None,
+            position_ids=None,
     ):
         hidden_states = self.transformer(input_ids, position_ids, token_type_ids)
         lm_logits = self.lm_head(hidden_states)

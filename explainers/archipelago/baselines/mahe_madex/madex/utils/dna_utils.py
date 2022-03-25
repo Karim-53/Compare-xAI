@@ -1,8 +1,8 @@
-import torch.nn as nn
-import torch
-import h5py as h5
 import numpy as np
+import torch
+import torch.nn as nn
 from utils.general_utils import *
+
 
 # from sampling_and_inference import *
 
@@ -13,7 +13,6 @@ class Flatten(nn.Module):
 
 
 def createConv1D(n_inp, n_out, hidden_units, kernel_size, seq_len, activation=nn.ReLU):
-
     layers = []
     layers_size = [n_inp] + hidden_units
     for i in range(len(layers_size) - 1):
@@ -53,7 +52,7 @@ def generate_random_dna_sequence_with_CACGTG(length=36, seed=None):
     for i in np.random.randint(0, 4, (length)):
         seq += nucleotides[i]
     i = np.random.randint(0, length - len(ebox))
-    seq = seq[:i] + ebox + seq[i + len(ebox) :]
+    seq = seq[:i] + ebox + seq[i + len(ebox):]
     return seq
 
 

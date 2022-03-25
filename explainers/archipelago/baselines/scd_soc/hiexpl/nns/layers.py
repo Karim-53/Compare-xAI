@@ -1,11 +1,11 @@
+import numpy as np
 import torch
 from torch import nn
-import numpy as np
 
 
 class DynamicEncoder(nn.Module):
     def __init__(
-        self, input_size, embed_size, hidden_size, gpu, n_layers=1, dropout=0.1
+            self, input_size, embed_size, hidden_size, gpu, n_layers=1, dropout=0.1
     ):
         super().__init__()
         self.input_size = input_size

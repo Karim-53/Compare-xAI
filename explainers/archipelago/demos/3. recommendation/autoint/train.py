@@ -1,17 +1,13 @@
 ## AutoInt's official training code. Modifications are only made to accomodate cross feature
 
-import math
-import numpy as np
-import pandas as pd
-import tensorflow as tf
-from sklearn.metrics import make_scorer
-from sklearn.model_selection import StratifiedKFold
-from time import time
-from model import AutoInt
 import argparse
 import os
-
 from os.path import join
+from time import time
+
+import numpy as np
+
+from model import AutoInt
 
 
 def str2list(v):
