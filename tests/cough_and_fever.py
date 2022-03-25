@@ -1,10 +1,11 @@
 import pandas as pd
 from xgboost import XGBRegressor
 
+from tests.test_superclass import Test
 from tests.util import importance_symmetric, is_attribution_symmetric
 
 
-class CoughAndFever:  # (Metric):
+class CoughAndFever(Test):
     name = "cough_and_fever"
     # todo add last_update = version of the release
     # todo [after submission] refactor

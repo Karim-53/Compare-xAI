@@ -21,8 +21,9 @@ class Saabas(Explainer):
             self.trained_model = trained_model.get_booster()
 
     def explain(self, dataset_to_explain, **kwargs):
+        self.interaction = None
         if isinstance(self.trained_model, xgb.core.Booster):
-            dmatrix_to_explain = xgb.DMatrix(dataset_to_explain)
+            dmatrix_to_explain = xgb.DMatrix(dataset_to_explain)  # dataset_to_explain must be pd.DataFrame otherwise error
             saabas_values_3 = self.trained_model.predict(dmatrix_to_explain, pred_contribs=True, approx_contribs=True)
             self.attribution = saabas_values_3[:, :-1]
 

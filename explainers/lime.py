@@ -96,3 +96,4 @@ class Lime:
             dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later
         self.importance = get_importance(self.attribution)
+        self.interaction = None

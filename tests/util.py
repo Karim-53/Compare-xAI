@@ -16,7 +16,7 @@ def is_ok(values, dim=None):
         return values.shape == dim
 
 
-def importance_symmetric(importance):  # importance=None,
+def importance_symmetric(importance):
     if not is_ok(importance):
         return None
     diff = abs(importance[0] - importance[1])
@@ -25,6 +25,19 @@ def importance_symmetric(importance):  # importance=None,
     else:
         return 0.
 
+
+def importance_xi_more_important(importance, i=0):
+    if not is_ok(importance):
+        return None
+    score = 1.
+    n = len(importance)
+    for j in range(n):
+        if i==j:
+            continue
+        if importance[i] < importance[j]:
+            score -= 1./(n-1)
+
+    return score
 
 def is_attribution_symmetric(attribution):
     if not is_ok(attribution):

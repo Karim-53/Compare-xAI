@@ -37,9 +37,10 @@ class KernelShap(Explainer):
         self.reference_dataset = np.array(X, dtype='float64')
         print(self.reference_dataset.dtype)
         # todo find a way to restrict reference dataset size
-        print(type(self.reference_dataset))
-        print(self.reference_dataset.shape)
+        # print(type(self.reference_dataset))
+        # print(self.reference_dataset.shape)
         self.predict_func(self.reference_dataset)  # just a test
+        self.model_supported = True
         try:
             self.explainer = shap.KernelExplainer(self.predict_func, self.reference_dataset, **kwargs)
         except Exception as e:
@@ -49,14 +50,15 @@ class KernelShap(Explainer):
             self.model_supported = False
 
     def explain(self, dataset_to_explain, **kwargs):
+        self.interaction = None
         if not self.model_supported:
             self.expected_values = None
             self.attribution = None
             self.importance = None
             return
 
-        shap_values = self.explainer.shap_values(np.array(dataset_to_explain))
         self.expected_values = self.explainer.expected_value
+        shap_values = self.explainer.shap_values(np.array(dataset_to_explain))
         self.attribution = shap_values
         self.importance = get_importance(self.attribution)
 

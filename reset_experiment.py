@@ -125,7 +125,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         pass
     print(result_df)
-    save_results(result_df)
+    save_results_safe(result_df)
 
     score_df = get_score_df(result_df)
     eligible_points_df = get_eligible_points_df(result_df)

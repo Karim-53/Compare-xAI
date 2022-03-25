@@ -2,11 +2,12 @@ from src.utils import are_class_names_unique
 from tests import *
 
 valid_tests = (
-    DetectInteraction0,
-    DetectInteraction1,
-    DetectInteraction2,
-    DetectInteraction3,
-    DetectInteraction4,
+    AAndBOrC,
+    # DetectInteraction0,
+    # DetectInteraction1,
+    # DetectInteraction2,
+    # DetectInteraction3,
+    # DetectInteraction4,
     # CoughAndFever,
     # Mnist,
     # CoughAndFever1090,
