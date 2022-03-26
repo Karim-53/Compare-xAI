@@ -5,7 +5,7 @@ import shutil
 import requests
 
 
-# this module was imported from archipelago repo
+# this module was imported from archipelago_lib repo
 # todo [after acceptance] let's clean it and just keep the unit tests imported
 
 def str2bool(v):

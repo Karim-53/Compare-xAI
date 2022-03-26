@@ -5,7 +5,7 @@ from itertools import chain, combinations
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-from explainers.archipelago.baselines.mahe_madex.madex.utils.general_utils import get_sample_distances
+from explainers.archipelago_lib.baselines.mahe_madex.madex.utils.general_utils import get_sample_distances
 
 
 def powerset(iterable):

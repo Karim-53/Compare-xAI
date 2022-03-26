@@ -47,7 +47,7 @@ class Explainer:
             self, set_indices, context, insertion_target, include_context=False
     ):
         """
-        Creates archipelago type data instances and runs batch inference on them
+        Creates archipelago_lib type data instances and runs batch inference on them
         All "sets" are represented as tuples to work as keys in dictionaries
         """
 
@@ -119,7 +119,7 @@ class Archipelago(Explainer):
 
     def archattribute(self, set_indices):
         """
-        Gets archipelago attributions of index sets
+        Gets archipelago_lib attributions of index sets
         """
         if not set_indices:
             return dict()
@@ -141,7 +141,7 @@ class Archipelago(Explainer):
     ):
         """
         Detects interactions and sorts them
-        Optional: gets archipelago main effects and/or pairwise effects from function reuse
+        Optional: gets archipelago_lib main effects and/or pairwise effects from function reuse
         "Effects" are archattribute scores
         """
         search_a = self.search_feature_sets(

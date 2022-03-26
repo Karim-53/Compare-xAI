@@ -116,7 +116,7 @@ def plot_explanations(img_arrays, figsize=0.4, spacing=0.15, savepath=""):
 
 def get_set_img(image, segments, set_indices_instance, set_atts_instance, max_att):
     """
-    Show archipelago sets and attributions
+    Show archipelago_lib sets and attributions
     """
     if not isinstance(set_atts_instance, list):
         set_atts_instance = [set_atts_instance] * len(set_indices_instance)
@@ -239,7 +239,7 @@ def custom_mark_boundaries(
 
 def overlay_explanation(explanation, image, segments, outline_thickness=2):
     """
-    Show archipelago sets and attributions
+    Show archipelago_lib sets and attributions
     """
     max_att = np.max(np.abs(list(explanation.values())))
 

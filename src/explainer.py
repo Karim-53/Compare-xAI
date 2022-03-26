@@ -3,7 +3,8 @@ from src.utils import are_class_names_unique
 
 valid_explainers = (
     Random,
-    Anova,
+    Archipelago,
+    # Anova,
     # ShapleyTaylorInteraction,
     # ShapInteraction,
     # Saabas,

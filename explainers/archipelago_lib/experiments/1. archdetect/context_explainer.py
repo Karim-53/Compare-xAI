@@ -21,7 +21,7 @@ class ContextExplainer(Archipelago):
     def detect_with_running_contexts(self, contexts):
         """
         Detects interactions and sorts them
-        Optional: gets archipelago main effects and/or pairwise effects from function reuse
+        Optional: gets archipelago_lib main effects and/or pairwise effects from function reuse
         """
         inter_scores_each_context = []
         inter_scores_running = {}
@@ -55,7 +55,7 @@ class ContextExplainer(Archipelago):
     def detect_with_contexts(self, contexts):
         """
         Detects interactions and sorts them
-        Optional: gets archipelago main effects and/or pairwise effects from function reuse
+        Optional: gets archipelago_lib main effects and/or pairwise effects from function reuse
         """
         inters = []
         for context in contexts:
