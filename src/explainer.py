@@ -3,13 +3,14 @@ from src.utils import are_class_names_unique
 
 valid_explainers = (
     Random,
-    ShapInteraction,
-    Saabas,
-    TreeShap,
-    Sage,
-    Lime,
-    KernelShap,
-    Maple,
+    ShapleyTaylorInteraction,
+    # ShapInteraction,
+    # Saabas,
+    # TreeShap,
+    # Sage,
+    # Lime,
+    # KernelShap,
+    # Maple,
 )
 assert are_class_names_unique(valid_explainers), 'Duplicate explainer names'
 

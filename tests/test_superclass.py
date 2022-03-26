@@ -13,3 +13,4 @@ class Test:
     def score(self, attribution=None, importance=None, **kwargs):
         # todo assert attribution importance size
         raise NotImplementedError("The scoring method of this test is not implemented at the moment.")
+        # todo assert on output format dict and that each score is a float not NaN

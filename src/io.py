@@ -17,7 +17,20 @@ def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:
         results_file_path,
         index_col=0,
         skipinitialspace=True,
-    ).applymap(literal_eval)
+    )
+    try:
+        df = df.applymap(literal_eval)
+    except:
+        for idx in df.index:
+            for col in df.columns:
+                try:
+                    e = None
+                    e = df.loc[idx, col]
+                    literal_eval(e)
+                except:
+                    print(f'Failed to eval df[{idx}, {col}] = ', e, 'of type', type(e))
+        raise ValueError('Unable to load results_df')
+
     df.columns = [c.replace(' ', '') for c in df.columns]
     df.index = [i.replace(' ', '') for i in df.index]
     return df

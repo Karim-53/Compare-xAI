@@ -1,9 +1,10 @@
-,a_and_b_or_c
-baseline_random,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.0009968280792236328, 'Last_updated': '2022-03-25 20:58:32.005190'}"
-shap_interaction,{'Last_updated': '2022-03-25 20:58:32.007185'}
-saabas,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.009972810745239258, 'Last_updated': '2022-03-25 20:58:32.094949'}"
-tree_shap,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.006983041763305664, 'Last_updated': '2022-03-25 20:58:32.181720'}"
-sage,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.04488015174865723, 'Last_updated': '2022-03-25 20:58:32.307383'}"
-lime,"{'score': {'importance_x0_more_important': 1.0}, 'time': 7.246718883514404, 'Last_updated': '2022-03-25 20:58:39.632891'}"
-kernel_shap,"{'score': {'importance_x0_more_important': 1.0}, 'time': 26.41909408569336, 'Last_updated': '2022-03-25 20:59:06.124790'}"
-maple,"{'score': {'importance_x0_more_important': 1.0}, 'time': 361.6756718158722, 'Last_updated': '2022-03-25 21:05:07.840356'}"
+,a_and_b_or_c,detect_interaction0,detect_interaction1,detect_interaction2,detect_interaction3,detect_interaction4
+baseline_random,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.002992391586303711, 'Last_updated': '2022-03-26 02:11:25.448275'}","{'score': {'interaction_detection': 0.0}, 'time': 0.223402738571167, 'Last_updated': '2022-03-26 02:11:25.674671'}","{'score': {'interaction_detection': 0.013628571428571545}, 'time': 0.1605665683746338, 'Last_updated': '2022-03-26 02:11:25.838232'}","{'score': {'interaction_detection': 0.0}, 'time': 0.17200493812561035, 'Last_updated': '2022-03-26 02:11:26.011236'}","{'score': {'interaction_detection': 0.0}, 'time': 0.15458345413208008, 'Last_updated': '2022-03-26 02:11:26.166817'}","{'score': {'interaction_detection': 0.009011198633037676}, 'time': 0.1572554111480713, 'Last_updated': '2022-03-26 02:11:26.325070'}"
+shap_interaction,{'Last_updated': '2022-03-25 20:58:32.007185'},{},{},{},{},{}
+saabas,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.009972810745239258, 'Last_updated': '2022-03-25 20:58:32.094949'}",{},{},{},{},{}
+tree_shap,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.006983041763305664, 'Last_updated': '2022-03-25 20:58:32.181720'}",{},{},{},{},{}
+sage,"{'score': {'importance_x0_more_important': 1.0}, 'time': 0.04488015174865723, 'Last_updated': '2022-03-25 20:58:32.307383'}",{},{},{},{},{}
+lime,"{'score': {'importance_x0_more_important': 1.0}, 'time': 7.246718883514404, 'Last_updated': '2022-03-25 20:58:39.632891'}",{},{},{},{},{}
+kernel_shap,"{'score': {'importance_x0_more_important': 1.0}, 'time': 26.41909408569336, 'Last_updated': '2022-03-25 20:59:06.124790'}",{},{},{},{},{}
+maple,"{'score': {'importance_x0_more_important': 1.0}, 'time': 361.6756718158722, 'Last_updated': '2022-03-25 21:05:07.840356'}",{},{},{},{},{}
+shapley_taylor_interaction,{'Last_updated': '2022-03-26 02:11:26.331054'},"{'score': {'interaction_detection': 0.0}, 'time': 1.5239224433898926, 'Last_updated': '2022-03-26 02:11:27.855974'}","{'score': {'interaction_detection': 1.0}, 'time': 2.193135976791382, 'Last_updated': '2022-03-26 02:11:30.050107'}","{'score': {'interaction_detection': 0.9074626865671642}, 'time': 1.57478928565979, 'Last_updated': '2022-03-26 02:11:31.624897'}","{'score': {'interaction_detection': 0.5283582089552239}, 'time': 1.6017351150512695, 'Last_updated': '2022-03-26 02:11:33.227628'}","{'score': {'interaction_detection': 0.854922279792746}, 'time': 1.44136643409729, 'Last_updated': '2022-03-26 02:11:34.668994'}"

@@ -1,6 +1,7 @@
 import itertools
 
 import numpy as np
+import pandas as pd
 from sklearn import metrics
 
 from tests.test_superclass import Test
@@ -199,6 +200,8 @@ class DetectInteraction(Test):
         gts = self.trained_model.get_gts(self.nb_features)
         auc = get_auc(interaction_sparse, gts)
         _score = (auc - .5) * 2.
+        if pd.isna(_score):
+            _score = 0.
         if _score < 0.:
             print('Negative AUC!')
             _score = max(_score, 0.)  # with random values it is possible to get a negative score
