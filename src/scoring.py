@@ -39,6 +39,7 @@ def get_details(result_df):
     score_df = get_score_df(result_df)
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
+    summary_df = summary_df.sort_values('time')
     print(summary_df.round(2))
     return summary_df, eligible_points_df, score_df
 

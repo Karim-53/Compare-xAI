@@ -200,6 +200,7 @@ class DetectInteraction(Test):
 
 
 class DetectInteraction0(DetectInteraction):
+    # todo check this test because it was not cited in the paper
     function_id = 0
     name = DetectInteraction.name + str(function_id)
 

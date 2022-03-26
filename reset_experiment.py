@@ -5,7 +5,7 @@ import time
 
 from src.explainer import valid_explainers
 from src.io import *
-from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
+from src.scoring import get_details
 from src.test import valid_tests
 
 logging.basicConfig(
@@ -53,9 +53,6 @@ def append_empty_row(result_df, name):
     return pd.concat([result_df, empty_row_df])
 
 
-TIME_LIMIT = 255  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
-
-
 def compatible(test_class, explainer_class):
     """ test if the xai generate the kind of explanation expected from the test """
     for explanation in ['importance', 'attribution', 'interaction']:
@@ -64,6 +61,9 @@ def compatible(test_class, explainer_class):
             return True
     else:
         return False
+
+
+TIME_LIMIT = 1000  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
 
 
 def run_experiment(test_class, explainer_class):
@@ -85,11 +85,11 @@ def run_experiment(test_class, explainer_class):
             _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
     except TimeoutException as e:
         print("Timed out!")
-        if _explainer.expected_values is None:
+        if _explainer.__dict__.get('expected_values',None) is None:
             _explainer.expected_values = f'Time out {TIME_LIMIT}'
-        if _explainer.attribution is None:
+        if _explainer.__dict__.get('attribution',None) is None:
             _explainer.attribution = f'Time out {TIME_LIMIT}'
-        if _explainer.importance is None:
+        if _explainer.__dict__.get('importance',None) is None:
             _explainer.importance = f'Time out {TIME_LIMIT}'
 
     score = test.score(attribution=_explainer.attribution,
@@ -127,10 +127,6 @@ if __name__ == "__main__":
     print(result_df)
     save_results_safe(result_df)
 
-    score_df = get_score_df(result_df)
-    eligible_points_df = get_eligible_points_df(result_df)
-    summary_df = get_summary_df(result_df, score_df, eligible_points_df)
-    summary_df = summary_df.sort_values('time')
-    print(summary_df.round(2))
+    summary_df, eligible_points_df, score_df = get_details(result_df)
 
     # todo [after acceptance] record library name and version

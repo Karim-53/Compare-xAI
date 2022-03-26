@@ -10,6 +10,8 @@ class Archipelago(Explainer):
     name = 'archipelago'
     interaction = True
 
+    source_code = 'https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb'
+
     # is_affected_by_seed = True
 
     def __init__(self, trained_model, X, nb_features, **kwargs):
