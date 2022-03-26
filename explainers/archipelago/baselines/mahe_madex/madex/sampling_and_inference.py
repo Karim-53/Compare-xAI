@@ -1,8 +1,8 @@
 import torch
 from tqdm import tqdm
 
+from explainers.interaction_utils import proprocess_data, set_seed
 from utils.dna_utils import *
-from utils.general_utils import *
 from utils.graph_utils import *
 from utils.lime.lime_text import *
 

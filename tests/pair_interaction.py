@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 
+from explainers.interaction_utils import gen_data_samples
 from tests.test_superclass import Test
 
 
@@ -149,17 +150,6 @@ def get_auc(inter_scores, gts):
     return auc
 
 
-def gen_data_samples(model, input_value, base_value, p, n=30000, seed=None):
-    if seed is not None:
-        np.random.seed(seed)
-    X = []
-    for i in range(n):
-        X.append(np.random.choice([input_value, base_value], p))
-    X = np.stack(X)
-
-    Y = model(X).squeeze()
-    return X, Y
-
 
 input_value, base_value = 1, -1
 
@@ -182,9 +172,10 @@ class DetectInteraction(Test):
             [base_value] * self.nb_features,  # was baseline
             [input_value] * self.nb_features,  # was input
         ])
-        self.dataset_to_explain = self.X
 
-        self.truth_to_explain = None  # todo
+        X, Y = gen_data_samples(self.trained_model, p=self.nb_features, n=30000, seed=42)
+        self.dataset_to_explain = X
+        self.truth_to_explain = Y
 
     def score(self, interaction, **kwargs):
         """
