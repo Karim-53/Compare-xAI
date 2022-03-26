@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 
+from explainers.explainer_superclass import Explainer
 from src.utils import get_importance
 
 try:
@@ -76,7 +77,7 @@ class LimeTabular:
         return out[0] if self.flat_out else out
 
 
-class Lime:
+class Lime(Explainer):
     """ Main wrapper. please use this one"""
     name = 'lime'
     supported_models = ('model_agnostic',)

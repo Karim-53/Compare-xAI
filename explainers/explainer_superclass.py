@@ -3,7 +3,7 @@ import numpy as np
 MODELS = ['tree_based', 'neural_network']
 EXTENDED_MODELS = {'model_agnostic': MODELS}
 
-
+import inspect
 def supported_models_developed(supported_models):
     _supported_models_developed = list(supported_models)
     for e in supported_models:
@@ -22,11 +22,47 @@ class Explainer:
     # todo add a pretty way to print the class
 
     # Know what could be calculated
-    attribution = False
     importance = False
+    attribution = False
     interaction = False
 
-    def explain(self, x, **kwargs):  # todo [after acceptance] change this to __call__ ?
+    def __repr__(self) -> str:
+        xai_output = []
+        for out,out_str in zip(['importance', 'attribution', 'interaction'],
+                               ['feature importance', 'feature attribution', 'pair interaction']):
+            if self.__class__.__dict__.get(out, False):
+                xai_output.append(out_str)
+
+        def _len(x):
+            if x is None:
+                return 0
+            return len(x)
+        self_method_init_args = inspect.getfullargspec(self.__class__.__init__).args
+        self_method_init_args = self_method_init_args[:-_len(inspect.getfullargspec(self.__class__.__init__).defaults)]# keep only required args
+        super_method_init_args = inspect.getfullargspec(Explainer.__init__).args
+        method_init_specific_args = set(self_method_init_args).difference(set(super_method_init_args))
+
+        self_method_explain_args = inspect.getfullargspec(self.__class__.explain).args
+        self_method_explain_args = self_method_explain_args[:-_len(inspect.getfullargspec(self.__class__.explain).defaults)]# keep only required args
+        super_method_explain_args = inspect.getfullargspec(Explainer.explain).args
+        method_explain_specific_args = set(self_method_explain_args).difference(set(super_method_explain_args))
+
+        s = f"""{self.__class__.__name__}(Explainer)
+name:\t\t\t\t{self.name}
+supported_models:\t{self.supported_models}
+xAI's output:\t\t {', '.join(xai_output)} 
+"""
+        s += f"\n.__init__() specific args: {', '.join(method_init_specific_args)}" if len(method_init_specific_args) else ''
+
+        s += f"\n.explain()  specific args: {', '.join(method_explain_specific_args)}" if len(method_explain_specific_args) else ''
+
+        s += f"\ndescription:\t{self.description}" if self.description is not None else ''
+        return s
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def explain(self, dataset_to_explain, **kwargs):  # todo [after acceptance] change this to __call__ ?
         from src.explainer import valid_explainers
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"

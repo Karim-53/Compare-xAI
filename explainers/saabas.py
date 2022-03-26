@@ -44,3 +44,8 @@ class Saabas(Explainer):
             self.importance = 'Saabas works only with tree-based model'
             self.attribution = None
 # todo if random forest :
+
+
+if __name__ == '__main__':
+    test = Saabas(trained_model=lambda x:x)
+    print(test)
