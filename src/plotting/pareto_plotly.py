@@ -2,7 +2,7 @@ from paretoset import paretoset
 from plotly import express as px, graph_objects as go
 
 from src.io import load_results
-from src.scoring import get_details
+from src.scoring import get_details, restrict_tests
 
 
 def pareto(summary_df, title="Global performance of xAI methods", min_time_value = .01, show=True):
@@ -43,12 +43,11 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
 
 
 from dash import Dash, html, dcc
-import pandas as pd
 
 app = Dash(__name__)
 
 result_df = load_results()
-summary_df, eligible_points_df, score_df  = get_details(result_df)
+summary_df, eligible_points_df, score_df  = get_details(result_df, verbose=False)
 fig = pareto(summary_df, show=False)
 
 
@@ -57,25 +56,74 @@ app.layout = html.Div(children=[
 
     # html.Div(children='''Dash: A web application framework for your data.'''),
 
-    dcc.Checklist(['I want to explain a specific model']),
-    dcc.Dropdown(['model_agnostic', 'tree_based', 'neural_network'],
-    disabled=True, multi=True, clearable=True, searchable=True),
+    dcc.Checklist(id='required_outputs_checklist',
+                  options={'specific_xai_output': 'I want to explain a specific model'}),  # todo [after acceptance] Learn more (link)
+    dcc.Dropdown(id='required_outputs_dropdown',
+                 options=['model_agnostic', 'tree_based', 'neural_network'],
+                 disabled=True, clearable=True, searchable=True,
+                 # multi=True,  # todo
+                 ),
 
-    dcc.Checklist(['I need a specific output from the XAI'], ), # todo make the text unselectable # todo chouf el persistance chma3neha
-    dcc.Dropdown(options={
-        'importance': 'Feature importance (Global Explanation)',
-        'attribution': 'Feature attribution (Local Explanation)',
-        'interaction': 'Pair feature interaction (Global Explanation)',
-        'todo1': 'Todo: Pair interaction (Local Ex), multi F interaction, debugging ...',
-    },
-    disabled=True, multi=True, clearable=True, searchable=True),
+    # dcc.Checklist(id='supported_models_checklist',
+    #               options=['I need a specific output from the XAI'],  # todo [after acceptance] Learn more (link)
+    #               ),  # todo make the text unselectable # todo chouf el persistance chma3neha
+    # dcc.Dropdown(id='supported_models_dropdown',
+    #              options={
+    #                  'importance': 'Feature importance (Global Explanation)',
+    #                  'attribution': 'Feature attribution (Local Explanation)',
+    #                  'interaction': 'Pair feature interaction (Global Explanation)',
+    #                  'todo1': 'Todo: Pair interaction (Local Ex), multi F interaction, debugging ...',
+    #              },
+    #              disabled=True, multi=True, clearable=True, searchable=True),
 
     html.H1(children='Pareto plot:'),
     dcc.Graph(
-        id='example-graph',
+        id='pareto_plot',
         figure=fig
     )
 ])
+from dash import Input, Output, State
+
+
+@app.callback(
+    Output(component_id='required_outputs_dropdown', component_property='disabled'),
+    Output(component_id='pareto_plot', component_property='figure'),
+
+    Input(component_id='required_outputs_checklist', component_property='value'),
+    Input(component_id='required_outputs_dropdown', component_property='value'),
+    # Input(component_id='supported_models_checklist', component_property='value'),
+    # Input(component_id='supported_models_dropdown', component_property='value'),
+)
+def update_output_div(required_outputs_checklist,
+                      required_outputs_dropdown,
+                      # supported_models_checklist,
+                      # supported_models_dropdown,
+                      ):
+    supported_model = None
+
+    if required_outputs_checklist is not None and 'specific_xai_output' in required_outputs_checklist:
+        required_outputs_dropdown_disabled = False
+        if required_outputs_dropdown is not None:
+            pass
+    else:
+        required_outputs_dropdown_disabled = True
+
+    print(
+      required_outputs_checklist,
+      required_outputs_dropdown,
+      # supported_models_checklist,
+      # supported_models_dropdown,
+          )
+
+    # result_df_restricted_tree = restrict_tests(result_df,
+    #                                            criteria={},
+    #                                            supported_model=supported_model)
+    # summary_df_restricted_tree, _, _  = get_details(result_df_restricted_tree)
+    summary_df_restricted_tree = summary_df
+    fig = pareto(summary_df_restricted_tree, show=False)
+    return (required_outputs_dropdown_disabled, fig)
+    # return f'Output: {input_value}'
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -35,12 +35,13 @@ def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_poi
     return summary_df
 
 
-def get_details(result_df):
+def get_details(result_df, verbose=True):
     score_df = get_score_df(result_df)
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     summary_df = summary_df.sort_values('time')
-    print(summary_df.round(2))
+    if verbose:
+        print(summary_df.round(2))
     return summary_df, eligible_points_df, score_df
 
 
