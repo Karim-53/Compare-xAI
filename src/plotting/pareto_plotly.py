@@ -44,6 +44,10 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
         fig.show();
     return fig
 
+def get_stats(eligible_points_df):
+    xai = len(eligible_points_df)
+    tests = eligible_points_df.max().sum()
+    return xai,tests
 
 
 from dash import Dash, html, dcc
@@ -52,6 +56,14 @@ app = Dash(__name__, prevent_initial_callbacks=True)
 
 result_df = load_results()
 summary_df, eligible_points_df, score_df = get_details(result_df, verbose=True)
+max_xai, max_tests = get_stats(eligible_points_df)
+
+def get_text_stats(eligible_points_df):
+    xai,tests = get_stats(eligible_points_df)
+    return [f"Kept XAI {xai} / {max_xai}", html.Br(), f"Kept tests {tests} / {max_tests}"]
+
+
+text_stats = get_text_stats(eligible_points_df)
 fig = pareto(summary_df, show=False)
 
 
@@ -67,11 +79,6 @@ app.layout = html.Div(children=[
                  disabled=True, clearable=True, searchable=True,
                  # multi=True,  # todo
                  ),
-    html.Div(children='''
-    
-    Kept XAI methods: n / M
-    
-    '''),
 
     dcc.Checklist(id='required_outputs_checklist',
                   options={'specific_xai_output': 'I need a specific output from the XAI'},
@@ -86,7 +93,7 @@ app.layout = html.Div(children=[
                  },
                  disabled=True, multi=True, clearable=True, searchable=True),
 
-    html.Div(children='''\n Kept tests: n / M \n'''),
+    html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
     html.H1(children='Pareto plot:'),
     dcc.Graph(
@@ -101,6 +108,7 @@ from dash import Input, Output
     Output(component_id='supported_models_dropdown', component_property='disabled'),
     Output(component_id='required_outputs_dropdown', component_property='disabled'),
     Output(component_id='pareto_plot', component_property='figure'),
+    Output(component_id='kept_objects', component_property='children'),
 
     Input(component_id='supported_models_checklist', component_property='value'),
     Input(component_id='supported_models_dropdown', component_property='value'),
@@ -141,14 +149,15 @@ def update_output_div(
     else:
         required_outputs_dropdown_disabled = True
 
-    result_df_restricted_tree = restrict_tests(result_df,
-                                               criteria=required_outputs,
-                                               supported_model=supported_model)
-    print(result_df_restricted_tree.index)
-    summary_df_restricted_tree, _, _ = get_details(result_df_restricted_tree, verbose=True)
-    # summary_df_restricted_tree = summary_df
+    result_df_restricted = restrict_tests(result_df,
+                                          criteria=required_outputs,
+                                          supported_model=supported_model)
+    print(result_df_restricted.index)
+    summary_df_restricted_tree, eligible_points_df_restricted, _ = get_details(result_df_restricted, verbose=True)
+    p_txt = get_text_stats(eligible_points_df_restricted)
+    # print(p_txt)
     fig = pareto(summary_df_restricted_tree, show=False)
-    return supported_models_dropdown_disabled, required_outputs_dropdown_disabled, fig
+    return supported_models_dropdown_disabled, required_outputs_dropdown_disabled, fig, p_txt
 
 
 if __name__ == '__main__':
