@@ -54,7 +54,7 @@ def keep_sub_test(k: str, criteria):
 
 def restrict_tests(
         result_df: pd.DataFrame,
-        criteria: Dict[str, bool] = {},
+        criteria: Dict[str, bool] = None,
         supported_model: str = None,
 ) -> pd.DataFrame:
     """
@@ -65,15 +65,20 @@ def restrict_tests(
 
     :return:
     """
+    if criteria is None:
+        criteria = {}
+    # just quickly
+    if result_df is None and len(criteria) == 0:
+        return result_df
     from src.explainer import valid_explainers_dico
     from explainers.explainer_superclass import supported_models_developed
 
     if supported_model is not None:
-        xai_supporting_slected_models = [xai for xai in result_df.index if
-                                         supported_model in supported_models_developed(
+        xai_supporting_selected_models = [xai for xai in result_df.index if
+                                          supported_model in supported_models_developed(
                                              valid_explainers_dico[xai].supported_models)]
     else:
-        xai_supporting_slected_models = result_df.index
+        xai_supporting_selected_models = result_df.index
 
     def _restrict_tests(row):
         # if supported_model is not None:
@@ -96,7 +101,7 @@ def restrict_tests(
             restricted_results.append(new_result)
         return pd.Series(restricted_results, name=row.name, index=result_df.columns)
 
-    _result_df = result_df.loc[xai_supporting_slected_models]
+    _result_df = result_df.loc[xai_supporting_selected_models]
     result_df_restricted = _result_df.apply(_restrict_tests, axis=1)
     # pd.DataFrame(columns=result_df.columns, index=result_df.index)
 

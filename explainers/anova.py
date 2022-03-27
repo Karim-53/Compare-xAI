@@ -8,7 +8,7 @@ class Anova(Explainer):
     """ Main wrapper. please use this one """
     name = 'anova'
     interaction = True
-
+    supported_models = ('model_agnostic',)
     # is_affected_by_seed = True
 
     def __init__(self, nb_features, **kwargs):

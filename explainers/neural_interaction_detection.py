@@ -269,6 +269,7 @@ class NeuralInteractionDetection(Explainer):
     """ Main wrapper. please use this one """
     name = 'neural_interaction_detection'
     interaction = True
+    supported_models = ('neural_network',)
 
     # is_affected_by_seed = True
 

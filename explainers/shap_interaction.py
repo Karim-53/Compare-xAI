@@ -190,6 +190,7 @@ class SiExplainer(InteractionExplainer):
 class ShapInteraction(Explainer):
     """ Main wrapper. please use this one """
     name = 'shap_interaction'
+    supported_models = ('model_agnostic',)
     interaction = True
     is_affected_by_seed = True
 

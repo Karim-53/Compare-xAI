@@ -60,6 +60,7 @@ app.layout = html.Div(children=[
                   options={'specific_xai_output': 'I want to explain a specific model'}),  # todo [after acceptance] Learn more (link)
     dcc.Dropdown(id='required_outputs_dropdown',
                  options=['model_agnostic', 'tree_based', 'neural_network'],
+                 value=['model_agnostic'],
                  disabled=True, clearable=True, searchable=True,
                  # multi=True,  # todo
                  ),
@@ -104,7 +105,7 @@ def update_output_div(required_outputs_checklist,
     if required_outputs_checklist is not None and 'specific_xai_output' in required_outputs_checklist:
         required_outputs_dropdown_disabled = False
         if required_outputs_dropdown is not None:
-            pass
+            supported_model = required_outputs_dropdown
     else:
         required_outputs_dropdown_disabled = True
 
@@ -115,11 +116,12 @@ def update_output_div(required_outputs_checklist,
       # supported_models_dropdown,
           )
 
-    # result_df_restricted_tree = restrict_tests(result_df,
-    #                                            criteria={},
-    #                                            supported_model=supported_model)
-    # summary_df_restricted_tree, _, _  = get_details(result_df_restricted_tree)
-    summary_df_restricted_tree = summary_df
+    result_df_restricted_tree = restrict_tests(result_df,
+                                               criteria={},
+                                               supported_model=supported_model)
+    summary_df_restricted_tree, _, _  = get_details(result_df_restricted_tree, verbose=True)
+    # print(summary_df_restricted_tree.columns)
+    # summary_df_restricted_tree = summary_df
     fig = pareto(summary_df_restricted_tree, show=False)
     return (required_outputs_dropdown_disabled, fig)
     # return f'Output: {input_value}'
