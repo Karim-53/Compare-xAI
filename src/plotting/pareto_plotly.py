@@ -21,22 +21,25 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
                      text='explainer_name',
                      log_x=True,
                      labels={
-                         "time": "Time (seconds)",
-                         "percentage": "Percentage %",
-                         'eligible_points': 'maximum score',
-                         'explainer_name': 'Explainer'
+                         "time": "Time (seconds) ",
+                         "percentage": "Percentage % ",
+                         'eligible_points': 'maximum score ',
+                         'explainer_name': 'Explainer '
                      },
                      title=title,
                      )
 
     mask = paretoset(summary_df[['percentage', 'time']], sense=["max", "min"])
     pareto_df = summary_df[mask].sort_values('time')
+    txt = "Time (seconds) = " + pareto_df.time.round(0).astype(str) + '\nPercentage % = ' + pareto_df.percentage.round(0).astype(str) + '\neligible_points = ' + pareto_df.eligible_points.astype(str) + '\n\nExplainer = ' + pareto_df.explainer_name
     fig.add_trace(go.Line(x=pareto_df.time,  #logx=True,
                           y=pareto_df.percentage,
-                          text=pareto_df.explainer_name,
+                          text=txt,
                           # textposition='middle right',
                           name='Pareto front',
                           ))
+    fig.update_traces(textposition='top center')
+
     if show:
         fig.show();
     return fig
@@ -149,4 +152,4 @@ def update_output_div(
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8005) #  dev_tools_hot_reload=False,
+    app.run_server(debug=False, port=8005)  #  dev_tools_hot_reload=False,
