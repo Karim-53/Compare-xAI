@@ -46,15 +46,21 @@ def get_details(result_df, verbose=True):
 
 
 def keep_sub_test(k: str, criteria):
-    for w in ['importance', 'attribution', 'interaction']:
-        if criteria.get(w, True) and k.startswith(w):
-            return True
-    return False
+    if isinstance(criteria, dict):
+        for w in ['importance', 'attribution', 'interaction']:
+            if criteria.get(w, True) and k.startswith(w):
+                return True
+        return False
+    elif isinstance(criteria, list):
+        for w in ['importance', 'attribution', 'interaction']:
+            if w in criteria and k.startswith(w):
+                return True
+        return False
 
 
 def restrict_tests(
         result_df: pd.DataFrame,
-        criteria: Dict[str, bool] = None,
+        criteria = None,  # dict or list
         supported_model: str = None,
 ) -> pd.DataFrame:
     """
@@ -65,10 +71,8 @@ def restrict_tests(
 
     :return:
     """
-    if criteria is None:
-        criteria = {}
     # just quickly
-    if result_df is None and len(criteria) == 0:
+    if criteria is None and supported_model is None:
         return result_df
     from src.explainer import valid_explainers_dico
     from explainers.explainer_superclass import supported_models_developed
@@ -77,8 +81,18 @@ def restrict_tests(
         xai_supporting_selected_models = [xai for xai in result_df.index if
                                           supported_model in supported_models_developed(
                                              valid_explainers_dico[xai].supported_models)]
+        print('xai_supporting_selected_models', xai_supporting_selected_models)
     else:
-        xai_supporting_selected_models = result_df.index
+        xai_supporting_selected_models = list(result_df.index)
+
+    if criteria is not None:
+        xai_supporting_required_output = [xai for xai in xai_supporting_selected_models
+                                          if any(c in valid_explainers_dico[xai].__dict__.keys() for c in criteria)]
+    else:
+        xai_supporting_required_output = xai_supporting_selected_models
+
+    if criteria is None:
+        criteria = {}
 
     def _restrict_tests(row):
         # if supported_model is not None:
@@ -101,7 +115,7 @@ def restrict_tests(
             restricted_results.append(new_result)
         return pd.Series(restricted_results, name=row.name, index=result_df.columns)
 
-    _result_df = result_df.loc[xai_supporting_selected_models]
+    _result_df = result_df.loc[xai_supporting_required_output]
     result_df_restricted = _result_df.apply(_restrict_tests, axis=1)
     # pd.DataFrame(columns=result_df.columns, index=result_df.index)
 
