@@ -105,8 +105,8 @@ def run_experiment(test_class, explainer_class):
 
 
 if __name__ == "__main__":
-    print(f'Explainers: {len(valid_explainers)}')
-    print(f'Tests: {len(valid_tests)}')
+    print(f'Explainers: {len(valid_explainers)} / 12 pour le 04-08')
+    print(f'Tests: {len(valid_tests)} / 24 pour le 04-08')
     result_df = load_results()
     if result_df is None:  # todo [after acceptance] move to io.py
         result_df = pd.DataFrame(index=[e.name for e in valid_explainers],
