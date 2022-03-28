@@ -1,3 +1,9 @@
+todo update before sub
+todo cite the original repository
+add binder tag 
+python version
+nb of XAI nb of tests 
+
 <p align="center"><img src="img/banner.svg" width=700 /></p>
 
 `XAI-Bench` is a library for benchmarking feature attribution techniques using synthetic data. Unlike real-world
