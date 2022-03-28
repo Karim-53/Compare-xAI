@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 MODELS = ['tree_based', 'neural_network']
 EXTENDED_MODELS = {'model_agnostic': MODELS}
@@ -11,10 +12,19 @@ def supported_models_developed(supported_models):
     return _supported_models_developed
 
 
+def _len(x):
+    if x is None:
+        return 0
+    return len(x)
+
+
 class Explainer:
     name = None
     description = None
     supported_models = ()
+    source_code = None
+    source_paper_tag = None
+    source_paper_bibliography = None
 
     # todo [after acceptance] add complexity as str, is_affected_by_seed
     # todo [after acceptance] add last_update = version of the release of this repo
@@ -25,27 +35,53 @@ class Explainer:
     importance = False
     attribution = False
     interaction = False
-
-    def __repr__(self) -> str:
+    def __init__(self):
+        self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
+    def get_xai_output(self):
         xai_output = []
         for out,out_str in zip(['importance', 'attribution', 'interaction'],
                                ['feature importance', 'feature attribution', 'pair interaction']):
             if self.__class__.__dict__.get(out, False):
                 xai_output.append(out_str)
+        return xai_output
 
-        def _len(x):
-            if x is None:
-                return 0
-            return len(x)
+    def get_specific_args_init(self):
+
         self_method_init_args = inspect.getfullargspec(self.__class__.__init__).args
         self_method_init_args = self_method_init_args[:-_len(inspect.getfullargspec(self.__class__.__init__).defaults)]# keep only required args
         super_method_init_args = inspect.getfullargspec(Explainer.__init__).args
         method_init_specific_args = set(self_method_init_args).difference(set(super_method_init_args))
+        return method_init_specific_args
 
+
+    def get_specific_args_explain(self):
         self_method_explain_args = inspect.getfullargspec(self.__class__.explain).args
         self_method_explain_args = self_method_explain_args[:-_len(inspect.getfullargspec(self.__class__.explain).defaults)]# keep only required args
         super_method_explain_args = inspect.getfullargspec(Explainer.explain).args
         method_explain_specific_args = set(self_method_explain_args).difference(set(super_method_explain_args))
+        return method_explain_specific_args
+
+    def __repr__(self) -> pd.DataFrame:
+        d = {}
+        d['name'] = self.name
+        d['supported_models'] = self.supported_models
+
+        d['xai_s_output'] = self.get_xai_output()
+        d['.__init__() specific args'] = ', '.join(self.get_specific_args_init())
+        d['.explain() specific args'] = ', '.join(self.get_specific_args_explain())
+        d['description'] = self.description
+
+        d['source_paper'] = self.get_bibliography()
+        d['source_code'] = self.source_code
+
+        df = pd.DataFrame()
+        return df
+
+    def __str__(self) -> str:
+        xai_output = self.get_xai_output()
+
+        method_init_specific_args = self.get_specific_args_init()
+        method_explain_specific_args = self.get_specific_args_explain()
 
         s = f"""{self.__class__.__name__}(Explainer)
 name:\t\t\t\t{self.name}
@@ -59,14 +95,14 @@ xAI's output:\t\t {', '.join(xai_output)}
         s += f"\ndescription:\t{self.description}" if self.description is not None else ''
         return s
 
-    def __str__(self) -> str:
-        return self.__repr__()
-
     def explain(self, dataset_to_explain, **kwargs):  # todo [after acceptance] change this to __call__ ?
         from src.explainer import valid_explainers
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
         )
+
+    def get_bibliography(self):
+        return self.
 
 
 class InteractionExplainer:
