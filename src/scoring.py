@@ -46,11 +46,14 @@ def get_details(result_df, verbose=True):
 
 
 def keep_sub_test(k: str, criteria):
+    if len(criteria) == 0:
+        return True  # no criteria
     if isinstance(criteria, dict):
-        for w in ['importance', 'attribution', 'interaction']:
-            if criteria.get(w, True) and k.startswith(w):
-                return True
-        return False
+        assert 'Depricated'
+        # for w in ['importance', 'attribution', 'interaction']:
+        #     if criteria.get(w, True) and k.startswith(w):
+        #         return True
+        # return False
     elif isinstance(criteria, list):
         for w in ['importance', 'attribution', 'interaction']:
             if w in criteria and k.startswith(w):
@@ -87,12 +90,12 @@ def restrict_tests(
 
     if criteria is not None:
         xai_supporting_required_output = [xai for xai in xai_supporting_selected_models
-                                          if any(c in valid_explainers_dico[xai].__dict__.keys() for c in criteria)]
+                                          if all(valid_explainers_dico[xai].__dict__.get(c, False) for c in criteria)]
     else:
         xai_supporting_required_output = xai_supporting_selected_models
 
     if criteria is None:
-        criteria = {}
+        criteria = []
 
     def _restrict_tests(row):
         # if supported_model is not None:
