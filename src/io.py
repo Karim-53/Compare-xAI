@@ -3,6 +3,7 @@ from ast import literal_eval
 
 import pandas as pd
 
+from src.test import get_sub_tests
 from src.utils import root
 
 RESULTS_FILE_PATH = root + '/results/results.csv'
@@ -50,6 +51,39 @@ def save_results_safe(result_df: pd.DataFrame):
     except:
         print('Failed to save the results correctly:')
         raise
+    # todo [after acceptance] write summary_df, eligible_points_df, score_df to keep track of the progress
+
+
+def insert_meta_row(sub_test, test_name, row, lista):
+    d = {'test': test_name,
+         'sub_test_category': 'meta',
+         'sub_test': sub_test,
+         }
+    for i, val in row.items():
+        d[i] = val.get(sub_test)
+    lista.append(d)
+
+def insert_score_row(sub_test, test_name, row, lista):
+    d = {'test': test_name,
+         'sub_test_category': 'score',
+         'sub_test': sub_test,
+         }
+    for i, val in row.items():
+        d[i] = val.get('score', {}).get(sub_test, None)
+    lista.append(d)
+
+
+def detail(result_df): # todo move to scoring
+    """ return a multi index df ['test', 'sub_test_category', 'sub_test'] vs explainer in columns"""
+    lista = []
+    for test_name, row in result_df.T.iterrows():
+
+        insert_meta_row('time', test_name, row, lista)
+        insert_meta_row('Last_updated', test_name, row, lista)
+        sub_tests = get_sub_tests(test_name)
+        for sub_test in sub_tests:
+            insert_score_row(sub_test, test_name, row, lista)
+    return pd.DataFrame(lista)  # .set_index(['test', 'sub_test_category', 'sub_test'])
 
 
 if __name__ == "__main__":

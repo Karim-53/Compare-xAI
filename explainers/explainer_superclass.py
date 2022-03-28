@@ -20,8 +20,20 @@ def _len(x):
 
 class Explainer:
     name = None
-    description = None
     supported_models = ()
+
+    # Know what could be calculated
+    importance = False
+    attribution = False
+    interaction = False
+
+    description = None
+
+    score_time_dominate = None
+    score_time_dominated_by = None
+    score_dominate = None
+    score_dominated_by = None
+
     source_code = None
     source_paper_tag = None
     source_paper_bibliography = None
@@ -31,12 +43,8 @@ class Explainer:
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
 
-    # Know what could be calculated
-    importance = False
-    attribution = False
-    interaction = False
-    def __init__(self):
-        self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
+    # def __init__(self):
+    #     self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
     def get_xai_output(self):
         xai_output = []
         for out,out_str in zip(['importance', 'attribution', 'interaction'],
@@ -61,20 +69,23 @@ class Explainer:
         method_explain_specific_args = set(self_method_explain_args).difference(set(super_method_explain_args))
         return method_explain_specific_args
 
-    def __repr__(self) -> pd.DataFrame:
+    def __repr__(self) -> pd.Series:
+        return self.to_pandas()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
+
+    def to_pandas(self) -> pd.Series: # todo add params include_dominance, include_results
         d = {}
         d['name'] = self.name
         d['supported_models'] = self.supported_models
 
         d['xai_s_output'] = self.get_xai_output()
-        d['.__init__() specific args'] = ', '.join(self.get_specific_args_init())
-        d['.explain() specific args'] = ', '.join(self.get_specific_args_explain())
+        d['.__init__() specific args'] = self.get_specific_args_init()
+        d['.explain() specific args'] = self.get_specific_args_explain()
         d['description'] = self.description
 
-        d['source_paper'] = self.get_bibliography()
+        d['source_paper'] = self.source_paper_bibliography
         d['source_code'] = self.source_code
 
-        df = pd.DataFrame()
+        df = pd.Series(d, name=self.name)
         return df
 
     def __str__(self) -> str:
@@ -100,9 +111,6 @@ xAI's output:\t\t {', '.join(xai_output)}
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
         )
-
-    def get_bibliography(self):
-        return self.
 
 
 class InteractionExplainer:
@@ -198,6 +206,14 @@ class Random(Explainer):
     importance = True
     interaction = True
 
+    source_paper_tag='liu2021synthetic'
+    source_paper_bibliography = r"""@article{liu2021synthetic,
+  title={Synthetic benchmarks for scientific research in explainable machine learning},
+  author={Liu, Yang and Khandagale, Sujay and White, Colin and Neiswanger, Willie},
+  journal={arXiv preprint arXiv:2106.12543},
+  year={2021}"""
+    source_code = 'https://github.com/abacusai/xai-bench'
+
     def __init__(self, **kwargs):
         super().__init__()
 
@@ -212,3 +228,8 @@ class Random(Explainer):
         self.importance = np.random.randn(_shape[1])
 
         self.interaction = np.random.randn(_shape[1], _shape[1])
+
+
+if __name__ == '__main__':
+    explainer = Random()
+    print(explainer.to_pandas())

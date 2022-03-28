@@ -66,7 +66,7 @@ def get_text_stats(eligible_points_df):
 text_stats = get_text_stats(eligible_points_df)
 fig = pareto(summary_df, show=False)
 
-
+# todo [after acceptance] on hover help / tips
 app.layout = html.Div(children=[
     html.H1(children='Filter:'),
 
@@ -81,8 +81,7 @@ app.layout = html.Div(children=[
                  ),
 
     dcc.Checklist(id='required_outputs_checklist',
-                  options={'specific_xai_output': 'I need a specific output from the XAI'},
-                  # todo [after acceptance] Learn more (link)
+                  options={'specific_xai_output': 'I need a specific output from the XAI',},
                   ),  # todo make the text unselectable # todo chouf el persistance chma3neha
     dcc.Dropdown(id='required_outputs_dropdown',
                  options={
@@ -93,6 +92,8 @@ app.layout = html.Div(children=[
                  },
                  disabled=True, multi=True, clearable=True, searchable=True),
 
+    # todo dcc.Checklist: I trust the XAI output (I created the data and the model myself)
+    # todo dcc.Checklist: I know the target value of the datapoints to explain
     html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
     html.H1(children='Pareto plot:'),

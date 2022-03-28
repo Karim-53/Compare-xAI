@@ -13,6 +13,7 @@ from tests.util import importance_dummy, attributions_dummy
 
 @lru_cache(None)
 def load_mnist():
+    # todo move this to explain because sometimes i just want to instanciate the thing
     # todo [after acceptance] double check that the pointers are not affected when moving to another XAI
     print('Load MNIST...')  # Load data from https://www.openml.org/d/554
     X, y = fetch_openml("mnist_784", version=1, return_X_y=True, as_frame=False)

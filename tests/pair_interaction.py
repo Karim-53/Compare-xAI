@@ -177,7 +177,7 @@ class DetectInteraction(Test):
         self.dataset_to_explain = X
         self.truth_to_explain = Y
 
-    def score(self, interaction, **kwargs):
+    def score(self, interaction=None, **kwargs) -> dict:
         """
 
         :param interaction: in sparse format
@@ -185,7 +185,7 @@ class DetectInteraction(Test):
         :return:
         """
         if interaction is None:
-            return {}
+            return {'interaction_detection': None}
         print('received feature interaction', interaction)
         interaction_sparse = sparse_format(interaction)
         gts = self.trained_model.get_gts(self.nb_features)
