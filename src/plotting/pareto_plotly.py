@@ -8,34 +8,35 @@ from src.scoring import get_details, restrict_tests
 # todo [after acceptance] peu etre nzid: dot size eligible points
 def pareto(summary_df, title="Global performance of xAI methods", min_time_value=.01, show=True):
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
-    summary_df.loc[summary_df.time < min_time_value, 'time'] = min_time_value
+    summary_df.loc[summary_df.time_per_test < min_time_value, 'time'] = min_time_value
     if summary_df.percentage.max() < 1.:
         summary_df.percentage = summary_df.percentage * 100
     summary_df['explainer_name'] = summary_df.index
 
     # see https://plotly.com/python/px-arguments/ for more options
     fig = px.scatter(summary_df,
-                     x='time',
-                     y='percentage',
+                     x='time_per_test',
+                     y='percentage',  # here I should not show score because 2 xai can have same score 3/3 and 3/10 and it is misleading
                      # s='explainer_name', # https://www.geeksforgeeks.org/how-to-annotate-matplotlib-scatter-plots/
                      # c='eligible_points',
                      text='explainer_name',
                      log_x=True,
                      labels={
-                         "time": "Time (seconds) ",
-                         "percentage": "Percentage % ",
+                         "time_per_test": "Average Time per test [Seconds] ↓",
+                         "percentage": "Score [%] ↑",
                          'eligible_points': 'maximum score ',
                          'explainer_name': 'Explainer '
                      },
-                     title=title,
+                     # title=title,
                      )
 
-    mask = paretoset(summary_df[['percentage', 'time']], sense=["max", "min"])
-    pareto_df = summary_df[mask].sort_values('time')
-    txt = "Time (seconds) = " + pareto_df.time.round(0).astype(str) + '\nPercentage % = ' + pareto_df.percentage.round(
-        0).astype(str) + '\neligible_points = ' + pareto_df.eligible_points.astype(
-        str) + '\n\nExplainer = ' + pareto_df.explainer_name
-    fig.add_trace(go.Line(x=pareto_df.time,  # logx=True,
+    mask = paretoset(summary_df[['percentage', 'time_per_test']], sense=["max", "min"])
+    pareto_df = summary_df[mask].sort_values('time_per_test')
+    txt = "Avg. Time = " + pareto_df.time_per_test.round(1).astype(str)
+    txt += ' <br>Score = ' + pareto_df.percentage.round(1).astype(str) + ' %'
+    txt += ' <br>eligible_points = ' + pareto_df.eligible_points.astype(str)
+    txt += ' <br>Explainer = ' + pareto_df.explainer_name
+    fig.add_trace(go.Line(x=pareto_df.time_per_test,  # logx=True,
                           y=pareto_df.percentage,
                           text=txt,
                           # textposition='middle right',
@@ -112,7 +113,7 @@ app.layout = html.Div(children=[
                   ),
     html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
-    html.H1(children='Pareto plot:'),
+    html.H1(children='Pareto plot: Global performance of xAI methods'),
     dcc.Graph(
         id='pareto_plot',
         figure=fig
