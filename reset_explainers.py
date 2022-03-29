@@ -3,8 +3,15 @@ from sqlalchemy.dialects.mssql.information_schema import columns
 import jinja2
 from src.io import load_results, detail
 from src.utils import root
+# todo(s) from Tim <3
+#   header row in specific color
+#   one empty line before each test
+#   merge redudent txt
+#   another font in the table
+#   fix \n in src
+#   remove underscore (importance_symmetric) and put human readable info
 
-EXPLAINERS_HTML_PATH = root + "/results/explainers/html/" # todo move to src.utils
+EXPLAINERS_HTML_PATH = root + "/docs/explainers/"  # todo move to src.utils
 def explainer_to_html(explainer_df_with_results):
     """ clean the df and write it to an html page"""
     df = explainer_df_with_results.fillna('')
