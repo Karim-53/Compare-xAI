@@ -4,7 +4,7 @@ from plotly import express as px, graph_objects as go
 from src.io import load_results
 from src.scoring import get_details, restrict_tests
 
-
+# todo [after acceptance] peu etre nzid: dot size eligible points
 def pareto(summary_df, title="Global performance of xAI methods", min_time_value = .01, show=True):
     assert len(summary_df)>0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time < min_time_value, 'time'] = min_time_value
@@ -66,7 +66,16 @@ def get_text_stats(eligible_points_df):
 text_stats = get_text_stats(eligible_points_df)
 fig = pareto(summary_df, show=False)
 
+todo_lista = ['I trust the XAI output (I created the data and the model myself)',
+'I know the target value of the data points to explain',
+'I can retrain my model',
+'I can perform additional predictions',
+'I have a reference input data',
+'I have a GPU ',]
+
 # todo [after acceptance] on hover help / tips
+# todo button reset
+# todo Click on the dot will take you to the git page with the csv of that method
 app.layout = html.Div(children=[
     html.H1(children='Filter:'),
 
@@ -92,8 +101,10 @@ app.layout = html.Div(children=[
                  },
                  disabled=True, multi=True, clearable=True, searchable=True),
 
-    # todo dcc.Checklist: I trust the XAI output (I created the data and the model myself)
-    # todo dcc.Checklist: I know the target value of the datapoints to explain
+    dcc.Checklist(id='todo',
+                  options=todo_lista,
+                  value=todo_lista,
+                  ),
     html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
     html.H1(children='Pareto plot:'),
