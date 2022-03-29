@@ -5,6 +5,8 @@ MODELS = ['tree_based', 'neural_network']
 EXTENDED_MODELS = {'model_agnostic': MODELS}
 
 import inspect
+
+
 def supported_models_developed(supported_models):
     _supported_models_developed = list(supported_models)
     for e in supported_models:
@@ -47,8 +49,8 @@ class Explainer:
     #     self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
     def get_xai_output(self):
         xai_output = []
-        for out,out_str in zip(['importance', 'attribution', 'interaction'],
-                               ['feature importance', 'feature attribution', 'pair interaction']):
+        for out, out_str in zip(['importance', 'attribution', 'interaction'],
+                                ['feature importance', 'feature attribution', 'pair interaction']):
             if self.__class__.__dict__.get(out, False):
                 xai_output.append(out_str)
         return xai_output
@@ -56,15 +58,16 @@ class Explainer:
     def get_specific_args_init(self):
 
         self_method_init_args = inspect.getfullargspec(self.__class__.__init__).args
-        self_method_init_args = self_method_init_args[:-_len(inspect.getfullargspec(self.__class__.__init__).defaults)]# keep only required args
+        self_method_init_args = self_method_init_args[:-_len(
+            inspect.getfullargspec(self.__class__.__init__).defaults)]  # keep only required args
         super_method_init_args = inspect.getfullargspec(Explainer.__init__).args
         method_init_specific_args = set(self_method_init_args).difference(set(super_method_init_args))
         return method_init_specific_args
 
-
     def get_specific_args_explain(self):
         self_method_explain_args = inspect.getfullargspec(self.__class__.explain).args
-        self_method_explain_args = self_method_explain_args[:-_len(inspect.getfullargspec(self.__class__.explain).defaults)]# keep only required args
+        self_method_explain_args = self_method_explain_args[:-_len(
+            inspect.getfullargspec(self.__class__.explain).defaults)]  # keep only required args
         super_method_explain_args = inspect.getfullargspec(Explainer.explain).args
         method_explain_specific_args = set(self_method_explain_args).difference(set(super_method_explain_args))
         return method_explain_specific_args
@@ -72,7 +75,7 @@ class Explainer:
     def __repr__(self) -> pd.Series:
         return self.to_pandas()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
 
-    def to_pandas(self) -> pd.Series: # todo add params include_dominance, include_results
+    def to_pandas(self) -> pd.Series:  # todo add params include_dominance, include_results
         d = {}
         d['name'] = self.name
         d['supported_models'] = self.supported_models
@@ -99,9 +102,11 @@ name:\t\t\t\t{self.name}
 supported_models:\t{self.supported_models}
 xAI's output:\t\t {', '.join(xai_output)} 
 """
-        s += f"\n.__init__() specific args: {', '.join(method_init_specific_args)}" if len(method_init_specific_args) else ''
+        s += f"\n.__init__() specific args: {', '.join(method_init_specific_args)}" if len(
+            method_init_specific_args) else ''
 
-        s += f"\n.explain()  specific args: {', '.join(method_explain_specific_args)}" if len(method_explain_specific_args) else ''
+        s += f"\n.explain()  specific args: {', '.join(method_explain_specific_args)}" if len(
+            method_explain_specific_args) else ''
 
         s += f"\ndescription:\t{self.description}" if self.description is not None else ''
         return s
@@ -206,7 +211,7 @@ class Random(Explainer):
     importance = True
     interaction = True
 
-    source_paper_tag='liu2021synthetic'
+    source_paper_tag = 'liu2021synthetic'
     source_paper_bibliography = r"""@article{liu2021synthetic,
   title={Synthetic benchmarks for scientific research in explainable machine learning},
   author={Liu, Yang and Khandagale, Sujay and White, Colin and Neiswanger, Willie},

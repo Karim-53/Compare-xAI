@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pandas as pd
 
 
@@ -63,7 +61,7 @@ def keep_sub_test(k: str, criteria):
 
 def restrict_tests(
         result_df: pd.DataFrame,
-        criteria = None,  # dict or list
+        criteria=None,  # dict or list
         supported_model: str = None,
 ) -> pd.DataFrame:
     """
@@ -83,7 +81,7 @@ def restrict_tests(
     if supported_model is not None:
         xai_supporting_selected_models = [xai for xai in result_df.index if
                                           supported_model in supported_models_developed(
-                                             valid_explainers_dico[xai].supported_models)]
+                                              valid_explainers_dico[xai].supported_models)]
         print('xai_supporting_selected_models', xai_supporting_selected_models)
     else:
         xai_supporting_selected_models = list(result_df.index)

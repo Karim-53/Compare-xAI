@@ -1,4 +1,3 @@
-import copy
 import random
 from itertools import chain, combinations
 
@@ -21,6 +20,7 @@ def random_subset(s):
         if random.randint(0, 1) == 0:
             out.append(el)
     return tuple(out)
+
 
 def gen_data_samples(model, input_value=1, base_value=-1, p=40, n=30000, seed=None):
     if seed is not None:

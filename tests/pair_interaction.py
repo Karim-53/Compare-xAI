@@ -150,7 +150,6 @@ def get_auc(inter_scores, gts):
     return auc
 
 
-
 input_value, base_value = 1, -1
 
 

@@ -1,15 +1,12 @@
 import numpy as np
 
-from explainers.interaction_utils import *
 from explainers.explainer_superclass import Explainer
+from explainers.interaction_utils import *
+
 
 # import torch
 # import torch.nn as nn
 # import torch.optim as optim
-
-import numpy as np
-import sklearn
-
 
 
 # class MLP(nn.Module):
@@ -47,6 +44,7 @@ def subset_before(S, ordering, ordering_dict):
 
 import bisect
 import operator
+
 
 # import torch
 # import torch.nn as nn
@@ -283,7 +281,7 @@ class NeuralInteractionDetection(Explainer):
         self.importance = 'Can not be calculated'
 
         Xs, Ys = proprocess_data(dataset_to_explain, truth_to_explain, valid_size=10000,
-                                                              test_size=10000, std_scale_X=True, std_scale=True)
+                                 test_size=10000, std_scale_X=True, std_scale=True)
         inter_scores, mlp_loss = detect_interactions(Xs, Ys, pairwise=True, seed=42)
 
         self.interaction = inter_scores

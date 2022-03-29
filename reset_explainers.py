@@ -1,8 +1,9 @@
-import pandas as pd
-from sqlalchemy.dialects.mssql.information_schema import columns
 import jinja2
+import pandas as pd
+
 from src.io import load_results, detail
 from src.utils import root
+
 # todo(s) from Tim <3
 #   header row in specific color
 #   one empty line before each test
@@ -12,6 +13,8 @@ from src.utils import root
 #   remove underscore (importance_symmetric) and put human readable info
 
 EXPLAINERS_HTML_PATH = root + "/docs/explainers/"  # todo move to src.utils
+
+
 def explainer_to_html(explainer_df_with_results):
     """ clean the df and write it to an html page"""
     df = explainer_df_with_results.fillna('')
@@ -49,7 +52,6 @@ def explainer_to_html(explainer_df_with_results):
 
 
 if __name__ == "__main__":
-    from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
     from explainers import Random
 
     result_df = load_results()
@@ -68,7 +70,7 @@ if __name__ == "__main__":
     explainer_df_with_results = pd.concat([
         explainer_df,
         result_s,
-    ], axis=0,).reset_index()[cols]
+    ], axis=0, ).reset_index()[cols]
     print(explainer_df_with_results)
     explainer_df_with_results['remarks'] = None
 

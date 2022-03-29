@@ -2,7 +2,7 @@ import pandas as pd
 from xgboost import XGBRegressor
 
 from tests.test_superclass import Test
-from tests.util import importance_symmetric, is_attribution_symmetric, importance_xi_more_important
+from tests.util import importance_xi_more_important
 
 
 class AAndBOrC(Test):
@@ -40,7 +40,7 @@ class AAndBOrC(Test):
             'importance_x0_more_important': importance_xi_more_important(importance=importance),
             # todo attribution local dummy prop men rassi : pour B, Fixi el be9i w badel el B maybadalch el output donc B lezemha sferm kifkif el C
             # todo sym propag prop men rassi :ken el B C sym ywali AC AB sym
-            }
+        }
 
 
 if __name__ == "__main__":

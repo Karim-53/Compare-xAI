@@ -28,5 +28,3 @@
 #     plt.legend(['Pareto'], loc='lower right')
 #     plt.ylim([0, 1])
 #     plt.show()
-
-

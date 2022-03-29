@@ -24,7 +24,6 @@ def get_sub_tests(test_name):
     score = test_instance.score()
     return score.keys()
 
-
 # not working yet
 # "faithfulness": tests.Faithfulness,
 # "roar_faithfulness": tests.ROARFaithfulness,

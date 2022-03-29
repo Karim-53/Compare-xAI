@@ -1,5 +1,7 @@
+import os
+import sys
+
 import numpy as np
-import os, sys
 
 from pipeline_mod import pipeline
 

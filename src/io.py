@@ -63,6 +63,7 @@ def insert_meta_row(sub_test, test_name, row, lista):
         d[i] = val.get(sub_test)
     lista.append(d)
 
+
 def insert_score_row(sub_test, test_name, row, lista):
     d = {'test': test_name,
          'sub_test_category': 'score',
@@ -73,7 +74,7 @@ def insert_score_row(sub_test, test_name, row, lista):
     lista.append(d)
 
 
-def detail(result_df): # todo move to scoring
+def detail(result_df):  # todo move to scoring
     """ return a multi index df ['test', 'sub_test_category', 'sub_test'] vs explainer in columns"""
     lista = []
     for test_name, row in result_df.T.iterrows():

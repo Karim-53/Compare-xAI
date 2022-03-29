@@ -61,7 +61,7 @@ https://iancovert.com/blog/understanding-shap-sage/"""
 
         if isinstance(dataset_to_explain, pd.DataFrame):
             dataset_to_explain = dataset_to_explain.to_numpy()
-        if isinstance(truth_to_explain, pd.Series) or isinstance(truth_to_explain, pd.DataFrame) :
+        if isinstance(truth_to_explain, pd.Series) or isinstance(truth_to_explain, pd.DataFrame):
             truth_to_explain = truth_to_explain.to_numpy()
 
         # Calculate SAGE values

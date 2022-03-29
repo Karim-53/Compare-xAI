@@ -1,8 +1,5 @@
 from explainers.archipelago_lib.src.explainer import Archipelago as _Archipelago
 from explainers.explainer_superclass import Explainer
-from explainers.interaction_utils import proprocess_data
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
 
 
 class Archipelago(Explainer):
@@ -18,7 +15,7 @@ class Archipelago(Explainer):
     def __init__(self, trained_model, X, nb_features, **kwargs):
         super().__init__()
         self.nb_features = nb_features
-        self.apgo = _Archipelago(trained_model,  input=list(X[0]), baseline=list(X[1]), output_indices=0, batch_size=20)
+        self.apgo = _Archipelago(trained_model, input=list(X[0]), baseline=list(X[1]), output_indices=0, batch_size=20)
 
     def explain(self, **kwargs):
         self.expected_values = None

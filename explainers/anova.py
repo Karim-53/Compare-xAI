@@ -1,7 +1,8 @@
-from explainers.explainer_superclass import Explainer
-from explainers.interaction_utils import proprocess_data
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+
+from explainers.explainer_superclass import Explainer
+from explainers.interaction_utils import proprocess_data
 
 
 class Anova(Explainer):
@@ -10,6 +11,7 @@ class Anova(Explainer):
     interaction = True
     # todo fix anova by adding feature importance
     supported_models = ('model_agnostic',)
+
     # is_affected_by_seed = True
 
     def __init__(self, nb_features, **kwargs):
@@ -22,7 +24,7 @@ class Anova(Explainer):
         self.importance = 'Can not be calculated'
 
         Xs, Ys = proprocess_data(dataset_to_explain, truth_to_explain, valid_size=10000,
-                                                              test_size=10000, std_scale_X=True, std_scale=True)
+                                 test_size=10000, std_scale_X=True, std_scale=True)
         X_train = Xs["train"]
         Y_train = Ys["train"]
 

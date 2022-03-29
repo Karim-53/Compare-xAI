@@ -4,9 +4,10 @@ from plotly import express as px, graph_objects as go
 from src.io import load_results
 from src.scoring import get_details, restrict_tests
 
+
 # todo [after acceptance] peu etre nzid: dot size eligible points
-def pareto(summary_df, title="Global performance of xAI methods", min_time_value = .01, show=True):
-    assert len(summary_df)>0, 'No XAI to plot. At least the baseline_random should be there'
+def pareto(summary_df, title="Global performance of xAI methods", min_time_value=.01, show=True):
+    assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time < min_time_value, 'time'] = min_time_value
     if summary_df.percentage.max() < 1.:
         summary_df.percentage = summary_df.percentage * 100
@@ -31,8 +32,10 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
 
     mask = paretoset(summary_df[['percentage', 'time']], sense=["max", "min"])
     pareto_df = summary_df[mask].sort_values('time')
-    txt = "Time (seconds) = " + pareto_df.time.round(0).astype(str) + '\nPercentage % = ' + pareto_df.percentage.round(0).astype(str) + '\neligible_points = ' + pareto_df.eligible_points.astype(str) + '\n\nExplainer = ' + pareto_df.explainer_name
-    fig.add_trace(go.Line(x=pareto_df.time,  #logx=True,
+    txt = "Time (seconds) = " + pareto_df.time.round(0).astype(str) + '\nPercentage % = ' + pareto_df.percentage.round(
+        0).astype(str) + '\neligible_points = ' + pareto_df.eligible_points.astype(
+        str) + '\n\nExplainer = ' + pareto_df.explainer_name
+    fig.add_trace(go.Line(x=pareto_df.time,  # logx=True,
                           y=pareto_df.percentage,
                           text=txt,
                           # textposition='middle right',
@@ -44,10 +47,11 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
         fig.show();
     return fig
 
+
 def get_stats(eligible_points_df):
     xai = len(eligible_points_df)
     tests = eligible_points_df.max().sum()
-    return xai,tests
+    return xai, tests
 
 
 from dash import Dash, html, dcc
@@ -58,8 +62,9 @@ result_df = load_results()
 summary_df, eligible_points_df, score_df = get_details(result_df, verbose=True)
 max_xai, max_tests = get_stats(eligible_points_df)
 
+
 def get_text_stats(eligible_points_df):
-    xai,tests = get_stats(eligible_points_df)
+    xai, tests = get_stats(eligible_points_df)
     return [f"Kept XAI {xai} / {max_xai}", html.Br(), f"Kept tests {tests} / {max_tests}"]
 
 
@@ -67,11 +72,11 @@ text_stats = get_text_stats(eligible_points_df)
 fig = pareto(summary_df, show=False)
 
 todo_lista = ['I trust the XAI output (I created the data and the model myself)',
-'I know the target value of the data points to explain',
-'I can retrain my model',
-'I can perform additional predictions',
-'I have a reference input data',
-'I have a GPU ',]
+              'I know the target value of the data points to explain',
+              'I can retrain my model',
+              'I can perform additional predictions',
+              'I have a reference input data',
+              'I have a GPU ', ]
 
 # todo [after acceptance] on hover help / tips
 # todo button reset
@@ -90,7 +95,7 @@ app.layout = html.Div(children=[
                  ),
 
     dcc.Checklist(id='required_outputs_checklist',
-                  options={'specific_xai_output': 'I need a specific output from the XAI',},
+                  options={'specific_xai_output': 'I need a specific output from the XAI', },
                   ),  # todo make the text unselectable # todo chouf el persistance chma3neha
     dcc.Dropdown(id='required_outputs_dropdown',
                  options={
@@ -149,7 +154,7 @@ def update_output_div(
         supported_models_dropdown_disabled = False
         if supported_models_dropdown is not None:
             supported_model = supported_models_dropdown
-            if isinstance(supported_model,list):
+            if isinstance(supported_model, list):
                 supported_model = supported_model[0]
     else:
         supported_models_dropdown_disabled = True
@@ -173,4 +178,4 @@ def update_output_div(
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8005)  #  dev_tools_hot_reload=False,
+    app.run_server(debug=False, port=8005)  # dev_tools_hot_reload=False,

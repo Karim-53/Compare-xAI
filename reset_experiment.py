@@ -85,11 +85,11 @@ def run_experiment(test_class, explainer_class):
             _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
     except TimeoutException as e:
         print("Timed out!")
-        if _explainer.__dict__.get('expected_values',None) is None:
+        if _explainer.__dict__.get('expected_values', None) is None:
             _explainer.expected_values = f'Time out {TIME_LIMIT}'
-        if _explainer.__dict__.get('attribution',None) is None:
+        if _explainer.__dict__.get('attribution', None) is None:
             _explainer.attribution = f'Time out {TIME_LIMIT}'
-        if _explainer.__dict__.get('importance',None) is None:
+        if _explainer.__dict__.get('importance', None) is None:
             _explainer.importance = f'Time out {TIME_LIMIT}'
 
     score = test.score(attribution=_explainer.attribution,
