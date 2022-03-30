@@ -29,7 +29,7 @@ class Explainer:
     attribution = False
     interaction = False
 
-    description = None
+    description = None  # if the xai pretend to be the unique solution given these assumptions / axioms please write it here until I find a way to index it
 
     score_time_dominate = None
     score_time_dominated_by = None
@@ -47,48 +47,52 @@ class Explainer:
 
     # def __init__(self):
     #     self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
-    def get_xai_output(self):
+    @classmethod
+    def get_xai_output(cls):
         xai_output = []
         for out, out_str in zip(['importance', 'attribution', 'interaction'],
                                 ['feature importance', 'feature attribution', 'pair interaction']):
-            if self.__class__.__dict__.get(out, False):
+            if cls.__dict__.get(out, False):
                 xai_output.append(out_str)
         return xai_output
 
-    def get_specific_args_init(self):
+    @classmethod
+    def get_specific_args_init(cls):
 
-        self_method_init_args = inspect.getfullargspec(self.__class__.__init__).args
-        self_method_init_args = self_method_init_args[:-_len(
-            inspect.getfullargspec(self.__class__.__init__).defaults)]  # keep only required args
+        cls_method_init_args = inspect.getfullargspec(cls.__init__).args
+        cls_method_init_args = cls_method_init_args[:-_len(
+            inspect.getfullargspec(cls.__init__).defaults)]  # keep only required args
         super_method_init_args = inspect.getfullargspec(Explainer.__init__).args
-        method_init_specific_args = set(self_method_init_args).difference(set(super_method_init_args))
+        method_init_specific_args = set(cls_method_init_args).difference(set(super_method_init_args))
         return method_init_specific_args
 
-    def get_specific_args_explain(self):
-        self_method_explain_args = inspect.getfullargspec(self.__class__.explain).args
-        self_method_explain_args = self_method_explain_args[:-_len(
-            inspect.getfullargspec(self.__class__.explain).defaults)]  # keep only required args
+    @classmethod
+    def get_specific_args_explain(cls):
+        cls_method_explain_args = inspect.getfullargspec(cls.explain).args
+        cls_method_explain_args = cls_method_explain_args[:-_len(
+            inspect.getfullargspec(cls.explain).defaults)]  # keep only required args
         super_method_explain_args = inspect.getfullargspec(Explainer.explain).args
-        method_explain_specific_args = set(self_method_explain_args).difference(set(super_method_explain_args))
+        method_explain_specific_args = set(cls_method_explain_args).difference(set(super_method_explain_args))
         return method_explain_specific_args
 
     def __repr__(self) -> pd.Series:
         return self.to_pandas()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
 
-    def to_pandas(self) -> pd.Series:  # todo add params include_dominance, include_results
+    @classmethod
+    def to_pandas(cls) -> pd.Series:  # todo add params include_dominance, include_results
         d = {}
-        d['name'] = self.name
-        d['supported_models'] = self.supported_models
+        d['name'] = cls.name
+        d['supported_models'] = cls.supported_models
 
-        d['xai_s_output'] = self.get_xai_output()
-        d['.__init__() specific args'] = self.get_specific_args_init()
-        d['.explain() specific args'] = self.get_specific_args_explain()
-        d['description'] = self.description
+        d['xai_s_output'] = cls.get_xai_output()
+        d['.__init__() specific args'] = cls.get_specific_args_init()
+        d['.explain() specific args'] = cls.get_specific_args_explain()
+        d['description'] = cls.description
 
-        d['source_paper'] = self.source_paper_bibliography
-        d['source_code'] = self.source_code
+        d['source_paper'] = cls.source_paper_bibliography
+        d['source_code'] = cls.source_code
 
-        df = pd.Series(d, name=self.name)
+        df = pd.Series(d, name=cls.name)
         return df
 
     def __str__(self) -> str:

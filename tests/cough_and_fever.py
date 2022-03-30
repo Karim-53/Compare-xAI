@@ -31,7 +31,8 @@ class CoughAndFever(Test):
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
-    def score(self, attribution=None, importance=None, **kwargs):
+    @staticmethod
+    def score(attribution=None, importance=None, **kwargs):
         # todo assert attribution importance size
         return {
             'importance_symmetric': importance_symmetric(importance=importance),

@@ -35,7 +35,8 @@ class AAndBOrC(Test):
         self.trained_model.fit(self.X, y=self.df_train.target)
         self.predict_func = self.trained_model.predict
 
-    def score(self, importance=None, **kwargs):
+    @staticmethod
+    def score(importance=None, **kwargs):
         return {
             'importance_x0_more_important': importance_xi_more_important(importance=importance),
             # todo attribution local dummy prop men rassi : pour B, Fixi el be9i w badel el B maybadalch el output donc B lezemha sferm kifkif el C

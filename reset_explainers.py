@@ -1,6 +1,7 @@
 import jinja2
 import pandas as pd
 
+from src.explainer import valid_explainers
 from src.io import load_results, detail
 from src.utils import root
 
@@ -57,21 +58,24 @@ if __name__ == "__main__":
     result_df = load_results()
     result_df_detailed = detail(result_df)
 
-    explainer = Random()
-    explainer_df = pd.DataFrame(explainer.to_pandas())
-    explainer_df.columns = ['value']
-    explainer_df['test'] = explainer_df.index
-    explainer_df['sub_test_category'] = None
-    explainer_df['sub_test'] = None
-    cols = ['test', 'sub_test_category', 'sub_test', explainer.name]
-    result_s = result_df_detailed[cols]
-    cols = ['test', 'sub_test_category', 'sub_test', 'value']
-    result_s.columns = cols
-    explainer_df_with_results = pd.concat([
-        explainer_df,
-        result_s,
-    ], axis=0, ).reset_index()[cols]
-    print(explainer_df_with_results)
-    explainer_df_with_results['remarks'] = None
+    for explainer_class in valid_explainers:
+        print(explainer_class.name)
+        # explainer = explainer_class()
+        explainer_df = pd.DataFrame(explainer_class.to_pandas())
+        explainer_df.columns = ['value']
+        explainer_df['test'] = explainer_df.index
+        explainer_df['sub_test_category'] = None
+        explainer_df['sub_test'] = None
+        cols = ['test', 'sub_test_category', 'sub_test', explainer_class.name]
+        result_s = result_df_detailed[cols]
+        cols = ['test', 'sub_test_category', 'sub_test', 'value']
+        result_s.columns = cols
+        explainer_df_with_results = pd.concat([
+            explainer_df,
+            result_s,
+        ], axis=0, ).reset_index()[cols]
+        print(explainer_df_with_results)
+        explainer_df_with_results['remarks'] = None
+        # todo also add columns results from original paper , and in remarks we can write why they are not the same
 
-    explainer_to_html(explainer_df_with_results)
+        explainer_to_html(explainer_df_with_results)

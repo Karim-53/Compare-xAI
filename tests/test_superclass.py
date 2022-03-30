@@ -10,7 +10,8 @@ class Test:
 
     # todo add init with var check
 
-    def score(self, attribution=None, importance=None, **kwargs) -> dict:
+    @staticmethod
+    def score(attribution=None, importance=None, **kwargs) -> dict:
         # todo assert attribution importance size
         raise NotImplementedError("The scoring method of this test is not implemented at the moment.")
         # todo assert on output format dict and that each score is a float not NaN
