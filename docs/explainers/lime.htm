@@ -1,9 +1,12 @@
 <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Demo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+        <title>lime</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
         </head>
@@ -34,7 +37,7 @@
       <td>supported_models</td>
       <td></td>
       <td></td>
-      <td>(model_agnostic,)</td>
+      <td>model_agnostic</td>
       <td></td>
     </tr>
     <tr>
@@ -42,7 +45,7 @@
       <td>xai_s_output</td>
       <td></td>
       <td></td>
-      <td>[feature importance, feature attribution]</td>
+      <td>feature importance <br>  feature attribution</td>
       <td></td>
     </tr>
     <tr>
@@ -50,7 +53,7 @@
       <td>.__init__() specific args</td>
       <td></td>
       <td></td>
-      <td>{X, predict_func}</td>
+      <td>predict_func <br>  X</td>
       <td></td>
     </tr>
     <tr>
@@ -58,7 +61,7 @@
       <td>.explain() specific args</td>
       <td></td>
       <td></td>
-      <td>{}</td>
+      <td></td>
       <td></td>
     </tr>
     <tr>
@@ -428,4 +431,10 @@
         <script defer type="text/javascript">
             let myTable = new simpleDatatables.DataTable("#myTable");
         </script>
+        <style type="text/css">
+        .imglink {
+          width: 18px;
+          padding-left: 3px;
+        }
+        </style>
     </html>

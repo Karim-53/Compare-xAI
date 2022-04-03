@@ -20,7 +20,7 @@ EXPLAINERS_HTML_PATH = root + "/docs/explainers/"  # todo move to src.utils
 
 import re
 
-_urlfinderregex = re.compile(r'http([^\.\s]+\.[^\.\s]*)+[^\.\s]{2,}')  # todo fix tr at the end of the link
+_urlfinderregex = re.compile(r'http([^<\.\s]+\.[^<\.\s]*)+[^<\.\s]{2,}')  # todo fix tr at the end of the link
 
 def linkify(text, maxlinklength=256):
     def replacewithlink(matchobj):
@@ -50,6 +50,7 @@ def explainer_to_html(explainer_df_with_results):
     """ clean the df and write it to an html page"""
     df = explainer_df_with_results.fillna('')
     df = df.applymap(lambda x: '\n '.join(x) if isinstance(x, Iterable) and not isinstance(x, str) else x)
+    # df['value'] = df['value'].apply(lambda x: linkify(x) if isinstance(x, str) else x)
     # os.chdir(file_dirname)
 
     # Generate HTML from template.
@@ -75,11 +76,12 @@ def explainer_to_html(explainer_df_with_results):
         </script>
         <style type="text/css">
         .imglink {
-          width: 16px;
+          width: 18px;
+          padding-left: 3px;
         }
         </style>
     </html>"""
-                               )
+    )
 
     table_html = df.to_html(table_id="myTable")
     table_html = linkify(table_html)
