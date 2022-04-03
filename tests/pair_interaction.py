@@ -171,6 +171,7 @@ class DetectInteraction(Test):
             [base_value] * self.nb_features,  # was baseline
             [input_value] * self.nb_features,  # was input
         ])
+        self.X_reference = self.X
 
         X, Y = gen_data_samples(self.trained_model, p=self.nb_features, n=30000, seed=42)
         self.dataset_to_explain = X

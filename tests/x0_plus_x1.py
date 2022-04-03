@@ -7,7 +7,7 @@ from tests.util import importance_symmetric, is_attribution_symmetric
 
 
 class _X0PlusX1(Test):
-    """ This is not a test: It is only a superclass"""
+    """ This is not a test: It is only a superclass"""  # todo [after acceptance] make abstract class
     name = 'x0_plus_x1'
     description = "We test the effect of the train_dataset 's distribution on the explanation.\n"
     input_features = ['x0', 'x1']
@@ -20,8 +20,9 @@ class _X0PlusX1(Test):
         self.dataset_size = len(X)
         self.df_train = pd.DataFrame(X, columns=self.input_features)
         self.df_train['target'] = self.df_train.x0 + self.df_train.x1
-        self.X = self.df_train[self.input_features]
+        self.X =            self.df_train[self.input_features]
         self.df_reference = self.df_train[self.input_features]
+        self.X_reference = self.X
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 

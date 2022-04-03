@@ -20,9 +20,19 @@ def _len(x):
     return len(x)
 
 
+def get_specific_args(method, super_method):
+    arg_spec = inspect.getfullargspec(method)
+    args = arg_spec.args
+    len_default_args = _len(arg_spec.defaults)
+    if len_default_args:  # keep only required args
+        args = args[:-len_default_args]
+    super_method_init_args = inspect.getfullargspec(super_method).args
+    return set(args).difference(set(super_method_init_args))
+
+
 class Explainer:
     name = None
-    supported_models = ()
+    supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
 
     # Know what could be calculated
     importance = False
@@ -58,22 +68,11 @@ class Explainer:
 
     @classmethod
     def get_specific_args_init(cls):
-
-        cls_method_init_args = inspect.getfullargspec(cls.__init__).args
-        cls_method_init_args = cls_method_init_args[:-_len(
-            inspect.getfullargspec(cls.__init__).defaults)]  # keep only required args
-        super_method_init_args = inspect.getfullargspec(Explainer.__init__).args
-        method_init_specific_args = set(cls_method_init_args).difference(set(super_method_init_args))
-        return method_init_specific_args
+        return get_specific_args(cls.__init__, Explainer.__init__)
 
     @classmethod
     def get_specific_args_explain(cls):
-        cls_method_explain_args = inspect.getfullargspec(cls.explain).args
-        cls_method_explain_args = cls_method_explain_args[:-_len(
-            inspect.getfullargspec(cls.explain).defaults)]  # keep only required args
-        super_method_explain_args = inspect.getfullargspec(Explainer.explain).args
-        method_explain_specific_args = set(cls_method_explain_args).difference(set(super_method_explain_args))
-        return method_explain_specific_args
+        return get_specific_args(cls.explain, Explainer.explain)
 
     def __repr__(self) -> pd.Series:
         return self.to_pandas()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
@@ -115,19 +114,23 @@ xAI's output:\t\t {', '.join(xai_output)}
         s += f"\ndescription:\t{self.description}" if self.description is not None else ''
         return s
 
-    def explain(self, dataset_to_explain, **kwargs):  # todo [after acceptance] change this to __call__ ?
+    def explain(self,   # todo [after acceptance] think about changing this to __call__ ?
+                dataset_to_explain,  # todo [after acceptance] think about changing var name to explicand == the input to be explained see https://arxiv.org/pdf/1908.08474.pdf
+                **kwargs):  # Should we make this an abstract method ?
+        """ Here we should cite 1 or 2 sentences why the xai need such variables """
         from src.explainer import valid_explainers
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
         )
 
+    # todo [after acceptance] think about how to sort explainer instances by name or expected execution time https://stackoverflow.com/questions/4010322/sort-a-list-of-class-instances-python
 
 class InteractionExplainer:
     def __init__(
             self,
             model,
             input=None,
-            baseline=None,
+            baseline=None, # todo ake this a parameter in the unit tests a part, because it is frequently use in atchipelago and in https://arxiv.org/pdf/1908.08474.pdf [18, 2, 10].
             data_xformer=None,
             output_indices=0,
             batch_size=20,

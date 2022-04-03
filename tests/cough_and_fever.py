@@ -28,6 +28,7 @@ class CoughAndFever(Test):
         self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=2, max_depth=2, random_state=0,
                                           base_score=0, eta=1)
         self.X = self.df_train[self.input_features]
+        self.X_reference = self.X
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 

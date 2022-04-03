@@ -8,40 +8,49 @@ class Sage(Explainer):
     name = 'sage'
     supported_models = ('model_agnostic',)
     # todo SAGE is using the truth to estimate the f importance so we should have this as a selection criteria
+    importance = True
+    source_paper_tag = 'covert2020understanding'
+    source_paper_bibliography = r"""@article{covert2020understanding,
+  title={Understanding global feature contributions with additive importance measures},
+  author={Covert, Ian and Lundberg, Scott M and Lee, Su-In},
+  journal={Advances in Neural Information Processing Systems},
+  volume={33},
+  pages={17212--17223},
+  year={2020}
+}"""
+    source_code = 'https://github.com/iancovert/sage'
 
-    description = """Compute feature importance based of Shapley value but faster
-The features that are most critical for the model to make good predictions will have large values 
-\phi_i(v_f) > 0ϕ i (vf )>0, while unimportant features will have small values \phi_i(v_f) \approx 0ϕ i (vf )≈0, 
-and only features that make the model's performance worse will have negative values \phi_i(v_f) < 0ϕi (vf  )<0. 
+    description = """Compute feature importance based on Shapley value but faster.
+The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) > 0
+While unimportant features will have small values ϕ_i(v_f)≈0
+And only features that make the model's performance worse will have negative values ϕ_i(v_f)<0. 
 These are SAGE values, and that's SAGE in a nutshell.
 
 Permutation tests, proposed by Leo Breiman for assessing feature importance in random forest models, 
 calculate how much the model performance drops when each column of the dataset is permuted [6]. 
 SAGE can be viewed as modified version of a permutation test:
 
-Instead of holding out one feature at a time, SAGE holds out larger subsets of features. 
-(By only removing individual features, permutation tests may erroneously assign low importance to features 
-with good proxies.)
-SAGE draws held out features from their conditional distribution p(X^{\bar S} \; | \; X^S = x^S)   p(XS¯  ∣ XS =xS ) 
-rather than their marginal distribution p(X^{\bar S})p(XS¯  ). (Using the conditional distribution simulates a 
-feature's absence, whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
-https://iancovert.com/blog/understanding-shap-sage/"""
+Instead of holding out one feature at a time, SAGE holds out larger subsets of features. (By only removing individual 
+features, permutation tests may erroneously assign low importance to features with good proxies.)
+SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S ) 
+rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence,
+whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
+src: https://iancovert.com/blog/understanding-shap-sage/   ."""
 
-    importance = True
-
-    def __init__(self, trained_model, X, X_reference=None, **kwargs):
+    def __init__(self, predict_func, X_reference, trained_model=None, **kwargs):
         super().__init__()
         # self.input_names = input_names
         # Set up an imputer to handle missing features
-        if X_reference is None:
-            X_reference = X
         reference_max_len = min(16, len(X_reference))  # 512 was the default value but I for faster results we use 16
-        imputer = sage.MarginalImputer(trained_model, X_reference[:reference_max_len])
+        imputer = sage.MarginalImputer(
+            predict_func if predict_func is not None else trained_model,  # it can convert some models into their predict_func :)
+            X_reference[:reference_max_len]
+        )
         # Set up an estimator
         self.sage_estimator = sage.PermutationEstimator(imputer, 'mse')
         # todo [after submission] get the optimizer from the model or the
 
-    def explain(self, dataset_to_explain, truth_to_explain=None, **kwargs):
+    def explain(self, dataset_to_explain, truth_to_explain, **kwargs):
         """
 
         :param dataset_to_explain:

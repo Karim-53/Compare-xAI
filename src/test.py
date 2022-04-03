@@ -20,8 +20,8 @@ valid_tests_dico = {e.name: e for e in valid_tests}
 
 
 def get_sub_tests(test_name):
-    test_instance = valid_tests_dico[test_name]()
-    score = test_instance.score()
+    test_class = valid_tests_dico[test_name]
+    score = test_class.score()
     return score.keys()
 
 # not working yet

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Demo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+        <title>sage</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
         </head>
@@ -34,7 +37,7 @@
       <td>supported_models</td>
       <td></td>
       <td></td>
-      <td>(model_agnostic,)</td>
+      <td>model_agnostic</td>
       <td></td>
     </tr>
     <tr>
@@ -42,7 +45,7 @@
       <td>xai_s_output</td>
       <td></td>
       <td></td>
-      <td>[feature importance]</td>
+      <td>feature importance</td>
       <td></td>
     </tr>
     <tr>
@@ -50,7 +53,7 @@
       <td>.__init__() specific args</td>
       <td></td>
       <td></td>
-      <td>{X, trained_model}</td>
+      <td>predict_func <br>  X_reference</td>
       <td></td>
     </tr>
     <tr>
@@ -58,7 +61,7 @@
       <td>.explain() specific args</td>
       <td></td>
       <td></td>
-      <td>{}</td>
+      <td>truth_to_explain</td>
       <td></td>
     </tr>
     <tr>
@@ -66,7 +69,7 @@
       <td>description</td>
       <td></td>
       <td></td>
-      <td>Compute feature importance based of Shapley value but faster\nThe features that are most critical for the model to make good predictions will have large values \n\phi_i(v_f) &gt; 0ϕ i (vf )&gt;0, while unimportant features will have small values \phi_i(v_f) pprox 0ϕ i (vf )≈0, \nand only features that make the model's performance worse will have negative values \phi_i(v_f) &lt; 0ϕi (vf  )&lt;0. \nThese are SAGE values, and that's SAGE in a nutshell.\n\nPermutation tests, proposed by Leo Breiman for assessing feature importance in random forest models, \ncalculate how much the model performance drops when each column of the dataset is permuted [6]. \nSAGE can be viewed as modified version of a permutation test:\n\nInstead of holding out one feature at a time, SAGE holds out larger subsets of features. \n(By only removing individual features, permutation tests may erroneously assign low importance to features \nwith good proxies.)\nSAGE draws held out features from their conditional distribution p(X^{ar S} \; | \; X^S = x^S)   p(XS¯  ∣ XS =xS ) \nrather than their marginal distribution p(X^{ar S})p(XS¯  ). (Using the conditional distribution simulates a \nfeature's absence, whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)\nhttps://iancovert.com/blog/understanding-shap-sage/</td>
+      <td>Compute feature importance based on Shapley value but faster. <br> The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) &gt; 0 <br> While unimportant features will have small values ϕ_i(v_f)≈0 <br> And only features that make the model's performance worse will have negative values ϕ_i(v_f)&lt;0.  <br> These are SAGE values, and that's SAGE in a nutshell. <br>  <br> Permutation tests, proposed by Leo Breiman for assessing feature importance in random forest models,  <br> calculate how much the model performance drops when each column of the dataset is permuted [6].  <br> SAGE can be viewed as modified version of a permutation test: <br>  <br> Instead of holding out one feature at a time, SAGE holds out larger subsets of features. (By only removing individual  <br> features, permutation tests may erroneously assign low importance to features with good proxies.) <br> SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S )  <br> rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence, <br> whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.) <br> src: <a class="comurl" href="https://iancovert.com/blog/understanding-shap-sage/" target="_blank" rel="nofollow">iancovert.com/blog/understanding-shap-sage/<img class="imglink" src="./images/linkout.png"></a>   .</td>
       <td></td>
     </tr>
     <tr>
@@ -74,7 +77,7 @@
       <td>source_paper</td>
       <td></td>
       <td></td>
-      <td></td>
+      <td>@article{covert2020understanding, <br>   title={Understanding global feature contributions with additive importance measures}, <br>   author={Covert, Ian and Lundberg, Scott M and Lee, Su-In}, <br>   journal={Advances in Neural Information Processing Systems}, <br>   volume={33}, <br>   pages={17212--17223}, <br>   year={2020} <br> }</td>
       <td></td>
     </tr>
     <tr>
@@ -82,7 +85,7 @@
       <td>source_code</td>
       <td></td>
       <td></td>
-      <td></td>
+      <td><a class="comurl" href="https://github.com/iancovert/sage</td>" target="_blank" rel="nofollow">github.com/iancovert/sage</td><img class="imglink" src="./images/linkout.png"></a>
       <td></td>
     </tr>
     <tr>
@@ -428,4 +431,9 @@
         <script defer type="text/javascript">
             let myTable = new simpleDatatables.DataTable("#myTable");
         </script>
+        <style type="text/css">
+        .imglink {
+          width: 16px;
+        }
+        </style>
     </html>
