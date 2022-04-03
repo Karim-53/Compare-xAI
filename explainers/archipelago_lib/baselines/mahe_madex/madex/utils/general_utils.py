@@ -5,7 +5,6 @@
 import numpy as np
 import sklearn
 
-from lime import lime_base
 
 
 # class MLP(nn.Module):
@@ -122,6 +121,7 @@ def get_sample_distances(Xs):
 def get_lime_attributions(
         Xs, Ys, max_features=10000, kernel_width=0.25, weight_samples=True, sort=True
 ):
+    from lime import lime_base
     def kernel(d):
         return np.sqrt(np.exp(-(d ** 2) / kernel_width ** 2))
 
