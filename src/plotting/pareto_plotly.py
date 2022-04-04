@@ -1,3 +1,7 @@
+import webbrowser
+from pprint import pprint
+
+import pandas as pd
 from paretoset import paretoset
 from plotly import express as px, graph_objects as go
 
@@ -6,6 +10,7 @@ from src.scoring import get_details, restrict_tests
 
 
 # todo [after acceptance] peu etre nzid: dot size eligible points
+explainer_root_link = 'file:///C:/Inn/Github/Compare-xAI/docs/explainers/'
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
 
 
@@ -15,7 +20,6 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
     if summary_df.percentage.max() < 1.:
         summary_df.percentage = summary_df.percentage * 100
     summary_df['explainer_name'] = summary_df.index
-
     # see https://plotly.com/python/px-arguments/ for more options
     fig = px.scatter(summary_df,
                      x='time_per_test',
@@ -49,6 +53,7 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
 
     if show:
         fig.show();
+        fig.show()
     return fig
 
 
@@ -61,6 +66,7 @@ def get_stats(eligible_points_df):
 from dash import Dash, html, dcc
 
 app = Dash(__name__, prevent_initial_callbacks=True)
+# server = app.server
 
 result_df = load_results()
 summary_df, eligible_points_df, score_df = get_details(result_df, verbose=True)
@@ -116,6 +122,7 @@ app.layout = html.Div(children=[
     dcc.Checklist(id='todo',
                   options=todo_lista,
                   value=todo_lista,
+                  inline=False,
                   ),
     html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
@@ -127,6 +134,29 @@ app.layout = html.Div(children=[
 ])
 from dash import Input, Output
 
+last_click_data = ''
+def on_click(clickData):
+    """ return Bool if the event is correct """
+    if pd.isna(clickData):
+        return False
+    global last_click_data
+    if last_click_data == str(clickData):
+        return False
+    last_click_data = str(clickData)
+    pprint(clickData)
+    txt = clickData.get('points', [{}])[0].get('text', '')
+    if txt == '':
+        return False
+    sub_str = '<br>Explainer = '
+    pos = txt.find(sub_str)
+    explainer_name = txt
+    if pos != -1:
+        explainer_name = txt[pos + len(sub_str):]
+    print('explainer_name', explainer_name)
+    url = explainer_root_link + explainer_name + '.htm'
+    webbrowser.open_new_tab(url)
+    return True
+
 
 @app.callback(
     Output(component_id='supported_models_dropdown', component_property='style'),
@@ -134,23 +164,26 @@ from dash import Input, Output
     Output(component_id='pareto_plot', component_property='figure'),
     Output(component_id='kept_objects', component_property='children'),
 
+    Input('pareto_plot', 'clickData'),
     Input(component_id='supported_models_checklist', component_property='value'),
     Input(component_id='supported_models_dropdown', component_property='value'),
     Input(component_id='required_outputs_checklist', component_property='value'),
     Input(component_id='required_outputs_dropdown', component_property='value'),
 )
 def update_output_div(
+        clickData,
         supported_models_checklist,
         supported_models_dropdown,
         required_outputs_checklist,
         required_outputs_dropdown,
 ):
-    print(
-        supported_models_checklist,
-        supported_models_dropdown,
-        required_outputs_checklist,
-        required_outputs_dropdown,
-    )
+    # print(
+    #     supported_models_checklist,
+    #     supported_models_dropdown,
+    #     required_outputs_checklist,
+    #     required_outputs_dropdown,
+    # )
+    on_click(clickData)
 
     supported_model = None
     required_outputs = None
@@ -176,10 +209,9 @@ def update_output_div(
     result_df_restricted = restrict_tests(result_df,
                                           criteria=required_outputs,
                                           supported_model=supported_model)
-    print(result_df_restricted.index)
-    summary_df_restricted_tree, eligible_points_df_restricted, _ = get_details(result_df_restricted, verbose=True)
+    # print(result_df_restricted.index)
+    summary_df_restricted_tree, eligible_points_df_restricted, _ = get_details(result_df_restricted, verbose=False)
     p_txt = get_text_stats(eligible_points_df_restricted)
-    # print(p_txt)
     fig = pareto(summary_df_restricted_tree, show=False)
     output = (
         {'display': 'none'} if supported_models_dropdown_disabled else {'display': 'block'},
