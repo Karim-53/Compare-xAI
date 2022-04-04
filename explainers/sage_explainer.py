@@ -35,7 +35,7 @@ features, permutation tests may erroneously assign low importance to features wi
 SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S ) 
 rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence,
 whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
-src: https://iancovert.com/blog/understanding-shap-sage/   ."""
+src: https://iancovert.com/blog/understanding-shap-sage/  """
 
     def __init__(self, predict_func, X_reference, trained_model=None, **kwargs):
         super().__init__()
@@ -86,6 +86,9 @@ src: https://iancovert.com/blog/understanding-shap-sage/   ."""
 
 
 if __name__ == "__main__":
+    df = Sage.to_pandas()
+    print(df)
+
     """ Example from https://github.com/iancovert/sage/blob/master/notebooks/bike.ipynb """
     import numpy as np
     from sklearn.model_selection import train_test_split

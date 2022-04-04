@@ -80,8 +80,8 @@ class Mnist(Test):
             'attributions_dummy': None
         }
         # todo assert attribution importance size
-        # _dummy_features = self.X.max(axis=0) == 0.
         print("score mnist")
+        # _dummy_features = self.X.max(axis=0) == 0.
         X, _, _, _, _ = load_mnist()
         _dummy_features = X.max(axis=0) == 0.
         return {
