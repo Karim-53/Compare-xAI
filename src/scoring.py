@@ -33,9 +33,7 @@ def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_poi
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
     summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
     summary_df['eligible_tests'] = eligible_points_df.applymap(lambda x: 0 if x==0 else 1).sum(axis='columns')
-    summary_df['time_per_test'] = result_df.apply(
-        lambda series: statistics.median([dico.get('time', None) for test_name, dico in series.items() if not pd.isna(dico.get('time', None))]),
-        axis='columns')
+    summary_df['time_per_test'] = summary_df.time / summary_df.eligible_tests.replace(0,1)
     return summary_df
 
 
