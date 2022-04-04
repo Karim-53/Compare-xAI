@@ -6,6 +6,9 @@ from src.scoring import get_details, restrict_tests
 
 
 # todo [after acceptance] peu etre nzid: dot size eligible points
+# todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
+
+
 def pareto(summary_df, title="Global performance of xAI methods", min_time_value=.01, show=True):
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time_per_test < min_time_value, 'time'] = min_time_value
