@@ -11,7 +11,7 @@ from src.scoring import get_details, restrict_tests
 
 def pareto(summary_df, title="Global performance of xAI methods", min_time_value=.01, show=True):
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
-    summary_df.loc[summary_df.time_per_test < min_time_value, 'time'] = min_time_value
+    summary_df.loc[summary_df.time_per_test < min_time_value, 'time_per_test'] = min_time_value
     if summary_df.percentage.max() < 1.:
         summary_df.percentage = summary_df.percentage * 100
     summary_df['explainer_name'] = summary_df.index
