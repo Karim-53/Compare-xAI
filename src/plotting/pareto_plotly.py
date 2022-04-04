@@ -73,10 +73,13 @@ text_stats = get_text_stats(eligible_points_df)
 fig = pareto(summary_df, show=False)
 
 todo_lista = ['I trust the XAI output (I created the data and the model myself)',
-              'I know the target value of the data points to explain',
-              'I can retrain my model',
-              'I can perform additional predictions',
+              # requirements from the xai alg: requirements on the data
               'I have a reference input data',
+              'I know the target value of the data points to explain',  # both global and local explanation
+              'Assume feature distribution iid',
+              # requirement from the xai alg: 
+              'The XAI can retrain my model',
+              'The XAI can perform additional predictions',
               'I have a GPU ', ]
 
 # todo [after acceptance] on hover help / tips
@@ -91,7 +94,7 @@ app.layout = html.Div(children=[
     dcc.Dropdown(id='supported_models_dropdown',
                  options=['model_agnostic', 'tree_based', 'neural_network'],
                  value=['model_agnostic'],
-                 disabled=True, clearable=True, searchable=True,
+                 style={'display': 'none'}, clearable=True, searchable=True,
                  # multi=True,  # todo
                  ),
 
@@ -101,11 +104,11 @@ app.layout = html.Div(children=[
     dcc.Dropdown(id='required_outputs_dropdown',
                  options={
                      'importance': 'Feature importance (Global Explanation)',
-                     'attribution': 'Feature attribution (Local Explanation)',
+                     'attribution': 'Feature attribution (Local Explanation)', # We discuss the attribution problem, i.e., the problem of distributing the prediction score of a model for a specific input to its base features (cf. [15, 10, 19]); the attribution to a base feature can be interpreted as the importance of the feature to the prediction. https://arxiv.org/pdf/1908.08474.pdf
                      'interaction': 'Pair feature interaction (Global Explanation)',
                      'todo1': 'Todo: Pair interaction (Local Ex), multi F interaction, debugging ...',
                  },
-                 disabled=True, multi=True, clearable=True, searchable=True),
+                 style={'display': 'none'}, multi=True, clearable=True, searchable=True),
 
     dcc.Checklist(id='todo',
                   options=todo_lista,
@@ -123,8 +126,8 @@ from dash import Input, Output
 
 
 @app.callback(
-    Output(component_id='supported_models_dropdown', component_property='disabled'),
-    Output(component_id='required_outputs_dropdown', component_property='disabled'),
+    Output(component_id='supported_models_dropdown', component_property='style'),
+    Output(component_id='required_outputs_dropdown', component_property='style'),
     Output(component_id='pareto_plot', component_property='figure'),
     Output(component_id='kept_objects', component_property='children'),
 
@@ -175,7 +178,13 @@ def update_output_div(
     p_txt = get_text_stats(eligible_points_df_restricted)
     # print(p_txt)
     fig = pareto(summary_df_restricted_tree, show=False)
-    return supported_models_dropdown_disabled, required_outputs_dropdown_disabled, fig, p_txt
+    output = (
+        {'display': 'none'} if supported_models_dropdown_disabled else {'display': 'block'},
+        {'display': 'none'} if required_outputs_dropdown_disabled else {'display': 'block'},
+        fig,
+        p_txt
+    )
+    return output
 
 
 if __name__ == '__main__':
