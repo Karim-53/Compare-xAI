@@ -274,10 +274,6 @@ class EmbeddingExplainerTF(PathExplainerTF):
                 batch_gradients = tf.reduce_sum(
                     batch_gradients, axis=self.embedding_axis
                 )
-                ################################
-
-        #                 print("BG", batch_gradients[:,interaction_index])
-        #         assert(False)
 
         if interaction_index is not None:
             batch_hessian = second_order_tape.gradient(

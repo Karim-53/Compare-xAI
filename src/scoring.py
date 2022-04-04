@@ -1,5 +1,3 @@
-import statistics
-
 import pandas as pd
 
 
@@ -86,7 +84,7 @@ def restrict_tests(
         xai_supporting_selected_models = [xai for xai in result_df.index if
                                           supported_model in supported_models_developed(
                                               valid_explainers_dico[xai].supported_models)]
-        print('xai_supporting_selected_models', xai_supporting_selected_models)
+        # print('xai_supporting_selected_models', xai_supporting_selected_models)
     else:
         xai_supporting_selected_models = list(result_df.index)
 

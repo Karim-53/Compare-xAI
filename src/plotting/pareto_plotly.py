@@ -8,7 +8,6 @@ from plotly import express as px, graph_objects as go
 from src.io import load_results
 from src.scoring import get_details, restrict_tests
 
-
 # todo [after acceptance] peu etre nzid: dot size eligible points
 explainer_root_link = 'file:///C:/Inn/Github/Compare-xAI/docs/explainers/'
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
@@ -52,7 +51,6 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
     fig.update_traces(textposition='top center')
 
     if show:
-        fig.show();
         fig.show()
     return fig
 
