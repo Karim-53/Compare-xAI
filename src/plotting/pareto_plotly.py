@@ -8,8 +8,10 @@ from plotly import express as px, graph_objects as go
 from src.io import load_results
 from src.scoring import get_details, restrict_tests
 
-# todo [after acceptance] peu etre nzid: dot size eligible points
-explainer_root_link = 'file:///C:/Inn/Github/Compare-xAI/docs/explainers/'
+# todo [after acceptance] dot size legend
+from src.utils import root
+
+explainer_root_link = root + '/docs/explainers/'
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
 
 
@@ -25,6 +27,7 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
                      y='percentage',  # here I should not show score because 2 xai can have same score 3/3 and 3/10 and it is misleading
                      # s='explainer_name', # https://www.geeksforgeeks.org/how-to-annotate-matplotlib-scatter-plots/
                      # c='eligible_points',
+                     size='eligible_points',
                      text='explainer_name',
                      log_x=True,
                      labels={
