@@ -20,7 +20,7 @@ class _X0PlusX1(Test):
         self.dataset_size = len(X)
         self.df_train = pd.DataFrame(X, columns=self.input_features)
         self.df_train['target'] = self.df_train.x0 + self.df_train.x1
-        self.X =            self.df_train[self.input_features]
+        self.X = self.df_train[self.input_features]
         self.df_reference = self.df_train[self.input_features]
         self.X_reference = self.X
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees

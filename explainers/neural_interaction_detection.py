@@ -1,5 +1,3 @@
-import numpy as np
-
 from explainers.explainer_superclass import Explainer
 from explainers.interaction_utils import *
 
@@ -278,6 +276,7 @@ dependencies on one another. Later work Tsang et al. (2020a) uses NID to train a
 additional ‘cross-features’ from the detected interactions to actually boost the deep networks performance. Given the popularity of deep learning, the prospect of improving deep networks’ performance
 through understanding feature interactions warrants further investigation into this re-emerging topic
 of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf """
+
     def __init__(self, nb_features, **kwargs):
         super().__init__()
         self.nb_features = nb_features

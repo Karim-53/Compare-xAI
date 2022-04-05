@@ -30,8 +30,8 @@ def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_poi
     summary_df['score'] = score_df.sum(axis='columns')
     summary_df['eligible_points'] = eligible_points_df.sum(axis='columns')
     summary_df['percentage'] = summary_df['score'] / summary_df['eligible_points']
-    summary_df['eligible_tests'] = eligible_points_df.applymap(lambda x: 0 if x==0 else 1).sum(axis='columns')
-    summary_df['time_per_test'] = summary_df.time / summary_df.eligible_tests.replace(0,1)
+    summary_df['eligible_tests'] = eligible_points_df.applymap(lambda x: 0 if x == 0 else 1).sum(axis='columns')
+    summary_df['time_per_test'] = summary_df.time / summary_df.eligible_tests.replace(0, 1)
     return summary_df
 
 
