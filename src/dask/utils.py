@@ -1,4 +1,3 @@
-import os
 from ast import literal_eval
 
 import pandas as pd
@@ -10,16 +9,19 @@ try:
 except:
     RESULTS_FILE_PATH = root + 'results.csv'
     deployed = True
+print('deployed', deployed)
+
 
 def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:
-    if not os.path.exists(results_file_path):
+    try:
+        df = pd.read_csv(
+            results_file_path,
+            index_col=0,
+            skipinitialspace=True,
+        )
+    except FileNotFoundError as e:
         return None  # return pd.DataFrame(index=[e.name for e in valid_explainers], columns=[t.name for t in valid_tests])
 
-    df = pd.read_csv(
-        results_file_path,
-        index_col=0,
-        skipinitialspace=True,
-    )
     try:
         df = df.applymap(literal_eval)
     except:

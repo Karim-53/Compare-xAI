@@ -1,5 +1,8 @@
 import webbrowser
-from pprint import pprint
+try:
+    from pprint import pprint
+except:
+    pprint = pprint
 
 import pandas as pd
 from paretoset import paretoset
@@ -70,7 +73,7 @@ def get_stats(eligible_points_df):
 from dash import Dash, html, dcc
 
 app = Dash(__name__, prevent_initial_callbacks=True)
-# server = app.server
+server = app.server
 
 result_df = load_results()
 summary_df, eligible_points_df, score_df = get_details(result_df, verbose=True)
