@@ -76,9 +76,9 @@ class Mnist(Test):
     def score(attribution=None, importance=None, **kwargs):
         if attribution is None and importance is None:
             return {
-            'importance_dummy': None,
-            'attributions_dummy': None
-        }
+                'importance_dummy': None,
+                'attributions_dummy': None
+            }
         # todo assert attribution importance size
         print("score mnist")
         # _dummy_features = self.X.max(axis=0) == 0.

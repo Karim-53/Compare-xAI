@@ -43,7 +43,8 @@ src: https://iancovert.com/blog/understanding-shap-sage/  """
         # Set up an imputer to handle missing features
         reference_max_len = min(16, len(X_reference))  # 512 was the default value but I for faster results we use 16
         imputer = sage.MarginalImputer(
-            predict_func if predict_func is not None else trained_model,  # it can convert some models into their predict_func :)
+            predict_func if predict_func is not None else trained_model,
+            # it can convert some models into their predict_func :)
             X_reference[:reference_max_len]
         )
         # Set up an estimator

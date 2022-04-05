@@ -7,11 +7,12 @@ from plotly import express as px, graph_objects as go
 
 from src.io import load_results
 from src.scoring import get_details, restrict_tests
-
 # todo [after acceptance] dot size legend
 from src.utils import root
 
 explainer_root_link = root + '/docs/explainers/'
+
+
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
 
 
@@ -24,7 +25,8 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
     # see https://plotly.com/python/px-arguments/ for more options
     fig = px.scatter(summary_df,
                      x='time_per_test',
-                     y='percentage',  # here I should not show score because 2 xai can have same score 3/3 and 3/10 and it is misleading
+                     y='percentage',
+                     # here I should not show score because 2 xai can have same score 3/3 and 3/10 and it is misleading
                      # s='explainer_name', # https://www.geeksforgeeks.org/how-to-annotate-matplotlib-scatter-plots/
                      # c='eligible_points',
                      size='eligible_points',
@@ -114,7 +116,8 @@ app.layout = html.Div(children=[
     dcc.Dropdown(id='required_outputs_dropdown',
                  options={
                      'importance': 'Feature importance (Global Explanation)',
-                     'attribution': 'Feature attribution (Local Explanation)', # We discuss the attribution problem, i.e., the problem of distributing the prediction score of a model for a specific input to its base features (cf. [15, 10, 19]); the attribution to a base feature can be interpreted as the importance of the feature to the prediction. https://arxiv.org/pdf/1908.08474.pdf
+                     'attribution': 'Feature attribution (Local Explanation)',
+                     # We discuss the attribution problem, i.e., the problem of distributing the prediction score of a model for a specific input to its base features (cf. [15, 10, 19]); the attribution to a base feature can be interpreted as the importance of the feature to the prediction. https://arxiv.org/pdf/1908.08474.pdf
                      'interaction': 'Pair feature interaction (Global Explanation)',
                      # Definition 1 (Statistical Non-Additive Interaction). A function f contains a statistical non-additive interaction of multiple features indexed in set I if and only if f cannot be decomposed into a sum of |I| subfunctions fi , each excluding the i-th interaction variable: f(x) =/= Sum i∈I fi(x\{i}).
                      #  Def. 1 identifies a non-additive effect among all features I on the output of function f (Friedman and Popescu, 2008; Sorokina et al., 2008; Tsang et al., 2018a). see https://arxiv.org/pdf/2103.03103.pdf
@@ -139,6 +142,8 @@ app.layout = html.Div(children=[
 from dash import Input, Output
 
 last_click_data = ''
+
+
 def on_click(clickData):
     """ return Bool if the event is correct """
     if pd.isna(clickData):

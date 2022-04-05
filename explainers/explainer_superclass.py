@@ -114,8 +114,9 @@ xAI's output:\t\t {', '.join(xai_output)}
         s += f"\ndescription:\t{self.description}" if self.description is not None else ''
         return s
 
-    def explain(self,   # todo [after acceptance] think about changing this to __call__ ?
-                dataset_to_explain,  # todo [after acceptance] think about changing var name to explicand == the input to be explained see https://arxiv.org/pdf/1908.08474.pdf
+    def explain(self,  # todo [after acceptance] think about changing this to __call__ ?
+                dataset_to_explain,
+                # todo [after acceptance] think about changing var name to explicand == the input to be explained see https://arxiv.org/pdf/1908.08474.pdf
                 **kwargs):  # Should we make this an abstract method ?
         """ Here we should cite 1 or 2 sentences why the xai need such variables """
         from src.explainer import valid_explainers
@@ -125,12 +126,14 @@ xAI's output:\t\t {', '.join(xai_output)}
 
     # todo [after acceptance] think about how to sort explainer instances by name or expected execution time https://stackoverflow.com/questions/4010322/sort-a-list-of-class-instances-python
 
+
 class InteractionExplainer:
     def __init__(
             self,
             model,
             input=None,
-            baseline=None, # todo ake this a parameter in the unit tests a part, because it is frequently use in atchipelago and in https://arxiv.org/pdf/1908.08474.pdf [18, 2, 10].
+            baseline=None,
+            # todo ake this a parameter in the unit tests a part, because it is frequently use in atchipelago and in https://arxiv.org/pdf/1908.08474.pdf [18, 2, 10].
             data_xformer=None,
             output_indices=0,
             batch_size=20,

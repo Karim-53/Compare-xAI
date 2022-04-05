@@ -22,6 +22,7 @@ import re
 
 _urlfinderregex = re.compile(r'http([^<\.\s]+\.[^<\.\s]*)+[^<\.\s]{2,}')  # todo fix tr at the end of the link
 
+
 def linkify(text, maxlinklength=256):
     def replacewithlink(matchobj):
         url = matchobj.group(0)
@@ -81,12 +82,12 @@ def explainer_to_html(explainer_df_with_results):
         }
         </style>
     </html>"""
-    )
+                               )
 
     table_html = df.to_html(table_id="myTable")
     table_html = linkify(table_html)
     output_html = template.render(dataframe=table_html)
-    output_html = output_html.replace(r'\n',' <br> ')
+    output_html = output_html.replace(r'\n', ' <br> ')
     # Write generated HTML to file.
     file = EXPLAINERS_HTML_PATH + df.loc[0, 'value'] + ".htm"
     print(file)
