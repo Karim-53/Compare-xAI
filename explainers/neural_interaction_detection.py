@@ -270,7 +270,14 @@ class NeuralInteractionDetection(Explainer):
     supported_models = ('neural_network',)
 
     # is_affected_by_seed = True
-
+    description = """The modern work of Neural Interaction Detection (NID) Tsang et al. (2018a) circumvented this
+problem by using the powerful inductions of feedforward neural networks. This work takes advantage of the specific structure of neural networks to avoid needing to specifying large numbers of
+interactions while still not focusing on individual testing. The method traces high-strength weights
+from features to common hidden units as a way to automatically detect which features have high
+dependencies on one another. Later work Tsang et al. (2020a) uses NID to train a new network with
+additional ‘cross-features’ from the detected interactions to actually boost the deep networks performance. Given the popularity of deep learning, the prospect of improving deep networks’ performance
+through understanding feature interactions warrants further investigation into this re-emerging topic
+of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf """
     def __init__(self, nb_features, **kwargs):
         super().__init__()
         self.nb_features = nb_features

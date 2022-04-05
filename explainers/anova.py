@@ -13,6 +13,13 @@ class Anova(Explainer):
     supported_models = ('model_agnostic',)
 
     # is_affected_by_seed = True
+    description = """Fisher (1921) also developed one of the foundations of statistical analysis called Analysis of Variance (ANOVA) including two-way ANOVA (Fisher, 1925),
+     Multi-way ANOVA exists to detect interactions of higher-orders combinations, not just between pairs of features.
+     A significant problem with individual testing methods is that they require an exponentially growing number of 
+     tests as the desired interaction order increases. Not only is this approach intractable, but also has a high 
+     chance of generating false positives or a high false discovery rate (Benjamini and Hochberg, 1995) that arises 
+     from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf     
+     """  # todo did we implement 2 way anova or the other one ? XD
 
     def __init__(self, nb_features, **kwargs):
         super().__init__()

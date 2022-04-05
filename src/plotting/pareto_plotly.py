@@ -116,7 +116,10 @@ app.layout = html.Div(children=[
                      'importance': 'Feature importance (Global Explanation)',
                      'attribution': 'Feature attribution (Local Explanation)', # We discuss the attribution problem, i.e., the problem of distributing the prediction score of a model for a specific input to its base features (cf. [15, 10, 19]); the attribution to a base feature can be interpreted as the importance of the feature to the prediction. https://arxiv.org/pdf/1908.08474.pdf
                      'interaction': 'Pair feature interaction (Global Explanation)',
-                     'todo1': 'Todo: Pair interaction (Local Ex), multi F interaction, debugging ...',
+                     # Definition 1 (Statistical Non-Additive Interaction). A function f contains a statistical non-additive interaction of multiple features indexed in set I if and only if f cannot be decomposed into a sum of |I| subfunctions fi , each excluding the i-th interaction variable: f(x) =/= Sum i∈I fi(x\{i}).
+                     #  Def. 1 identifies a non-additive effect among all features I on the output of function f (Friedman and Popescu, 2008; Sorokina et al., 2008; Tsang et al., 2018a). see https://arxiv.org/pdf/2103.03103.pdf
+                     # todo [after acceptance] we need a page with a clear description of each option
+                     'todo1': 'Todo: Pair interaction (Local Ex), multi F interaction, NLP, debugging ...',
                  },
                  style={'display': 'none'}, multi=True, clearable=True, searchable=True),
 
