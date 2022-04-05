@@ -2,5 +2,4 @@ numpy
 paretoset
 matplotlib
 pandas
-webbrowser
 plotly
