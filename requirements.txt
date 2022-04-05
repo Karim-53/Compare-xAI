@@ -2,5 +2,6 @@ numpy
 paretoset
 matplotlib
 pandas
-xgboost
-scikit_learn
+webbrowser
+plotly
+gunicorn==20.0.4
