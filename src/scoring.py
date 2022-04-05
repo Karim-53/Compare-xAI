@@ -131,24 +131,3 @@ if __name__ == "__main__":
     result_df = load_results()
     summary_df, eligible_points_df, score_df = get_details(result_df)
 
-    print('Best XAI for feature importance')
-    result_df_restricted = restrict_tests(result_df,
-                                          criteria={'importance': True,
-                                                    'attribution': False,
-                                                    'interaction': False, },
-                                          supported_model=None)
-    summary_df_restricted, eligible_points_df_restricted, score_df_restricted = get_details(result_df_restricted)
-
-    print('Best XAI for explaining feature importance of tree models')
-    result_df_restricted = restrict_tests(result_df,
-                                          criteria={'importance': True,
-                                                    'attribution': False,
-                                                    'interaction': False, },
-                                          supported_model='tree_based')
-    summary_df_restricted, eligible_points_df_restricted, score_df_restricted = get_details(result_df_restricted)
-
-    print('Best model-agnostic XAI')
-    result_df_restricted = restrict_tests(result_df,
-                                          criteria={},
-                                          supported_model='model_agnostic')
-    summary_df_restricted, eligible_points_df_restricted, score_df_restricted = get_details(result_df_restricted)
