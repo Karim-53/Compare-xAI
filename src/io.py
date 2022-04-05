@@ -1,40 +1,7 @@
-import os
-from ast import literal_eval
-
 import pandas as pd
 
+from src.dask.utils import load_results, RESULTS_FILE_PATH, RESULTS_TMP_FILE_PATH
 from src.test import get_sub_tests
-from src.utils import root
-
-RESULTS_FILE_PATH = root + '/results/results.csv'
-RESULTS_TMP_FILE_PATH = root + '/results/results_tmp.csv'
-
-
-def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:
-    if not os.path.exists(results_file_path):
-        return None  # return pd.DataFrame(index=[e.name for e in valid_explainers], columns=[t.name for t in valid_tests])
-
-    df = pd.read_csv(
-        results_file_path,
-        index_col=0,
-        skipinitialspace=True,
-    )
-    try:
-        df = df.applymap(literal_eval)
-    except:
-        for idx in df.index:
-            for col in df.columns:
-                try:
-                    e = None
-                    e = df.loc[idx, col]
-                    literal_eval(e)
-                except:
-                    print(f'Failed to eval df[{idx}, {col}] = ', e, 'of type', type(e))
-        raise ValueError('Unable to load results_df')
-
-    df.columns = [c.replace(' ', '') for c in df.columns]
-    df.index = [i.replace(' ', '') for i in df.index]
-    return df
 
 
 def save_results(result_df: pd.DataFrame):
@@ -88,7 +55,7 @@ def detail(result_df):  # todo move to scoring
 
 
 if __name__ == "__main__":
-    from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
+    from src.dask.scoring import get_score_df, get_eligible_points_df, get_summary_df
 
     result_df = load_results()
     print(result_df)

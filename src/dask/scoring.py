@@ -35,16 +35,6 @@ def get_summary_df(result_df: pd.DataFrame, score_df: pd.DataFrame, eligible_poi
     return summary_df
 
 
-def get_details(result_df, verbose=True):
-    score_df = get_score_df(result_df)
-    eligible_points_df = get_eligible_points_df(result_df)
-    summary_df = get_summary_df(result_df, score_df, eligible_points_df)
-    summary_df = summary_df.sort_values('time')
-    if verbose:
-        print(summary_df.round(2))
-    return summary_df, eligible_points_df, score_df
-
-
 def keep_sub_test(k: str, criteria):
     if len(criteria) == 0:
         return True  # no criteria
@@ -59,6 +49,23 @@ def keep_sub_test(k: str, criteria):
             if w in criteria and k.startswith(w):
                 return True
         return False
+
+
+def get_details(result_df, verbose=True):
+    score_df = get_score_df(result_df)
+    eligible_points_df = get_eligible_points_df(result_df)
+    summary_df = get_summary_df(result_df, score_df, eligible_points_df)
+    summary_df = summary_df.sort_values('time')
+    if verbose:
+        print(summary_df.round(2))
+    return summary_df, eligible_points_df, score_df
+
+
+if __name__ == "__main__":
+    from src.dask.utils import load_results
+
+    result_df = load_results()
+    summary_df, eligible_points_df, score_df = get_details(result_df)
 
 
 def restrict_tests(
@@ -123,11 +130,3 @@ def restrict_tests(
     # pd.DataFrame(columns=result_df.columns, index=result_df.index)
 
     return result_df_restricted
-
-
-if __name__ == "__main__":
-    from src.io import load_results
-
-    result_df = load_results()
-    summary_df, eligible_points_df, score_df = get_details(result_df)
-

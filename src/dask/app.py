@@ -5,11 +5,12 @@ import pandas as pd
 from paretoset import paretoset
 from plotly import express as px, graph_objects as go
 
-from src.io import load_results
-from src.scoring import get_details, restrict_tests
-# todo [after acceptance] dot size legend
-from src.utils import root
+from utils import load_results
+from scoring import get_details, restrict_tests
 
+# todo [after acceptance] dot size legend
+# from src.utils import root  # local website
+root = 'https://karim-53.github.io/Compare-xAI/'
 explainer_root_link = root + '/docs/explainers/'
 
 

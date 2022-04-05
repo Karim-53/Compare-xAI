@@ -5,7 +5,7 @@ import time
 
 from src.explainer import valid_explainers
 from src.io import *
-from src.scoring import get_details
+from src.dask.scoring import get_details
 from src.test import valid_tests
 
 logging.basicConfig(

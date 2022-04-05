@@ -4,7 +4,8 @@ import jinja2
 import pandas as pd
 
 from src.explainer import valid_explainers
-from src.io import load_results, detail
+from src.io import detail
+from src.dask.utils import load_results
 from src.utils import root
 
 # todo(s) from Tim <3
