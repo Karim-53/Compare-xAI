@@ -67,9 +67,44 @@ def explainer_to_html(explainer_df_with_results):
         <title>""" + df.loc[0, 'value'] + """</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+        
+        <style>
+            body {
+              margin: 0;
+              font-family: Arial, Helvetica, sans-serif;
+            }
+            
+            .topnav {
+              overflow: hidden;
+              background-color: #333;
+            }
+            
+            .topnav a {
+              float: left;
+              color: #f2f2f2;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+            
+            .topnav a:hover {
+              background-color: #ddd;
+              color: black;
+            }
+            
+            .topnav a.active {
+              background-color: #04AA6D;
+              color: white;
+            }
+            </style>
+
         </head>
 
         <body>
+            <div style="display: flex; width: 100%; height: 50px; flex-direction: column; background-color: gray; overflow: hidden;">
+                <iframe src="../header.html"  style="flex-grow: 1; border: none; margin: 0; padding: 0;" ></iframe>
+            </div>
             {{ dataframe }}
         </body>
 
@@ -121,4 +156,9 @@ if __name__ == "__main__":
         # todo also add columns results from original paper , and in remarks we can write why they are not the same
 
         explainer_to_html(explainer_df_with_results)
+
+    for explainer_class in valid_explainers:
+        # 'https://karim-53.github.io/Compare-xAI/explainers/'
+        url = explainer_class.name + '.htm'
+        print(f'<a href="{url}">{explainer_class.name}</a><br>')
     print('End')

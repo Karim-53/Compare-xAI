@@ -9,9 +9,44 @@
         <title>sage</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+        
+        <style>
+            body {
+              margin: 0;
+              font-family: Arial, Helvetica, sans-serif;
+            }
+            
+            .topnav {
+              overflow: hidden;
+              background-color: #333;
+            }
+            
+            .topnav a {
+              float: left;
+              color: #f2f2f2;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+            
+            .topnav a:hover {
+              background-color: #ddd;
+              color: black;
+            }
+            
+            .topnav a.active {
+              background-color: #04AA6D;
+              color: white;
+            }
+            </style>
+
         </head>
 
         <body>
+            <div style="display: flex; width: 100%; height: 50px; flex-direction: column; background-color: gray; overflow: hidden;">
+                <iframe src="../header.html"  style="flex-grow: 1; border: none; margin: 0; padding: 0;" ></iframe>
+            </div>
             <table border="1" class="dataframe" id="myTable">
   <thead>
     <tr style="text-align: right;">
@@ -69,7 +104,7 @@
       <td>description</td>
       <td></td>
       <td></td>
-      <td>Compute feature importance based on Shapley value but faster. <br> The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) &gt; 0 <br> While unimportant features will have small values ϕ_i(v_f)≈0 <br> And only features that make the model's performance worse will have negative values ϕ_i(v_f)&lt;0.  <br> These are SAGE values, and that's SAGE in a nutshell. <br>  <br> Permutation tests, proposed by Leo Breiman for assessing feature importance in random forest models,  <br> calculate how much the model performance drops when each column of the dataset is permuted [6].  <br> SAGE can be viewed as modified version of a permutation test: <br>  <br> Instead of holding out one feature at a time, SAGE holds out larger subsets of features. (By only removing individual  <br> features, permutation tests may erroneously assign low importance to features with good proxies.) <br> SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S )  <br> rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence, <br> whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.) <br> src: <a class="comurl" href="https://iancovert.com/blog/understanding-shap-sage/" target="_blank" rel="nofollow">iancovert.com/blog/understanding-shap-sage/<img class="imglink" src="./images/linkout.png"></a>   .</td>
+      <td>Compute feature importance based on Shapley value but faster. <br> The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) &gt; 0 <br> While unimportant features will have small values ϕ_i(v_f)≈0 <br> And only features that make the model's performance worse will have negative values ϕ_i(v_f)&lt;0.  <br> These are SAGE values, and that's SAGE in a nutshell. <br>  <br> Permutation tests, proposed by Leo Breiman for assessing feature importance in random forest models,  <br> calculate how much the model performance drops when each column of the dataset is permuted [6].  <br> SAGE can be viewed as modified version of a permutation test: <br>  <br> Instead of holding out one feature at a time, SAGE holds out larger subsets of features. (By only removing individual  <br> features, permutation tests may erroneously assign low importance to features with good proxies.) <br> SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S )  <br> rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence, <br> whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.) <br> src: <a class="comurl" href="https://iancovert.com/blog/understanding-shap-sage/" target="_blank" rel="nofollow">iancovert.com/blog/understanding-shap-sage/<img class="imglink" src="./images/linkout.png"></a></td>
       <td></td>
     </tr>
     <tr>
