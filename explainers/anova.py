@@ -1,6 +1,3 @@
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
-
 from explainers.explainer_superclass import Explainer
 from explainers.interaction_utils import proprocess_data
 
@@ -43,6 +40,9 @@ class Anova(Explainer):
             st += '+X' + str(i)
         st = "(" + st[1:] + ")"
         formula = 'y ~ ' + st + ":" + st
+
+        import statsmodels.api as sm
+        from statsmodels.formula.api import ols
 
         lm = ols(formula, data=data).fit()
 
