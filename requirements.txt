@@ -2,6 +2,5 @@ numpy
 paretoset
 matplotlib
 pandas
-webbrowser
 plotly
 gunicorn==20.0.4
