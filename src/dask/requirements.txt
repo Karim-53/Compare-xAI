@@ -1,5 +1,0 @@
-numpy
-paretoset
-matplotlib
-pandas
-plotly

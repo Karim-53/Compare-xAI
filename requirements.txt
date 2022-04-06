@@ -3,4 +3,5 @@ paretoset
 matplotlib
 pandas
 plotly
+dash
 gunicorn==20.0.4
