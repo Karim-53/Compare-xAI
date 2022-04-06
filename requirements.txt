@@ -16,6 +16,7 @@ requests
 pillow
 # scikit-image
 regex
-nltk
+# nltk
 h5py
 # jinja2
+gunicorn # for dash
