@@ -100,7 +100,6 @@ todo_lista = ['I trust the XAI output (I created the data and the model myself)'
 
 # todo [after acceptance] on hover help / tips
 # todo button reset
-# todo Click on the dot will take you to the git page with the csv of that method
 app.layout = html.Div(children=[
     html.H1(children='Filter:'),
 
@@ -130,7 +129,10 @@ app.layout = html.Div(children=[
                  },
                  style={'display': 'none'}, multi=True, clearable=True, searchable=True),
 
-    dcc.Checklist(id='todo',
+    html.Div(html.P(id='help_txt2',
+                    children='The Checklist below do not affect the plot yet (just for demonstration purpose):')),
+
+     dcc.Checklist(id='todo',
                   options=todo_lista,
                   value=todo_lista,
                   inline=False,
@@ -138,6 +140,7 @@ app.layout = html.Div(children=[
     html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
 
     html.H1(children='Pareto plot: Global performance of xAI methods'),
+    html.Div(html.P(id='help_txt', children='Dot size == how much polyvalent is the xAI (i.e. this xAI works on different explanation tasks). higher is better. ______________ Click on a dot to know more about the xAI')),
     dcc.Graph(
         id='pareto_plot',
         figure=fig
