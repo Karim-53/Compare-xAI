@@ -167,7 +167,8 @@ def on_click(clickData):
         explainer_name = txt[pos + len(sub_str):]
     print('explainer_name', explainer_name)
     url = explainer_root_link + explainer_name + '.htm'
-    webbrowser.open_new_tab(url)
+    print('opening:', url)
+    print(webbrowser.open_new_tab(url))
     return True
 
 
