@@ -1,22 +1,30 @@
+# Run Experiments
+scikit-learn
+lime
+shap
+xgboost
+# tensorflow
+# keras
+# scikit-image
+
+
+# App
+plotly
+dash
+visdcc
+gunicorn # for deployment
+
+# html pages
+# jinja2
+
 numpy
 paretoset
 matplotlib
 pandas
-plotly
-dash
-scikit-learn
 tqdm
 scipy
-xgboost
-# tensorflow
-# keras
-lime
-shap
 requests
 pillow
-# scikit-image
 regex
-# nltk
 h5py
-# jinja2
-gunicorn # for dash
+# nltk

@@ -1,4 +1,4 @@
-import webbrowser
+import visdcc
 try:
     from pprint import pprint
 except:
@@ -14,7 +14,7 @@ from scoring import get_details, restrict_tests
 # todo [after acceptance] dot size legend
 # from src.utils import root  # local website
 root = 'https://karim-53.github.io/Compare-xAI/'
-explainer_root_link = root + '/docs/explainers/'
+explainer_root_link = root + 'explainers/'
 
 
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
@@ -141,25 +141,26 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='pareto_plot',
         figure=fig
-    )
+    ),
+    visdcc.Run_js(id = 'javascript'),
 ])
 from dash import Input, Output
 
 last_click_data = ''
 
 
-def on_click(clickData):
+def on_click(clickData) -> str:
     """ return Bool if the event is correct """
     if pd.isna(clickData):
-        return False
+        return ''
     global last_click_data
     if last_click_data == str(clickData):
-        return False
+        return ''
     last_click_data = str(clickData)
     pprint(clickData)
     txt = clickData.get('points', [{}])[0].get('text', '')
     if txt == '':
-        return False
+        return ''
     sub_str = '<br>Explainer = '
     pos = txt.find(sub_str)
     explainer_name = txt
@@ -168,8 +169,7 @@ def on_click(clickData):
     print('explainer_name', explainer_name)
     url = explainer_root_link + explainer_name + '.htm'
     print('opening:', url)
-    print(webbrowser.open_new_tab(url))
-    return True
+    return f"window.open('{url}')"
 
 
 @app.callback(
@@ -177,6 +177,7 @@ def on_click(clickData):
     Output(component_id='required_outputs_dropdown', component_property='style'),
     Output(component_id='pareto_plot', component_property='figure'),
     Output(component_id='kept_objects', component_property='children'),
+    Output('javascript', 'run'),
 
     Input('pareto_plot', 'clickData'),
     Input(component_id='supported_models_checklist', component_property='value'),
@@ -197,7 +198,7 @@ def update_output_div(
     #     required_outputs_checklist,
     #     required_outputs_dropdown,
     # )
-    on_click(clickData)
+    url = on_click(clickData)
 
     supported_model = None
     required_outputs = None
@@ -231,7 +232,8 @@ def update_output_div(
         {'display': 'none'} if supported_models_dropdown_disabled else {'display': 'block'},
         {'display': 'none'} if required_outputs_dropdown_disabled else {'display': 'block'},
         fig,
-        p_txt
+        p_txt,
+        url,
     )
     return output
 
