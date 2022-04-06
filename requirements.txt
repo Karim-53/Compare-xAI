@@ -4,4 +4,18 @@ matplotlib
 pandas
 plotly
 dash
-gunicorn==20.0.4
+scikit-learn
+tqdm
+scipy
+xgboost
+# tensorflow
+# keras
+lime
+shap
+requests
+pillow
+# scikit-image
+regex
+nltk
+h5py
+# jinja2
