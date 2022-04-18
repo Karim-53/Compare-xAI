@@ -1,5 +1,5 @@
 class Test:
-    # todo add last_update = version of the release
+    # todo [after publication] add last_update = version of the release
     description = None
     input_features = []
     dataset_size = None  # deprecated to delete

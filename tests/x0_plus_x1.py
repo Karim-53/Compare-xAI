@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # print(test.df_train.drop_duplicates())
     # filename = test.__class__.__name__ + '.png'
     # plot_tree(test.trained_model, filename)
-    # todo add assert if target is different from prediction (move it of __init__
+    # todo add assert if target is different from prediction (move it to __init__
 
     # todo [after acceptance] asset on the data distribution
     # stat = df_train[input_features].groupby(input_features).size().reset_index().rename(columns={0: 'frequency'})

@@ -15,13 +15,13 @@ from src.utils import root
 #   another font in the table
 #   fix \n in src
 #   remove underscore (importance_symmetric) and put human readable info
-# todo [after acceptance] page for each paper: searchi ken el paper saye 9rineh w 7atineh wala mahouch yet considered, ( enehom unit tests / xai / original results eli fih)
+# todo add paper.csv , link from the website to the csv in github
 
 EXPLAINERS_HTML_PATH = root + "/docs/explainers/"  # todo move to src.utils
 
 import re
 
-_urlfinderregex = re.compile(r'http([^<\.\s]+\.[^<\.\s]*)+[^<\.\s]{2,}')  # todo fix tr at the end of the link
+_urlfinderregex = re.compile(r'http([^<\.\s]+\.[^<\.\s]*)+[^<\.\s]{2,}')
 
 
 def linkify(text, maxlinklength=256):
@@ -153,7 +153,7 @@ if __name__ == "__main__":
         ], axis=0, ).reset_index()[cols]
         # print(explainer_df_with_results)
         explainer_df_with_results['remarks'] = None
-        # todo also add columns results from original paper , and in remarks we can write why they are not the same
+        # todo also add columns results from original paper , and in remarks columns why results differ
 
         explainer_to_html(explainer_df_with_results)
 

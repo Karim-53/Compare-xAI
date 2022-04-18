@@ -128,5 +128,3 @@ if __name__ == "__main__":
     save_results_safe(result_df)
 
     summary_df, eligible_points_df, score_df = get_details(result_df)
-
-    # todo [after acceptance] record library name and version

@@ -7,7 +7,7 @@ from tests.util import importance_symmetric, is_attribution_symmetric
 
 class CoughAndFever(Test):
     name = "cough_and_fever"
-    # todo add last_update = version of the release
+    # todo [after acceptance] add last_update = version of the release (of this repo)
     # todo [after submission] refactor
     input_features = ['Cough', 'Fever']
     dataset_size = 20000
@@ -49,4 +49,3 @@ if __name__ == "__main__":
     print(test.df_train.drop_duplicates())
     filename = test.__class__.__name__ + '.png'
     plot_tree(test.trained_model, filename)
-    # todo add assert if target is different from prediction (move it of __init__

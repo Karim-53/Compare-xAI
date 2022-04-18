@@ -40,8 +40,6 @@ class AAndBOrC(Test):
     def score(importance=None, **kwargs):
         return {
             'importance_x0_more_important': importance_xi_more_important(importance=importance),
-            # todo attribution local dummy prop men rassi : pour B, Fixi el be9i w badel el B maybadalch el output donc B lezemha sferm kifkif el C
-            # todo sym propag prop men rassi :ken el B C sym ywali AC AB sym
         }
 
 
@@ -53,4 +51,4 @@ if __name__ == "__main__":
     print(test.df_train.drop_duplicates())
     filename = './tmp/' + test.__class__.__name__ + '.png'
     plot_tree(test.trained_model, filename)
-    # todo add assert if target is different from prediction (move it of __init__
+    # todo add assert if target is different from prediction (move this check to __init__)

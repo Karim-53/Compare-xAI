@@ -23,7 +23,6 @@ valid_explainers_dico = {e.name: e for e in valid_explainers}
 # "shapr": explainers.ShapR,
 # "brutekernelshap": explainers.BruteForceKernelShap,
 # "l2x": explainers.L2X,
-# "random": explainers.Random, # todo delete
 
 if __name__ == '__main__':
     import numpy as np

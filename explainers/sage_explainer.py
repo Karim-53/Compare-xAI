@@ -91,6 +91,9 @@ The algorithm can be trapped in a potential infinite loop if we do not fine tune
 
 
 if __name__ == "__main__":
+    import sage
+    print(sage.__version__)
+
     df = Sage.to_pandas()
     print(df)
 
