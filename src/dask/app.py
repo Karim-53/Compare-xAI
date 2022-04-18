@@ -1,3 +1,6 @@
+""" Main script to run the rapeto plot online
+check the remaining hours https://dashboard.heroku.com/account/billing
+"""
 import visdcc
 try:
     from pprint import pprint
@@ -20,13 +23,14 @@ explainer_root_link = root + 'explainers/'
 # todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
 
 
-def pareto(summary_df, title="Global performance of xAI methods", min_time_value=.01, show=True):
+def pareto(summary_df, min_time_value=.01, show=True):
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time_per_test < min_time_value, 'time_per_test'] = min_time_value
     if summary_df.percentage.max() < 1.:
         summary_df.percentage = summary_df.percentage * 100
     summary_df['explainer_name'] = summary_df.index
     # see https://plotly.com/python/px-arguments/ for more options
+    # title = ""
     fig = px.scatter(summary_df,
                      x='time_per_test',
                      y='percentage',
@@ -42,7 +46,7 @@ def pareto(summary_df, title="Global performance of xAI methods", min_time_value
                          'eligible_points': 'maximum score ',
                          'explainer_name': 'Explainer '
                      },
-                     # title=title,
+                     # title=title,  # take some vertical space
                      )
 
     mask = paretoset(summary_df[['percentage', 'time_per_test']], sense=["max", "min"])
@@ -129,18 +133,18 @@ app.layout = html.Div(children=[
                  },
                  style={'display': 'none'}, multi=True, clearable=True, searchable=True),
 
-    html.Div(html.P(id='help_txt2',
-                    children='The Checklist below do not affect the plot yet (just for demonstration purpose):')),
+    html.P(id='help_txt2',
+                    children='The Checklist below do not affect the plot yet (just for demonstration purpose):'),
 
-     dcc.Checklist(id='todo',
+    dcc.Checklist(id='todo',
                   options=todo_lista,
                   value=todo_lista,
                   inline=False,
                   ),
-    html.Div(html.P(id='kept_objects', children=get_text_stats(eligible_points_df))),
+    html.P(id='kept_objects', children=get_text_stats(eligible_points_df)),
 
     html.H1(children='Pareto plot: Global performance of xAI methods'),
-    html.Div(html.P(id='help_txt', children='Dot size == how much polyvalent is the xAI (i.e. this xAI works on different explanation tasks). higher is better. ______________ Click on a dot to know more about the xAI')),
+    html.P(id='help_txt', children='Dot size == how much polyvalent is the xAI (i.e. this xAI works on different explanation tasks). higher is better. ______________ Click on a dot to know more about the xAI'),
     dcc.Graph(
         id='pareto_plot',
         figure=fig

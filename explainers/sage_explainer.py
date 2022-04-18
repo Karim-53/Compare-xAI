@@ -34,7 +34,11 @@ features, permutation tests may erroneously assign low importance to features wi
 SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S ) 
 rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence,
 whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
-src: https://iancovert.com/blog/understanding-shap-sage/  """
+src: https://iancovert.com/blog/understanding-shap-sage/  
+
+Disadvantage:
+The convergence of the algorithm depends on 2 parameters: `thres` and `gap`.
+The algorithm can be trapped in a potential infinite loop if we do not fine tune them. """
 
     def __init__(self, predict_func, X_reference, trained_model=None, **kwargs):
         super().__init__()

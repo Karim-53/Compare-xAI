@@ -8,11 +8,12 @@ from explainers.explainer_superclass import Explainer
 from src.utils import get_importance
 
 
-class Shap(Explainer):  # todo custom explainers should inhirit from a bigger class
+class Shap(Explainer):
     expected_values = None
     attribution = None
     importance = None
 
+    description = """shap is unifying all other methods (Deeplift, limeshapley regression…)"""
     def __init__(self, f, X, **kwargs):
         self.f = f
         self.X = X
