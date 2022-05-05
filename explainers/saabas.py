@@ -12,7 +12,7 @@ class Saabas(Explainer):
     # requirements = {'generic_xgboost':True}
 
     attribution = True
-    importance = True  # infered
+    importance = True  # inferred
 
     def __init__(self, trained_model, **kwargs):
         super().__init__()

@@ -20,7 +20,7 @@ def _len(x):
     return len(x)
 
 
-def get_specific_args(method, super_method):
+def get_specific_args(method, super_method) -> set:
     arg_spec = inspect.getfullargspec(method)
     args = arg_spec.args
     len_default_args = _len(arg_spec.defaults)
@@ -40,7 +40,7 @@ class Explainer:
     interaction = False
 
     description = None  # if the xai pretend to be the unique solution given these assumptions / axioms please write it here until I find a way to index it
-
+    
     score_time_dominate = None
     score_time_dominated_by = None
     score_dominate = None
@@ -67,11 +67,11 @@ class Explainer:
         return xai_output
 
     @classmethod
-    def get_specific_args_init(cls):
+    def get_specific_args_init(cls) -> set:
         return get_specific_args(cls.__init__, Explainer.__init__)
 
     @classmethod
-    def get_specific_args_explain(cls):
+    def get_specific_args_explain(cls)->set:
         return get_specific_args(cls.explain, Explainer.explain)
 
     def __repr__(self) -> pd.Series:

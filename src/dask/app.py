@@ -1,11 +1,12 @@
-""" Main script to run the rapeto plot online
+""" Main script to run the Pareto plot online
 check the remaining hours https://dashboard.heroku.com/account/billing
 """
+# TODO stop using backend, use https://plotly.com/javascript/line-and-scatter/
 import visdcc
 try:
     from pprint import pprint
 except:
-    pprint = pprint
+    pprint = print
 
 import pandas as pd
 from paretoset import paretoset
@@ -13,6 +14,7 @@ from plotly import express as px, graph_objects as go
 
 from utils import load_results
 from scoring import get_details, restrict_tests
+from dash import Dash, html, dcc, Input, Output
 
 # todo [after acceptance] dot size legend
 # from src.utils import root  # local website
@@ -20,10 +22,8 @@ root = 'https://karim-53.github.io/Compare-xAI/'
 explainer_root_link = root + 'explainers/'
 
 
-# todo [before submission] pages:  web header, <iframe width="800" height="800" src="http://127.0.0.1:8005/"/>
-
-
 def pareto(summary_df, min_time_value=.01, show=True):
+    """ Generate the scatter plot and the pareto front given the specific selection of xai and unit-tests """
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time_per_test < min_time_value, 'time_per_test'] = min_time_value
     if summary_df.percentage.max() < 1.:
@@ -49,6 +49,7 @@ def pareto(summary_df, min_time_value=.01, show=True):
                      # title=title,  # take some vertical space
                      )
 
+    # Pareto front -------------------------------------------------------------------
     mask = paretoset(summary_df[['percentage', 'time_per_test']], sense=["max", "min"])
     pareto_df = summary_df[mask].sort_values('time_per_test')
     txt = "Avg. Time = " + pareto_df.time_per_test.round(1).astype(str)
@@ -69,12 +70,11 @@ def pareto(summary_df, min_time_value=.01, show=True):
 
 
 def get_stats(eligible_points_df):
+    """ return the number of xai and unit-tests selected """
     xai = len(eligible_points_df)
     tests = eligible_points_df.max().sum()
     return xai, tests
 
-
-from dash import Dash, html, dcc
 
 app = Dash(__name__, prevent_initial_callbacks=True)
 server = app.server
@@ -119,7 +119,7 @@ app.layout = html.Div(children=[
 
     dcc.Checklist(id='required_outputs_checklist',
                   options={'specific_xai_output': 'I need a specific output from the XAI', },
-                  ),  # todo make the text unselectable # todo chouf el persistance chma3neha
+                  ),
     dcc.Dropdown(id='required_outputs_dropdown',
                  options={
                      'importance': 'Feature importance (Global Explanation)',
@@ -151,7 +151,6 @@ app.layout = html.Div(children=[
     ),
     visdcc.Run_js(id = 'javascript'),
 ])
-from dash import Input, Output
 
 last_click_data = ''
 
