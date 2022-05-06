@@ -1,0 +1,169 @@
+source_paper_tag,Done (0 to 1),Method,Detail,Links,source_paper_bibliography,extra
+paper tag from scholars,,,this row is a description of the columns,,,extra research we can not include in our repo that are intresting of xAI enthusiastic scientist
+lundberg2018consistent,0.6,TreeSHAP,"Original Paper of TreeSHAP
+Compares Saaba to treeshap",,"@article{lundberg2018consistent,
+  title={Consistent individualized feature attribution for tree ensembles},
+  author={Lundberg, Scott M and Erion, Gabriel G and Lee, Su-In},
+  journal={arXiv preprint arXiv:1802.03888},
+  year={2018}
+}",
+tsang2020does,1,Archipelago,compares archipelago to many other xai (focus on interaction),"https://github.com/mtsang/archipelago
+
+https://arxiv.org/pdf/2006.10965.pdf   paper on neurips is shorter 
+
+","@article{tsang2020does,
+  title={How does this interaction affect me? interpretable attribution for feature interactions},
+  author={Tsang, Michael and Rambhatla, Sirisha and Liu, Yan},
+  journal={Advances in neural information processing systems},
+  volume={33},
+  pages={6147--6159},
+  year={2020}
+}",
+sundararajan2020many,0.7,BShap,"prove that shapley values  are not unique. 
+that bshap provides unique resuts. 
+some new axioms",https://arxiv.org/pdf/1908.08474.pdf,"@inproceedings{sundararajan2020many,
+  title={The many Shapley values for model explanation},
+  author={Sundararajan, Mukund and Najmi, Amir},
+  booktitle={International conference on machine learning},
+  pages={9269--9278},
+  year={2020},
+  organization={PMLR}
+}",
+janzing2020feature,0.5,-,Critisize TreeShap given the problem of feature distribution,http://proceedings.mlr.press/v108/janzing20a/janzing20a.pdf,"@inproceedings{janzing2020feature,
+  title={Feature relevance quantification in explainable AI: A causal problem},
+  author={Janzing, Dominik and Minorics, Lenon and Bl{\""o}baum, Patrick},
+  booktitle={International Conference on artificial intelligence and statistics},
+  pages={2907--2916},
+  year={2020},
+  organization={PMLR}
+}",
+covert2020understanding,1,SAGE,SAGE is a faster way to calculate the average abs shap values so it is only limited to Feature importance but is is fast,"https://proceedings.neurips.cc/paper/2020/file/c7bf0b7c1a86d5eb3be2c722cf2cf746-Paper.pdf
+
+https://github.com/iancovert/sage
+
+https://iancovert.com/blog/understanding-shap-sage/ ","@article{covert2020understanding,
+  title={Understanding global feature contributions with additive importance measures},
+  author={Covert, Ian and Lundberg, Scott M and Lee, Su-In},
+  journal={Advances in Neural Information Processing Systems},
+  volume={33},
+  pages={17212--17223},
+  year={2020}
+}",confidence of the F importance
+liu2021synthetic,0.85,XAI-Bench,"(-) As a creator of an xai method i will probably not use it because I am not intrested if my values correlate with the expected conditional something
+(-) 2 citations since it publication in NeurIPS 2021
+after testing all xai on 5 metrics with sytetic data now they test it on real data and then get different numbers so what the point , what kind of conlusion can we get out of this ? is this experiment helping the comunity deciding which xai to pick ????   wine quality dataset [16, 60] and the forest fire dataset [17]
+
+TODO understnd better the metrics to decide if I should include them in my repo",https://github.com/abacusai/xai-bench,"@article{liu2021synthetic,
+  title={Synthetic benchmarks for scientific research in explainable machine learning},
+  author={Liu, Yang and Khandagale, Sujay and White, Colin and Neiswanger, Willie},
+  journal={arXiv preprint arXiv:2106.12543},
+  year={2021}
+}",
+lakkaraju2020fool,1,Unit-test,how to make model agnostic xai based on feature perturbation fail to retreive the correct most important feature,"https://www.youtube.com/watch?v=4HyJIOenIlI&ab_channel=Harvard%27sCRCS 
+https://dl.acm.org/doi/pdf/10.1145/3375627.3375833","@inproceedings{lakkaraju2020fool,
+  title={"" How do I fool you?"" Manipulating User Trust via Misleading Black Box Explanations},
+  author={Lakkaraju, Himabindu and Bastani, Osbert},
+  booktitle={Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society},
+  pages={79--85},
+  year={2020}
+}",
+mohseni2020benchmark,,Benchmark,"for images, use human evaluation",https://github.com/SinaMohseni/ML-Interpretability-Evaluation-Benchmark,"@article{mohseni2020benchmark,
+  title={Quantitative Evaluation of Machine Learning Explanations: A Human-Grounded Benchmark},
+  author={Mohseni, Sina and Block, Jeremy E and Ragan, Eric D},
+  journal={arXiv preprint arXiv:1801.05075},
+  year={2020}
+}",
+sattarzadeh2021svea,0.5,SVEA benchmark,benchmark using mnist-1D and didn t understand the metric :[,https://openaccess.thecvf.com/content/ICCV2021W/HTCV/papers/Sattarzadeh_SVEA_A_Small-Scale_Benchmark_for_Validating_the_Usability_of_Post-Hoc_ICCVW_2021_paper.pdf,"@inproceedings{sattarzadeh2021svea,
+  title={SVEA: A Small-scale Benchmark for Validating the Usability of Post-hoc Explainable AI Solutions in Image and Signal Recognition},
+  author={Sattarzadeh, Sam and Sudhakar, Mahesh and Plataniotis, Konstantinos N},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={4158--4167},
+  year={2021}
+}",
+rozemberczki2022shapley,0.5,survey,"survey about shapley values, no unit test, nothing special besides some intresting cited papers",https://arxiv.org/pdf/2202.05594.pdf,"@article{rozemberczki2022shapley,
+  title={The Shapley Value in Machine Learning},
+  author={Rozemberczki, Benedek and Watson, Lauren and Bayer, P{\'e}ter and Yang, Hao-Tsung and Kiss, Oliv{\'e}r and Nilsson, Sebastian and Sarkar, Rik},
+  journal={arXiv preprint arXiv:2202.05594},
+  year={2022}
+}",
+kumar2020problems,1,unit test,"problem in how to interpert the shapley values in ML. Causal explanation, some limitation of shap, highliting the fact that some math properties might be useless for interpreting models. Finally in section 4 they highlight the fact that the shapley values (even if correctly calculated might not be the right explanation)",http://proceedings.mlr.press/v119/kumar20e/kumar20e.pdf,"@inproceedings{kumar2020problems,
+  title={Problems with Shapley-value-based explanations as feature importance measures},
+  author={Kumar, I Elizabeth and Venkatasubramanian, Suresh and Scheidegger, Carlos and Friedler, Sorelle},
+  booktitle={International Conference on Machine Learning},
+  pages={5491--5500},
+  year={2020},
+  organization={PMLR}
+}",
+tsang2021interpretable,1,survey,"recent survey about feature interaction xAI, no unit-test
+
+Additionally, if a higher-order interaction exists, all of its subsets also exist as interactions (Sorokina et al., 2008; Tsang et al., 2018a). -> TODO should we have a unit test for such a property ?",https://arxiv.org/pdf/2103.03103.pdf,"@article{tsang2021interpretable,
+  title={Interpretable Artificial Intelligence through the Lens of Feature Interaction},
+  author={Tsang, Michael and Enouen, James and Liu, Yan},
+  journal={arXiv preprint arXiv:2103.03103},
+  year={2021}
+}","Examples of word interactions are “not, good” and “not, bad” in movie reviews. An example of an image interaction is a combination of image patches corresponding to the ears, nose, and eyes of a dog, which supports a dog classification. -> will not be included because it does not highlight any limit
+sin(x1 +x2) just an example of pair f interaction was not used to demo any kind of limitation so no need to implement it"
+molnar2020interpretable,1,survey,maybe i should reread it again and check if there is any unit test inthere,https://christophm.github.io/interpretable-ml-book/,"@book{molnar2020interpretable,
+  title={Interpretable machine learning},
+  author={Molnar, Christoph},
+  year={2020},
+  publisher={Lulu. com}
+}",
+chromik2021think,0.9,human interpretation,,http://www.medien.ifi.lmu.de/pubdb/publications/pub/chromik2021iui/chromik2021iui.pdf,"@inproceedings{chromik2021think,
+  title={I think i get your point, AI! the illusion of explanatory depth in explainable AI},
+  author={Chromik, Michael and Eiband, Malin and Buchner, Felicitas and Kr{\""u}ger, Adrian and Butz, Andreas},
+  booktitle={26th International Conference on Intelligent User Interfaces},
+  pages={307--317},
+  year={2021}
+}",
+leavitt2020towards,0.1,human interpretation,how XAI alg should be structured and doccumented,https://arxiv.org/pdf/2010.12016.pdf,"@article{leavitt2020towards,
+  title={Towards falsifiable interpretability research},
+  author={Leavitt, Matthew L and Morcos, Ari},
+  journal={arXiv preprint arXiv:2010.12016},
+  year={2020}
+}",
+kearns2019ethical,0.1,human interpretation,how XAI alg should be structured and doccumented,,"@book{kearns2019ethical,
+  title={The ethical algorithm: The science of socially aware algorithm design},
+  author={Kearns, Michael and Roth, Aaron},
+  year={2019},
+  publisher={Oxford University Press}
+}",
+vstrumbelj2014explaining,0.1,aproximate shap,,,"@article{vstrumbelj2014explaining,
+  title={Explaining prediction models and individual predictions with feature contributions},
+  author={{\v{S}}trumbelj, Erik and Kononenko, Igor},
+  journal={Knowledge and information systems},
+  volume={41},
+  number={3},
+  pages={647--665},
+  year={2014},
+  publisher={Springer}
+}",
+lundberg2017unified,0.3,kernel shap,,,"@article{lundberg2017unified,
+  title={A unified approach to interpreting model predictions},
+  author={Lundberg, Scott M and Lee, Su-In},
+  journal={Advances in neural information processing systems},
+  volume={30},
+  year={2017}
+}",
+sundararajan2017axiomatic,0.1,Integrated gradient,,,"@inproceedings{sundararajan2017axiomatic,
+  title={Axiomatic attribution for deep networks},
+  author={Sundararajan, Mukund and Taly, Ankur and Yan, Qiqi},
+  booktitle={International conference on machine learning},
+  pages={3319--3328},
+  year={2017},
+  organization={PMLR}
+}",
+lakkaraju2019faithful,0.1,survey,category of unit tests,https://dl.acm.org/doi/10.1145/3306618.3314229,"@inproceedings{lakkaraju2019faithful,
+  title={Faithful and customizable explanations of black box models},
+  author={Lakkaraju, Himabindu and Kamar, Ece and Caruana, Rich and Leskovec, Jure},
+  booktitle={Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society},
+  pages={131--138},
+  year={2019}
+}",
+ribeiro2016should,0.1,lime,,,"@inproceedings{ribeiro2016should,
+  title={ Why should i trust you? Explaining the predictions of any classifier},
+  author={Ribeiro, Marco Tulio and Singh, Sameer and Guestrin, Carlos},
+  booktitle={Proceedings of the 22nd ACM SIGKDD international conference on knowledge discovery and data mining},
+  pages={1135--1144},
+  year={2016}
+}",
