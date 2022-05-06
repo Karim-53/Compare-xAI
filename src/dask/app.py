@@ -1,7 +1,7 @@
 """ Main script to run the Pareto plot online
 check the remaining hours https://dashboard.heroku.com/account/billing
 """
-# TODO stop using backend, use https://plotly.com/javascript/line-and-scatter/
+# TODO stop using backend, use plotly.offline https://stackoverflow.com/questions/46821554/multiple-plotly-plots-on-1-page-without-subplot/59265030#59265030
 import visdcc
 try:
     from pprint import pprint
