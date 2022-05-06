@@ -17,6 +17,8 @@ explainer = pd.read_parquet('../data/03_experiment_output_aggregated/explainer.p
 explainer = explainer.applymap(lambda x: int(x) if isinstance(x,bool) else x, na_action='ignore')
 explainer.to_sql('explainer', connection, if_exists='replace', index=False)
 
+paper = pd.read_csv('../data/01_raw/paper.csv')
+paper.to_sql('paper', connection, if_exists='replace', index=False)
 
 connection.close()
 print('connection.close()')
@@ -28,3 +30,4 @@ shutil.copyfile('../data/04_sql/database', '../../cxai/src/database')
 tests = cross_tab.test.unique()
 valid_tests = test.set_index('test').loc[tests]  # if failed: some tests are not indexed in text.csv -> add them
 assert sum(valid_tests['category'].isna()) == 0, 'there is some NaN values -> fill them'
+# todo test that all paper tags in explainer exist in paper
