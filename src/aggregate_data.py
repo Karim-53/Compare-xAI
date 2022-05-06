@@ -33,7 +33,7 @@ if __name__ == "__main__":
                               'last_updated': last_updated,
                               })
     cross_tab = pd.DataFrame(lista).sort_values(['explainer', 'test', 'subtest'])
-    print(cross_tab)
+    # print(cross_tab)
     print('writing files to /data/03_experiment_output_aggregated/ ...')
     cross_tab.to_parquet('../data/03_experiment_output_aggregated/cross_tab.parquet')
     cross_tab.to_csv('../data/03_experiment_output_aggregated/cross_tab.csv')
@@ -58,7 +58,11 @@ if __name__ == "__main__":
     explainer.required_input_X_reference = np.logical_or(explainer.required_input_X,
                                                          explainer.required_input_X_reference)  # todo fix that in prior code
 
+    explainer.required_input_data = explainer.required_input_data.apply(str)
+    # print('todo required_input_train_function is set to 0')
+    # explainer['required_input_train_function'] = 0
     print(explainer)
     print('writing explainer to /data/03_experiment_output_aggregated/ ...')
     explainer.to_parquet('../data/03_experiment_output_aggregated/explainer.parquet')
     explainer.to_csv('../data/03_experiment_output_aggregated/explainer.csv')
+    print('End')
