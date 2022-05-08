@@ -84,7 +84,7 @@ class Lime(Explainer):
     attribution = True
     importance = True
 
-    def __init__(self, predict_func, X, X_reference=None, **kwargs):
+    def __init__(self, predict_func, X, X_reference=None, **kwargs): # todo add mode (see super class) and categorical_features see https://github.com/dylan-slack/Fooling-LIME-SHAP/blob/master/COMPAS_Example.ipynb
         super().__init__()
         self.predict_func = predict_func
         self.X_reference = X_reference if X_reference is not None else X

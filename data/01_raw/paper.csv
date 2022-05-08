@@ -160,10 +160,16 @@ lakkaraju2019faithful,0.1,survey,category of unit tests,https://dl.acm.org/doi/1
   pages={131--138},
   year={2019}
 }",
-ribeiro2016should,0.1,lime,,,"@inproceedings{ribeiro2016should,
+ribeiro2016should,0,lime,,,"@inproceedings{ribeiro2016should,
   title={ Why should i trust you? Explaining the predictions of any classifier},
   author={Ribeiro, Marco Tulio and Singh, Sameer and Guestrin, Carlos},
   booktitle={Proceedings of the 22nd ACM SIGKDD international conference on knowledge discovery and data mining},
   pages={1135--1144},
   year={2016}
+}",
+staniak2018explanations,0,breakdown,,https://arxiv.org/abs/1804.01955,"@article{staniak2018explanations,
+  title={Explanations of model predictions with live and breakDown packages},
+  author={Staniak, Mateusz and Biecek, Przemyslaw},
+  journal={arXiv preprint arXiv:1804.01955},
+  year={2018}
 }",

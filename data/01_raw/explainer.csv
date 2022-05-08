@@ -1,5 +1,5 @@
 explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs
-Shapley Values,0.75,,,"There is an alternate permutation-based description of the Shapley value:
+Shapley Values,0.75,to finish implementing,,"There is an alternate permutation-based description of the Shapley value:
 Order the players uniformly at random, add them one at a time in this order,
 and assign to each player i its expected marginal contribution V (S ∪ i) − v(S);
 here S is the set of players that precede i in the ordering. https://arxiv.org/pdf/1908.08474.pdf
@@ -22,7 +22,7 @@ A significant problem with individual testing methods is that they require an ex
 tests as the desired interaction order increases. Not only is this approach intractable, but also has a high 
 chance of generating false positives or a high false discovery rate (Benjamini and Hochberg, 1995) that arises 
 from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf",,"""['model_agnostic']""","""['interaction']"""
-IG: Integrated Gradients,0.25,,,"IG is an analog of the Aumann-Shapley method from cost-sharing [4]. We will discuss the sense in which IG is an extension of the Shapley value in Section 4.1 https://arxiv.org/pdf/1908.08474.pdf 
+IG: Integrated Gradients,0.25,to implement,,"IG is an analog of the Aumann-Shapley method from cost-sharing [4]. We will discuss the sense in which IG is an extension of the Shapley value in Section 4.1 https://arxiv.org/pdf/1908.08474.pdf 
 
 IG uses the fundamental theorem of calculus to provide additive explanations of a prediction (Sundararajan et al., 2017). This method is very popular in computer vision where its computational efficiency and saliency are prized, even though other work has exposed some of its shortcomings in providing an interpretation (Adebayo et al., 2018).  see  https://arxiv.org/pdf/2103.03103.pdf 
 
@@ -77,17 +77,17 @@ in the final prediction in comparison to its normal prediction (Fisher et al., 2
 Mean Importance,0.25,,,feature importance cited in covert2020understanding,,,
 Feature Ablation,0.25,,,feature importance cited in covert2020understanding,,,
 Univariate Predictors,0.25,,,feature importance cited in covert2020understanding,,,
-SHAPR,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,
+SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,
 maple,0.75,1,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"""['model_agnostic']""","""['attribution','importance']"""
 L2X,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,
-breakdown,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,
+breakdown,0.25,to implement,staniak2018explanations,approximate the shapley values (see https://christophm.github.io/interpretable-ml-book/shapley.html#software-and-alternatives-4= ) implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,
 baseline_random,1,1,liu2021synthetic,This is not a real explainer it helps measure the baseline score and processing time.,created,"""['model_agnostic']""","""['attribution','importance','interaction']"""
 Uniform,0.25,,Us,output uniform feature attribution,,,
 Zero,0.25,,Us,output zero feature attribution,,,
 DeepLIFT,0,,,,,,
 Shapley Regression,0,,,,,,
-BShap: Baseline Shapley,0.25,,sundararajan2020many,Is unique (in constrast with shapley values) need a baseline to provide local explanation,,,
-RBShap: Random Baseline Shapley,0.25,,sundararajan2020many,"BShap that takes three inputs: An explicand x, a function f, and a distribution D. The attributions are the expected BShap values, where the baseline x' is drawn randomly according to the distribution D. This approach is implicit in [10] (see Equation 11). https://arxiv.org/pdf/1908.08474.pdf
+BShap: Baseline Shapley,0.25,to implement,sundararajan2020many,Is unique (in constrast with shapley values) need a baseline to provide local explanation,,,
+RBShap: Random Baseline Shapley,0.25,to implement,sundararajan2020many,"BShap that takes three inputs: An explicand x, a function f, and a distribution D. The attributions are the expected BShap values, where the baseline x' is drawn randomly according to the distribution D. This approach is implicit in [10] (see Equation 11). https://arxiv.org/pdf/1908.08474.pdf
 ",,,
 QII,0.25,,,see kumar2020problems,,,
 FAE,0.25,,,see kumar2020problems,,,
