@@ -1,7 +1,7 @@
 from ast import literal_eval
 
 import pandas as pd
-
+# todo move
 try:
     from src.utils import root
     RESULTS_FILE_PATH = root + '/src/dask/results.csv'
@@ -9,7 +9,7 @@ try:
 except:
     RESULTS_FILE_PATH = root + 'results.csv'
     deployed = True
-print('deployed', deployed)
+# print('deployed', deployed)
 
 
 def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:

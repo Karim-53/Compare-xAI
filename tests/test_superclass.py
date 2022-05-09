@@ -1,5 +1,6 @@
-class Test:
+class Test: # todo make abstract
     # todo [after publication] add last_update = version of the release
+    description_short = " "  # todo
     description = None
     input_features = []
     dataset_size = None  # deprecated to delete
@@ -10,7 +11,7 @@ class Test:
 
     # todo add init with var check
 
-    @staticmethod
+    @staticmethod  # todo change all to class method
     def score(attribution=None, importance=None, **kwargs) -> dict:
         # todo assert attribution importance size
         raise NotImplementedError("The scoring method of this test is not implemented at the moment.")

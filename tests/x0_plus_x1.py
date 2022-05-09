@@ -9,6 +9,7 @@ from tests.util import importance_symmetric, is_attribution_symmetric
 class _X0PlusX1(Test):
     """ This is not a test: It is only a superclass"""  # todo [after acceptance] make abstract class
     name = 'x0_plus_x1'
+    ml_task = 'regression'
     description = "We test the effect of the train_dataset 's distribution on the explanation.\n"
     input_features = ['x0', 'x1']
     dataset_to_explain = pd.DataFrame([[0, 0], [0, 1], [1, 0], [1, 1]], columns=input_features)

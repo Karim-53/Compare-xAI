@@ -81,18 +81,25 @@ class Lime(Explainer):
     """ Main wrapper. please use this one"""
     name = 'lime'
     supported_models = ('model_agnostic',)
-    attribution = True
-    importance = True
+    output_attribution = True
+    output_importance = True
 
-    def __init__(self, predict_func, X, X_reference=None, **kwargs): # todo add mode (see super class) and categorical_features see https://github.com/dylan-slack/Fooling-LIME-SHAP/blob/master/COMPAS_Example.ipynb
+    def __init__(self, predict_func, predict_proba, X_reference, ml_task,
+                 **kwargs):  # todo categorical_features see https://github.com/dylan-slack/Fooling-LIME-SHAP/blob/master/COMPAS_Example.ipynb
         super().__init__()
-        self.predict_func = predict_func
-        self.X_reference = X_reference if X_reference is not None else X
+        self.ml_task = ml_task
+        self.predict_func = predict_proba if ('classification' in ml_task) else predict_func
 
-        self.lime_explainer = LimeTabular(self.predict_func, self.X_reference, mode="regression")
+        self.X_reference = X_reference
+        self.lime_explainer = LimeTabular(self.predict_func,
+                                          self.X_reference,
+                                          mode='regression' if ml_task == 'regression' else 'classification')
 
     def explain(self, dataset_to_explain, **kwargs):
-        self.attribution = self.lime_explainer.attributions(dataset_to_explain)
+        self.attribution = np.asarray(self.lime_explainer.attributions(dataset_to_explain))
+        print('lime self.attribution', self.attribution)
+        if self.ml_task == 'binary_classification':
+            self.attribution = self.attribution[0, ...]
         self.expected_values = np.zeros(
             dataset_to_explain.shape[0]
         )  # TODO: maybe we might want to change this later

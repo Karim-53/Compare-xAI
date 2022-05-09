@@ -151,7 +151,7 @@ class ShapleyTaylorInteraction(Explainer):
     """ Main wrapper. please use this one """
     name = 'shapley_taylor_interaction'
     supported_models = ('model_agnostic',)
-    interaction = True
+    output_interaction = True
 
     # is_affected_by_seed = True
 

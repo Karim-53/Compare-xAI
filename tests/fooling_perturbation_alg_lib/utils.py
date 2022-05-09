@@ -13,10 +13,18 @@ class Params():
     ----------
     Parameters object
     """
-    def __init__(self, json_path = "./model_configurations/experiment_params.json"):
-        with open(json_path) as f:
-            params = json.load(f)
-            self.__dict__.update(params)
+    def __init__(self, json_path = "experiment_params.json"): # todo delete json_path arg
+        params = {
+                "model_version": "experiment_params",
+                "seed": 123454321,
+                "protected_class": 1,
+                "unprotected_class": 0,
+                "positive_outcome": 1,
+                "negative_outcome": 0,
+                "perturbation_std": 0.3,
+                "samples": 3000
+            }
+        self.__dict__.update(params)
 
     def save(self, json_path):
         with open(json_path, 'w') as f:

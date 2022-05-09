@@ -143,3 +143,4 @@ results/*
 
 # Vim
 *.sw*
+src/dask/results_tmp.csv

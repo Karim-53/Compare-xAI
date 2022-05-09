@@ -209,8 +209,7 @@ class MAPLE:
             self.n_estimators = n_estimators = len(fe.estimators_)
         self.fe = fe
 
-        train_leaf_ids = fe.apply(X_train)
-        self.train_leaf_ids = train_leaf_ids
+        self.train_leaf_ids = fe.apply(X_train)
 
         val_leaf_ids_list = fe.apply(X_val)
 
@@ -220,9 +219,7 @@ class MAPLE:
             for i in range(n_estimators):
                 splits = fe[i].tree_.feature  # -2 indicates leaf, index 0 is root
                 if splits[0] != -2:
-                    scores[splits[0]] += fe[i].tree_.impurity[
-                        0
-                    ]  # impurity reduction not normalized per tree
+                    scores[splits[0]] += fe[i].tree_.impurity[0]  # impurity reduction not normalized per tree
         elif fe_type == "gbrt":
             for i in range(n_estimators):
                 splits = fe[i, 0].tree_.feature  # -2 indicates leaf, index 0 is root
@@ -338,13 +335,14 @@ class Maple(Explainer):
     """ Wrapper for all maple implementation. Please use this one """
     name = 'maple'
     supported_models = ('model_agnostic',)
-    attribution = True
-    importance = True
+    output_attribution = True
+    output_importance = True
 
-    def __init__(self, predict_func, trained_model, X, X_reference=None, **kwargs):
+    def __init__(self, predict_func, trained_model, X, X_reference, **kwargs):
         super().__init__()
         self.predict_func = predict_func
         self.trained_model = trained_model
+        # it needs X if we will use TreeMaple and it needs X_reference for the other version
         self.X = X
         self.X_reference = X_reference if X_reference is not None else X
 

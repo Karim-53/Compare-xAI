@@ -13,8 +13,8 @@ from tqdm import tqdm
 class BreakDown:
     name = 'breakdown'
     expected_values = None
-    attribution = None
-    importance = None
+    output_attribution = None
+    output_importance = None
 
     def __init__(self, trained_model, df_reference, input_names=None, **kwargs):
         if input_names:

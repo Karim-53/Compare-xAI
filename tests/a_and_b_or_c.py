@@ -7,6 +7,7 @@ from tests.util import importance_xi_more_important
 
 class AAndBOrC(Test):
     name = "a_and_b_or_c"
+    ml_task = 'binary_classification'
     description = """Model: A and (B or C)
     Goal make sure that A is more important than B, C
     

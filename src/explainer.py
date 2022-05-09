@@ -5,14 +5,15 @@ valid_explainers = (
     Random,
     TreeShap,
     Saabas,
-    Archipelago,
-    ShapleyTaylorInteraction,
-    Anova,
     KernelShap,
     Sage,
-    ShapInteraction,
     Lime,
     Maple,
+    # Anova, # todo fix feature importance
+
+    # Archipelago,  # todo after paper acceptance
+    # ShapleyTaylorInteraction,  # todo after paper acceptance
+    # ShapInteraction,  # todo after paper acceptance
 )
 assert are_class_names_unique(valid_explainers), 'Duplicate explainer names'
 

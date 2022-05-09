@@ -6,6 +6,7 @@ from tests.util import is_ok
 
 class CoughAndFever1090:  # todo [after acceptance] move to the other file and refactor both classes
     name = 'cough_and_fever_10_90'
+    ml_task = 'regression'
     input_features = ['Cough', 'Fever']
     dataset_size = 20000
     train_dataset = None

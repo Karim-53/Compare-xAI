@@ -35,12 +35,17 @@ class Explainer:
     supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
 
     # Know what could be calculated
-    importance = False
-    attribution = False
-    interaction = False
+    output_importance = False
+    output_attribution = False
+    output_interaction = False
+
+    # xAI output
+    importance: np.array = None
+    attribution: np.ndarray = None
+    interaction: np.ndarray = None
 
     description = None  # if the xai pretend to be the unique solution given these assumptions / axioms please write it here until I find a way to index it
-    
+
     score_time_dominate = None
     score_time_dominated_by = None
     score_dominate = None
@@ -55,7 +60,7 @@ class Explainer:
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
 
-    # def __init__(self):
+    # def __init__(self): # todo create init that import all prop from csv
     #     self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
     @classmethod
     def get_xai_output(cls):
@@ -71,7 +76,7 @@ class Explainer:
         return get_specific_args(cls.__init__, Explainer.__init__)
 
     @classmethod
-    def get_specific_args_explain(cls)->set:
+    def get_specific_args_explain(cls) -> set:
         return get_specific_args(cls.explain, Explainer.explain)
 
     def __repr__(self) -> pd.Series:
@@ -123,6 +128,19 @@ xAI's output:\t\t {', '.join(xai_output)}
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
         )
+
+    def check_explanation(self, dataset_to_explain):  # , **kwargs
+        arr = np.array(dataset_to_explain)
+        _shape = arr.shape
+        if len(_shape) == 1:
+            _shape = (1, _shape[0])
+        # self.expected_values = np.random.randn(_shape[0])
+
+        for var_name, expected_shape in [['attribution', _shape], ['importance', (_shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
+            var = self.__dict__.get(var_name)
+            if var is not None and not isinstance(var, str):
+                if var.shape != expected_shape:  # todo also verify it is numpy
+                    print(f'{self.name} {var_name}: Wrong shape. received {var.shape}  should be {expected_shape}')
 
     # todo [after acceptance] think about how to sort explainer instances by name or expected execution time https://stackoverflow.com/questions/4010322/sort-a-list-of-class-instances-python
 
@@ -217,9 +235,9 @@ class Random(Explainer):
     name = 'baseline_random'
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
     supported_models = ('model_agnostic',)
-    attribution = True
-    importance = True
-    interaction = True
+    output_attribution = True
+    output_importance = True
+    output_interaction = True
 
     source_paper_tag = 'liu2021synthetic'
     source_paper_bibliography = r"""@article{liu2021synthetic,
@@ -243,6 +261,11 @@ class Random(Explainer):
         self.importance = np.random.randn(_shape[1])
 
         self.interaction = np.random.randn(_shape[1], _shape[1])
+
+
+class UnsupportedModelException(Exception):
+    def __init__(self, msg=''):
+        self.msg = msg
 
 
 if __name__ == '__main__':

@@ -2,11 +2,17 @@ import datetime
 import inspect
 import logging
 import time
+import sys
+import traceback
 
+from typing import Type
+
+from explainers.explainer_superclass import Explainer, UnsupportedModelException
 from src.explainer import valid_explainers
 from src.io import *
 from src.dask.scoring import get_details
 from src.test import valid_tests
+from tests.test_superclass import Test
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -21,6 +27,12 @@ import _thread
 class TimeoutException(Exception):
     def __init__(self, msg=''):
         self.msg = msg
+
+
+def not_string(e):
+    if isinstance(e, str):
+        return None
+    return e
 
 
 @contextmanager
@@ -54,10 +66,11 @@ def append_empty_row(result_df, name):
 
 
 def compatible(test_class, explainer_class):
-    """ test if the xai generate the kind of explanation expected from the test """
+    """ test if the xai generate the kind of explanation required by the test """
     for explanation in ['importance', 'attribution', 'interaction']:
-        if explanation in inspect.getfullargspec(test_class.score).args and explainer_class.__dict__.get(explanation,
-                                                                                                         False):
+        is_explanation_required_by_test = explanation in inspect.getfullargspec(test_class.score).args
+        if_explainer_able_to_provide_it = explainer_class.__dict__.get(f'output_{explanation}', False)
+        if is_explanation_required_by_test and if_explainer_able_to_provide_it:
             return True
     else:
         return False
@@ -66,42 +79,59 @@ def compatible(test_class, explainer_class):
 TIME_LIMIT = 1000  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
 
 
-def run_experiment(test_class, explainer_class):
+def format_results(score=None, time=None):  # todo add note for unsopported Model exception
+    results = {}
+    if score is not None:
+        results['score'] = score
+    if time is not None:
+        results['time'] = time
+        # 'time': time.time() - start_time,
+    results['Last_updated']: str(datetime.datetime.now())
+    return results
+
+
+def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
     print(test_class.__name__, explainer_class.__name__)
     if not compatible(test_class, explainer_class):
-        return {
-            # 'score': score,
-            'Last_updated': str(datetime.datetime.now()),
-        }
-    # todo try except to catch error from XAI alg
-    test = test_class()
+        print('not compatible')
+        return format_results()
 
+    # Init test
+    test = test_class()
     start_time = time.time()
 
-    # print(test.__dict__)
-    _explainer = explainer_class(**test.__dict__)
+    # Init Explainer
     try:
-        with time_limit(TIME_LIMIT, 'sleep'):
-            _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
+        arg = dict(**test.__dict__,
+                   **test_class.__dict__)  # todo delete from test_class.__dict__: '__module__', '__doc__', 'description_short', ', 'description', '__init__', 'score']) and keep name', 'ml_task', input_features
+        _explainer = explainer_class(**arg)
+    except UnsupportedModelException:
+        print('UnsupportedModelException')
+        return format_results()
+    except Exception as e:
+        exc_info = sys.exc_info()
+        traceback.print_exception(*exc_info)
+        return format_results()
+
+    # Explain
+    try:
+        with time_limit(TIME_LIMIT, 'explain'):
+            try:
+                _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
+            except Exception as e:
+                exc_info = sys.exc_info()
+                traceback.print_exception(*exc_info)
+                print('Err while explaining')
+                return format_results()
+            _explainer.check_explanation(test.dataset_to_explain)
     except TimeoutException as e:
         print("Timed out!")
-        if _explainer.__dict__.get('expected_values', None) is None:
-            _explainer.expected_values = f'Time out {TIME_LIMIT}'
-        if _explainer.__dict__.get('attribution', None) is None:
-            _explainer.attribution = f'Time out {TIME_LIMIT}'
-        if _explainer.__dict__.get('importance', None) is None:
-            _explainer.importance = f'Time out {TIME_LIMIT}'
+        format_results(score=None, time=TIME_LIMIT)
 
-    score = test.score(attribution=_explainer.attribution,
-                       importance=_explainer.importance,
-                       interaction=_explainer.interaction,
-                       )
-    results = {
-        'score': score,
-        'time': time.time() - start_time,
-        'Last_updated': str(datetime.datetime.now()),
-    }
-    return results
+    # Score the output
+    arg = {key: not_string(_explainer.__dict__.get(key)) for key in ['attribution', 'importance', 'interaction']}
+    score = test.score(**arg)
+    return format_results(score=score, time=time.time() - start_time)
 
 
 if __name__ == "__main__":

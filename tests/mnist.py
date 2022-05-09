@@ -62,6 +62,7 @@ def load_mnist():
 
 class Mnist(Test):
     name = 'mnist'
+    ml_task = 'classification'
     description = "code from https://github.com/iancovert/sage-experiments/blob/main/experiments/univariate_predictors.ipynb"
     src = ''
     input_features = [f'px{n}' for n in range(256)]

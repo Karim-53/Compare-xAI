@@ -3,6 +3,7 @@ todo cite the original repository
 add binder tag
 python version
 nb of XAI nb of tests 
+todo write the power capacity of the used computer 
 
 <p align="center"><img src="img/banner.svg" width=700 /></p>
 

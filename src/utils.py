@@ -2,6 +2,8 @@ import collections
 import os
 import pathlib
 
+import numpy as np
+
 root = ''
 for root_relative_dir in [r'./', r'../', r'../../', r'../../../']:
     if all([pathlib.Path(os.path.abspath(root_relative_dir + subdir)).exists() for subdir in
@@ -32,7 +34,9 @@ def plot_tree(xgb_model, filename, rankdir='UT', num_trees=0):
 
 
 def get_importance(attribution):
-    return abs(attribution).mean(axis=0)
+    importance = abs(np.array(attribution)).mean(axis=0)
+    # importance = np.squeeze(importance, axis=0)
+    return importance
 
 
 def are_class_names_unique(class_list):

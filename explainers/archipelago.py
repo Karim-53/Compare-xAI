@@ -6,7 +6,7 @@ class Archipelago(Explainer):
     """ Main wrapper. please use this one """
     name = 'archipelago'
     supported_models = ('model_agnostic',)
-    interaction = True
+    output_interaction = True
 
     source_code = 'https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb'
 

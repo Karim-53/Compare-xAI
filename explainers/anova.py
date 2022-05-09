@@ -5,7 +5,7 @@ from explainers.interaction_utils import proprocess_data
 class Anova(Explainer):
     """ Main wrapper. please use this one """
     name = 'anova'
-    interaction = True
+    output_interaction = True
     # todo fix anova by adding feature importance
     supported_models = ('model_agnostic',)
 

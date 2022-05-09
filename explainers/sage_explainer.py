@@ -7,7 +7,7 @@ class Sage(Explainer):
     name = 'sage'
     supported_models = ('model_agnostic',)
     # todo SAGE is using the truth to estimate the f importance so we should have this as a selection criteria
-    importance = True
+    output_importance = True
     source_paper_tag = 'covert2020understanding'
     source_paper_bibliography = r"""@article{covert2020understanding,
   title={Understanding global feature contributions with additive importance measures},

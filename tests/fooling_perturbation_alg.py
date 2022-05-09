@@ -1,29 +1,22 @@
 """ In this .py we test the effect of the distribution on the explanation"""
 from tests.test_superclass import Test
-# import warnings
-# warnings.filterwarnings('ignore')
-# from fooling_lime_shap.adversarial_models import *
-import fooling_perturbation_alg_lib as lib
+try:
+    from .fooling_perturbation_alg_lib import *
+except ImportError:
+    from fooling_perturbation_alg_lib import *
 
 
 class FoolingPerturbationAlg(Test):
-    """ """
     name = 'fooling_perturbation_alg'
-    description_short = " "
-    # input_features = ['x0', 'x1']
-    # dataset_to_explain = pd.DataFrame([[0, 0], [0, 1], [1, 0], [1, 1]], columns=input_features)
-    # truth_to_explain = pd.Series([0, 1, 1, 2], name='target')
+    ml_task = 'binary_classification'
+    input_features = ['age', 'two_year_recid', 'priors_count', 'length_of_stay', 'c_charge_degree_F',
+                      'c_charge_degree_M', 'sex_Female', 'sex_Male', 'race', 'unrelated_column']
 
-    description = """
-            ### Setup
-        Let's begin by examining the COMPAS data set.  This data set consists of defendent information from
-        Broward Couty, Florida.Let's suppose that some adversary wants to _mask_ baised or racist behavior on this data set.
-    """
 
     def __init__(self):
+        super().__init__()
         # Get the data set and do some preprocessing
-        params = lib.Params("model_configurations/experiment_params.json")
-        np.random.seed(params.seed)  # todo this should be deleted
+        params = Params()
         X, y, cols = get_and_preprocess_compas_data(params)
 
         # Add a random column -- this is what we'll have LIME/SHAP explain.
@@ -73,60 +66,61 @@ class FoolingPerturbationAlg(Test):
 
         # Train the adversarial model for LIME with f and psi
         adv_lime = Adversarial_Lime_Model(racist_model_f(), innocuous_model_psi()
-                                          ).train(xtrain, ytrain, feature_names=features, categorical_features=categorical_feature_indcs)
+                                          ).train(xtrain, ytrain, feature_names=features,
+                                                  categorical_features=categorical_feature_indcs)
 
         # preparing local explanation
-        ex_indc = 0  # np.random.choice(xtest.shape[0]) # I fix it to be fair to all xAI
+        ex_indc = [0]  # todo add some more datapoints to differenciate f importance and f attribution
 
         self.trained_model = adv_lime
         self.dataset_size = len(xtrain)
         self.df_train = pd.DataFrame(xtrain, columns=adv_lime.get_column_names())
         self.categorical_feature_indices = categorical_feature_indcs
         self.df_train['target'] = ytrain
-        # self.X = self.df_train[self.input_features]
+        # self.input_features = adv_lime.get_column_names()
+        assert self.input_features == adv_lime.get_column_names()
         self.df_reference = self.df_train[self.input_features]
         self.X_reference = xtrain
+        self.X = self.X_reference
         self.dataset_to_explain = xtest[ex_indc]
         self.truth_to_explain = ytest[ex_indc]
-        self.predict_func = self.trained_model.predict_proba
-        self.input_features = adv_lime.get_column_names()
+        self.predict_func = self.trained_model.predict
+        self.predict_proba = self.trained_model.predict_proba
+        # print(self.input_features)
 
-    @staticmethod
-    def score(attribution=None, importance=None, **kwargs):
-        # todo assert attribution importance size
+    @classmethod  # todo change all to class method
+    def score(cls, attribution: np.ndarray = None, importance: np.array = None, **kwargs):
+
+        def is_unrelated_feature_important(_importance: np.array):
+            """ can receive both global and local importance"""
+            if _importance is None or _importance.shape == ():  # case np.asarray(None) see https://stackoverflow.com/questions/54186190/why-does-numpy-ndarray-allow-for-a-none-array
+                return None
+            print('_importance', _importance, type(_importance))
+            # todo MAPLE output _importance = [0, ..., 0] should we consider that it succeeded in the test ? or is there a mistake in the implementation ?
+            feature_ranks = np.argsort(abs(_importance))
+            print(feature_ranks)
+            unrelated_column_index = FoolingPerturbationAlg.input_features.index('unrelated_column')
+            unrelated_column_rank = feature_ranks[unrelated_column_index]
+            score = 1 - (unrelated_column_rank / (len(cls.input_features) - 1))
+            print(score)
+            return score
+        if attribution is None:
+            _attribution = None
+        else:
+            try:
+                _attribution = np.squeeze(attribution)
+                if len(_attribution.shape) > 2:
+                    print('WARNING fooling_perturbation_alg received _attribution.shape = ', _attribution.shape)
+                if len(_attribution.shape) == 2:  # did give an explanation to each class Yes and No class -.-
+                    _attribution = _attribution[0, :]
+            except:
+                _attribution = None
         return {
-            # 'importance_symmetric': importance_symmetric(importance=importance),
-            # 'is_attribution_symmetric': is_attribution_symmetric(attribution=attribution)
+            'attribution_fragility_is_unrelated_feature_important': is_unrelated_feature_important(_attribution),
+            'importance_fragility_is_unrelated_feature_important': is_unrelated_feature_important(importance),
         }
 
 
 if __name__ == "__main__":
-    FoolingPerturbationAlg()
-
-
-
-    pass
-    # todo double check the tree
-    # test = CoughAndFever()
-    # test.df_train['prediction'] = test.trained_model.predict(test.X)
-    # print(test.df_train.drop_duplicates())
-    # filename = test.__class__.__name__ + '.png'
-    # plot_tree(test.trained_model, filename)
-    # todo add assert if target is different from prediction (move it to __init__
-
-    # todo [after acceptance] asset on the data distribution
-    # stat = df_train[input_features].groupby(input_features).size().reset_index().rename(columns={0: 'frequency'})
-    # stat['join_distribution'] = stat.frequency.astype(float) / len(df_train)
-    #
-    # import math
-    #
-    #
-    # def marginal_probability(feature, r):
-    #     return sum(df_train[feature] == r[feature]) / len(df_train)
-    #
-    #
-    # stat['proba_product'] = [math.prod([marginal_probability(feature, r) for feature in input_features]) for idx, r in
-    #                          stat.iterrows()]
-    # stat['equal'] = stat.proba_product == stat.join_distribution
-    # print('Is statistically independent:', all(stat['equal']))
-    # stat
+    test = FoolingPerturbationAlg()
+    print(test.__dict__.keys())

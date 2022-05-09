@@ -8,6 +8,7 @@ valid_tests = (
     DistributionNonUniformStatDep,
     DistributionUniformStatDep,
     DistributionNonUniformStatIndep,
+    FoolingPerturbationAlg,
     DetectInteraction0,
     DetectInteraction1,
     DetectInteraction2,

@@ -7,6 +7,7 @@ from tests.util import importance_symmetric, is_attribution_symmetric
 
 class CoughAndFever(Test):
     name = "cough_and_fever"
+    ml_task = 'regression'
     # todo [after acceptance] add last_update = version of the release (of this repo)
     # todo [after submission] refactor
     input_features = ['Cough', 'Fever']

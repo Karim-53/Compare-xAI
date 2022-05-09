@@ -28,7 +28,9 @@ remove-and-retrain (ROAR)(↑),,0.17,0,does retrain the model so it is not a uni
 GT-Shapley(↑),,0.17,0,does the xAi output correlate with the ground truth shapley values. Noooooo !,,liu2021synthetic,,,,,,,,,
 infidelity(↓),,0.17,0,-,,liu2021synthetic,,,,,,,,,
 x0*x1,,0.58,not a priority,,,did not find a paper implementing that yet. but it is a quite popular example,,,1,1,0,,-,-,1
-COMPAS,fragility,0.92,to implement,exploit a vulnerability in model-agnostic xai that use feature perturbation: adversarial attack to lower the feature importance of a specific feature,"https://github.com/propublica/compas-analysis/blob/master/compas-scores-two-years.csv 
+fooling_perturbation_alg,fragility,0.92,1,"exploit a vulnerability in model-agnostic xai that use feature perturbation: adversarial attack to lower the feature importance of a specific feature
+### Setup
+Let's begin by examining the COMPAS data set. This data set consists of defendent information from Broward Couty, Florida.Let's suppose that some adversary wants to _mask_ baised or racist behavior on this data set.","https://github.com/propublica/compas-analysis/blob/master/compas-scores-two-years.csv 
 https://www.kaggle.com/datasets/danofer/compass",lakkaraju2020fool,categorical/scalars,,0,0,0,1,"Race should be the most important feature
 is the f importance of Race as the correct value or is it affected by the adversarial attack
 using out of distribution is the faille: cibli ken el model anistic
