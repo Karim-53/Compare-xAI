@@ -1,3 +1,4 @@
+""" plot the distribution of score and time"""
 import numpy as np
 import pandas as pd
 import seaborn as sns
