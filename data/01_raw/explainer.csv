@@ -102,3 +102,4 @@ interactions, and the other that has the interaction of interest forcibly remove
 with this method is it exacerbates the slowness of individual testing methods which require many
 tests by forcing a complex model to be trained for each test.
 https://arxiv.org/pdf/2103.03103.pdf ",,,
+permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,,

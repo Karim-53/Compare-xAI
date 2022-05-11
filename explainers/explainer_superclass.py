@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from src.utils import root
+
 MODELS = ['tree_based', 'neural_network']
 EXTENDED_MODELS = {'model_agnostic': MODELS}
 
@@ -60,8 +62,21 @@ class Explainer:
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
 
-    # def __init__(self): # todo create init that import all prop from csv
-    #     self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
+    def __init__(self):
+        # print('ppp', self.name, self.__dict__.keys())
+        explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('explainer')
+        if hasattr(self, 'name'):
+            if self.name in explainer_csv.index:
+                row = explainer_csv.loc[self.name]
+                for idx,val in row.items():
+                    if ' ' not in idx:
+                        self.__dict__[idx] = val
+            else:
+                print(f'Warning: {self.name} Explainer is not mentioned in explainer.csv')
+        else:
+            print(f'Warning: Explainer defined without a name property')
+
+        # self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
     @classmethod
     def get_xai_output(cls):
         xai_output = []
