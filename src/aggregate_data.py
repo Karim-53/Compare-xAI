@@ -2,6 +2,10 @@ from src.dask.utils import load_results
 import pandas as pd
 import numpy as np
 
+# todo delete supported_models and outputs columns
+# todo generate supported_models and outputs columns for the detailed view of an explainer
+
+
 from src.explainer import valid_explainers_dico
 def get_required_input_data(explainer_name) -> set:
     if explainer_name not in valid_explainers_dico.keys():

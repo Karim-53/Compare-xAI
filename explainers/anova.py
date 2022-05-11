@@ -2,11 +2,11 @@ from explainers.explainer_superclass import Explainer
 from explainers.interaction_utils import proprocess_data
 
 
-class Anova(Explainer):
+class Anova(Explainer,    name = 'anova'):
     """ Main wrapper. please use this one """
-    name = 'anova'
+
     output_interaction = True
-    # todo fix anova by adding feature importance
+    # todo fix anova by adding feature importance https://towardsdatascience.com/statistics-in-python-using-anova-for-feature-selection-b4dc876ef4f0
     supported_models = ('model_agnostic',)
 
     # is_affected_by_seed = True

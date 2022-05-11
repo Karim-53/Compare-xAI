@@ -77,9 +77,9 @@ class LimeTabular:
         return out[0] if self.flat_out else out
 
 
-class Lime(Explainer):
+class Lime(Explainer,    name = 'lime'):
     """ Main wrapper. please use this one"""
-    name = 'lime'
+
     supported_models = ('model_agnostic',)
     output_attribution = True
     output_importance = True

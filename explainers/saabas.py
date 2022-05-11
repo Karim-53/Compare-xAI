@@ -8,8 +8,8 @@ from explainers.explainer_superclass import Explainer, UnsupportedModelException
 from src.utils import get_importance
 
 
-class Saabas(Explainer):
-    name = 'saabas'
+class Saabas(Explainer,     name = 'saabas'):
+
     supported_models = ('tree_based',)
     # requirements = {'generic_xgboost':True}
 

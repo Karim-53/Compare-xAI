@@ -28,6 +28,3 @@ valid_explainers_dico = {e.name: e for e in valid_explainers}
 
 if __name__ == '__main__':
     import numpy as np
-
-    test = Lime(predict_func=lambda x: x, X=np.array([[0, 0] * 5]))
-    print(test)

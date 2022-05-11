@@ -3,8 +3,8 @@ import pandas as pd
 from explainers.explainer_superclass import Explainer
 
 
-class Sage(Explainer):
-    name = 'sage'
+class Sage(Explainer,    name = 'sage'):
+
     supported_models = ('model_agnostic',)
     # todo SAGE is using the truth to estimate the f importance so we should have this as a selection criteria
     output_importance = True

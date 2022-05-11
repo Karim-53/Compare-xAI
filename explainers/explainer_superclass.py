@@ -33,6 +33,9 @@ def get_specific_args(method, super_method) -> set:
 
 
 class Explainer:
+    """ The doc is different from description prop:
+    doc is for coders while description is for the end user data scientist seeing the website"""
+    # todo change this to shap 's format: use __call__ ect. (literally this one should inherit from that class)
     name = None
     supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
 
@@ -45,6 +48,10 @@ class Explainer:
     importance: np.array = None
     attribution: np.ndarray = None
     interaction: np.ndarray = None
+
+    supported_model_model_agnostic: bool
+    supported_model_tree_based: bool
+    supported_model_neural_network: bool
 
     description = None  # if the xai pretend to be the unique solution given these assumptions / axioms please write it here until I find a way to index it
 
@@ -61,22 +68,23 @@ class Explainer:
     # todo [after acceptance] add last_update = version of the release of this repo
     # todo add source paper just the bibtex tag
     # todo add a pretty way to print the class
-
-    def __init__(self):
-        # print('ppp', self.name, self.__dict__.keys())
+    def __init_subclass__(cls, name=None, **kwargs):  # todo delete name param and replace it by cls.__name__
+        super().__init_subclass__(**kwargs)
+        cls.name = name
         explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('explainer')
-        if hasattr(self, 'name'):
-            if self.name in explainer_csv.index:
-                row = explainer_csv.loc[self.name]
-                for idx,val in row.items():
-                    if ' ' not in idx:
-                        self.__dict__[idx] = val
+        if name is not None:
+            if cls.name in explainer_csv.index:
+                row = explainer_csv.loc[cls.name]
+                for attribute, val in row.items():
+                    if ' ' not in attribute:
+                        setattr(cls, attribute, val)
             else:
-                print(f'Warning: {self.name} Explainer is not mentioned in explainer.csv')
+                print(f'Warning: {cls.name} Explainer is not mentioned in explainer.csv')
         else:
-            print(f'Warning: Explainer defined without a name property')
+            print(f'Warning: {cls.__name__} Explainer defined without a name property')
 
         # self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
+
     @classmethod
     def get_xai_output(cls):
         xai_output = []
@@ -94,8 +102,8 @@ class Explainer:
     def get_specific_args_explain(cls) -> set:
         return get_specific_args(cls.explain, Explainer.explain)
 
-    def __repr__(self) -> pd.Series:
-        return self.to_pandas()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
+    def __repr__(self) -> str:  # it must be a string
+        return self.to_pandas().__repr__()  # todo fix add string saying that it is an instance otherwise it is gonna be confusing
 
     @classmethod
     def to_pandas(cls) -> pd.Series:  # todo add params include_dominance, include_results
@@ -151,7 +159,8 @@ xAI's output:\t\t {', '.join(xai_output)}
             _shape = (1, _shape[0])
         # self.expected_values = np.random.randn(_shape[0])
 
-        for var_name, expected_shape in [['attribution', _shape], ['importance', (_shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
+        for var_name, expected_shape in [['attribution', _shape], ['importance', (
+        _shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
             var = self.__dict__.get(var_name)
             if var is not None and not isinstance(var, str):
                 if var.shape != expected_shape:  # todo also verify it is numpy
@@ -246,8 +255,7 @@ class InteractionExplainer:
         return output
 
 
-class Random(Explainer):
-    name = 'baseline_random'
+class Random(Explainer, name='baseline_random'):
     description = 'This is not a real explainer it helps measure the baseline score and processing time.'
     supported_models = ('model_agnostic',)
     output_attribution = True
@@ -285,4 +293,4 @@ class UnsupportedModelException(Exception):
 
 if __name__ == '__main__':
     explainer = Random()
-    print(explainer.to_pandas())
+    print(explainer.supported_model_neural_network)
