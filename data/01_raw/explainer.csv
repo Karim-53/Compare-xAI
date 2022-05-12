@@ -103,3 +103,7 @@ with this method is it exacerbates the slowness of individual testing methods wh
 tests by forcing a complex model to be trained for each test.
 https://arxiv.org/pdf/2103.03103.pdf ",,,,,,,,,
 permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True
+partition,,1,-,partition explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True
+permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True
+tree_shap_approximation,,1,-,tree_shap_approximation explainer from shap,https://github.com/slundberg/shap,,,True,True,False,False,True,False
+exact_shapley_values,,1,-,exact_shapley_values explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True

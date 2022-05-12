@@ -6,7 +6,7 @@ from .lime import Lime
 from .maple import Maple
 from .saabas import Saabas
 from .sage_explainer import Sage
-from .shap_explainer import Shap, KernelShap, TreeShap, Permutation
+from .shap_explainer import Shap, KernelShap, TreeShap, Permutation,    PermutationPartition,Partition,    TreeShapApproximation,    ExactShapleyValues
 from .shap_interaction import ShapInteraction
 from .shapley_taylor_interaction import ShapleyTaylorInteraction
 from .shapr import ShapR

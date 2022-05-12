@@ -9,12 +9,14 @@ valid_tests = (
     DistributionUniformStatDep,
     DistributionNonUniformStatIndep,
     FoolingPerturbationAlg,
-    DetectInteraction0,
-    DetectInteraction1,
-    DetectInteraction2,
-    DetectInteraction3,
-    DetectInteraction4,
     Mnist,
+
+    # Tests for interaction output: working but let's continue with it after acceptance
+    # DetectInteraction0,
+    # DetectInteraction1,
+    # DetectInteraction2,
+    # DetectInteraction3,
+    # DetectInteraction4,
 )
 assert are_class_names_unique(valid_tests), 'Duplicate test names'
 valid_tests_dico = {e.name: e for e in valid_tests}

@@ -1,3 +1,5 @@
+import re
+
 import numpy as np
 import pandas as pd
 
@@ -30,13 +32,15 @@ def get_specific_args(method, super_method) -> set:
         args = args[:-len_default_args]
     super_method_init_args = inspect.getfullargspec(super_method).args
     return set(args).difference(set(super_method_init_args))
-
+regex_to_snake_case = re.compile(r'(?<!^)(?=[A-Z])') # for a more advanced case: https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
+to_snake_case = lambda name: regex_to_snake_case.sub('_', name).lower()
+explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('explainer')
 
 class Explainer:
     """ The doc is different from description prop:
     doc is for coders while description is for the end user data scientist seeing the website"""
     # todo change this to shap 's format: use __call__ ect. (literally this one should inherit from that class)
-    name = None
+    name:str  # will be inferred from class name
     supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
 
     # Know what could be calculated
@@ -70,18 +74,17 @@ class Explainer:
     # todo add a pretty way to print the class
     def __init_subclass__(cls, name=None, **kwargs):  # todo delete name param and replace it by cls.__name__
         super().__init_subclass__(**kwargs)
+        if name is None:
+            # print(f'Warning: {cls.__name__} Explainer defined without a name property')
+            name = to_snake_case(cls.__name__)
         cls.name = name
-        explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('explainer')
-        if name is not None:
-            if cls.name in explainer_csv.index:
-                row = explainer_csv.loc[cls.name]
-                for attribute, val in row.items():
-                    if ' ' not in attribute:
-                        setattr(cls, attribute, val)
-            else:
-                print(f'Warning: {cls.name} Explainer is not mentioned in explainer.csv')
+        if cls.name in explainer_csv.index:
+            row = explainer_csv.loc[cls.name]
+            for attribute, val in row.items():
+                if ' ' not in attribute:
+                    setattr(cls, attribute, val)
         else:
-            print(f'Warning: {cls.__name__} Explainer defined without a name property')
+            print(f'Warning: {cls.name} Explainer is not mentioned in explainer.csv')
 
         # self.source_paper_bibliography = bibliography.get(self.source_paper_tag, None)
 
@@ -147,6 +150,7 @@ xAI's output:\t\t {', '.join(xai_output)}
                 # todo [after acceptance] think about changing var name to explicand == the input to be explained see https://arxiv.org/pdf/1908.08474.pdf
                 **kwargs):  # Should we make this an abstract method ?
         """ Here we should cite 1 or 2 sentences why the xai need such variables """
+        # todo create a decorator for this function: automatically infer global explanation and check the output format
         from src.explainer import valid_explainers
         raise NotImplementedError(
             f"This explainer is not supported at the moment. Explainers supported are {[e.name for e in valid_explainers]}"
