@@ -1,10 +1,10 @@
 """ plot the distribution of score and time"""
-import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
-from src.dask.utils import load_results
+
 from src.dask.scoring import get_score_df, get_eligible_points_df, get_summary_df
+from src.dask.utils import load_results
 
 if __name__ == "__main__":
 
@@ -13,7 +13,6 @@ if __name__ == "__main__":
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     # print(summary_df.round(2))
-
 
     lista = []
     for idx, row in result_df.iterrows():
@@ -41,5 +40,5 @@ if __name__ == "__main__":
                 lista_time.append(v)
     # distrib of time (real)
     fig = sns.histplot(lista_time, kde=True, label='real time', legend=True)
-    plt.xlim([None,200])
+    plt.xlim([None, 200])
     plt.show()

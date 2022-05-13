@@ -1,14 +1,18 @@
 from ast import literal_eval
 
 import pandas as pd
+
 # todo move
 try:
     from src.utils import root
+
     RESULTS_FILE_PATH = root + '/src/dask/results.csv'
     deployed = False
 except:
     RESULTS_FILE_PATH = root + 'results.csv'
     deployed = True
+
+
 # print('deployed', deployed)
 
 

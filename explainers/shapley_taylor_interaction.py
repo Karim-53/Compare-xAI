@@ -147,7 +147,7 @@ def subset_before(S, ordering, ordering_dict):
     return ordering[:end_idx]
 
 
-class ShapleyTaylorInteraction(Explainer, name = 'shapley_taylor_interaction'):
+class ShapleyTaylorInteraction(Explainer, name='shapley_taylor_interaction'):
     """ Main wrapper. please use this one """
 
     supported_models = ('model_agnostic',)

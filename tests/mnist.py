@@ -84,7 +84,8 @@ class Mnist(Test):
         print("score mnist")
         # _dummy_features = self.X.max(axis=0) == 0.
         X, _, _, _, _ = load_mnist()
-        _dummy_features = X.max(axis=0) == 0.  # todo double check that the MLP is indeed not using these pixels by applying the axiom (brute force)
+        _dummy_features = X.max(
+            axis=0) == 0.  # todo double check that the MLP is indeed not using these pixels by applying the axiom (brute force)
         return {
             'importance_dummy': importance_dummy(importance=importance, dummy_features=_dummy_features),
             'attributions_dummy': attributions_dummy(attribution=attribution,

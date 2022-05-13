@@ -1,4 +1,4 @@
-class Test: # todo make abstract
+class Test:  # todo make abstract
     # todo [after publication] add last_update = version of the release
     description_short = " "  # todo
     description = None

@@ -2,18 +2,18 @@ from explainers import *
 from src.utils import are_class_names_unique
 
 valid_explainers = (
-    # Permutation,
+    Permutation,
     PermutationPartition,
     Partition,
     TreeShapApproximation,
     ExactShapleyValues,
-    # Random,
-    # TreeShap,
-    # Saabas,
-    # KernelShap,
-    # Sage,
-    # Lime,
-    # Maple,
+    Random,
+    TreeShap,
+    Saabas,
+    KernelShap,
+    Sage,
+    Lime,
+    Maple,
     # Anova, # todo fix feature importance
 
     # Archipelago,  # todo after paper acceptance
@@ -31,4 +31,4 @@ valid_explainers_dico = {e.name: e for e in valid_explainers}
 # "l2x": explainers.L2X,
 
 if __name__ == '__main__':
-    import numpy as np
+    pass

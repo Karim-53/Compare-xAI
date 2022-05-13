@@ -1,16 +1,15 @@
 import datetime
 import inspect
 import logging
-import time
 import sys
+import time
 import traceback
-
 from typing import Type
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
+from src.dask.scoring import get_details
 from src.explainer import valid_explainers
 from src.io import *
-from src.dask.scoring import get_details
 from src.test import valid_tests
 from tests.test_superclass import Test
 
@@ -102,8 +101,9 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
 
     # Init Explainer
     try:
-        arg = dict(**test.__dict__) # todo try to solve this problem of attributes here and there...
-        arg.update(**test_class.__dict__)  # todo delete from test_class.__dict__: '__module__', '__doc__', 'description_short', ', 'description', '__init__', 'score']) and keep name', 'ml_task', input_features
+        arg = dict(**test.__dict__)  # todo try to solve this problem of attributes here and there...
+        arg.update(
+            **test_class.__dict__)  # todo delete from test_class.__dict__: '__module__', '__doc__', 'description_short', ', 'description', '__init__', 'score']) and keep name', 'ml_task', input_features
         _explainer = explainer_class(**arg)
     except UnsupportedModelException:
         print('UnsupportedModelException')

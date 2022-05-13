@@ -2,7 +2,7 @@ from explainers.archipelago_lib.src.explainer import Archipelago as _Archipelago
 from explainers.explainer_superclass import Explainer
 
 
-class Archipelago(Explainer, name = 'archipelago'):
+class Archipelago(Explainer, name='archipelago'):
     """ Main wrapper. please use this one """
 
     supported_models = ('model_agnostic',)

@@ -331,7 +331,7 @@ class MAPLE:
         return pred
 
 
-class Maple(Explainer,    name = 'maple'):
+class Maple(Explainer, name='maple'):
     """ Wrapper for all maple implementation. Please use this one """
 
     supported_models = ('model_agnostic',)

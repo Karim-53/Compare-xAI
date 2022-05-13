@@ -1,5 +1,6 @@
 """ In this .py we test the effect of the distribution on the explanation"""
 from tests.test_superclass import Test
+
 try:
     from .fooling_perturbation_alg_lib import *
 except ImportError:
@@ -11,7 +12,6 @@ class FoolingPerturbationAlg(Test):
     ml_task = 'binary_classification'
     input_features = ['age', 'two_year_recid', 'priors_count', 'length_of_stay', 'c_charge_degree_F',
                       'c_charge_degree_M', 'sex_Female', 'sex_Male', 'race', 'unrelated_column']
-
 
     def __init__(self):
         super().__init__()
@@ -86,7 +86,6 @@ class FoolingPerturbationAlg(Test):
         self.truth_to_explain = ytest[ex_indc]
         self.predict_func = self.trained_model.predict
         self.predict_proba = self.trained_model.predict_proba
-        # print(self.input_features)
 
     @classmethod  # todo change all to class method
     def score(cls, attribution: np.ndarray = None, importance: np.array = None, **kwargs):
@@ -95,15 +94,16 @@ class FoolingPerturbationAlg(Test):
             """ can receive both global and local importance"""
             if _importance is None or _importance.shape == ():  # case np.asarray(None) see https://stackoverflow.com/questions/54186190/why-does-numpy-ndarray-allow-for-a-none-array
                 return None
-            print('_importance', _importance, type(_importance))
+            # print('_importance', _importance, type(_importance))
             # todo MAPLE output _importance = [0, ..., 0] should we consider that it succeeded in the test ? or is there a mistake in the implementation ?
             feature_ranks = np.argsort(abs(_importance))
-            print(feature_ranks)
+            # print(feature_ranks)
             unrelated_column_index = FoolingPerturbationAlg.input_features.index('unrelated_column')
             unrelated_column_rank = feature_ranks[unrelated_column_index]
             score = 1 - (unrelated_column_rank / (len(cls.input_features) - 1))
-            print(score)
+            # print(score)
             return score
+
         if attribution is None:
             _attribution = None
         else:

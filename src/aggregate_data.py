@@ -1,16 +1,17 @@
-from src.dask.utils import load_results
-import pandas as pd
 import numpy as np
+import pandas as pd
+
+from src.dask.utils import load_results
+from src.explainer import valid_explainers_dico
+from src.export_sql import export_to_sql
+
 
 # todo delete supported_models and outputs columns
 # todo generate supported_models and outputs columns for the detailed view of an explainer
 
 
-from src.explainer import valid_explainers_dico
-from src.export_sql import export_to_sql
-
-
 def get_required_input_data(explainer_name) -> set:
+    print('valid explainers:', len(valid_explainers_dico), valid_explainers_dico.keys())
     if explainer_name not in valid_explainers_dico.keys():
         print(f'{explainer_name}  not in valid_explainers_dico.keys()')
         return None
@@ -20,26 +21,28 @@ def get_required_input_data(explainer_name) -> set:
     return _init_specific_args.union(_explain_specific_args)
 
 
-def aggregate_outputs(explainer:pd.DataFrame):
+def aggregate_outputs(explainer: pd.DataFrame):
     _df = pd.DataFrame()
-    output_labels = {'importance':'Feature importance (global explanation)',
-                     'attribution':'Feature attribution (local explanation)', # can use html here
-                     'interaction':'Feature interaction (local explanation)',
+    output_labels = {'importance': 'Feature importance (global explanation)',
+                     'attribution': 'Feature attribution (local explanation)',  # can use html here
+                     'interaction': 'Feature interaction (local explanation)',
                      }
-    for out,label in output_labels.items():
-        _df[out] = explainer[f'output_{out}'].map({True:label, False:None})
+    for out, label in output_labels.items():
+        _df[out] = explainer[f'output_{out}'].map({True: label, False: None})
     return _df.apply(lambda x: ','.join(x.dropna().values.tolist()), axis=1)
 
 
-def aggregate_supported_models(explainer:pd.DataFrame):
+def aggregate_supported_models(explainer: pd.DataFrame):
     _df = pd.DataFrame()
-    model_labels = {'model_agnostic':'Any AI model (model agnostic xAI algorithms are independent of the AI implementation)',
-                     'tree_based':'Tree-based ML',
-                     'neural_network':'Neural networks',
-                     }
-    for key,label in model_labels.items():
-        _df[key] = explainer[f'supported_model_{key}'].map({True:label, False:None})
+    model_labels = {
+        'model_agnostic': 'Any AI model (model agnostic xAI algorithms are independent of the AI implementation)',
+        'tree_based': 'Tree-based ML',
+        'neural_network': 'Neural networks',
+        }
+    for key, label in model_labels.items():
+        _df[key] = explainer[f'supported_model_{key}'].map({True: label, False: None})
     return _df.apply(lambda x: ','.join(x.dropna().values.tolist()), axis=1)
+
 
 if __name__ == "__main__":
     result_df = load_results()

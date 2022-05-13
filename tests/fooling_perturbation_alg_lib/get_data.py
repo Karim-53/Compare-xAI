@@ -1,5 +1,6 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 from .utils import Params
 
 
@@ -28,7 +29,7 @@ def get_and_preprocess_compas_data(params):
                               (compas_df['score_text'] != "NA")]
 
     compas_df['length_of_stay'] = (
-                pd.to_datetime(compas_df['c_jail_out']) - pd.to_datetime(compas_df['c_jail_in'])).dt.days
+            pd.to_datetime(compas_df['c_jail_out']) - pd.to_datetime(compas_df['c_jail_in'])).dt.days
     X = compas_df[['age', 'two_year_recid', 'c_charge_degree', 'race', 'sex', 'priors_count', 'length_of_stay']]
 
     # if person has high score give them the _negative_ model outcome

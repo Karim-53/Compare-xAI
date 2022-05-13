@@ -32,15 +32,19 @@ def get_specific_args(method, super_method) -> set:
         args = args[:-len_default_args]
     super_method_init_args = inspect.getfullargspec(super_method).args
     return set(args).difference(set(super_method_init_args))
-regex_to_snake_case = re.compile(r'(?<!^)(?=[A-Z])') # for a more advanced case: https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
+
+
+regex_to_snake_case = re.compile(
+    r'(?<!^)(?=[A-Z])')  # for a more advanced case: https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
 to_snake_case = lambda name: regex_to_snake_case.sub('_', name).lower()
 explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('explainer')
+
 
 class Explainer:
     """ The doc is different from description prop:
     doc is for coders while description is for the end user data scientist seeing the website"""
     # todo change this to shap 's format: use __call__ ect. (literally this one should inherit from that class)
-    name:str  # will be inferred from class name
+    name: str  # will be inferred from class name
     supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
 
     # Know what could be calculated
@@ -164,7 +168,7 @@ xAI's output:\t\t {', '.join(xai_output)}
         # self.expected_values = np.random.randn(_shape[0])
 
         for var_name, expected_shape in [['attribution', _shape], ['importance', (
-        _shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
+                _shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
             var = self.__dict__.get(var_name)
             if var is not None and not isinstance(var, str):
                 if var.shape != expected_shape:  # todo also verify it is numpy

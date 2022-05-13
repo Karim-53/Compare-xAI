@@ -43,7 +43,7 @@ def importance_xi_more_important(importance, i=0):
 def is_attribution_symmetric(attribution):
     if not is_ok(attribution):
         return None
-    print(attribution)
+    # print(attribution)
     diff = np.max(np.abs(attribution[:, 0] - attribution[[0, 2, 1, 3], 1]))
     if diff < 1:
         return 1. - diff  # if there is a small epsilon then it's gonna hit the score

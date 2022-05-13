@@ -2,7 +2,7 @@ from explainers.explainer_superclass import Explainer
 from explainers.interaction_utils import proprocess_data
 
 
-class Anova(Explainer,    name = 'anova'):
+class Anova(Explainer, name='anova'):
     """ Main wrapper. please use this one """
 
     output_interaction = True

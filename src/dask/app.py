@@ -4,6 +4,7 @@ check the remaining hours https://dashboard.heroku.com/account/billing
 # todo delete
 # TODO stop using backend, use plotly.offline https://stackoverflow.com/questions/46821554/multiple-plotly-plots-on-1-page-without-subplot/59265030#59265030
 import visdcc
+
 try:
     from pprint import pprint
 except:
@@ -135,7 +136,7 @@ app.layout = html.Div(children=[
                  style={'display': 'none'}, multi=True, clearable=True, searchable=True),
 
     html.P(id='help_txt2',
-                    children='The Checklist below do not affect the plot yet (just for demonstration purpose):'),
+           children='The Checklist below do not affect the plot yet (just for demonstration purpose):'),
 
     dcc.Checklist(id='todo',
                   options=todo_lista,
@@ -145,12 +146,13 @@ app.layout = html.Div(children=[
     html.P(id='kept_objects', children=get_text_stats(eligible_points_df)),
 
     html.H1(children='Pareto plot: Global performance of xAI methods'),
-    html.P(id='help_txt', children='Dot size == how much polyvalent is the xAI (i.e. this xAI works on different explanation tasks). higher is better. ______________ Click on a dot to know more about the xAI'),
+    html.P(id='help_txt',
+           children='Dot size == how much polyvalent is the xAI (i.e. this xAI works on different explanation tasks). higher is better. ______________ Click on a dot to know more about the xAI'),
     dcc.Graph(
         id='pareto_plot',
         figure=fig
     ),
-    visdcc.Run_js(id = 'javascript'),
+    visdcc.Run_js(id='javascript'),
 ])
 
 last_click_data = ''

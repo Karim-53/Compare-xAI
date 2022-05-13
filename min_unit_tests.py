@@ -19,7 +19,7 @@ def experience(n, m):
     summary_df['time_per_test'] = (summary_df['time_per_test'] * m + abs(np.random.randn(n))) / (m + 1)
     mask2 = paretoset(summary_df[['percentage', 'time_per_test']], sense=["max", "min"])
 
-    return sum(mask1 != mask2) #/ n
+    return sum(mask1 != mask2)  # / n
 
 
 def smallest_acceptable_nb_tests(n, t):
@@ -30,6 +30,7 @@ def smallest_acceptable_nb_tests(n, t):
             return m
     else:
         raise Exception('we need more than unit tests...')
+
 
 # ex = [experience(n, m) for _ in range(t)]
 # print(np.average(ex), pd.Series(ex).sem())
@@ -45,19 +46,19 @@ def smallest_acceptable_nb_tests(n, t):
 # plt.title(f'n = {n}')
 # plt.show()
 
-n_lista = list(range(10,1000,10))
+n_lista = list(range(10, 1000, 10))
 m_lista = []
 for n in n_lista:
     m_lista.append(smallest_acceptable_nb_tests(n, t))
 
-plt.figure(figsize=(5,5))
+plt.figure(figsize=(5, 5))
 plt.plot(n_lista, m_lista, label='$M = f(n)$')
 plt.plot(n_lista, n_lista, '--', color='gray', label='diagonal')
 plt.plot(n_lista, [x * 0.5 for x in n_lista], '--', label='trend line: $M = 0.5 * n$')
 plt.xlabel('$n$: the number of xAI')
 plt.ylabel('$M$: the minimum number of unit tests')
-plt.xlim([0,200])
-plt.ylim([0,200])
+plt.xlim([0, 200])
+plt.ylim([0, 200])
 # plt.title(f'threshold')
 plt.grid()
 plt.legend()

@@ -1,15 +1,15 @@
+import sys
+import traceback
+
 import xgboost as xgb
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
-import sys
-import traceback
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
 from src.utils import get_importance
 
 
-class Saabas(Explainer,     name = 'saabas'):
-
+class Saabas(Explainer, name='saabas'):
     supported_models = ('tree_based',)
     # requirements = {'generic_xgboost':True}
 
@@ -26,7 +26,8 @@ class Saabas(Explainer,     name = 'saabas'):
             exc_info = sys.exc_info()
             traceback.print_exception(*exc_info)
             raise UnsupportedModelException()
-        if not isinstance(self.trained_model, xgb.core.Booster) and not isinstance(self.trained_model, RandomForestRegressor):
+        if not isinstance(self.trained_model, xgb.core.Booster) and not isinstance(self.trained_model,
+                                                                                   RandomForestRegressor):
             raise UnsupportedModelException()
 
     def explain(self, dataset_to_explain, **kwargs):
@@ -40,7 +41,7 @@ class Saabas(Explainer,     name = 'saabas'):
             # self.expected_values = shap_values.base_values  # todo [after acceptance] get the base value from the xgboost
             self.importance = get_importance(self.attribution)
         elif isinstance(self.trained_model, RandomForestRegressor):
-            raise 'not implemented' # todo if random forest
+            raise 'not implemented'  # todo if random forest
             # from treeinterpreter import treeinterpreter as ti, utils
             # from sklearn.ensemble import RandomForestRegressor
             #

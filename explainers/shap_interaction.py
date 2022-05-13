@@ -187,7 +187,7 @@ class SiExplainer(InteractionExplainer):
             return np.array(res)
 
 
-class ShapInteraction(Explainer, name = 'shap_interaction'):
+class ShapInteraction(Explainer, name='shap_interaction'):
     """ Main wrapper. please use this one """
 
     supported_models = ('model_agnostic',)

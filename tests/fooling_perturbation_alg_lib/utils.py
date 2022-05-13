@@ -1,6 +1,7 @@
 import json
+
 import numpy as np
-import pandas as pd
+
 
 class Params():
     """Parameters object taken from: https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/utils.py
@@ -13,17 +14,18 @@ class Params():
     ----------
     Parameters object
     """
-    def __init__(self, json_path = "experiment_params.json"): # todo delete json_path arg
+
+    def __init__(self, json_path="experiment_params.json"):  # todo delete json_path arg
         params = {
-                "model_version": "experiment_params",
-                "seed": 123454321,
-                "protected_class": 1,
-                "unprotected_class": 0,
-                "positive_outcome": 1,
-                "negative_outcome": 0,
-                "perturbation_std": 0.3,
-                "samples": 3000
-            }
+            "model_version": "experiment_params",
+            "seed": 123454321,
+            "protected_class": 1,
+            "unprotected_class": 0,
+            "positive_outcome": 1,
+            "negative_outcome": 0,
+            "perturbation_std": 0.3,
+            "samples": 3000
+        }
         self.__dict__.update(params)
 
     def save(self, json_path):
@@ -58,6 +60,7 @@ def one_hot_encode(y):
     y_hat_one_hot[np.arange(len(y)), y] = 1
     return y_hat_one_hot
 
+
 def rank_features(explanation):
     """ Given an explanation of type (name, value) provide the ranked list of feature names according to importance
 
@@ -70,9 +73,10 @@ def rank_features(explanation):
     List contained ranked feature names
     """
 
-    ordered_tuples = sorted(explanation, key=lambda x : abs(x[1]), reverse=True)  
-    results = [tup[0] if tup[1] != 0 else ("Nothing shown",0) for tup in ordered_tuples]
+    ordered_tuples = sorted(explanation, key=lambda x: abs(x[1]), reverse=True)
+    results = [tup[0] if tup[1] != 0 else ("Nothing shown", 0) for tup in ordered_tuples]
     return results
+
 
 def get_rank_map(ranks, to_consider):
     """ Give a list of feature names in their ranked positions, return a map from position ranks
@@ -87,13 +91,14 @@ def get_rank_map(ranks, to_consider):
     ----------
     A dictionary containing the ranks mapped to the uniques.
     """
-    unique = {i+1 : [] for i in range(len(ranks))}
+    unique = {i + 1: [] for i in range(len(ranks))}
 
     for i, rank in enumerate(ranks):
         for unique_rank in np.unique(rank):
-            unique[i+1].append((unique_rank, np.sum(np.array(rank) == unique_rank) / to_consider))
+            unique[i + 1].append((unique_rank, np.sum(np.array(rank) == unique_rank) / to_consider))
 
     return unique
+
 
 def experiment_summary(explanations, features):
     """ Provide a high level display of the experiment results for the top three features.

@@ -1,4 +1,6 @@
 import pandas as pd
+
+
 # todo move out
 
 def sum_score(dico):

@@ -3,8 +3,7 @@ import pandas as pd
 from explainers.explainer_superclass import Explainer
 
 
-class Sage(Explainer,    name = 'sage'):
-
+class Sage(Explainer, name='sage'):
     supported_models = ('model_agnostic',)
     # todo SAGE is using the truth to estimate the f importance so we should have this as a selection criteria
     output_importance = True
@@ -92,6 +91,7 @@ The algorithm can be trapped in a potential infinite loop if we do not fine tune
 
 if __name__ == "__main__":
     import sage
+
     print(sage.__version__)
 
     df = Sage.to_pandas()
@@ -103,6 +103,7 @@ if __name__ == "__main__":
 
     # Load data
     import sage
+
     df = sage.datasets.bike()
     feature_names = df.columns.tolist()[:-3]
 
