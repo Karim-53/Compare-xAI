@@ -33,7 +33,7 @@ def export_to_sql():
     valid_tests = test.set_index('test').loc[tests]  # if failed: some tests are not indexed in text.csv -> add them
     assert sum(valid_tests['category'].isna()) == 0, 'there is some NaN values -> fill them'
     # explainer table
-    assert 'required_input_truth_to_explain' not in explainer.columns
+    assert 'required_input_truth_to_explain' in explainer.columns
     # todo test that all paper tags in explainer exist in paper
 
 
