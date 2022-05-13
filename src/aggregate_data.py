@@ -5,13 +5,27 @@ from src.dask.utils import load_results
 from src.explainer import valid_explainers_dico
 from src.export_sql import export_to_sql
 
-
 # todo delete supported_models and outputs columns
 # todo generate supported_models and outputs columns for the detailed view of an explainer
 
+required_data_to_nice_name = {
+    'trained_model': "AI model's structure",
+    'ml_task': 'Nature of the ML task (regression/classification)',
+
+    'predict_proba': "model's predict probability function",
+    'predict_func': "model's predict function",
+
+    'df_reference': 'A reference dataset',
+    'X_reference': 'A reference dataset (input only)',
+    'X': 'The train set',
+
+    'truth_to_explain': 'True output of the data points to explain',
+}
+
 
 def get_required_input_data(explainer_name) -> set:
-    print('valid explainers:', len(valid_explainers_dico), valid_explainers_dico.keys())
+    # print('valid explainers:', len(valid_explainers_dico), valid_explainers_dico.keys())
+    assert len(valid_explainers_dico) > 5
     if explainer_name not in valid_explainers_dico.keys():
         print(f'{explainer_name}  not in valid_explainers_dico.keys()')
         return None
@@ -25,11 +39,13 @@ output_labels = {'importance': 'Feature importance (global explanation)',
                  'attribution': 'Feature attribution (local explanation)',  # can use html here
                  'interaction': 'Feature interaction (local explanation)',
                  }
+
+
 def aggregate_outputs(explainer: pd.DataFrame):
     _df = pd.DataFrame()
     for out, label in output_labels.items():
         _df[out] = explainer[f'output_{out}'].map({True: label, False: None})
-    return _df.apply(lambda x: ','.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: ', '.join(x.dropna().values.tolist()), axis=1)
 
 
 def aggregate_supported_models(explainer: pd.DataFrame):
@@ -38,10 +54,10 @@ def aggregate_supported_models(explainer: pd.DataFrame):
         'model_agnostic': 'Any AI model (model agnostic xAI algorithms are independent of the AI implementation)',
         'tree_based': 'Tree-based ML',
         'neural_network': 'Neural networks',
-        }
+    }
     for key, label in model_labels.items():
         _df[key] = explainer[f'supported_model_{key}'].map({True: label, False: None})
-    return _df.apply(lambda x: ','.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: ', '.join(x.dropna().values.tolist()), axis=1)
 
 
 if __name__ == "__main__":
@@ -65,12 +81,15 @@ if __name__ == "__main__":
                               })
     cross_tab = pd.DataFrame(lista).sort_values(['explainer', 'test', 'subtest'])
 
+
     def subtest_to_tested_xai_output(subtest):
         for out, label in output_labels.items():
             if out in subtest:
                 return label
         print('fix me in aggregate_data.py')
         return None
+
+
     cross_tab['tested_xai_output'] = cross_tab.subtest.apply(subtest_to_tested_xai_output)
     # print(cross_tab)
     print('writing files to /data/03_experiment_output_aggregated/ ...')
@@ -92,7 +111,8 @@ if __name__ == "__main__":
 
     explainer['required_input_data'] = [get_required_input_data(explainer_name) for explainer_name in
                                         explainer.explainer]
-    all_required_input_data = set(sorted(set().union(*list(explainer[explainer.required_input_data.notna()].required_input_data))))
+    all_required_input_data = set(
+        sorted(set().union(*list(explainer[explainer.required_input_data.notna()].required_input_data))))
     print('all_required_input_data', all_required_input_data)
     for required_input_data in all_required_input_data:
         explainer[f'required_input_{required_input_data}'] = [None if pd.isna(s) else required_input_data in s for s in

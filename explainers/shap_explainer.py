@@ -30,9 +30,8 @@ class KernelShap(Explainer, name='kernel_shap'):
     output_attribution = True
     output_importance = True  # inferred
 
-    def __init__(self, trained_model, X, predict_func, **kwargs):
+    def __init__(self, X, predict_func, **kwargs):
         super().__init__()
-        self.trained_model = trained_model
         self.predict_func = predict_func
         self.reference_dataset = np.array(X, dtype='float64')
         print(self.reference_dataset.dtype)

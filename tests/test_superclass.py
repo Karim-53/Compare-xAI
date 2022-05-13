@@ -1,7 +1,5 @@
 class Test:  # todo make abstract
     # todo [after publication] add last_update = version of the release
-    description_short = " "  # todo
-    description = None
     input_features = []
     dataset_size = None  # deprecated to delete
     X = None  # must be 2d (nb of samples, nb of features)
@@ -9,6 +7,9 @@ class Test:  # todo make abstract
     trained_model = None
     predict_func = None
 
+    # properties defined in the test.csv:
+    description_short: str
+    description: str
     # todo add init with var check
 
     @staticmethod  # todo change all to class method
