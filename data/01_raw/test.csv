@@ -1,5 +1,5 @@
 test,category,is_documented,is_implemented,short_description,description,dataset,source_tag,source_code,Input_type,Solution,feature symetry,Pair Feature Interaction,multiple Feature Interaction,Noise,Global Explanation (Feature importance),Local Explanation (f attribution),Feature Interaction,to_delete
-cough_and_fever,fidelity,0.92,1,Can the xAI detect symmetric binary features?,[Cough & Fever]*80,-,lundberg2018consistent,,binary,,1,1,0,0,Cough & Fever have the same importance,Cough & Fever are symetric features,-,
+cough_and_fever,fidelity,0.92,1,Can the xAI detect symmetric binary input features?,[Cough & Fever]*80,-,lundberg2018consistent,,binary,,1,1,0,0,Cough & Fever have the same importance,Cough & Fever are symetric features,-,
 cough_and_fever_10_90,fidelity,0.92,1,Can the xAI detect that 'Cough' feature is more important than 'Fever'?,[Cough & Fever]*80 + [Cough]*10: Cough should be more important than Fever,-,lundberg2018consistent,,binary,,1,1,0,0,Cough should be more important than Fever,"Case (Fever = yes, Cough = yes)
 Feature Attribution of Cough should be more important",-,
 detect_interaction0,fidelity,0,1,todo,,,,,,,,,,,,,,
@@ -20,15 +20,15 @@ mnist,stress,0.75,1,Is the xAI able to detect all dummy (constant and useless) p
 Able to identify the top important features and top less important features
 P.S. I did not add the score to the other heet because I do not have the exact values from the plot
 todo use that tool online to get the values or check their repo",-,,
-bank*,,0.42,0,,Identifying corrupted features. but i think this is not a relevant test and could be added at a later stage,Bank http://rstudio-pubs-static.s3.amazonaws.com/19586_40769e2b72aa4558ab9493ec651e4c90.html,covert2020understanding,,Tabular,,,,,1,,,,
-input correlation,stability,0.42,to implement,,effect of feature correlations on the xai,synthetic,liu2021synthetic,,-,,,,,1,,,,
-faithfulness(↑),,0.67,0,,corr between feature attribution and approximate marginal contribution. Since  a perfect correlation does not mean the best intuitive explanation thus we discard this ambiguis unit test (n need to mention that in the paper,synthetic,liu2021synthetic,,-,,-,-,-,1,,,,
-monotonicity(↑),,0.17,0,,like the other features. its metric is debatable.,,liu2021synthetic,,,,,,,,,,,
-remove-and-retrain (ROAR)(↑),,0.17,0,,does retrain the model so it is not a unit test,,liu2021synthetic,,,,,,,,,,,
-GT-Shapley(↑),,0.17,0,,does the xAi output correlate with the ground truth shapley values. Noooooo !,,liu2021synthetic,,,,,,,,,,,
-infidelity(↓),,0.17,0,,-,,liu2021synthetic,,,,,,,,,,,
-x0*x1,,0.58,not a priority,,,,did not find a paper implementing that yet. but it is a quite popular example,,,,1,1,0,,-,-,1,
-fooling_perturbation_alg,fragility,0.92,1,,"exploit a vulnerability in model-agnostic xai that use feature perturbation: adversarial attack to lower the feature importance of a specific feature
+bank*,,0.42,0,-,Identifying corrupted features. but i think this is not a relevant test and could be added at a later stage,Bank http://rstudio-pubs-static.s3.amazonaws.com/19586_40769e2b72aa4558ab9493ec651e4c90.html,covert2020understanding,,Tabular,,,,,1,,,,
+input correlation,stability,0.42,to implement,todo,effect of feature correlations on the xai,synthetic,liu2021synthetic,,-,,,,,1,,,,
+faithfulness(↑),,0.67,0,-,corr between feature attribution and approximate marginal contribution. Since  a perfect correlation does not mean the best intuitive explanation thus we discard this ambiguis unit test (n need to mention that in the paper,synthetic,liu2021synthetic,,-,,-,-,-,1,,,,
+monotonicity(↑),,0.17,0,-,like the other features. its metric is debatable.,,liu2021synthetic,,,,,,,,,,,
+remove-and-retrain (ROAR)(↑),,0.17,0,-,does retrain the model so it is not a unit test,,liu2021synthetic,,,,,,,,,,,
+GT-Shapley(↑),,0.17,0,-,does the xAI output correlate with the ground truth shapley values. Noooooo !,,liu2021synthetic,,,,,,,,,,,
+infidelity(↓),,0.17,0,-,-,,liu2021synthetic,,,,,,,,,,,
+x0*x1,,0.58,not a priority,todo after acceptance,,,did not find a paper implementing that yet. but it is a quite popular example,,,,1,1,0,,-,-,1,
+fooling_perturbation_alg,fragility,0.92,1,Is the xAI affected by an adversarial attack against perturbation-based algorithms?,"exploit a vulnerability in model-agnostic xai that use feature perturbation: adversarial attack to lower the feature importance of a specific feature
 ### Setup
 Let's begin by examining the COMPAS data set. This data set consists of defendent information from Broward Couty, Florida.Let's suppose that some adversary wants to _mask_ baised or racist behavior on this data set.","https://github.com/propublica/compas-analysis/blob/master/compas-scores-two-years.csv 
 https://www.kaggle.com/datasets/danofer/compass",lakkaraju2020fool,https://github.com/dylan-slack/Fooling-LIME-SHAP/blob/master/COMPAS_Example.ipynb,categorical/scalars,,0,0,0,1,"Race should be the most important feature
@@ -43,13 +43,13 @@ data sparsity,stress,0.42,to implement,,"sensitive to the degree of data sparsit
  see https://arxiv.org/pdf/1908.08474.pdf   ",Diabetes Prediction,sundararajan2020many,,continuous,"One way to deal with this sensitivity is to smooth the data. We can simulate smoothing within Algorithm 1. When we condition on a set S of features in the computation of CES, we average the  rediction over all the training data points that are close to the explicand in each of the features in S; two data points are close in a certain feature if their difference is within a certain fraction of the standard deviation. In our experiments, we use two settings 0.1 and 0.2. Figure 1 shows how different amounts of smoothing change the attributions (see for instance the attributions of the feature  2). 
  hus while smoothing mitigates sensitivity, it is still unclear how much smoothing to do.
 https://arxiv.org/pdf/1908.08474.pdf ",,,,,,,,
-failiure of dummy,simplicity,0.33,to implement,,counter example that SHAP CES do not satisfy the dummy axiom. BSHAP successed in this test,synthetic,sundararajan2020many,,continuous,,,,,,,,,
-Failure of Linearity: f1=y ; f2 = x ;  f1 + f3,simplicity,0.25,to implement,,,synthetic,sundararajan2020many,,continuous,,,,,,,,,
+failiure of dummy,simplicity,0.33,to implement,Is the xAI able to detect unused input features?,counter example that SHAP CES do not satisfy the dummy axiom. BSHAP successed in this test,synthetic,sundararajan2020many,,continuous,,,,,,,,,
+Failure of Linearity: f1=y ; f2 = x ;  f1 + f3,simplicity,0.25,to implement,Is the explanation consistent with 2 models and their linear combination?,,synthetic,sundararajan2020many,,continuous,,,,,,,,,
 Product blurs local explanation,fidelity,0.92,to implement,,limit of shap in locally interpreting correctly using its model agnostic method (interventionnal) features get the same contribution while it is not true,synthetic,kumar2020problems,,continuous,,1,1,1,1,"they should have the same importance 
 but this is not what we whant to test","Section 3 at the end issue (wrong answer): ""the Shapley value for every feature i is 1 d f(x), regardless of the value xi . 
 Even if, for instance, the magnitude of one of the variables is much higher than the other""",-,
 simple interaction,,1,not a priority,,sin(x1 +x2) just an example of pair f interaction was not used to demo any kind of limitation so no need to implement it,synthetic,tsang2021interpretable,,continuous,-,1,1,0,0,-,-,x1 and x2 interact,
-a_and_b_or_c,fidelity,0.08,,,"Model: A and (B or C)
+a_and_b_or_c,fidelity,0.08,,Can the xAI detect that input feature 'A' is more important than 'B' or 'C'?,"Model: A and (B or C)
     Goal make sure that A is more important than B, C
     
     Noise: even if the model output is not == 1. still we expect the xai to give a correct answer => no noise",,,,,,,,,,,,,
