@@ -1,6 +1,6 @@
 test,category,is_documented,is_implemented,short_description,description,dataset,source_tag,source_code,Input_type,Solution,feature symetry,Pair Feature Interaction,multiple Feature Interaction,Noise,Global Explanation (Feature importance),Local Explanation (f attribution),Feature Interaction,to_delete
-cough_and_fever,fidelity,0.92,1,,[Cough & Fever]*80,-,lundberg2018consistent,,binary,,1,1,0,0,Cough & Fever have the same importance,Cough & Fever are symetric features,-,
-cough_and_fever_10_90,fidelity,0.92,1,,[Cough & Fever]*80 + [Cough]*10: Cough should be more important than Fever,-,lundberg2018consistent,,binary,,1,1,0,0,Cough should be more important than Fever,"Case (Fever = yes, Cough = yes) 
+cough_and_fever,fidelity,0.92,1,Can the xAI detect symmetric binary features?,[Cough & Fever]*80,-,lundberg2018consistent,,binary,,1,1,0,0,Cough & Fever have the same importance,Cough & Fever are symetric features,-,
+cough_and_fever_10_90,fidelity,0.92,1,Can the xAI detect that 'Cough' feature is more important than 'Fever'?,[Cough & Fever]*80 + [Cough]*10: Cough should be more important than Fever,-,lundberg2018consistent,,binary,,1,1,0,0,Cough should be more important than Fever,"Case (Fever = yes, Cough = yes)
 Feature Attribution of Cough should be more important",-,
 detect_interaction0,fidelity,0,1,,,,,,,,,,,,,,,
 detect_interaction1,fidelity,0.92,1,,multiple product terms of pairs of features,-,tsang2020does,,"[0,1[ might be another interval let's check on github",,1,1,0,0,-,-,1,
