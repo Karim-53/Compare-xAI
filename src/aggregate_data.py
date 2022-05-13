@@ -12,8 +12,8 @@ required_data_to_nice_name = {
     'trained_model': "AI model's structure",
     'ml_task': 'Nature of the ML task (regression/classification)',
 
-    'predict_proba': "model's predict probability function",
-    'predict_func': "model's predict function",
+    'predict_proba': "The model's predict probability function",
+    'predict_func': "The model's predict function",
 
     'df_reference': 'A reference dataset',
     'X_reference': 'A reference dataset (input only)',
@@ -45,7 +45,7 @@ def aggregate_outputs(explainer: pd.DataFrame):
     _df = pd.DataFrame()
     for out, label in output_labels.items():
         _df[out] = explainer[f'output_{out}'].map({True: label, False: None})
-    return _df.apply(lambda x: ', '.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: '\t - ' + '\n\t\t - '.join(x.dropna().values.tolist()), axis=1)
 
 
 def aggregate_supported_models(explainer: pd.DataFrame):
@@ -57,7 +57,7 @@ def aggregate_supported_models(explainer: pd.DataFrame):
     }
     for key, label in model_labels.items():
         _df[key] = explainer[f'supported_model_{key}'].map({True: label, False: None})
-    return _df.apply(lambda x: ', '.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: '\t - ' + '\n\t\t\t - '.join(x.dropna().values.tolist()), axis=1)
 
 
 if __name__ == "__main__":
@@ -121,7 +121,9 @@ if __name__ == "__main__":
         explainer.required_input_X_reference = np.logical_or(explainer.required_input_X,
                                                              explainer.required_input_X_reference)  # todo fix that in prior code
 
-    explainer.required_input_data = explainer.required_input_data.apply(str)
+    explainer.required_input_data = explainer.required_input_data.apply(
+        lambda _set: None if _set is None else ' - ' + '\n\t\t\t  - '.join([required_data_to_nice_name.get(e,e) for e in _set])
+    )
     # print('todo required_input_train_function is set to 0')
     # explainer['required_input_train_function'] = 0
     print('writing explainer to /data/03_experiment_output_aggregated/ ...')
