@@ -39,13 +39,13 @@ output_labels = {'importance': 'Feature importance (global explanation)',
                  'attribution': 'Feature attribution (local explanation)',  # can use html here
                  'interaction': 'Feature interaction (local explanation)',
                  }
-
+bullet_point = '\n\t\t\t - '
 
 def aggregate_outputs(explainer: pd.DataFrame):
     _df = pd.DataFrame()
     for out, label in output_labels.items():
         _df[out] = explainer[f'output_{out}'].map({True: label, False: None})
-    return _df.apply(lambda x: '\t - ' + '\n\t\t - '.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: bullet_point + bullet_point.join(x.dropna().values.tolist()), axis=1)
 
 
 def aggregate_supported_models(explainer: pd.DataFrame):
@@ -57,7 +57,7 @@ def aggregate_supported_models(explainer: pd.DataFrame):
     }
     for key, label in model_labels.items():
         _df[key] = explainer[f'supported_model_{key}'].map({True: label, False: None})
-    return _df.apply(lambda x: '\t - ' + '\n\t\t\t - '.join(x.dropna().values.tolist()), axis=1)
+    return _df.apply(lambda x: bullet_point + bullet_point.join(x.dropna().values.tolist()), axis=1)
 
 
 if __name__ == "__main__":
@@ -122,7 +122,7 @@ if __name__ == "__main__":
                                                              explainer.required_input_X_reference)  # todo fix that in prior code
 
     explainer.required_input_data = explainer.required_input_data.apply(
-        lambda _set: None if _set is None else ' - ' + '\n\t\t\t  - '.join([required_data_to_nice_name.get(e,e) for e in _set])
+        lambda _set: None if _set is None else bullet_point + bullet_point.join([required_data_to_nice_name.get(e,e) for e in _set])
     )
     # print('todo required_input_train_function is set to 0')
     # explainer['required_input_train_function'] = 0

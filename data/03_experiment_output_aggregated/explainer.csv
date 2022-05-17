@@ -1,47 +1,67 @@
-explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network,required_input_data,required_input_truth_to_explain,required_input_predict_proba,required_input_ml_task,required_input_trained_model,required_input_predict_func,required_input_df_reference,required_input_X_reference,required_input_X
+explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network,required_input_data,required_input_df_reference,required_input_predict_func,required_input_X,required_input_ml_task,required_input_predict_proba,required_input_truth_to_explain,required_input_X_reference,required_input_trained_model
 Shapley Values,0.75,to finish implementing,,"There is an alternate permutation-based description of the Shapley value:
 Order the players uniformly at random, add them one at a time in this order,
 and assign to each player i its expected marginal contribution V (S ∪ i) − v(S);
 here S is the set of players that precede i in the ordering. https://arxiv.org/pdf/1908.08474.pdf
 
-is unique given a set of constrains",,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+is unique given a set of constrains",,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature importance (global explanation),False,True,False,True,True,True,,,,,,,,,
-kernel_shap,0.75,1,lundberg2017unified,it approximate the Shapley values with a constant noise \cite{janzing2020feature},,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)",False,True,False,True,True,True,,,,,,,,,
+kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - The model's predict function
-			  - The train set",False,False,False,False,True,False,True,True
-tree_shap,0.5,1,lundberg2018consistent,,,	 - Tree-based ML,"	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,False,True,False," - AI model's structure
-			  - The model's predict function
-			  - A reference dataset",False,False,False,True,True,True,False,False
-saabas,0.75,1,-,,https://github.com/andosa/treeinterpreter/,	 - Tree-based ML,"	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,False,True,False, - AI model's structure,False,False,False,True,False,False,False,False
-lime,0.5,1,ribeiro2016should,,,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - The train set",False,True,True,False,False,False,True,False
+tree_shap,0.5,1,lundberg2018consistent,,,"
+			 - Tree-based ML","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
+			 - A reference dataset
+			 - The model's predict function
+			 - AI model's structure",True,True,False,False,False,False,False,True
+saabas,0.75,1,-,,https://github.com/andosa/treeinterpreter/,"
+			 - Tree-based ML","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
+			 - AI model's structure",False,False,False,False,False,False,False,True
+lime,0.5,1,ribeiro2016should,,,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - The model's predict function
-			  - Nature of the ML task (regression/classification)
-			  - A reference dataset (input only)
-			  - The model's predict probability function",False,True,True,False,True,False,True,False
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - The model's predict probability function
+			 - A reference dataset (input only)
+			 - Nature of the ML task (regression/classification)",False,True,False,True,True,False,True,False
 archipelago,1.0,1,tsang2020does,"seperate the input features into sets. all features inside a set interact and there is no interaaction outside a set
 ArchAttribute: interaction attribution method
 + ArchDetect: a corresponding interaction detector,  to address the challenges of being interpretable, axiomatic, and scalable.
 Archipelago is named after its ability to provide explanations by isolating feature interactions, or feature “islands”.
 The inputs to Archipelago are a black-box model f and data instance x*, 
-its outputs are a set of interactions and individual features {I} as well as an attribution score φ(I) for each of the feature sets I.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+its outputs are a set of interactions and individual features {I} as well as an attribution score φ(I) for each of the feature sets I.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature interaction (local explanation),False,False,True,True,True,True,,,,,,,,,
-Difference,0.0,,,,,	 - ,	 - ,,,,,,,,,,,,,,,
+			 - Neural networks","
+			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,
+Difference,0.0,,,,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 anova,0.75,1,,"Fisher (1921) also developed one of the foundations of statistical analysis called Analysis of Variance (ANOVA) including two-way ANOVA (Fisher, 1925),
 Multi-way ANOVA exists to detect interactions of higher-orders combinations, not just between pairs of features.
 A significant problem with individual testing methods is that they require an exponentially growing number of 
 tests as the desired interaction order increases. Not only is this approach intractable, but also has a high 
 chance of generating false positives or a high false discovery rate (Benjamini and Hochberg, 1995) that arises 
-from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf",,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf",,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature interaction (local explanation),False,False,True,True,True,True,,,,,,,,,
+			 - Neural networks","
+			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,
 IG: Integrated Gradients,0.25,to implement,,"IG is an analog of the Aumann-Shapley method from cost-sharing [4]. We will discuss the sense in which IG is an extension of the Shapley value in Section 4.1 https://arxiv.org/pdf/1908.08474.pdf 
 
 IG uses the fundamental theorem of calculus to provide additive explanations of a prediction (Sundararajan et al., 2017). This method is very popular in computer vision where its computational efficiency and saliency are prized, even though other work has exposed some of its shortcomings in providing an interpretation (Adebayo et al., 2018).  see  https://arxiv.org/pdf/2103.03103.pdf 
@@ -50,10 +70,16 @@ The Integrated Gradients (IG) (Sundararajan et al., 2017) is an extremely
 popular path integration method used for feature attribution. It obeys a host of axioms similar to
 Shapley index while also being applicable to continuous input variables. It uses the following equation
 to integrate over the model’s decision output F from a baseline input x’ to the input of interest x
-with a linear interpolation.Because it works on any differentiable model, it has become a staple for interpretation in some deep learning communities. https://arxiv.org/pdf/2103.03103.pdf",,	 - ,	 - ,,,,,,,,,,,,,,,
+with a linear interpolation.Because it works on any differentiable model, it has become a staple for interpretation in some deep learning communities. https://arxiv.org/pdf/2103.03103.pdf",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 IH: Integrated Hessians,0.25,,,"The Integrated Hessians (IH) method (Janizek et al., 2020) extends this to interactions by applying the method to itself. In this way, the method describes how important j’s importance is to i, but is more easily understood as the feature interaction. 
-This method is able to enjoy a lot of the axioms coming from IG, but one of its major drawbacks is a result of not formalizing interactions and main effects. The term IHi,i is more like a residual term instead of the main effect, which can make it difficult to identify how much of the actual effects are being properly captured by this method https://arxiv.org/pdf/2103.03103.pdf",,	 - ,	 - ,,,,,,,,,,,,,,,
-MAHE: Model-Agnostic Hierarchical Explanations,0.25,,,"Model-Agnostic Hierarchical Explanations (MAHE) (Tsang et al., 2018b) trains a surrogate explainer models for interaction detection and attribution in a method similar to LIME. MAHE’s explanations are then fed through a NID model and final GAM to get the attributions. This methodology allows MAHE to provide explanations relatively quickly by not needing to look at the overall feature space. Because MAHE is trained on overlapping feature sets, MAHE can fail a lot of the desirable axioms satisfied by these other attribution methods. https://arxiv.org/pdf/2103.03103.pdf",,	 - ,	 - ,,,,,,,,,,,,,,,
+This method is able to enjoy a lot of the axioms coming from IG, but one of its major drawbacks is a result of not formalizing interactions and main effects. The term IHi,i is more like a residual term instead of the main effect, which can make it difficult to identify how much of the actual effects are being properly captured by this method https://arxiv.org/pdf/2103.03103.pdf",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+MAHE: Model-Agnostic Hierarchical Explanations,0.25,,,"Model-Agnostic Hierarchical Explanations (MAHE) (Tsang et al., 2018b) trains a surrogate explainer models for interaction detection and attribution in a method similar to LIME. MAHE’s explanations are then fed through a NID model and final GAM to get the attributions. This methodology allows MAHE to provide explanations relatively quickly by not needing to look at the overall feature space. Because MAHE is trained on overlapping feature sets, MAHE can fail a lot of the desirable axioms satisfied by these other attribution methods. https://arxiv.org/pdf/2103.03103.pdf",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 neural_interaction_detection,0.75,0.5,,"The modern work of Neural Interaction Detection (NID) Tsang et al. (2018a) circumvented this
 problem by using the powerful inductions of feedforward neural networks. This work takes advantage of the specific structure of neural networks to avoid needing to specifying large numbers of
 interactions while still not focusing on individual testing. The method traces high-strength weights
@@ -61,20 +87,32 @@ from features to common hidden units as a way to automatically detect which feat
 dependencies on one another. Later work Tsang et al. (2020a) uses NID to train a new network with
 additional ‘cross-features’ from the detected interactions to actually boost the deep networks performance. Given the popularity of deep learning, the prospect of improving deep networks’ performance
 through understanding feature interactions warrants further investigation into this re-emerging topic
-of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf ",,	 - Neural networks,	 - Feature interaction (local explanation),False,False,True,False,False,True,,,,,,,,,
-shap_interaction,0.75,1,,SI: Shapley Interaction Index,,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf ",,"
+			 - Neural networks","
+			 - Feature interaction (local explanation)",False,False,True,False,False,True,,,,,,,,,
+shap_interaction,0.75,1,,SI: Shapley Interaction Index,,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature interaction (local explanation),False,False,True,True,True,True,,,,,,,,,
-shapley_taylor_interaction,0.75,1,,STI: Shapley Taylor Interaction Index,,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,
+shapley_taylor_interaction,0.75,1,,STI: Shapley Taylor Interaction Index,,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature interaction (local explanation),False,False,True,True,True,True,,,,,,,,,
-SCD: Sampling Contextual Decomposition,0.0,,,,,	 - ,	 - ,,,,,,,,,,,,,,,
-SOC: Sampling Occlusion,0.0,,,,,	 - ,	 - ,,,,,,,,,,,,,,,
+			 - Neural networks","
+			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,
+SCD: Sampling Contextual Decomposition,0.0,,,,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+SOC: Sampling Occlusion,0.0,,,,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 CD: Contextual Decomposition,0.25,,,"variant of SCD [35,42], see tsang2020does
 Agglomerative Contextual Decomposition: Agglomerative Contextual Decomposition (ACD) (Singh et al., 2019) is a hierarchical extension of Contextual Decomposition (Murdoch et al., 2018) which was originally designed for LSTMs. This method extended the additive decomposition to NNs in general by adding technical solutions for the method to work on convolutions and maxpooling, both common  perations in CNNs. The method decomposes each layer as:
 gi(x) = βi(x) + γi(x)
 Each gi denotes a layer of the network and where β denotes the contribution only by the features of interest and γ denotes the residual contribution for the model. Thus, the β values can be seen as the interaction effect of a certain group of features when it is the final β value from the logit/ prediction layer. The method then accumulates these scores into a tree hierarchy over the input. Because this work was designed for text and images, this looks something like a tree of word subsets with their corresponding polarity or image patches with their corresponding classes. A primary weakness is this method also fails many axiomatic interaction scores because of its formulation. A minor weakness is the computation time required by the iterative, hierarchical, full-explanation approach. This is because a partial hierarchy could be computed if desired and many pieces of this framework are flexible for quicker or even different inference.
-",,	 - ,	 - ,,,,,,,,,,,,,,,
+",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 sage,1.0,1,covert2020understanding,"Compute feature importance based on Shapley value but faster.
 The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) > 0
 While unimportant features will have small values ϕ_i(v_f)≈0
@@ -94,43 +132,84 @@ src: https://iancovert.com/blog/understanding-shap-sage/
 
 Disadvantage:
 The convergence of the algorithm depends on 2 parameters: `thres` and `gap`.
-The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks",	 - Feature importance (global explanation),False,True,False,True,True,True," - True output of the data points to explain
-			  - A reference dataset (input only)
-			  - The model's predict function",True,False,False,False,True,False,True,False
+			 - Neural networks","
+			 - Feature importance (global explanation)",False,True,False,True,True,True,"
+			 - The model's predict function
+			 - True output of the data points to explain
+			 - A reference dataset (input only)",False,True,False,False,False,True,True,False
 Permutation Test,0.25,,,"feature importance cited in covert2020understanding
 also ""Shuffle-based feature importance permutes the data of each feature to ascertain its importance
-in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,	 - ,	 - ,,,,,,,,,,,,,,,
-Mean Importance,0.25,,,feature importance cited in covert2020understanding,,	 - ,	 - ,,,,,,,,,,,,,,,
-Feature Ablation,0.25,,,feature importance cited in covert2020understanding,,	 - ,	 - ,,,,,,,,,,,,,,,
-Univariate Predictors,0.25,,,feature importance cited in covert2020understanding,,	 - ,	 - ,,,,,,,,,,,,,,,
-SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,	 - ,	 - ,,,,,,,,,,,,,,,
-maple,0.75,1,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+Mean Importance,0.25,,,feature importance cited in covert2020understanding,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+Feature Ablation,0.25,,,feature importance cited in covert2020understanding,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+Univariate Predictors,0.25,,,feature importance cited in covert2020understanding,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+maple,0.75,1,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - A reference dataset (input only)
-			  - AI model's structure
-			  - The model's predict function
-			  - The train set",False,False,False,True,True,False,True,True
-L2X,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,	 - ,	 - ,,,,,,,,,,,,,,,
-breakdown,0.25,to implement,staniak2018explanations,approximate the shapley values (see https://christophm.github.io/interpretable-ml-book/shapley.html#software-and-alternatives-4= ) implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,	 - ,	 - ,,,,,,,,,,,,,,,
-baseline_random,1.0,1,liu2021synthetic,This is not a real explainer it helps measure the baseline score and processing time.,created,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - The train set
+			 - A reference dataset (input only)
+			 - AI model's structure",False,True,True,False,False,False,True,True
+L2X,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+breakdown,0.25,to implement,staniak2018explanations,approximate the shapley values (see https://christophm.github.io/interpretable-ml-book/shapley.html#software-and-alternatives-4= ) implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+baseline_random,1.0,1,liu2021synthetic,This is not a real explainer it helps measure the baseline score and processing time.,created,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)
-		 - Feature interaction (local explanation)",True,True,True,True,True,True, - ,False,False,False,False,False,False,False,False
-Uniform,0.25,,Us,output uniform feature attribution,,	 - ,	 - ,,,,,,,,,,,,,,,
-Zero,0.25,,Us,output zero feature attribution,,	 - ,	 - ,,,,,,,,,,,,,,,
-DeepLIFT,0.0,,,,,	 - ,	 - ,,,,,,,,,,,,,,,
-Shapley Regression,0.0,,,,,	 - ,	 - ,,,,,,,,,,,,,,,
-BShap: Baseline Shapley,0.25,to implement,sundararajan2020many,Is unique (in constrast with shapley values) need a baseline to provide local explanation,,	 - ,	 - ,,,,,,,,,,,,,,,
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)
+			 - Feature interaction (local explanation)",True,True,True,True,True,True,"
+			 - ",False,False,False,False,False,False,False,False
+Uniform,0.25,,Us,output uniform feature attribution,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+Zero,0.25,,Us,output zero feature attribution,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+DeepLIFT,0.0,,,,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+Shapley Regression,0.0,,,,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+BShap: Baseline Shapley,0.25,to implement,sundararajan2020many,Is unique (in constrast with shapley values) need a baseline to provide local explanation,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 RBShap: Random Baseline Shapley,0.25,to implement,sundararajan2020many,"BShap that takes three inputs: An explicand x, a function f, and a distribution D. The attributions are the expected BShap values, where the baseline x' is drawn randomly according to the distribution D. This approach is implicit in [10] (see Equation 11). https://arxiv.org/pdf/1908.08474.pdf
-",,	 - ,	 - ,,,,,,,,,,,,,,,
-QII,0.25,,,see kumar2020problems,,	 - ,	 - ,,,,,,,,,,,,,,,
-FAE,0.25,,,see kumar2020problems,,	 - ,	 - ,,,,,,,,,,,,,,,
+",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+QII,0.25,,,see kumar2020problems,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+FAE,0.25,,,see kumar2020problems,,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 TCAV,0.25,,,"Other methods are specifically designed for computer vision like TCAV (Kim et al., 2018) which finds a ‘concept direction’ corresponding to a large sample of concept images from the user. see  https://arxiv.org/pdf/2103.03103.pdf 
-do not consider f Interaction",,	 - ,	 - ,,,,,,,,,,,,,,,
+do not consider f Interaction",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
 AG,0.25,,,"Additive Groves (AG) method (Sorokina et al., 2008). This method is notable
 because it detects interactions using high-performance random forest models while accounting for the
 non-additive definition of feature interaction. This essentially allows the detected feature interaction
@@ -139,27 +218,44 @@ the time. AG tests each of these interactions by comparing two regression trees,
 interactions, and the other that has the interaction of interest forcibly removed. The main issue
 with this method is it exacerbates the slowness of individual testing methods which require many
 tests by forcing a complex model to be trained for each test.
-https://arxiv.org/pdf/2103.03103.pdf ",,	 - ,	 - ,,,,,,,,,,,,,,,
-permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+https://arxiv.org/pdf/2103.03103.pdf ",,"
+			 - ","
+			 - ",,,,,,,,,,,,,,,
+permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - A reference dataset (input only)
-			  - The model's predict function",False,False,False,False,True,False,True,False
-partition,,1,-,partition explainer from shap,https://github.com/slundberg/shap,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+partition,,1,-,partition explainer from shap,https://github.com/slundberg/shap,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - A reference dataset (input only)
-			  - The model's predict function",False,False,False,False,True,False,True,False
-permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - A reference dataset (input only)
-			  - The model's predict function",False,False,False,False,True,False,True,False
-tree_shap_approximation,,1,-,tree_shap_approximation explainer from shap,https://github.com/slundberg/shap,	 - Tree-based ML,"	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,False,True,False," - AI model's structure
-			  - A reference dataset (input only)",False,False,False,True,False,False,True,False
-exact_shapley_values,,1,-,exact_shapley_values explainer from shap,https://github.com/slundberg/shap,"	 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+tree_shap_approximation,,1,-,tree_shap_approximation explainer from shap,https://github.com/slundberg/shap,"
+			 - Tree-based ML","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
+			 - A reference dataset (input only)
+			 - AI model's structure",False,False,False,False,False,False,True,True
+exact_shapley_values,,1,-,exact_shapley_values explainer from shap,https://github.com/slundberg/shap,"
+			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
-			 - Neural networks","	 - Feature importance (global explanation)
-		 - Feature attribution (local explanation)",True,True,False,True,True,True," - A reference dataset (input only)
-			  - The model's predict function",False,False,False,False,True,False,True,False
+			 - Neural networks","
+			 - Feature importance (global explanation)
+			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - The model's predict function
+			 - A reference dataset (input only)",False,True,False,False,False,False,True,False

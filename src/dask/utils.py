@@ -6,14 +6,12 @@ import pandas as pd
 try:
     from src.utils import root
 
-    RESULTS_FILE_PATH = root + '/src/dask/results.csv'
+    RESULTS_FILE_PATH = root + '/data/02_experiment_output/results.csv'
     deployed = False
 except:
     RESULTS_FILE_PATH = root + 'results.csv'
     deployed = True
 
-
-# print('deployed', deployed)
 
 
 def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:

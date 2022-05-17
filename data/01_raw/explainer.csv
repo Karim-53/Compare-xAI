@@ -5,7 +5,7 @@ and assign to each player i its expected marginal contribution V (S ∪ i) − v
 here S is the set of players that precede i in the ordering. https://arxiv.org/pdf/1908.08474.pdf
 
 is unique given a set of constrains",,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
-kernel_shap,0.75,1,lundberg2017unified,it approximate the Shapley values with a constant noise \cite{janzing2020feature},,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
+kernel_shap,0.75,,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
 tree_shap,0.5,1,lundberg2018consistent,,,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 saabas,0.75,1,-,,https://github.com/andosa/treeinterpreter/,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 lime,0.5,1,ribeiro2016should,,,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True

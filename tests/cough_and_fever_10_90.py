@@ -34,7 +34,7 @@ class CoughAndFever1090:  # todo [after acceptance] move to the other file and r
     @staticmethod
     def score(attribution=None, importance=None, **kwargs):
         # todo assert attribution importance size
-        def is_cough_more_important_than_fever(importance=None, **kwargs):
+        def importance_is_cough_more_important_than_fever(importance=None, **kwargs):
             if not is_ok(importance):
                 return None
 
@@ -43,7 +43,7 @@ class CoughAndFever1090:  # todo [after acceptance] move to the other file and r
             else:
                 return 0.
 
-        def is_cough_attribution_higher_than_fever_attribution(attribution=None, **kwargs):
+        def attribution_is_cough_attribution_higher_than_fever_attribution(attribution=None, **kwargs):
             if not is_ok(attribution):
                 return None
             if attribution[3, 0] > attribution[3, 1]:
@@ -51,9 +51,9 @@ class CoughAndFever1090:  # todo [after acceptance] move to the other file and r
             else:
                 return 0.
 
-        return {'is_cough_more_important_than_fever': is_cough_more_important_than_fever(
-            importance=importance),
-            'is_cough_attribution_higher_than_fever_attribution': is_cough_attribution_higher_than_fever_attribution(
+        return {
+            'importance_is_cough_more_important_than_fever': importance_is_cough_more_important_than_fever(importance=importance),
+            'attribution_is_cough_attribution_higher_than_fever_attribution': attribution_is_cough_attribution_higher_than_fever_attribution(
                 attribution=attribution)}
         # todo add axiom_symmetry
 
