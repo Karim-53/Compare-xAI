@@ -44,9 +44,7 @@ class Saabas(Explainer, name='saabas'):
             raise 'not implemented'  # todo if random forest
             # from treeinterpreter import treeinterpreter as ti, utils
             # from sklearn.ensemble import RandomForestRegressor
-            #
             # rf = RandomForestRegressor(n_estimators=3, max_depth=3, bootstrap=False)
-            #
             # rf.fit(df_train[input_features].values, df_train['target'])
             # prediction, bias, contributions = ti.predict(rf, df_train[input_features].values, joint_contribution=True)
             # aggregated_contributions = utils.aggregated_contribution(contributions)
