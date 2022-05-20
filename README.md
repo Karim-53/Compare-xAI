@@ -1,12 +1,24 @@
-todo update before sub
-todo cite the original repository
-add binder tag
-python version
+todo update before sub 
 nb of XAI nb of tests 
-todo write the power capacity of the used computer 
 todo check again `requirements.txt`
 
 [![Python Version](https://img.shields.io/badge/python-v3.8.3-blue)]()
+
+# Table of Content
+
+- [1. Download](#1-download)
+- [2. Run experiments](#2-run-experiments)
+  * [2.1 Install required packages](#21-install-required-packages)
+  * [2.2 Reset experiment results](#22-reset-experiment-results)
+  * [2.3 Computing ressouces](#23-computing-ressouces)
+- [3. Contributing](#3-contributing)
+  * [3.1 Add a new Explainer](#31-add-a-new-explainer)
+  * [3.2 Add a new Unit test](#32-add-a-new-unit-test)
+- [More details](#more-details)
+  * [Reference](#reference)
+  * [Cite Us](#cite-us)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 [//]: # (<p align="center"><img src="img/banner.svg" width=700 /></p>)
 
@@ -29,7 +41,7 @@ Results are in `data/03_experiment_output_aggregated/cross_tab.csv`
 
 The data is also available as one SQLite database file `data/04_sql/database`
 
-# 2. Run experiments (Sample Usage) 
+# 2. Run experiments
 Want to reproduce the results shown in [our paper][arxiv] ? Follow these instructions:
 ## 2.1 Install required packages
 
@@ -90,7 +102,7 @@ src/aggregate_data.py
 
 ---
 
-## More details
+# More details
 
 ## Reference
 The source code was inspired from https://github.com/abacusai/xai-bench and https://github.com/mtsang/archipelago
