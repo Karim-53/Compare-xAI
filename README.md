@@ -1,18 +1,30 @@
-todo update before sub
-todo cite the original repository
-add binder tag
-python version
+todo update before sub 
 nb of XAI nb of tests 
-todo write the power capacity of the used computer 
 todo check again `requirements.txt`
 
 [![Python Version](https://img.shields.io/badge/python-v3.8.3-blue)]()
 
+# Table of Content
+
+- [1. Download](#1-download)
+- [2. Run experiments](#2-run-experiments)
+  * [2.1 Install required packages](#21-install-required-packages)
+  * [2.2 Reset experiment results](#22-reset-experiment-results)
+  * [2.3 Computing ressouces](#23-computing-ressouces)
+- [3. Contributing](#3-contributing)
+  * [3.1 Add a new Explainer](#31-add-a-new-explainer)
+  * [3.2 Add a new Unit test](#32-add-a-new-unit-test)
+- [More details](#more-details)
+  * [Reference](#reference)
+  * [Cite Us](#cite-us)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 [//]: # (<p align="center"><img src="img/banner.svg" width=700 /></p>)
 
-`Comapre-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
+`Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
 
-See our NeurIPS paper at https://arxiv.org/ todo.
+See our [NeurIPS paper][arxiv].
 
 You can check directly the benchmark results at https://karim-53.github.io/cxAI/
 
@@ -29,8 +41,8 @@ Results are in `data/03_experiment_output_aggregated/cross_tab.csv`
 
 The data is also available as one SQLite database file `data/04_sql/database`
 
-# 2. Run experiments (Sample Usage) 
-Want to reproduce the results shown in [our paper](arxiv todo) ? Follow these instructions:
+# 2. Run experiments
+Want to reproduce the results shown in [our paper][arxiv] ? Follow these instructions:
 ## 2.1 Install required packages
 
 [//]: # (There is no specific requirements listed in `requirements.txt` you can run only a few unit tests and a few Explainer with a small set of packages. So just install what is needed on the go :&#41; )
@@ -56,6 +68,11 @@ This also generate an SQLite database used in https://karim-53.github.io/cxAI/
 `data/04_sql/database` aggregate all data: information about unit tests, explainers, papers, and results of all experiments.
 
 **Tip**: Reduce the list explainers by changing `valid_explainers` in `src/explainer.py`. Same for the unit tests, see `src/test.py`.
+
+## 2.3 Computing ressouces
+Experiments were run over a normal computer (see [CPU-Z report](https://karim-53.github.io/cxai/CPU-Z.html)) without a GPU.
+
+Total execution time: 1h 10min 11sec
 
 
 # 3. Contributing
@@ -85,14 +102,15 @@ src/aggregate_data.py
 
 ---
 
-## More details
+# More details
 
 ## Reference
 The source code was inspired from https://github.com/abacusai/xai-bench and https://github.com/mtsang/archipelago
-## Citation
+## Cite Us
 
 Please cite our work if you use code from this repo:
 
 ```bibtex
  
 ```
+[arxiv]: http://arxiv.org
