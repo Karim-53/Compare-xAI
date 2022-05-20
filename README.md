@@ -22,7 +22,7 @@ todo check again `requirements.txt`
 
 [//]: # (<p align="center"><img src="img/banner.svg" width=700 /></p>)
 
-`Comapre-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
+`Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
 
 See our [NeurIPS paper][arxiv].
 
