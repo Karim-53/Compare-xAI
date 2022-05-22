@@ -1,4 +1,4 @@
-test,category,is_documented,is_implemented,short_description,description,dataset,source_tag,source_code,Input_type,Solution,feature symetry,Pair Feature Interaction,multiple Feature Interaction,Noise,Global Explanation (Feature importance),Local Explanation (f attribution),Feature Interaction,to_delete
+test,category,is_documented,is_implemented,short_description,description,dataset,source_tag,source_code,Input_type,Solution,feature symetry,Pair Feature Interaction,multiple Feature Interaction,Noise,Global Explanation (Feature importance),Local Explanation (f attribution),Feature Interaction,column_to_delete
 cough_and_fever,fidelity,0.92,1,Can the xAI detect symmetric binary input features?,[Cough & Fever]*80,-,lundberg2018consistent,,binary,,1,1,0,0,Cough & Fever have the same importance,Cough & Fever are symetric features,-,
 cough_and_fever_10_90,fidelity,0.92,1,Can the xAI detect that 'Cough' feature is more important than 'Fever'?,[Cough & Fever]*80 + [Cough]*10: Cough should be more important than Fever,-,lundberg2018consistent,,binary,,1,1,0,0,Cough should be more important than Fever,"Case (Fever = yes, Cough = yes)
 Feature Attribution of Cough should be more important",-,
@@ -45,12 +45,10 @@ data sparsity,stress,0.42,to implement,,"sensitive to the degree of data sparsit
 https://arxiv.org/pdf/1908.08474.pdf ",,,,,,,,
 failiure of dummy,simplicity,0.33,to implement,Is the xAI able to detect unused input features?,counter example that SHAP CES do not satisfy the dummy axiom. BSHAP successed in this test,synthetic,sundararajan2020many,,continuous,,,,,,,,,
 Failure of Linearity: f1=y ; f2 = x ;  f1 + f3,simplicity,0.25,to implement,Is the explanation consistent with 2 models and their linear combination?,,synthetic,sundararajan2020many,,continuous,,,,,,,,,
-Product blurs local explanation,fidelity,0.92,to implement,,limit of shap in locally interpreting correctly using its model agnostic method (interventionnal) features get the same contribution while it is not true,synthetic,kumar2020problems,,continuous,,1,1,1,1,"they should have the same importance 
+Product blurs local explanation,fidelity,0.92,to implement,,limit of shap in locally interpreting correctly using its model agnostic method (interventionnal) features get the same contribution while it is not true,synthetic,kumar2020problems,,continuous,,1,1,1,1,"they should have the same importance
 but this is not what we whant to test","Section 3 at the end issue (wrong answer): ""the Shapley value for every feature i is 1 d f(x), regardless of the value xi . 
 Even if, for instance, the magnitude of one of the variables is much higher than the other""",-,
 simple interaction,,1,not a priority,,sin(x1 +x2) just an example of pair f interaction was not used to demo any kind of limitation so no need to implement it,synthetic,tsang2021interpretable,,continuous,-,1,1,0,0,-,-,x1 and x2 interact,
-a_and_b_or_c,fidelity,0.08,,Can the xAI detect that input feature 'A' is more important than 'B' or 'C'?,"Model: A and (B or C)
-    Goal make sure that A is more important than B, C
-    
-    Noise: even if the model output is not == 1. still we expect the xai to give a correct answer => no noise",,,,,,,,,,,,,
-Implementation invariance axiom,stability,,,,,,,,,,,,,,,,,
+a_and_b_or_c,fidelity,0.08,1,Can the xAI detect that input feature 'A' is more important than 'B' or 'C'?,"Model: A and (B or C). Goal: make sure that A is more important than B, C. Noise: even if the model output is not == 1. still we expect the xai to give a correct answer => no noise",synthetic,-,-,binary,-,,,,,,,,
+Implementation invariance axiom,stability,0,,,,,,,,,,,,,,,,
+nlp_correctness,,0,,,todo read https://arxiv.org/pdf/2105.09740.pdf,,,,,,,,,,,,,
