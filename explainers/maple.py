@@ -361,7 +361,7 @@ class Maple(Explainer, name='maple'):
             # elif str(type(predict_func.__self__)).endswith("xgboost.sklearn.XGBRegressor'>"):
             #     is_tree = True  # Unfortunately it is not working :(  # todo [after submission] investigate TreeMapleExplainer
         except:
-            print('error in mapple alg.')
+            print('Maple: enable to detect if the model is a tree or not. Suppose it is not a tree...')
             pass
         if is_tree:
             self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)

@@ -173,3 +173,9 @@ staniak2018explanations,0,breakdown,,https://arxiv.org/abs/1804.01955,"@article{
   journal={arXiv preprint arXiv:1804.01955},
   year={2018}
 }",
+zhang2020interpretable,0.1,adv2,adversarial attacks using pytorch models,https://arxiv.org/abs/1812.00891   https://github.com/alps-lab/adv2,"@inproceedings{zhang2020interpretable,
+  title={Interpretable deep learning under fire},
+  author={Zhang, Xinyang and Wang, Ningfei and Shen, Hua and Ji, Shouling and Luo, Xiapu and Wang, Ting},
+  booktitle={29th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$ Security 20)},
+  year={2020}
+}",

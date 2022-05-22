@@ -7,7 +7,7 @@ import traceback
 from typing import Type
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
-from src.dask.scoring import get_details
+from src.scoring import get_details
 from src.explainer import valid_explainers
 from src.io import *
 from src.test import valid_tests

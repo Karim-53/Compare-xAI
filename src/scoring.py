@@ -64,7 +64,7 @@ def get_details(result_df, verbose=True):
 
 
 if __name__ == "__main__":
-    from src.dask.utils import load_results
+    from src.io import load_results
 
     result_df = load_results()
     summary_df, eligible_points_df, score_df = get_details(result_df)

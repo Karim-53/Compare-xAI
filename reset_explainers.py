@@ -3,9 +3,8 @@ from typing import Iterable
 import jinja2
 import pandas as pd
 
-from src.dask.utils import load_results
 from src.explainer import valid_explainers
-from src.io import detail
+from src.io import detail, load_results
 from src.utils import root
 
 # todo(s) from Tim <3

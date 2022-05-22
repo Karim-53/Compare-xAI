@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.dask.utils import load_results
+from src.io import load_results
 from src.explainer import valid_explainers_dico
 from src.export_sql import export_to_sql
 

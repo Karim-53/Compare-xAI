@@ -14,8 +14,8 @@ import pandas as pd
 from paretoset import paretoset
 from plotly import express as px, graph_objects as go
 
-from utils import load_results
-from scoring import get_details, restrict_tests
+from src.io import load_results
+from src.scoring import get_details, restrict_tests
 from dash import Dash, html, dcc, Input, Output
 
 # todo [after acceptance] dot size legend

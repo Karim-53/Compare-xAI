@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from src.dask.scoring import get_score_df, get_eligible_points_df, get_summary_df
-from src.dask.utils import load_results
+from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
+from src.io import load_results
 
 if __name__ == "__main__":
 

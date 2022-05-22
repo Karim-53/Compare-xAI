@@ -1,8 +1,12 @@
+from ast import literal_eval
+
 import pandas as pd
 
-from src.dask.utils import load_results, RESULTS_FILE_PATH, RESULTS_TMP_FILE_PATH
 from src.test import get_sub_tests
+from src.utils import root
 
+RESULTS_FILE_PATH = root + '/data/02_experiment_output/results.csv'
+RESULTS_TMP_FILE_PATH = root + '/data/02_experiment_output/results_tmp.csv'
 
 def save_results(result_df: pd.DataFrame):
     # print('writing to', results_file_path, '...')
@@ -54,8 +58,36 @@ def detail(result_df):  # todo move to scoring
     return pd.DataFrame(lista)  # .set_index(['test', 'sub_test_category', 'sub_test'])
 
 
+def load_results(results_file_path=RESULTS_FILE_PATH) -> pd.DataFrame:
+    try:
+        df = pd.read_csv(
+            results_file_path,
+            index_col=0,
+            skipinitialspace=True,
+        )
+    except FileNotFoundError as e:
+        return None  # return pd.DataFrame(index=[e.name for e in valid_explainers], columns=[t.name for t in valid_tests])
+
+    try:
+        df = df.applymap(literal_eval)
+    except:
+        for idx in df.index:
+            for col in df.columns:
+                try:
+                    e = None
+                    e = df.loc[idx, col]
+                    literal_eval(e)
+                except:
+                    print(f'Failed to eval df[{idx}, {col}] = ', e, 'of type', type(e))
+        raise ValueError('Unable to load results_df')
+
+    df.columns = [c.replace(' ', '') for c in df.columns]
+    df.index = [i.replace(' ', '') for i in df.index]
+    return df
+
+
 if __name__ == "__main__":
-    from src.dask.scoring import get_score_df, get_eligible_points_df, get_summary_df
+    from src.scoring import get_score_df, get_eligible_points_df, get_summary_df
 
     result_df = load_results()
     print(result_df)
@@ -65,3 +97,4 @@ if __name__ == "__main__":
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     print(summary_df.round(2))
+deployed = False
