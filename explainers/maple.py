@@ -347,18 +347,22 @@ class Maple(Explainer, name='maple'):
         self.X_reference = X_reference if X_reference is not None else X
 
         is_tree = False
-        if str(type(predict_func.__self__)).endswith(
-                "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
-        ):
-            is_tree = True
-        # elif str(type(predict_func.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
-        #     is_tree = True
-        elif str(type(predict_func.__self__)).endswith(
-                "sklearn.ensemble.forest.RandomForestRegressor'>"
-        ):
-            is_tree = True
-        # elif str(type(predict_func.__self__)).endswith("xgboost.sklearn.XGBRegressor'>"):
-        #     is_tree = True  # Unfortunately it is not working :(  # todo [after submission] investigate TreeMapleExplainer
+        try:
+            if str(type(predict_func.__self__)).endswith(
+                    "sklearn.ensemble.gradient_boosting.GradientBoostingRegressor'>"
+            ):
+                is_tree = True
+            # elif str(type(predict_func.__self__)).endswith("sklearn.tree._classes.DecisionTreeRegressor'>"):
+            #     is_tree = True
+            elif str(type(predict_func.__self__)).endswith(
+                    "sklearn.ensemble.forest.RandomForestRegressor'>"
+            ):
+                is_tree = True
+            # elif str(type(predict_func.__self__)).endswith("xgboost.sklearn.XGBRegressor'>"):
+            #     is_tree = True  # Unfortunately it is not working :(  # todo [after submission] investigate TreeMapleExplainer
+        except:
+            print('error in mapple alg.')
+            pass
         if is_tree:
             self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)
         else:

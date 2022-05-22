@@ -4,6 +4,7 @@ from tests import *
 valid_tests = (
     CoughAndFever,
     CoughAndFever1090,
+    CounterexampleDummyAxiom,
     AAndBOrC,
     DistributionNonUniformStatDep,
     DistributionUniformStatDep,

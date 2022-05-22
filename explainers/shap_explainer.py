@@ -1,6 +1,6 @@
 import sys
 import traceback
-
+import numpy as np
 import shap as shap_lib
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
@@ -169,8 +169,6 @@ class PermutationPartition(Explainer):
 
 if __name__ == '__main__':
     print(shap_lib.__version__)
-
-    import numpy as np
     from sklearn.model_selection import train_test_split
     import xgboost
 
