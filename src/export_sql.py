@@ -29,6 +29,7 @@ def export_to_sql():
     shutil.copyfile('../data/04_sql/database', '../../cxai/src/database')
 
     # verification
+    print('Total execution time to run experiment:', cross_tab.time.sum(), 'sec')
     tests = cross_tab.test.unique()
     valid_tests = test.set_index('test').loc[tests]  # if failed: some tests are not indexed in text.csv -> add them
     assert sum(valid_tests['category'].isna()) == 0, 'there is some NaN values -> fill them'
