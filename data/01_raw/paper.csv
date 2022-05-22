@@ -20,8 +20,8 @@ https://arxiv.org/pdf/2006.10965.pdf   paper on neurips is shorter
   year={2020}
 }",
 sundararajan2020many,0.7,BShap,"prove that shapley values  are not unique. 
-that bshap provides unique resuts. 
-some new axioms",https://arxiv.org/pdf/1908.08474.pdf,"@inproceedings{sundararajan2020many,
+that bshap provides unique feature attribution.
+Propose some new axioms",https://arxiv.org/pdf/1908.08474.pdf,"@inproceedings{sundararajan2020many,
   title={The many Shapley values for model explanation},
   author={Sundararajan, Mukund and Najmi, Amir},
   booktitle={International conference on machine learning},
