@@ -1,4 +1,4 @@
-explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network,required_input_data,required_input_df_reference,required_input_predict_func,required_input_X,required_input_ml_task,required_input_predict_proba,required_input_truth_to_explain,required_input_X_reference,required_input_trained_model
+explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network,required_input_data,required_input_predict_proba,required_input_predict_func,required_input_df_reference,required_input_X_reference,required_input_trained_model,required_input_X,required_input_ml_task,required_input_truth_to_explain
 Shapley Values,0.75,to finish implementing,,"There is an alternate permutation-based description of the Shapley value:
 Order the players uniformly at random, add them one at a time in this order,
 and assign to each player i its expected marginal contribution V (S ∪ i) − v(S);
@@ -9,36 +9,36 @@ is unique given a set of constrains",,"
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)",False,True,False,True,True,True,,,,,,,,,
-kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"
+kernel_shap,0.75,,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - The train set",False,True,True,False,False,False,True,False
+			 - The train set
+			 - The model's predict function",False,True,False,True,False,True,False,False
 tree_shap,0.5,1,lundberg2018consistent,,,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
-			 - A reference dataset
+			 - AI model's structure
 			 - The model's predict function
-			 - AI model's structure",True,True,False,False,False,False,False,True
+			 - A reference dataset",False,True,True,False,True,False,False,False
 saabas,0.75,1,-,,https://github.com/andosa/treeinterpreter/,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
-			 - AI model's structure",False,False,False,False,False,False,False,True
+			 - AI model's structure",False,False,False,False,True,False,False,False
 lime,0.5,1,ribeiro2016should,,,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - The model's predict probability function
 			 - A reference dataset (input only)
-			 - Nature of the ML task (regression/classification)",False,True,False,True,True,False,True,False
+			 - Nature of the ML task (regression/classification)
+			 - The model's predict probability function
+			 - The model's predict function",True,True,False,True,False,False,True,False
 archipelago,1.0,1,tsang2020does,"seperate the input features into sets. all features inside a set interact and there is no interaaction outside a set
 ArchAttribute: interaction attribution method
 + ArchDetect: a corresponding interaction detector,  to address the challenges of being interpretable, axiomatic, and scalable.
@@ -137,9 +137,9 @@ The algorithm can be trapped in a potential infinite loop if we do not fine tune
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)",False,True,False,True,True,True,"
-			 - The model's predict function
+			 - A reference dataset (input only)
 			 - True output of the data points to explain
-			 - A reference dataset (input only)",False,True,False,False,False,True,True,False
+			 - The model's predict function",False,True,False,True,False,False,False,True
 Permutation Test,0.25,,,"feature importance cited in covert2020understanding
 also ""Shuffle-based feature importance permutes the data of each feature to ascertain its importance
 in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,"
@@ -163,10 +163,10 @@ maple,0.75,1,,implemented in liu2021synthetic see https://github.com/abacusai/xa
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
+			 - AI model's structure
 			 - The model's predict function
 			 - The train set
-			 - A reference dataset (input only)
-			 - AI model's structure",False,True,True,False,False,False,True,True
+			 - A reference dataset (input only)",False,True,False,True,True,True,False,False
 L2X,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,
@@ -227,35 +227,35 @@ permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/sh
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+			 - A reference dataset (input only)
+			 - The model's predict function",False,True,False,True,False,False,False,False
 partition,,1,-,partition explainer from shap,https://github.com/slundberg/shap,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+			 - A reference dataset (input only)
+			 - The model's predict function",False,True,False,True,False,False,False,False
 permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+			 - A reference dataset (input only)
+			 - The model's predict function",False,True,False,True,False,False,False,False
 tree_shap_approximation,,1,-,tree_shap_approximation explainer from shap,https://github.com/slundberg/shap,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
-			 - A reference dataset (input only)
-			 - AI model's structure",False,False,False,False,False,False,True,True
+			 - AI model's structure
+			 - A reference dataset (input only)",False,False,False,True,True,False,False,False
 exact_shapley_values,,1,-,exact_shapley_values explainer from shap,https://github.com/slundberg/shap,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
-			 - The model's predict function
-			 - A reference dataset (input only)",False,True,False,False,False,False,True,False
+			 - A reference dataset (input only)
+			 - The model's predict function",False,True,False,True,False,False,False,False
