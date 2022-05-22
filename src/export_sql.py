@@ -32,11 +32,12 @@ def export_to_sql():
     print('Total execution time to run all experiments:', cross_tab.time.sum(), 'sec')
     tests = cross_tab.test.unique()
     valid_tests = test.set_index('test').loc[tests]  # if failed: some tests are not indexed in text.csv -> add them
-    assert sum(valid_tests['category'].isna()) == 0, 'there is some NaN values -> fill them'
+    assert sum(valid_tests['category'].isna()) == 0, 'there is some test.category containing NaN values -> fill them'
     # explainer table
     assert 'required_input_truth_to_explain' in explainer.columns
     # todo test that all paper tags in explainer exist in paper
-
+    valid_tests['test'] = valid_tests.index
+    print(valid_tests[['test','category']].groupby('category').count())
 
 if __name__ == '__main__':
     export_to_sql()
