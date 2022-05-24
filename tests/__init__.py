@@ -8,3 +8,4 @@ from .pair_interaction import DetectInteraction0, DetectInteraction1, DetectInte
 from .x0_plus_x1 import DistributionNonUniformStatDep, DistributionUniformStatDep, DistributionNonUniformStatIndep
 from .dummy_axiom import CounterexampleDummyAxiom
 from .correlated_features import CorrelatedFeatures
+from .stress_nb_features import StressNbFeatures
