@@ -86,7 +86,7 @@ rozemberczki2022shapley,0.5,survey,"survey about shapley values, no unit test, n
   journal={arXiv preprint arXiv:2202.05594},
   year={2022}
 }",
-kumar2020problems,1,unit test,"problem in how to interpert the shapley values in ML. Causal explanation, some limitation of shap, highliting the fact that some math properties might be useless for interpreting models. Finally in section 4 they highlight the fact that the shapley values (even if correctly calculated might not be the right explanation)",http://proceedings.mlr.press/v119/kumar20e/kumar20e.pdf,"@inproceedings{kumar2020problems,
+kumar2020problems,1,unit test,"problem in how to interpret the shapley values in ML. Causal explanation, some limitation of shap, highliting the fact that some math properties might be useless for interpreting models. Finally in section 4 they highlight the fact that the shapley values (even if correctly calculated might not be the right explanation)",http://proceedings.mlr.press/v119/kumar20e/kumar20e.pdf,"@inproceedings{kumar2020problems,
   title={Problems with Shapley-value-based explanations as feature importance measures},
   author={Kumar, I Elizabeth and Venkatasubramanian, Suresh and Scheidegger, Carlos and Friedler, Sorelle},
   booktitle={International Conference on Machine Learning},
@@ -179,3 +179,13 @@ zhang2020interpretable,0.1,adv2,adversarial attacks using pytorch models,https:/
   booktitle={29th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$ Security 20)},
   year={2020}
 }",
+,0.4,unit test,change distrib to prove that f permutation is not a good idea,https://arxiv.org/pdf/1905.03151.pdf,,
+amoukou2022accurate,0.3,unit test,shap is enable to explain dummy features correctly (one hot encoding),https://arxiv.org/pdf/2106.03820.pdf, "@inproceedings{amoukou2022accurate,
+  title={Accurate Shapley Values for explaining tree-based models},
+  author={Amoukou, Salim I and Salaun, Tangi and Brunel, Nicolas},
+  booktitle={International Conference on Artificial Intelligence and Statistics},
+  pages={2448--2465},
+  year={2022},
+  organization={PMLR}
+}",
+amoukou,0.8,unit test plus shapley-like xAI,a better xAI for explaining locally, https://github.com/salimamoukou/acv00/blob/main/papers/Shapley_Values_estimation_and_Active_Shapley_Values/ImportantVariablesAreGameChangersRevisitingShapleyValuesForExplainingBlackBoxModels.pdf,,
