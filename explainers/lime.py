@@ -89,7 +89,7 @@ class Lime(Explainer, name='lime'):
         super().__init__()
         self.ml_task = ml_task
         self.predict_func = predict_proba if ('classification' in ml_task) else predict_func
-
+        assert callable(self.predict_func), (ml_task, predict_proba, predict_proba) # todo move to a general place
         self.X_reference = X_reference
         self.lime_explainer = LimeTabular(self.predict_func,
                                           self.X_reference,
@@ -97,7 +97,7 @@ class Lime(Explainer, name='lime'):
 
     def explain(self, dataset_to_explain, **kwargs):
         self.attribution = np.asarray(self.lime_explainer.attributions(dataset_to_explain))
-        print('lime self.attribution', self.attribution)
+        # print('lime self.attribution', self.attribution)
         if self.ml_task == 'binary_classification':
             self.attribution = self.attribution[0, ...]
         self.expected_values = np.zeros(
