@@ -143,4 +143,4 @@ results/*
 
 # Vim
 *.sw*
-src/dask/results_tmp.csv
+data/02_experiment_output/results_tmp.csv
