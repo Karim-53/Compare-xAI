@@ -4,7 +4,7 @@ import numpy as np
 import shap as shap_lib
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
-from src.utils import get_importance
+from src.utils import get_importance, TimeoutException
 
 
 class Shap(Explainer, name='shap'):  # todo finish implement this
@@ -87,7 +87,6 @@ class Permutation(Explainer, name='permutation'):
 
         # use an independent masker
         masker = shap_lib.maskers.Independent(X_reference)
-        print('masker', masker)
 
         # build the explainers
         self.explainer = shap_lib.explainers.Permutation(predict_func, masker)
@@ -134,9 +133,13 @@ class ExactShapleyValues(Explainer):
         self.explainer = shap_lib.explainers.Exact(predict_func, masker)
 
     def explain(self, dataset_to_explain, **kwargs):
-        attribution: shap_lib._explanation.Explanation = self.explainer(dataset_to_explain)
-        self.attribution = attribution.values
-        self.importance = get_importance(self.attribution)
+        try:
+            attribution: shap_lib._explanation.Explanation = self.explainer(dataset_to_explain)
+            self.attribution = attribution.values
+            self.importance = get_importance(self.attribution)
+        except Exception as e:
+            if 'masked evaluations to run the Exact explainer on this instance, but max_evals' in str(e):
+                raise TimeoutException("ExactShapleyValues has exponential execution time.")
 
 
 class PermutationPartition(Explainer):
