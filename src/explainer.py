@@ -2,12 +2,12 @@ from explainers import *
 from src.utils import are_class_names_unique
 
 valid_explainers = (
+    Random,  # keep on top
     Permutation,
     PermutationPartition,
     Partition,
     TreeShapApproximation,
     ExactShapleyValues,
-    Random,
     TreeShap,
     Saabas,
     KernelShap,
