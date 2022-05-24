@@ -20,6 +20,7 @@ def importance_is_b_dummy(importance: list) -> float:
 
 
 class CorrelatedFeatures(Test):
+    # I was not able to make this work see slide 16 / 28
     # https://crossminds.ai/video/problems-with-shapley-value-based-explanations-as-feature-importance-measures-606f4961072e523d7b7811fc/
     name = 'correlated_features'
     ml_task = 'regression'
@@ -32,18 +33,19 @@ class CorrelatedFeatures(Test):
         self.dataset_to_explain = pd.DataFrame(dataset_to_explain, columns=self.input_features)
 
         def predict_func(input_features):
+            """ input should be a 2d array [data points, args] """
             if isinstance(input_features,pd.DataFrame):
-                return input_features['b'] ** 2
+                return input_features['b'] * 5 + input_features['a']
             if isinstance(input_features,np.ndarray):
-                return input_features[:,1] ** 2
+                return input_features[:, 1] * 5 + input_features[:, 0]
             if isinstance(input_features,list):
                 if isinstance(input_features[0], list):
-                    return [row[1] ** 2 for row in input_features]
+                    return [row[1] * 5 + row[0] for row in input_features]
                 else:
-                    return input_features[1] ** 2
+                    return input_features[1] * 5 + input_features[0]
             else:
                 print('predict_func', input_features, type(input_features))
-                return input_features[1] ** 2
+                return input_features[1] * 5 + input_features[0]
 
         truth_to_explain = predict_func(dataset_to_explain)
         self.truth_to_explain = pd.DataFrame(truth_to_explain, columns=['target'])
