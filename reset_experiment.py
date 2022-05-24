@@ -8,10 +8,14 @@ from typing import Type
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
 from src.scoring import get_details
+# none
 from src.explainer import valid_explainers
+# 1
 from src.io import *
 from src.test import valid_tests
+from src.utils import TimeoutException
 from tests.test_superclass import Test
+# 1
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -113,6 +117,8 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
         with time_limit(TIME_LIMIT, 'explain'):
             try:
                 _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
+            except TimeoutException:
+                raise
             except Exception as e:
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
@@ -121,7 +127,7 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
             _explainer.check_explanation(test.dataset_to_explain)
     except TimeoutException as e:
         print("Timed out!")
-        format_results(score=None, time=TIME_LIMIT)
+        return format_results(score=None, time=TIME_LIMIT)
 
     # Score the output
     arg = {key: not_string(_explainer.__dict__.get(key)) for key in ['attribution', 'importance', 'interaction']}
@@ -130,8 +136,8 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
 
 
 if __name__ == "__main__":
-    print(f'Explainers: {len(valid_explainers)} / 12 pour le 04-08')
-    print(f'Tests: {len(valid_tests)} / 24 pour le 04-08')
+    print(f'Explainers: {len(valid_explainers)}')
+    print(f'Tests: {len(valid_tests)}')
     result_df = load_results()
     if result_df is None:  # todo [after acceptance] move to io.py
         result_df = pd.DataFrame(index=[e.name for e in valid_explainers],
