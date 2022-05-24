@@ -79,7 +79,7 @@ Feature Ablation,0.25,,,feature importance cited in covert2020understanding,,,,,
 Univariate Predictors,0.25,,,feature importance cited in covert2020understanding,,,,,,,,,
 SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,,,,,,,
 maple,0.75,1,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
-L2X,0.25,,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,,,,,,,
+L2X,0.25,,, https://github.com/Jianbo-Lab/L2X also implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,,,,,,,
 breakdown,0.25,to implement,staniak2018explanations,approximate the shapley values (see https://christophm.github.io/interpretable-ml-book/shapley.html#software-and-alternatives-4= ) implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,,,,,,,
 baseline_random,1.0,1,liu2021synthetic,This is not a real explainer it helps measure the baseline score and processing time.,created,"""['model_agnostic']""","""['attribution','importance','interaction']""",True,True,True,True,True,True
 Uniform,0.25,,Us,output uniform feature attribution,,,,,,,,,
@@ -107,3 +107,11 @@ partition,,1,-,partition explainer from shap,https://github.com/slundberg/shap,,
 permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True
 tree_shap_approximation,,1,-,tree_shap_approximation explainer from shap,https://github.com/slundberg/shap,,,True,True,False,False,True,False
 exact_shapley_values,,1,-,exact_shapley_values explainer from shap,https://github.com/slundberg/shap,,,True,True,False,True,True,True
+todo,,0,,,https://arxiv.org/pdf/2006.04750.pdf,,,,,,,,
+ablation f importance,,,,,https://captum.ai/api/feature_ablation.html  https://deepai.org/publication/randomized-ablation-feature-importance ,,,,,,,,
+Morris Sensitivity Analysis,,,,,see https://github.com/interpretml/interpret ,,,,,,,,
+lofo f importance,,,,,to implement. it retrain the model   https://github.com/aerdem4/lofo-importance ,,,,,,,,
+ACV and ACVTree,,to implement,,, https://github.com/salimamoukou/acv00   It provides a better estimation of Shapley Values for tree-based model (more accurate than path-dependent TreeSHAP). It also proposes new Shapley Values that have better local fidelity. and the correct way of computing Shapley Values of categorical variables after encoding (eg. One Hot or Dummy etc.),,,,,,,,
+shap wrong local explanation,,to implement,,, see fig 1  in https://arxiv.org/pdf/2106.14648.pdf ,,,,,,,,
+shap is enable to explain dummy features correctly (one hot encoding),,to implement, see https://arxiv.org/pdf/2106.03820.pdf ,,,,,,,,
+
