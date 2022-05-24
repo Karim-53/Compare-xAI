@@ -8,7 +8,7 @@ from tests.test_superclass import Test
 
 # Load the IMDB dataset
 corpus, y = shap.datasets.imdb()
-corpus_train, corpus_test, y_train, y_test = train_test_split(corpus, y, test_size=0.0002, random_state=7)
+corpus_train, corpus_test, y_train, y_test = train_test_split(corpus, y, test_size=0.002, random_state=7)
 
 vectorizer = TfidfVectorizer(
     stop_words='english',  # it removes 'not'
@@ -24,7 +24,11 @@ X_train = vectorizer.fit_transform(
 X_test = vectorizer.transform(corpus_test).toarray()
 
 # Fit a linear logistic regression model
-trained_model = sklearn.linear_model.LogisticRegression(penalty="l2", C=0.1)
+trained_model = sklearn.linear_model.LogisticRegression(
+    penalty="l2",
+    C=0.1,
+    n_jobs=-1,
+)
 trained_model.fit(X_train, y_train)
 
 input_features = vectorizer.get_feature_names_out()  # get_feature_names
@@ -33,13 +37,14 @@ print(len(input_features), 'tokens')
 
 dataset_to_explain = X_test  # pd.DataFrame(dataset_to_explain, columns=self.input_features)
 X = X_train
-X_reference = X[:10]
+X_reference = X[:50]
 
 print(len(dataset_to_explain), 'data points to explain')
 print(len(X_reference), 'reference points')
 
-assert len(np.where(input_features == 'bad')[0]), print(input_features)
-token_bad_idx = np.where(input_features == 'bad')[0][0]
+my_token = 'best'  # also token 'love', 'bad', 'great' should be in the top 10
+assert my_token in input_features
+my_token_idx = np.where(input_features == my_token)[0][0]
 
 
 class StressNbFeatures(Test):
@@ -47,11 +52,13 @@ class StressNbFeatures(Test):
     ml_task = 'binary_classification'
     # description = """This is a stress test against a high number of input features (18328) using an nlp model"""
     input_features = input_features
+    trained_model = trained_model
 
     X = X  # todo rename X to X_train
     X_reference = X_reference
 
     predict_func = trained_model.predict
+    predict_proba = trained_model.predict_proba
 
     dataset_to_explain = dataset_to_explain
     truth_to_explain = y_test  # pd.DataFrame(truth_to_explain, columns=['target'])
@@ -62,12 +69,17 @@ class StressNbFeatures(Test):
     @classmethod
     def score(cls, importance=None, **kwargs):
         def importance_token_rank(importance):
-            token_bad_rank = importance[token_bad_idx]
-            if token_bad_rank < 10:
+            if importance is None:
+                return None
+            reorder = np.argsort(np.abs(importance))[::-1]  # most import first in np.abs(importance)[ranks]
+            print(cls.input_features[reorder][:15])  # top 15 given this explainer
+            my_token_rank = np.where(cls.input_features[reorder] == my_token)[0][0]  # lower is more important 0based
+            print('my_token_rank', my_token_rank)
+            if my_token_rank < 10:
                 return 1.
-            if token_bad_rank > 100:
+            if my_token_rank > 100:
                 return 0.
-            return 1. - (token_bad_rank / 100)
+            return 1. - ( (my_token_rank-10) / 100)
 
         return {
             'importance_token_rank': importance_token_rank(importance=importance),
