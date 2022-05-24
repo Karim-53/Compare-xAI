@@ -46,3 +46,8 @@ def are_class_names_unique(class_list):
     else:
         print("Duplicates:", [item for item, count in collections.Counter(names).items() if count > 1])
         return False
+
+
+class TimeoutException(Exception):
+    def __init__(self, msg=''):
+        self.msg = msg
