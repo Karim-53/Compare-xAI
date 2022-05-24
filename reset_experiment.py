@@ -23,11 +23,6 @@ import threading
 import _thread
 
 
-class TimeoutException(Exception):
-    def __init__(self, msg=''):
-        self.msg = msg
-
-
 def not_string(e):
     if isinstance(e, str):
         return None
