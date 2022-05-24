@@ -73,8 +73,8 @@ class Mnist(Test):
         self.predict_func = self.trained_model.predict
         # self.dataset_size = len(self.X)
 
-    @staticmethod
-    def score(attribution=None, importance=None, **kwargs):
+    @classmethod
+    def score(cls, attribution=None, importance=None, **kwargs):
         if attribution is None and importance is None:
             return {
                 'importance_dummy': None,

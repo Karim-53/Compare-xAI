@@ -37,8 +37,8 @@ class AAndBOrC(Test):
         self.trained_model.fit(self.X, y=self.df_train.target)
         self.predict_func = self.trained_model.predict
 
-    @staticmethod
-    def score(importance=None, **kwargs):
+    @classmethod
+    def score(cls, importance=None, **kwargs):
         return {
             'importance_x0_more_important': importance_xi_more_important(importance=importance),
         }

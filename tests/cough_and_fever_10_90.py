@@ -31,8 +31,8 @@ class CoughAndFever1090:  # todo [after acceptance] move to the other file and r
         self.trained_model.fit(self.X, y=self.df_train.target)  # == nb of trees
         self.predict_func = self.trained_model.predict
 
-    @staticmethod
-    def score(attribution=None, importance=None, **kwargs):
+    @classmethod
+    def score(cls, attribution=None, importance=None, **kwargs):
         # todo assert attribution importance size
         def importance_is_cough_more_important_than_fever(importance=None, **kwargs):
             if not is_ok(importance):

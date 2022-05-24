@@ -177,8 +177,8 @@ class DetectInteraction(Test):
         self.dataset_to_explain = X
         self.truth_to_explain = Y
 
-    @staticmethod
-    def score(interaction=None, **kwargs) -> dict:
+    @classmethod
+    def score(cls, interaction=None, **kwargs) -> dict:
         """
 
         :param interaction: in sparse format

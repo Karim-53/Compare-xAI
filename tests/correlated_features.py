@@ -62,8 +62,8 @@ class CorrelatedFeatures(Test):
         self.predict_func = predict_func
         self.predict_proba = None
 
-    @staticmethod
-    def score(importance=None, **kwargs):
+    @classmethod
+    def score(cls, importance=None, **kwargs):
         return {
             'importance_is_b_dummy': importance_is_b_dummy(importance=importance),
             # todo add a test for attribution

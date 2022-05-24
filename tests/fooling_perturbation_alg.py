@@ -88,7 +88,7 @@ class FoolingPerturbationAlg(Test):
         self.predict_proba = self.trained_model.predict_proba
 
     @classmethod  # todo change all to class method
-    def score(cls, attribution: np.ndarray = None, importance: np.array = None, **kwargs):
+    def score(cls,  attribution: np.ndarray = None, importance: np.array = None, **kwargs):
 
         def is_unrelated_feature_important(_importance: np.array):
             """ can receive both global and local importance"""
