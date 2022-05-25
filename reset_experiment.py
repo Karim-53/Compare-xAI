@@ -8,19 +8,16 @@ from typing import Type
 
 from explainers.explainer_superclass import Explainer, UnsupportedModelException
 from src.scoring import get_details
-# none
 from src.explainer import valid_explainers
-# 1
 from src.io import *
 from src.test import valid_tests
 from src.utils import TimeoutException
 from tests.test_superclass import Test
-# 1
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
     level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S",
+    datefmt="%H:%M:%S",
 )
 from contextlib import contextmanager
 import threading
