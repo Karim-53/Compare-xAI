@@ -25,7 +25,7 @@ def load_mnist():
                                                                 test_size=0.999)
     X_to_explain, _, y_to_explain, _ = train_test_split(X_rest, y_rest, stratify=y_rest, random_state=2,
                                                         test_size=0.9995)
-    print(len(X_reference), len(X_to_explain))
+    # print(len(X_reference), len(X_to_explain))
     mnist_model_path = root + '/tests/tmp/mnist_model.sav'
     if not os.path.exists(mnist_model_path):
         mlp = MLPClassifier(
