@@ -1,5 +1,5 @@
 import sqlite3 as db
-
+import datetime
 import numpy as np
 import pandas as pd
 
@@ -29,7 +29,7 @@ def export_to_sql():
     shutil.copyfile('../data/04_sql/database', '../../cxai/src/database')
 
     # verification
-    print('Total execution time to run all experiments:', cross_tab.time.sum(), 'sec')
+    print('Total execution time to run all experiments:', str(datetime.timedelta(seconds=int(cross_tab.time.sum()))), 'sec')
     tests = cross_tab.test.unique()
     valid_tests = test.set_index('test').loc[tests]  # if failed: some tests are not indexed in text.csv -> add them
     assert sum(valid_tests['category'].isna()) == 0, 'there is some test.category containing NaN values -> fill them'

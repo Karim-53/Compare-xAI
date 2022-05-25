@@ -74,7 +74,7 @@ def compatible(test_class, explainer_class):
         return False
 
 
-TIME_LIMIT = 1000  # 250  # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
+TIME_LIMIT = 3*60*60  # seconds  # todo [before submission] increase # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call
 
 
 def format_results(score=None, time=None):  # todo add note for unsopported Model exception

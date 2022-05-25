@@ -8,12 +8,12 @@ from tests.test_superclass import Test
 
 # Load the IMDB dataset
 corpus, y = shap.datasets.imdb()
-corpus_train, corpus_test, y_train, y_test = train_test_split(corpus, y, test_size=0.002, random_state=7)
+corpus_train, corpus_test, y_train, y_test = train_test_split(corpus, y, test_size=0.004, random_state=7)
 
 vectorizer = TfidfVectorizer(
     stop_words='english',  # it removes 'not'
-    # max_df=.9,  # max freq  # increase to keep more tokens
-    min_df=.1,  # minimum frequency  # decrease to keep more tokens
+    max_df=.999,  # max freq  # increase to keep more tokens
+    min_df=.01,  # del tokens if they occur in less than 10% of the docs # decrease to keep more tokens
     strip_accents='ascii',
     lowercase=True,
     dtype=np.float32,
@@ -37,7 +37,7 @@ print(len(input_features), 'tokens')
 
 dataset_to_explain = X_test  # pd.DataFrame(dataset_to_explain, columns=self.input_features)
 X = X_train
-X_reference = X[:50]
+X_reference = X[:100]
 
 print(len(dataset_to_explain), 'data points to explain')
 print(len(X_reference), 'reference points')
@@ -75,21 +75,22 @@ class StressNbFeatures(Test):
             print(cls.input_features[reorder][:15])  # top 15 given this explainer
             my_token_rank = np.where(cls.input_features[reorder] == my_token)[0][0]  # lower is more important 0based
             print('my_token_rank', my_token_rank)
-            if my_token_rank < 10:
+            n = len(cls.input_features)
+            if my_token_rank < n // 4:
                 return 1.
-            if my_token_rank > 100:
+            if my_token_rank > n * 3 / 4:
                 return 0.
-            return 1. - ( (my_token_rank-10) / 100)
+            return 1. - ( (my_token_rank-n // 4) / (n // 2))
 
         return {
             'importance_token_rank': importance_token_rank(importance=importance),
         }
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # Init test
-    test = StressNbFeatures()
-    arg = dict(**test.__dict__)
+    # test = StressNbFeatures()
+    # arg = dict(**test.__dict__)
     # arg.update(**StressNbFeatures.__dict__)
 
     # from explainers import KernelShap

@@ -11,6 +11,7 @@ valid_tests = (
     DistributionNonUniformStatIndep,
     FoolingPerturbationAlg,
     Mnist,
+    StressNbFeatures,
 
     # Tests for interaction output: working but let's continue with it after acceptance
     # DetectInteraction0,
