@@ -117,6 +117,7 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
         with time_limit(TIME_LIMIT, 'explain'):
             try:
                 _explainer.explain(dataset_to_explain=test.dataset_to_explain, truth_to_explain=test.truth_to_explain)
+                execution_time = time.time() - start_time
             except TimeoutException:
                 raise
             except Exception as e:
@@ -127,12 +128,12 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
             _explainer.check_explanation(test.dataset_to_explain)
     except TimeoutException as e:
         print("Timed out!")
-        return format_results(score=None, time=TIME_LIMIT)
+        execution_time = TIME_LIMIT
 
     # Score the output
     arg = {key: not_string(_explainer.__dict__.get(key)) for key in ['attribution', 'importance', 'interaction']}
     score = test.score(**arg)
-    return format_results(score=score, time=time.time() - start_time)
+    return format_results(score=score, time=execution_time)
 
 
 if __name__ == "__main__":

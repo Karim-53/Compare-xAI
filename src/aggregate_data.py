@@ -98,6 +98,7 @@ if __name__ == "__main__":
 
     ############################################################################################################
     explainer = pd.read_csv('../data/01_raw/explainer.csv')
+    explainer.sort_values('explainer', inplace=True)
     # todo delete supported_models column from 01_raw/explainer.csv because we add it now
     # todo delete outputs column from 01_raw/explainer.csv because we add it now
 
@@ -124,6 +125,11 @@ if __name__ == "__main__":
     explainer.required_input_data = explainer.required_input_data.apply(
         lambda _set: None if _set is None else bullet_point + bullet_point.join([required_data_to_nice_name.get(e,e) for e in _set])
     )
+
+    time_per_test = cross_tab[['explainer', 'time']].groupby('explainer').mean()
+    time_per_test = time_per_test.rename(columns={'time': 'time_per_test'})
+    time_per_test['explainer'] = time_per_test.index
+    explainer = explainer.join(time_per_test, on='explainer', rsuffix='_to_drop').drop('explainer_to_drop', axis=1)
     # print('todo required_input_train_function is set to 0')
     # explainer['required_input_train_function'] = 0
     print('writing explainer to /data/03_experiment_output_aggregated/ ...')
