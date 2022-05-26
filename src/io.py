@@ -97,4 +97,3 @@ if __name__ == "__main__":
     eligible_points_df = get_eligible_points_df(result_df)
     summary_df = get_summary_df(result_df, score_df, eligible_points_df)
     print(summary_df.round(2))
-deployed = False
