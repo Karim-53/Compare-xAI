@@ -4,6 +4,14 @@ todo check again `requirements.txt`
 
 [![Python Version](https://img.shields.io/badge/python-v3.8.3-blue)]()
 
+
+`Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
+
+See our [NeurIPS paper][arxiv] (under review).
+
+You can check directly the benchmark results at https://karim-53.github.io/cxAI/
+
+
 # Table of Content
 
 - [1. Download](#1-download)
@@ -21,12 +29,6 @@ todo check again `requirements.txt`
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 [//]: # (<p align="center"><img src="img/banner.svg" width=700 /></p>)
-
-`Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different unit tests. 
-
-See our [NeurIPS paper][arxiv].
-
-You can check directly the benchmark results at https://karim-53.github.io/cxAI/
 
 [//]: # (<p align="center"><img src="img/overview_figure.svg" width=700 /></p>)
 
