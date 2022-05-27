@@ -189,3 +189,11 @@ amoukou2022accurate,0.3,unit test,shap is enable to explain dummy features corre
   organization={PMLR}
 }",
 amoukou,0.8,unit test plus shapley-like xAI,a better xAI for explaining locally, https://github.com/salimamoukou/acv00/blob/main/papers/Shapley_Values_estimation_and_Active_Shapley_Values/ImportantVariablesAreGameChangersRevisitingShapleyValuesForExplainingBlackBoxModels.pdf,,
+jethani2021have,,,,http://proceedings.mlr.press/v130/jethani21a/jethani21a.pdf,"@inproceedings{jethani2021have,
+  title={Have We Learned to Explain?: How Interpretability Methods Can Learn to Encode Predictions in their Interpretations.},
+  author={Jethani, Neil and Sudarshan, Mukund and Aphinyanaphongs, Yindalon and Ranganath, Rajesh},
+  booktitle={International Conference on Artificial Intelligence and Statistics},
+  pages={1459--1467},
+  year={2021},
+  organization={PMLR}
+}",
