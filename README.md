@@ -74,7 +74,7 @@ This also generate an SQLite database used in https://karim-53.github.io/cxAI/
 ## 2.3 Computing ressouces
 Experiments were run over a normal computer (see [CPU-Z report](https://karim-53.github.io/cxai/CPU-Z.html)) without a GPU.
 
-Total execution time: 1h 10min 11sec
+Total execution time: 4h 18min 18sec
 
 
 # 3. Contributing
