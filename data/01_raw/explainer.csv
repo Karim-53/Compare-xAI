@@ -1,11 +1,11 @@
 explainer,is_documented,is_implemented,source_paper_tag,description,source_code,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network
-Shapley Values,0.75,to finish implementing,,"There is an alternate permutation-based description of the Shapley value:
+Shapley Values,0.75,1,,"There is an alternate permutation-based description of the Shapley value:
 Order the players uniformly at random, add them one at a time in this order,
 and assign to each player i its expected marginal contribution V (S ∪ i) − v(S);
 here S is the set of players that precede i in the ordering. https://arxiv.org/pdf/1908.08474.pdf
 
 is unique given a set of constrains",,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
-kernel_shap,0.75,,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
+kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise \cite{janzing2020feature},https://github.com/slundberg/shap,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
 tree_shap,0.5,1,lundberg2018consistent,,,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 saabas,0.75,1,-,,https://github.com/andosa/treeinterpreter/,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 lime,0.5,1,ribeiro2016should,,,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
@@ -16,7 +16,7 @@ Archipelago is named after its ability to provide explanations by isolating feat
 The inputs to Archipelago are a black-box model f and data instance x*, 
 its outputs are a set of interactions and individual features {I} as well as an attribution score φ(I) for each of the feature sets I.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,"""['model_agnostic']""","""['interaction']""",False,False,True,True,True,True
 Difference,0.0,,,,,,,,,,,,
-anova,0.75,1,,"Fisher (1921) also developed one of the foundations of statistical analysis called Analysis of Variance (ANOVA) including two-way ANOVA (Fisher, 1925),
+anova,0.75,0.75,,"Fisher (1921) also developed one of the foundations of statistical analysis called Analysis of Variance (ANOVA) including two-way ANOVA (Fisher, 1925),
 Multi-way ANOVA exists to detect interactions of higher-orders combinations, not just between pairs of features.
 A significant problem with individual testing methods is that they require an exponentially growing number of 
 tests as the desired interaction order increases. Not only is this approach intractable, but also has a high 
@@ -71,7 +71,7 @@ src: https://iancovert.com/blog/understanding-shap-sage/
 Disadvantage:
 The convergence of the algorithm depends on 2 parameters: `thres` and `gap`.
 The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
-Permutation Test,0.25,,,"feature importance cited in covert2020understanding
+Permutation Test,0.25,1,,"feature importance cited in covert2020understanding
 also ""Shuffle-based feature importance permutes the data of each feature to ascertain its importance
 in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,,,,,,,,
 Mean Importance,0.25,,,feature importance cited in covert2020understanding,,,,,,,,,
