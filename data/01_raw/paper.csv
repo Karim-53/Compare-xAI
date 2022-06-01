@@ -197,3 +197,10 @@ jethani2021have,,,,http://proceedings.mlr.press/v130/jethani21a/jethani21a.pdf,"
   year={2021},
   organization={PMLR}
 }",
+ghalebikesabi2021locality,0.8,unit-test,demo that the attribution (local explanation) of an interaction term using lime is wrong,https://proceedings.neurips.cc/paper/2021/file/995665640dc319973d3173a74a03860c-Paper.pdf,"@article{ghalebikesabi2021locality,
+  title={On locality of local explanation models},
+  author={Ghalebikesabi, Sahra and Ter-Minassian, Lucile and DiazOrdaz, Karla and Holmes, Chris C},
+  journal={Advances in Neural Information Processing Systems},
+  volume={34},
+  year={2021}
+}",
