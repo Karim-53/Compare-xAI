@@ -7,24 +7,23 @@ xgboost
 # keras
 # scikit-image
 
-
-# App
-plotly
-dash
-visdcc
-gunicorn # for deployment
-
-# html pages
-# jinja2
-
 numpy
-paretoset
 matplotlib
 pandas
-tqdm
 scipy
 requests
 pillow
 regex
 h5py
-# nltk
+nltk
+
+# Other
+tqdm
+seaborn
+
+# App
+# plotly
+# paretoset
+
+# html pages
+# jinja2
