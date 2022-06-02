@@ -22,7 +22,7 @@ monotonicity(↑),,0,0,-,like the other features. its metric is debatable.,,,liu
 remove-and-retrain (ROAR)(↑),,0,0,-,does retrain the model so it is not a unit test,,,liu2021synthetic,,,,,,,,,,,
 GT-Shapley(↑),,0,0,-,does the xAI output correlate with the ground truth shapley values. Noooooo !,,,liu2021synthetic,,,,,,,,,,,
 infidelity(↓),,0,0,-,-,,,liu2021synthetic,,,,,,,,,,,
-x0*x1,,1,not a priority,todo after acceptance,,,,did not find a paper implementing that yet. but it is a quite popular example,,,,1,1,0,,-,-,1
+x0*x1,,1,not a priority,todo after acceptance,,,,did not find a paper implementing that yet. but it is a quite popular example,,,,1,1,0,,-,-,1,
 fooling_perturbation_alg,fragility,1,1,Is the xAI affected by an adversarial attack against perturbation-based algorithms?,"exploit a vulnerability in model-agnostic xai that use feature perturbation: adversarial attack to lower the feature importance of a specific feature
 ### Setup
 Let's begin by examining the COMPAS data set. This data set consists of defendent information from Broward Couty, Florida. Let's suppose that some adversary wants to _mask_ baised or racist behavior on this data set.",,"https://github.com/propublica/compas-analysis/blob/master/compas-scores-two-years.csv
