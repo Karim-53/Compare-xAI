@@ -204,3 +204,11 @@ ghalebikesabi2021locality,0.8,unit-test,demo that the attribution (local explana
   volume={34},
   year={2021}
 }",
+jeyakumar2020can,0.4,human evaluation,demo that humans prefer to use exmatchina,,"@article{jeyakumar2020can,
+  title={How can i explain this to you? an empirical study of deep neural network explanation methods},
+  author={Jeyakumar, Jeya Vikranth and Noor, Joseph and Cheng, Yu-Hsi and Garcia, Luis and Srivastava, Mani},
+  journal={Advances in Neural Information Processing Systems},
+  volume={33},
+  pages={4211--4222},
+  year={2020}
+}",
