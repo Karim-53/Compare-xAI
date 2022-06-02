@@ -1,6 +1,4 @@
-todo update before sub 
-nb of XAI nb of tests 
-todo check again `requirements.txt`
+<p align="center"><img src="img/banner/banner.png"  /></p>
 
 [![Python Version](https://img.shields.io/badge/python-v3.8.3-blue)]()
 
@@ -28,7 +26,6 @@ You can check directly the benchmark results at https://karim-53.github.io/cxAI/
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-[//]: # (<p align="center"><img src="img/banner.svg" width=700 /></p>)
 
 [//]: # (<p align="center"><img src="img/overview_figure.svg" width=700 /></p>)
 
