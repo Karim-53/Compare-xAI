@@ -50,7 +50,7 @@ CD: Contextual Decomposition,0.25,,,"variant of SCD [35,42], see tsang2020does
 Agglomerative Contextual Decomposition: Agglomerative Contextual Decomposition (ACD) (Singh et al., 2019) is a hierarchical extension of Contextual Decomposition (Murdoch et al., 2018) which was originally designed for LSTMs. This method extended the additive decomposition to NNs in general by adding technical solutions for the method to work on convolutions and maxpooling, both common  perations in CNNs. The method decomposes each layer as:
 gi(x) = βi(x) + γi(x)
 Each gi denotes a layer of the network and where β denotes the contribution only by the features of interest and γ denotes the residual contribution for the model. Thus, the β values can be seen as the interaction effect of a certain group of features when it is the final β value from the logit/ prediction layer. The method then accumulates these scores into a tree hierarchy over the input. Because this work was designed for text and images, this looks something like a tree of word subsets with their corresponding polarity or image patches with their corresponding classes. A primary weakness is this method also fails many axiomatic interaction scores because of its formulation. A minor weakness is the computation time required by the iterative, hierarchical, full-explanation approach. This is because a partial hierarchy could be computed if desired and many pieces of this framework are flexible for quicker or even different inference.
-",,,,,,,
+",,,,,,,,,
 sage,1.0,1,covert2020understanding,"Compute feature importance based on Shapley value but faster.
 The features that are most critical for the model to make good predictions will have large values ϕ_i(v_f) > 0
 While unimportant features will have small values ϕ_i(v_f)≈0
@@ -114,4 +114,3 @@ lofo f importance,,,,,to implement. it retrain the model   https://github.com/ae
 ACV and ACVTree,,to implement,,, https://github.com/salimamoukou/acv00   It provides a better estimation of Shapley Values for tree-based model (more accurate than path-dependent TreeSHAP). It also proposes new Shapley Values that have better local fidelity. and the correct way of computing Shapley Values of categorical variables after encoding (eg. One Hot or Dummy etc.),,,,,,,,
 shap wrong local explanation,,to implement,,, see fig 1  in https://arxiv.org/pdf/2106.14648.pdf ,,,,,,,,
 shap is enable to explain dummy features correctly (one hot encoding),,to implement, see https://arxiv.org/pdf/2106.03820.pdf ,,,,,,,,
-
