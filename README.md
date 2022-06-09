@@ -32,13 +32,13 @@ You can check directly the benchmark results at https://karim-53.github.io/cxAI/
 # 1. Download
 All data are located in `data/`
 
-The list of fair unit tests is in `data/01_raw/test.csv`.
+The list of shortlisted unit tests is in `data/01_raw/test.csv`.
 
 Info about explainers could be found in `data/03_experiment_output_aggregated/explainer.csv`
 
-Results are in `data/03_experiment_output_aggregated/cross_tab.csv`
+Raw score results are in `data/03_experiment_output_aggregated/cross_tab.csv`
 
-The data is also available as one SQLite database file `data/04_sql/database`
+The data is also available as one SQLite database file `data/04_sql/database`.
 
 # 2. Run experiments
 Want to reproduce the results shown in [our paper][arxiv] ? Follow these instructions:
