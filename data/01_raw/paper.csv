@@ -1,7 +1,6 @@
 source_paper_tag,Done (0 to 1),Method,Detail,Links,source_paper_bibliography,extra
 paper tag from scholars,,,this row is a description of the columns,,,extra research we can not include in our repo that are intresting of xAI enthusiastic scientist
-lundberg2018consistent,0.6,TreeSHAP,"Original Paper of TreeSHAP
-Compares Saaba to treeshap",,"@article{lundberg2018consistent,
+lundberg2018consistent,0.6,TreeSHAP,"Original Paper of TreeSHAP. Compares Saaba to treeshap",,"@article{lundberg2018consistent,
   title={Consistent individualized feature attribution for tree ensembles},
   author={Lundberg, Scott M and Erion, Gabriel G and Lee, Su-In},
   journal={arXiv preprint arXiv:1802.03888},
@@ -211,4 +210,11 @@ jeyakumar2020can,0.4,human evaluation,demo that humans prefer to use exmatchina,
   volume={33},
   pages={4211--4222},
   year={2020}
+}",
+plumb2018model,0,MAPLE,,,"@article{plumb2018model,
+  title={Model agnostic supervised local explanations},
+  author={Plumb, Gregory and Molitor, Denali and Talwalkar, Ameet S},
+  journal={Advances in neural information processing systems},
+  volume={31},
+  year={2018}
 }",

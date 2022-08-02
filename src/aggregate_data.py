@@ -41,6 +41,7 @@ output_labels = {'importance': 'Feature importance (global explanation)',
                  }
 bullet_point = '\n\t\t\t - '
 
+
 def aggregate_outputs(explainer: pd.DataFrame):
     _df = pd.DataFrame()
     for out, label in output_labels.items():
