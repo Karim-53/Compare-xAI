@@ -3,7 +3,7 @@ Shapley Values,1,1,shapley1953quota,"is a permutation-based xAI algorithm follow
 'Order the players uniformly at random, add them one at a time in this order,
 and assign to each player i its expected marginal contribution'\cite{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper.",,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
 kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise\cite{janzing2020feature}.,https://github.com/slundberg/shap,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
-tree_shap,0.5,1,lundberg2018consistent,,,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
+tree_shap,0.5,1,lundberg2018consistent,accurately compute the shap values using the structure of the tree model.,,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 saabas,0.75,1,-,explain tree based models by decomposing each prediction into bias and feature contribution components,https://github.com/andosa/treeinterpreter/,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 lime,0.5,1,ribeiro2016should,it explains the model locally by generating an interpretable model approximating the original one.,,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
 archipelago,1.0,1,tsang2020does,"separate the input features into sets. all features inside a set interact and there is no interaction outside a set
