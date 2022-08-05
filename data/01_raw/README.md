@@ -1,5 +1,12 @@
 
 `test.csv`: list of unit tests (implemented/ might be implemented / will never be implemented and why).
+ - dataset: name of the dataset
+ - dataset_source (paper, direct link)
+ - dataset_size (integer)
+ - model (xgboost, Neural networks, black-box custom function, etc.)
+ - test_source_paper (paper, direct link)
+ - test_implementation_link
+ - test_metric: how to translate the end-user requirement into a score between 0 (failing) and 1 (correctly fullfiling the requirement)
 
 `xai.csv`:  list of xAI        (implemented/ might be implemented / will never be implemented and why)
 
