@@ -58,7 +58,7 @@ TODO understnd better the metrics to decide if I should include them in my repo"
   journal={arXiv preprint arXiv:2106.12543},
   year={2021}
 }",
-lakkaraju2020fool,1,Unit-test,how to make model agnostic xai based on feature perturbation fail to retreive the correct most important feature,"https://www.youtube.com/watch?v=4HyJIOenIlI&ab_channel=Harvard%27sCRCS 
+lakkaraju2020fool,1,test,how to make model agnostic xai based on feature perturbation fail to retreive the correct most important feature,"https://www.youtube.com/watch?v=4HyJIOenIlI&ab_channel=Harvard%27sCRCS
 https://dl.acm.org/doi/pdf/10.1145/3375627.3375833","@inproceedings{lakkaraju2020fool,
   title={"" How do I fool you?"" Manipulating User Trust via Misleading Black Box Explanations},
   author={Lakkaraju, Himabindu and Bastani, Osbert},
@@ -93,7 +93,7 @@ kumar2020problems,1,test,"problem in how to interpret the shapley values in ML. 
   year={2020},
   organization={PMLR}
 }",
-tsang2021interpretable,1,survey,"recent survey about feature interaction xAI, no unit-test
+tsang2021interpretable,1,survey,"recent survey about feature interaction xAI, no test
 
 Additionally, if a higher-order interaction exists, all of its subsets also exist as interactions (Sorokina et al., 2008; Tsang et al., 2018a). -> TODO should we have a test for such a property ?",https://arxiv.org/pdf/2103.03103.pdf,"@article{tsang2021interpretable,
   title={Interpretable Artificial Intelligence through the Lens of Feature Interaction},
@@ -196,7 +196,7 @@ jethani2021have,,,,http://proceedings.mlr.press/v130/jethani21a/jethani21a.pdf,"
   year={2021},
   organization={PMLR}
 }",
-ghalebikesabi2021locality,0.8,unit-test,demo that the attribution (local explanation) of an interaction term using lime is wrong,https://proceedings.neurips.cc/paper/2021/file/995665640dc319973d3173a74a03860c-Paper.pdf,"@article{ghalebikesabi2021locality,
+ghalebikesabi2021locality,0.8,test,demo that the attribution (local explanation) of an interaction term using lime is wrong,https://proceedings.neurips.cc/paper/2021/file/995665640dc319973d3173a74a03860c-Paper.pdf,"@article{ghalebikesabi2021locality,
   title={On locality of local explanation models},
   author={Ghalebikesabi, Sahra and Ter-Minassian, Lucile and DiazOrdaz, Karla and Holmes, Chris C},
   journal={Advances in Neural Information Processing Systems},
