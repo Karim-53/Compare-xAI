@@ -141,6 +141,6 @@ if __name__ == "__main__":
 
     ############################################################################################################
     test = pd.read_csv('../data/01_raw/test.csv')
-    test = test[test.is_shortlisted==1]
-    test = test[test.is_implemented==1]
+    test = test[test.is_shortlisted == 1]
+    test = test[test.is_implemented=="1"]
     test.to_csv('../data/03_experiment_output_aggregated/test.csv', index=False)
