@@ -1,5 +1,5 @@
 
-`test.csv`: list of unit tests (implemented/ might be implemented / will never be implemented and why).
+`test.csv`: list of tests (implemented/ might be implemented / will never be implemented and why).
  - test: Id of the test
  - category: idelity, Fragility, Stability, Simplicity, Stress test
  - is_shortlisted: [0 or 1] does it respect the selection protocol (see paper)

@@ -79,13 +79,13 @@ sattarzadeh2021svea,0.5,SVEA benchmark,benchmark using mnist-1D and didn t under
   pages={4158--4167},
   year={2021}
 }",
-rozemberczki2022shapley,0.5,survey,"survey about shapley values, no unit test, nothing special besides some intresting cited papers",https://arxiv.org/pdf/2202.05594.pdf,"@article{rozemberczki2022shapley,
+rozemberczki2022shapley,0.5,survey,"survey about shapley values, no test, nothing special besides some intresting cited papers",https://arxiv.org/pdf/2202.05594.pdf,"@article{rozemberczki2022shapley,
   title={The Shapley Value in Machine Learning},
   author={Rozemberczki, Benedek and Watson, Lauren and Bayer, P{\'e}ter and Yang, Hao-Tsung and Kiss, Oliv{\'e}r and Nilsson, Sebastian and Sarkar, Rik},
   journal={arXiv preprint arXiv:2202.05594},
   year={2022}
 }",
-kumar2020problems,1,unit test,"problem in how to interpret the shapley values in ML. Causal explanation, some limitation of shap, highliting the fact that some math properties might be useless for interpreting models. Finally in section 4 they highlight the fact that the shapley values (even if correctly calculated might not be the right explanation)",http://proceedings.mlr.press/v119/kumar20e/kumar20e.pdf,"@inproceedings{kumar2020problems,
+kumar2020problems,1,test,"problem in how to interpret the shapley values in ML. Causal explanation, some limitation of shap, highliting the fact that some math properties might be useless for interpreting models. Finally in section 4 they highlight the fact that the shapley values (even if correctly calculated might not be the right explanation)",http://proceedings.mlr.press/v119/kumar20e/kumar20e.pdf,"@inproceedings{kumar2020problems,
   title={Problems with Shapley-value-based explanations as feature importance measures},
   author={Kumar, I Elizabeth and Venkatasubramanian, Suresh and Scheidegger, Carlos and Friedler, Sorelle},
   booktitle={International Conference on Machine Learning},
@@ -95,14 +95,14 @@ kumar2020problems,1,unit test,"problem in how to interpret the shapley values in
 }",
 tsang2021interpretable,1,survey,"recent survey about feature interaction xAI, no unit-test
 
-Additionally, if a higher-order interaction exists, all of its subsets also exist as interactions (Sorokina et al., 2008; Tsang et al., 2018a). -> TODO should we have a unit test for such a property ?",https://arxiv.org/pdf/2103.03103.pdf,"@article{tsang2021interpretable,
+Additionally, if a higher-order interaction exists, all of its subsets also exist as interactions (Sorokina et al., 2008; Tsang et al., 2018a). -> TODO should we have a test for such a property ?",https://arxiv.org/pdf/2103.03103.pdf,"@article{tsang2021interpretable,
   title={Interpretable Artificial Intelligence through the Lens of Feature Interaction},
   author={Tsang, Michael and Enouen, James and Liu, Yan},
   journal={arXiv preprint arXiv:2103.03103},
   year={2021}
 }","Examples of word interactions are “not, good” and “not, bad” in movie reviews. An example of an image interaction is a combination of image patches corresponding to the ears, nose, and eyes of a dog, which supports a dog classification. -> will not be included because it does not highlight any limit
 sin(x1 +x2) just an example of pair f interaction was not used to demo any kind of limitation so no need to implement it"
-molnar2020interpretable,1,survey,maybe i should reread it again and check if there is any unit test inthere,https://christophm.github.io/interpretable-ml-book/,"@book{molnar2020interpretable,
+molnar2020interpretable,1,survey,maybe i should reread it again and check if there is any test inthere,https://christophm.github.io/interpretable-ml-book/,"@book{molnar2020interpretable,
   title={Interpretable machine learning},
   author={Molnar, Christoph},
   year={2020},
@@ -152,7 +152,7 @@ sundararajan2017axiomatic,0.1,Integrated gradient,,,"@inproceedings{sundararajan
   year={2017},
   organization={PMLR}
 }",
-lakkaraju2019faithful,0.1,survey,category of unit tests,https://dl.acm.org/doi/10.1145/3306618.3314229,"@inproceedings{lakkaraju2019faithful,
+lakkaraju2019faithful,0.1,survey,category of tests,https://dl.acm.org/doi/10.1145/3306618.3314229,"@inproceedings{lakkaraju2019faithful,
   title={Faithful and customizable explanations of black box models},
   author={Lakkaraju, Himabindu and Kamar, Ece and Caruana, Rich and Leskovec, Jure},
   booktitle={Proceedings of the 2019 AAAI/ACM Conference on AI, Ethics, and Society},
@@ -178,8 +178,8 @@ zhang2020interpretable,0.1,adv2,adversarial attacks using pytorch models,https:/
   booktitle={29th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$ Security 20)},
   year={2020}
 }",
-,0.4,unit test,change distrib to prove that f permutation is not a good idea,https://arxiv.org/pdf/1905.03151.pdf,,
-amoukou2022accurate,0.3,unit test,shap is enable to explain dummy features correctly (one hot encoding),https://arxiv.org/pdf/2106.03820.pdf, "@inproceedings{amoukou2022accurate,
+,0.4,test,change distrib to prove that f permutation is not a good idea,https://arxiv.org/pdf/1905.03151.pdf,,
+amoukou2022accurate,0.3,test,shap is enable to explain dummy features correctly (one hot encoding),https://arxiv.org/pdf/2106.03820.pdf, "@inproceedings{amoukou2022accurate,
   title={Accurate Shapley Values for explaining tree-based models},
   author={Amoukou, Salim I and Salaun, Tangi and Brunel, Nicolas},
   booktitle={International Conference on Artificial Intelligence and Statistics},
@@ -187,7 +187,7 @@ amoukou2022accurate,0.3,unit test,shap is enable to explain dummy features corre
   year={2022},
   organization={PMLR}
 }",
-amoukou,0.8,unit test plus shapley-like xAI,a better xAI for explaining locally, https://github.com/salimamoukou/acv00/blob/main/papers/Shapley_Values_estimation_and_Active_Shapley_Values/ImportantVariablesAreGameChangersRevisitingShapleyValuesForExplainingBlackBoxModels.pdf,,
+amoukou,0.8,test plus shapley-like xAI,a better xAI for explaining locally, https://github.com/salimamoukou/acv00/blob/main/papers/Shapley_Values_estimation_and_Active_Shapley_Values/ImportantVariablesAreGameChangersRevisitingShapleyValuesForExplainingBlackBoxModels.pdf,,
 jethani2021have,,,,http://proceedings.mlr.press/v130/jethani21a/jethani21a.pdf,"@inproceedings{jethani2021have,
   title={Have We Learned to Explain?: How Interpretability Methods Can Learn to Encode Predictions in their Interpretations.},
   author={Jethani, Neil and Sudarshan, Mukund and Aphinyanaphongs, Yindalon and Ranganath, Rajesh},
