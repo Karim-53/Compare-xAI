@@ -1,12 +1,22 @@
 
 `test.csv`: list of unit tests (implemented/ might be implemented / will never be implemented and why).
+ - test: Id of the test
+ - category: idelity, Fragility, Stability, Simplicity, Stress test
+ - is_shortlisted: [0 or 1] does it respect the selection protocol (see paper)
+ - is_implemented: [0 or 1]
+ - short_description: one sentence description of the test
+ - description: longer description
+ - why_not_shortlisted
  - dataset: name of the dataset
  - dataset_source (paper, direct link)
  - dataset_size (integer)
  - model (xgboost, Neural networks, black-box custom function, etc.)
  - test_source_paper (paper, direct link)
- - test_implementation_link
+ - test_source_code: link to the original code if imported
+ - test_implementation_link: link in our repo to the implementation
+ - Input_type
  - test_metric: how to translate the end-user requirement into a score between 0 (failing) and 1 (correctly fullfiling the requirement)
+ - Solution: tips to make most of the xai successed in fulfilling this end-user requirement
 
 `xai.csv`:  list of xAI        (implemented/ might be implemented / will never be implemented and why)
 
