@@ -183,7 +183,7 @@ class InteractionExplainer:
             model,
             input=None,
             baseline=None,
-            # todo ake this a parameter in the unit tests a part, because it is frequently use in atchipelago and in https://arxiv.org/pdf/1908.08474.pdf [18, 2, 10].
+            # todo ake this a parameter in the tests a part, because it is frequently use in atchipelago and in https://arxiv.org/pdf/1908.08474.pdf [18, 2, 10].
             data_xformer=None,
             output_indices=0,
             batch_size=20,

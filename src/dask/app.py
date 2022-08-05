@@ -25,7 +25,7 @@ explainer_root_link = root + 'explainers/'
 
 
 def pareto(summary_df, min_time_value=.01, show=True):
-    """ Generate the scatter plot and the pareto front given the specific selection of xai and unit-tests """
+    """ Generate the scatter plot and the pareto front given the specific selection of xai and tests """
     assert len(summary_df) > 0, 'No XAI to plot. At least the baseline_random should be there'
     summary_df.loc[summary_df.time_per_test < min_time_value, 'time_per_test'] = min_time_value
     if summary_df.percentage.max() < 1.:
@@ -72,7 +72,7 @@ def pareto(summary_df, min_time_value=.01, show=True):
 
 
 def get_stats(eligible_points_df):
-    """ return the number of xai and unit-tests selected """
+    """ return the number of xai and tests selected """
     xai = len(eligible_points_df)
     tests = eligible_points_df.max().sum()
     return xai, tests

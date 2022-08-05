@@ -1,4 +1,4 @@
-"""Main script to evaluate xAI algorithms. It generates the raw scores for every Unit test and every xAI."""
+"""Main script to evaluate xAI algorithms. It generates the raw scores for every test and every xAI."""
 import datetime
 import inspect
 import logging

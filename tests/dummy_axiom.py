@@ -20,7 +20,7 @@ def importance_is_b_dummy(importance: list) -> float:
 class CounterexampleDummyAxiom(Test):
     name = 'counterexample_dummy_axiom'
     ml_task = 'regression'
-    description = """Model: output = b^2. Feature a should have a null attribution. This unit test does not exactly correspond to the one in \cite{sundararajan2020many} because it is using a non uniform distrib that is evaluated in another unit test."""
+    description = """Model: output = b^2. Feature a should have a null attribution. This test does not exactly correspond to the one in \cite{sundararajan2020many} because it is using a non uniform distrib that is evaluated in another test."""
     input_features = ['a', 'b']
     dataset_size = 20000
 
