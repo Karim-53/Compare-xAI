@@ -1,7 +1,7 @@
 
 `test.csv`: list of tests (implemented/ might be implemented / will never be implemented and why).
  - test: Id of the test
- - category: idelity, Fragility, Stability, Simplicity, Stress test
+ - category: Fidelity, Fragility, Stability, Simplicity, Stress test
  - is_shortlisted: [0 or 1] does it respect the selection protocol (see paper)
  - is_implemented: [0 or 1]
  - short_description: one sentence description of the test
