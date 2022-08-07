@@ -104,14 +104,33 @@ src/aggregate_data.py
 # More details
 
 ## FAQ
- - **What is a functional test ?** 
+### What is a functional test ?
 Functional testing is a popular testing technique for software engineers. The following definition is adapted from the software engineering field to our intended usage in machine learning.  
 Functional tests are created by testers with no specific knowledge of the algorithm's internal modules, i.e., not the developers themselves. Therefore, the algorithm is considered a black-box and is executed from end to end.  
 Each functional test is intended to verify an end-user requirement on the xAI algorithm rather than a specific internal module. Thus, functional tests share the advantage of being able to test different algorithms, if they respect the same input and output format. On the other hand, failed tests do not inform about the location of the errors but rather attribute it to the entire algorithm.
 
- - ** How to reproduce experiment ?**
+### Which metrics are used to evaluate an xAI algorithm?
+3 metrics are used:
+
+**Comprehensibility**: a high Comprehensibility mean that it is easy for data scientist to interpret the explanation provided by an xAI algorithm without making errors. We compress all results from shortlisted tests into this metric as explained in the paper.
+
+**Portability**: is the number of test the xAI can execute. xAI(s) that accept different AI models or data sctructure have a higher protability.
+
+**Average execution time**: of the tests 
+
+Let's consider 2 examples:
+
+*maple*     : portability=17 (high, i.e. can explain different models), comprehensibility=49.15% (bad)
+
+*tree_shap* : portability=11 (low, i.e. can explain only a few models), comprehensibility=74.15% (good)
+
+It is the choice of the data scientist to use a general xAI with medium performance (like maple) or a specialized xAI algorithm with an explanation respecting a most of the known end-user requirements.
+
+
+### How to reproduce experiment ?
+
 The full original code is made available in this repo. Plus you can find a summary of the experiment setup in https://github.com/Karim-53/Compare-xAI/blob/main/data/03_experiment_output_aggregated/test.csv
- - 
+ 
 ## Reference
 The source code was inspired from https://github.com/abacusai/xai-bench and https://github.com/mtsang/archipelago
 ## Cite Us
