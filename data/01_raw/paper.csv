@@ -218,3 +218,12 @@ plumb2018model,0,MAPLE,,,"@article{plumb2018model,
   volume={31},
   year={2018}
 }",
+ghorbani2019interpretation,0,fragility,,,"@inproceedings{ghorbani2019interpretation,
+  title={Interpretation of neural networks is fragile},
+  author={Ghorbani, Amirata and Abid, Abubakar and Zou, James},
+  booktitle={Proceedings of the AAAI conference on artificial intelligence},
+  volume={33},
+  number={01},
+  pages={3681--3688},
+  year={2019}
+}",
