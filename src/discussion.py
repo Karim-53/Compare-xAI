@@ -37,3 +37,8 @@ stat['fail'] = df[df.score<.05].groupby('explainer').count()['test']
 stat['partial_fail_ratio'] = stat['partial_fail'] / stat['total']
 stat['fail_ratio'] = stat['fail'] / stat['total']
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.histplot(df.fail_ratio, kde=True)
+plt.show()
+
