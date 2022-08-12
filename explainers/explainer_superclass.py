@@ -41,8 +41,10 @@ explainer_csv = pd.read_csv(root + '/data/01_raw/explainer.csv').set_index('expl
 
 
 class Explainer:
-    """ The doc is different from description prop:
-    doc is for coders while description is for the end user data scientist seeing the website"""
+    """class `Explainer` is a template for xAI algorithms.
+
+    The docstring's content is different from description prop:
+    docstring is for coders while description is for the end user data scientist seeing the website"""
     # todo change this to shap 's format: use __call__ ect. (literally this one should inherit from that class)
     name: str  # will be inferred from class name
     supported_models = ()  # supported in the implementation not in theory # todo [after acceptance] add supported_models_theory if needed in filters
@@ -72,6 +74,8 @@ class Explainer:
     source_paper_tag = None
     source_paper_bibliography = None
 
+    #  - `init` function loads the dataset and train the model.
+
     # todo [after acceptance] add complexity as str, is_affected_by_seed
     # todo [after acceptance] add last_update = version of the release of this repo
     # todo add source paper just the bibtex tag
@@ -94,6 +98,8 @@ class Explainer:
 
     @classmethod
     def get_xai_output(cls):
+        """ Check in general what is the output of the implemented xAi algorithm
+        'feature importance', 'feature attribution', or 'pair interaction'"""
         xai_output = []
         for out, out_str in zip(['importance', 'attribution', 'interaction'],
                                 ['feature importance', 'feature attribution', 'pair interaction']):
@@ -153,7 +159,8 @@ xAI's output:\t\t {', '.join(xai_output)}
                 dataset_to_explain,
                 # todo [after acceptance] think about changing var name to explicand == the input to be explained see https://arxiv.org/pdf/1908.08474.pdf
                 **kwargs):  # Should we make this an abstract method ?
-        """ Here we should cite 1 or 2 sentences why the xai need such variables """
+        """executes the xAI algorithm.
+        Here we should cite 1 or 2 sentences why the xai need such variables """
         # todo create a decorator for this function: automatically infer global explanation and check the output format
         from src.explainer import valid_explainers
         raise NotImplementedError(
