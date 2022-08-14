@@ -37,29 +37,48 @@ stat['fail_ratio'] = stat['fail'] / stat['total'] * 100.
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(1, 2, figsize=(5, 1.5), sharex=True, sharey=True)
 meanprops = {
     "marker": "o",
     "markerfacecolor": "white",
     "markeredgecolor": "black",
-    "markersize": "8",
+    "markersize": "6",
     "label": "Mean",
 }
+
+
+
+
+fig, ax = plt.subplots(1, 2, figsize=(6, .6), sharex=True, sharey=True)
+for i in range(2):
+    ax[i].tick_params(axis=u'both', which=u'both',length=0)
+    ax[i].spines['top'].set_visible(False)
+    ax[i].spines['right'].set_visible(False)
+    ax[i].set_xlim([0,95])
 
 sns.boxplot(x=stat.fail_ratio, ax=ax[0],
             showmeans=True,
             meanprops=meanprops,
             )
+# ax[0].grid(axis="x")
 ax[0].set_xlabel('Failed tests [%]')
-plt.grid(axis="x")
 
-sns.boxplot(x=stat.partial_fail_ratio, ax=ax[1], width=.5,
+# ax[0].spines['top'].set_visible(False)
+# ax[0].spines['right'].set_visible(False)
+
+ax[0].set_yticks([])
+
+# axis 1
+sns.boxplot(x=stat.partial_fail_ratio, ax=ax[1], # width=.7,
             showmeans=True,
             meanprops=meanprops,
             )
+# ax[1].grid(axis="x")
 ax[1].set_xlabel('Partially failed tests [%]')
-plt.grid(axis="x")
 
-ax[1].legend()
+ax[1].legend(loc=(1.03, 0))
+
 plt.tight_layout(pad=0)
-plt.show()
+# plt.title('Box plot of test status per xAI algorithm.')
+# plt.show()
+plt.savefig('boxplot.pdf', bbox_inches="tight")
+plt.savefig('boxplot.png', bbox_inches="tight")
