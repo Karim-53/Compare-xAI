@@ -2,9 +2,8 @@
 import numpy as np
 import pandas as pd
 
-
 # Discussion of Level 2
-df = pd.DataFrame(index = ['fidelity', 'fragility', 'stability', 'simplicity', 'Stress test'])
+df = pd.DataFrame(index=['fidelity', 'fragility', 'stability', 'simplicity', 'Stress test'])
 df['baseline_random'] = [12.9, 50, 30.7, 0, 33.3]
 df['exact_shapley_values'] = [100, 11.1, 84.3, 100, np.nan]
 df['kernel_shap'] = [100, 11.1, 85.6, 100, 100]
@@ -23,22 +22,44 @@ description = df.describe()
 delta = description.loc['max'] - description.loc['min']
 _mean = delta.mean()
 _std = delta.std()
-print('The average difference in sub scores is', round(_mean,2), '% +-', round(_std,2),'%')
-
-
+print('The average difference in sub scores is', round(_mean, 2), '% +-', round(_std, 2), '%')
 
 # Level 3
 df = pd.read_csv(r'C:\Inn\GitHub\Compare-xAI\data\03_experiment_output_aggregated\cross_tab.csv')
 stat = pd.DataFrame(index=df.groupby('explainer').count()['test'].index)
 stat['total'] = df.groupby('explainer').count()['test']
-stat['partial_fail'] = df[df.score<.95].groupby('explainer').count()['test']
-stat['fail'] = df[df.score<.05].groupby('explainer').count()['test']
+stat['partial_fail'] = df[df.score < .95].groupby('explainer').count()['test']
+stat['fail'] = df[df.score < .05].groupby('explainer').count()['test']
 
-stat['partial_fail_ratio'] = stat['partial_fail'] / stat['total']
-stat['fail_ratio'] = stat['fail'] / stat['total']
+stat['partial_fail_ratio'] = stat['partial_fail'] / stat['total'] * 100.
+stat['fail_ratio'] = stat['fail'] / stat['total'] * 100.
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-sns.histplot(df.fail_ratio, kde=True)
-plt.show()
 
+fig, ax = plt.subplots(1, 2, figsize=(5, 1.5), sharex=True, sharey=True)
+meanprops = {
+    "marker": "o",
+    "markerfacecolor": "white",
+    "markeredgecolor": "black",
+    "markersize": "8",
+    "label": "Mean",
+}
+
+sns.boxplot(x=stat.fail_ratio, ax=ax[0],
+            showmeans=True,
+            meanprops=meanprops,
+            )
+ax[0].set_xlabel('Failed tests [%]')
+plt.grid(axis="x")
+
+sns.boxplot(x=stat.partial_fail_ratio, ax=ax[1], width=.5,
+            showmeans=True,
+            meanprops=meanprops,
+            )
+ax[1].set_xlabel('Partially failed tests [%]')
+plt.grid(axis="x")
+
+ax[1].legend()
+plt.tight_layout(pad=0)
+plt.show()
