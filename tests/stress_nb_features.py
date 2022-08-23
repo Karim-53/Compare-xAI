@@ -7,7 +7,10 @@ import shap
 from tests.test_superclass import Test
 
 # Load the IMDB dataset
-corpus, y = shap.datasets.imdb()
+corpus, y = shap.datasets.imdb()  # if this fails then
+# In `...\Lib\site-packages\shap\datasets.py`
+# Replace `with open(cache(github_data_url + "imdb_train.txt")) as f:`
+# By `with open(cache(github_data_url + "imdb_train.txt"), encoding="utf8") as f:`
 corpus_train, corpus_test, y_train, y_test = train_test_split(corpus, y, test_size=0.004, random_state=7)
 
 vectorizer = TfidfVectorizer(
