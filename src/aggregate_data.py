@@ -149,7 +149,7 @@ if __name__ == "__main__":
     test_table = test[~test.test.str.contains('detect_interaction')].copy()
 
 
-    for col in ['description']:
+    for col in ['description', 'test_procedure', 'test_metric', 'category_justification']:
         test_table['end'] = test_table[col].str[-1]
         print(col)
         print(test_table[test_table.end!='.'][['test','end']])
