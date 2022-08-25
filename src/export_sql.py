@@ -39,8 +39,8 @@ def export_to_sql():
     valid_tests['test'] = valid_tests.index
     print(valid_tests[['test','category']].groupby('category').count())
 
-    are_tests_to_implement_fair = test[test.is_implemented == 'to implement'].is_fair.unique()
-    assert all(are_tests_to_implement_fair == np.array([1.])), are_tests_to_implement_fair
+    are_tests_to_implement_shortlisted = test[test.is_implemented == 'to implement'].is_shortlisted.unique()
+    assert all(are_tests_to_implement_shortlisted == np.array([1.])), are_tests_to_implement_shortlisted
 
 if __name__ == '__main__':
     export_to_sql()
