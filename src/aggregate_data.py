@@ -255,6 +255,9 @@ if __name__ == "__main__":
 
     #############################
     explainer_table = explainer[explainer.is_implemented == "1"].copy()
+    # explainer_table = explainer_table[explainer_table.explainer != "archipelago"]
+    # explainer_table = explainer_table[explainer_table.explainer != "shap_interaction"]
+    # explainer_table = explainer_table[explainer_table.explainer != "shapley_taylor_interaction"]
     explainer_table.explainer = '\href{' + explainer_table.implementation_link + '}{' + explainer_table.explainer.str.replace('_', '\\_') + '}'
 
     def f(supported_model_model_agnostic, supported_model_tree_based, supported_model_neural_network):
@@ -302,9 +305,9 @@ if __name__ == "__main__":
     explainer_table.source_paper_tag = explainer_table.source_paper_tag.apply(f)
 
     def f(required_input_data):
-        if pd.isna(required_input_data):
+        if pd.isna(required_input_data) or required_input_data=='\n\t\t\t - ':
             return ''
-        return 'The following information are required by the xAI algorithm: ' + required_input_data.replace('-', ',')
+        return 'The following information are required by the xAI algorithm: ' + required_input_data.replace('-', ',').replace('_', ' ')
     explainer_table.required_input_data = explainer_table.required_input_data.apply(f)
 
 
@@ -312,7 +315,7 @@ if __name__ == "__main__":
     explainer_table['annex'] += '\n' + explainer_table.source_paper_tag
     explainer_table['annex'] += ' \n' + explainer_table.description
     explainer_table['annex'] += ' \n' + explainer_table.supported_model_str
-    explainer_table['annex'] += ' \nThe xAI algorithm can output the following explanations: ' + explainer_table['output_str']
+    explainer_table['annex'] += ' \nThe xAI algorithm can output the following explanations: ' + explainer_table['output_str'] + '.'
     explainer_table['annex'] += ' \n' + explainer_table.required_input_data
 
 
