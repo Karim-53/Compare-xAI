@@ -1,0 +1,138 @@
+\begin{description}
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/archipelago.py}{archipelago}] 
+ \citep{tsang2020does} 
+separate the input features into sets. all features inside a set interact, and there is no interaction outside a set. ArchAttribute is an interaction attribution method. ArchDetect is the corresponding interaction detector. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature interaction (local explanation). 
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/explainer_superclass.py}{baseline\_random}] 
+ \citep{liu2021synthetic} 
+Output a random explanation. It is not a real explainer. It helps measure the baseline score and processing time. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation), Feature interaction (local explanation). 
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{exact\_shapley\_values}] 
+ \citep{shapley1953quota} 
+is a permutation-based xAI algorithm following a game theory approach: Iteratively Order the features randomly, then add them to the input one at a time following this order, and calculate their expected marginal contribution \citep{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , A reference dataset (input only)
+			 , The model's predict function
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{kernel\_shap}] 
+ \citep{lundberg2017unified} 
+it approximates the Shapley values with a constant noise \citep{janzing2020feature}. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , A reference dataset (input only)
+			 , The model's predict function
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/lime.py}{lime}] 
+ \citep{ribeiro2016should} 
+it explains the model locally by generating an interpretable model approximating the original one. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , The model's predict probability function
+			 , A reference dataset (input only)
+			 , The model's predict function
+			 , Nature of the ML task (regression/classification)
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/maple.py}{maple}] 
+ \citep{plumb2018model} 
+is a supervised neighborhood approach that combines ideas from local linear models and ensembles of decision trees \citep{plumb2018model}. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , AI model's structure
+			 , The model's predict function
+			 , The train set
+			 , A reference dataset (input only)
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{partition}] 
+ \citep{lundberg2017unified} 
+Partition SHAP approximates the Shapley values using a hierarchy of feature coalitions. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , A reference dataset (input only)
+			 , The model's predict function
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{permutation}] 
+ 
+is a shuffle-based feature importance. It permutes the input data and compares it to the normal prediction 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , input features
+			 , The model's predict function
+			 , A reference dataset (input only)
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{permutation\_partition}] 
+ 
+is a combination of permutation and partition algorithm from shap. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , input features
+			 , The model's predict function
+			 , A reference dataset (input only)
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/saabas.py}{saabas}] 
+ 
+explain tree based models by decomposing each prediction into bias and feature contribution components 
+The xAI algorithm can explain tree-based models. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , AI model's structure
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/sage_explainer.py}{sage}] 
+ \citep{covert2020understanding} 
+Compute feature importance based on Shapley value but faster. The features that are most critical for the model to make good predictions will have large importance and only features that make the model's performance worse will have negative values.
+Disadvantage: The convergence of the algorithm depends on 2 parameters: `thres` and `gap`. The algorithm can be trapped in a potential infinite loop if we do not fine tune them. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , True output of the data points to explain
+			 , A reference dataset (input only)
+			 , The model's predict function
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_interaction.py}{shap\_interaction}] 
+ \citep{owen1972multilinear} 
+SI: Shapley Interaction Index. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature interaction (local explanation). 
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shapley_taylor_interaction.py}{shapley\_taylor\_interaction}] 
+ \citep{sundararajan2020shapley} 
+STI: Shapley Taylor Interaction Index. 
+The xAI algorithm is model agnostic i.e. it can explain any AI model. 
+The xAI algorithm can output the following explanations: Feature interaction (local explanation). 
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{tree\_shap}] 
+ \citep{lundberg2018consistent} 
+accurately compute the shap values using the structure of the tree model. 
+The xAI algorithm can explain tree-based models. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , AI model's structure
+			 , A reference dataset (input only)
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py}{tree\_shap\_approximation}] 
+ 
+is a faster implementation of shap reserved for tree based models. 
+The xAI algorithm can explain tree-based models. 
+The xAI algorithm can output the following explanations: Feature attribution (local explanation), Feature importance (global explanation). 
+The following information are required by the xAI algorithm: 
+			 , AI model's structure
+			 , A reference dataset (input only)
+
+\end{description}
