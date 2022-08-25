@@ -97,6 +97,26 @@ if __name__ == "__main__":
     cross_tab.to_parquet('../data/03_experiment_output_aggregated/cross_tab.parquet')
     cross_tab.to_csv('../data/03_experiment_output_aggregated/cross_tab.csv', index=False)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ############################################################################################################
     explainer = pd.read_csv('../data/01_raw/explainer.csv')
     explainer.sort_values('explainer', inplace=True)
@@ -139,6 +159,31 @@ if __name__ == "__main__":
     export_to_sql()
     print('End')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # For appendix
     ############################################################################################################
     test = pd.read_csv('../data/01_raw/test.csv')
     test = test[test.is_shortlisted == 1]
@@ -204,3 +249,59 @@ if __name__ == "__main__":
     with open("test.tex", "w") as f:
             f.write(tex)
 
+
+
+
+
+    #############################
+    explainer_table = explainer[explainer.is_implemented == "1"].copy()
+    explainer_table.explainer = '\href{' + explainer_table.implementation_link + '}{' + test_table.test.str.replace('_', '\\_') + '}'
+
+    def f(supported_model_model_agnostic, supported_model_tree_based, supported_model_neural_network):
+        if supported_model_model_agnostic:
+            return 'The xAI algorithm is model agnostic i.e. it can explain any AI model.'
+
+        s = 'The xAI algorithm can explain'
+        if supported_model_tree_based:
+            s+=' tree-based models'
+            if supported_model_neural_network:
+                s += ' and neural networks'
+            s += '.'
+            return s
+        if supported_model_neural_network:
+            s += ' neural networks.'
+            return s
+    explainer_table['supported_model_str'] = [
+        f(a,b,c) for a,b,c in zip(explainer_table.supported_model_model_agnostic,
+                                  explainer_table.supported_model_tree_based,
+                                  explainer_table.supported_model_neural_network,)]
+
+    def f(output_attribution,output_importance,output_interaction):
+        out = []
+        if output_attribution:
+            out+=output_labels['attribution']
+        if output_importance:
+            out+=output_labels['importance']
+        if output_interaction:
+            out+=output_labels['interaction']
+        return ', '.join(out)
+
+
+    explainer_table['output_str'] = [
+        f(output_attribution, output_importance, output_interaction)
+        for output_attribution,output_importance,output_interaction
+        in zip(explainer_table.output_attribution,explainer_table.output_importance,explainer_table.output_interaction)
+    ]
+
+    explainer_table['annex'] = '\n\\item[' + explainer_table.explainer + '] '
+    explainer_table['annex'] += ' \citep{' + explainer_table.source_paper_tag + '}'
+    explainer_table['annex'] += ' \n' + explainer_table.description
+    explainer_table['annex'] += ' \n' + explainer_table.supported_model_str
+    explainer_table['annex'] += ' \nThe xAI algorithm can output the following explanations: ' + explainer_table['output_str']
+    explainer_table['annex'] += ' \nThe following information are required by the xAI algorithm: ' + explainer_table.required_input_data.replace('-', ',')
+
+
+
+    tex = '\\begin{description}\n\n' + explainer_table.annex.str.cat(sep='\n') + '\n\n\end{description}'
+    with open("explainer.tex", "w") as f:
+            f.write(tex)
