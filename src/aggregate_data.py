@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
     #############################
     explainer_table = explainer[explainer.is_implemented == "1"].copy()
-    explainer_table.explainer = '\href{' + explainer_table.implementation_link + '}{' + test_table.test.str.replace('_', '\\_') + '}'
+    explainer_table.explainer = '\href{' + explainer_table.implementation_link + '}{' + explainer_table.explainer.str.replace('_', '\\_') + '}'
 
     def f(supported_model_model_agnostic, supported_model_tree_based, supported_model_neural_network):
         if supported_model_model_agnostic:
@@ -279,13 +279,12 @@ if __name__ == "__main__":
     def f(output_attribution,output_importance,output_interaction):
         out = []
         if output_attribution:
-            out+=output_labels['attribution']
+            out+=[output_labels['attribution']]
         if output_importance:
-            out+=output_labels['importance']
+            out+=[output_labels['importance']]
         if output_interaction:
-            out+=output_labels['interaction']
+            out+=[output_labels['interaction']]
         return ', '.join(out)
-
 
     explainer_table['output_str'] = [
         f(output_attribution, output_importance, output_interaction)
@@ -293,12 +292,28 @@ if __name__ == "__main__":
         in zip(explainer_table.output_attribution,explainer_table.output_importance,explainer_table.output_interaction)
     ]
 
+
+    def f(source_paper_tag):
+        if pd.isna(source_paper_tag) or source_paper_tag=='-':
+            return ''
+        else:
+            return ' \citep{' + source_paper_tag + '}'
+
+    explainer_table.source_paper_tag = explainer_table.source_paper_tag.apply(f)
+
+    def f(required_input_data):
+        if pd.isna(required_input_data):
+            return ''
+        return 'The following information are required by the xAI algorithm: ' + required_input_data.replace('-', ',')
+    explainer_table.required_input_data = explainer_table.required_input_data.apply(f)
+
+
     explainer_table['annex'] = '\n\\item[' + explainer_table.explainer + '] '
-    explainer_table['annex'] += ' \citep{' + explainer_table.source_paper_tag + '}'
+    explainer_table['annex'] += '\n' + explainer_table.source_paper_tag
     explainer_table['annex'] += ' \n' + explainer_table.description
     explainer_table['annex'] += ' \n' + explainer_table.supported_model_str
     explainer_table['annex'] += ' \nThe xAI algorithm can output the following explanations: ' + explainer_table['output_str']
-    explainer_table['annex'] += ' \nThe following information are required by the xAI algorithm: ' + explainer_table.required_input_data.replace('-', ',')
+    explainer_table['annex'] += ' \n' + explainer_table.required_input_data
 
 
 
