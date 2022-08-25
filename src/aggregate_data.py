@@ -142,23 +142,33 @@ if __name__ == "__main__":
     ############################################################################################################
     test = pd.read_csv('../data/01_raw/test.csv')
     test = test[test.is_shortlisted == 1]
-    test = test[test.is_implemented=="1"]
+    test = test[test.is_implemented == "1"]
     test.to_csv('../data/03_experiment_output_aggregated/test.csv', index=False)
 
     # supplementary material
     test_table = test[~test.test.str.contains('detect_interaction')].copy()
 
-
     for col in ['description', 'test_procedure', 'test_metric', 'category_justification']:
         test_table['end'] = test_table[col].str[-1]
-        print(col)
-        print(test_table[test_table.end!='.'][['test','end']])
+        _summary = test_table[test_table.end!='.'][['test','end']]
+        if len(_summary):
+            print(col)
+            print(_summary)
 
 
 
 
     test_table['test'] = '\href{' + test_table.test_implementation_link + '}{' + test_table.test.str.replace('_', '\\_') + '}'
-    test_table['dataset'] = '\href{' + test_table.dataset_source.replace('-', '#') + '}{' + test_table.dataset.str.replace('_', ' ') + '}'
+    def f(dataset, dataset_source):
+        if dataset_source == '-':
+            return 'a ' + dataset.replace('_', ' ')
+        else:
+            return 'the \href{' + dataset_source + '}{' + dataset.replace('_', ' ') + '}'
+
+
+    test_table['dataset'] = [f(dataset, dataset_source) for dataset, dataset_source in zip(test_table.dataset,test_table.dataset_source)]
+    test_table['model'] = test_table.model.replace('function', 'a custom function')
+    test_table['model'] = test_table.model.replace('MLP', 'an MLP')
 
     # test_table.category_justification = 'p{'+test_table.category_justification+'}'
     # test_table.short_description = 'p{'+test_table.short_description+'}'
@@ -184,13 +194,13 @@ if __name__ == "__main__":
 
     test_table['annex'] = '\n\n\\item['+test_table.test+'] answers the following question: \\emph{' + test_table.short_description + '}.'
     test_table['annex'] += '\n'+ test_table.description  # nzid point
-    test_table['annex'] += '\n'+ ' The test utilize a \\textbf{'+test_table.model+'} model trained on the \\textbf{'+test_table.dataset +'} dataset (total size: '+test_table.dataset_size.astype('int').astype('str') +').'
+    test_table['annex'] += '\n'+ ' The test utilize \\textbf{'+test_table.model+'} model trained on \\textbf{'+test_table.dataset +'} dataset (total size: '+test_table.dataset_size.astype('int').astype('str') +').'
     test_table['annex'] += '\n The test procedure is as follows: ' + test_table.test_procedure
-    test_table['annex'] += '\n The score is calculated as follows:' + test_table.test_metric
+    test_table['annex'] += '\n The score is calculated as follows: ' + test_table.test_metric
     test_table['annex'] += '\n'+ ' The test is classified in the \\textbf{'+test_table.category+'} category because ' + test_table.category_justification   # nzid point
 
     tex = '\\begin{description}\n\n' + test_table.annex.str.cat(sep='\n') + '\n\n\end{description}'
 
-    with open("test_table.tex", "w") as f:
+    with open("test.tex", "w") as f:
             f.write(tex)
 
