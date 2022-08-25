@@ -1,9 +1,9 @@
 explainer,is_documented,is_implemented,source_paper_tag,description,source_code,implementation_link,supported_models,outputs,output_attribution,output_importance,output_interaction,supported_model_model_agnostic,supported_model_tree_based,supported_model_neural_network
 Shapley Values,1,1,shapley1953quota,"is a permutation-based xAI algorithm following a game theory approach.
 'Order the players uniformly at random, add them one at a time in this order,
-and assign to each player i its expected marginal contribution'\cite{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper.",,,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
-kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise\cite{janzing2020feature}.,https://github.com/slundberg/shap,,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
-tree_shap,0.5,1,lundberg2018consistent,accurately compute the shap values using the structure of the tree model.,,,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
+and assign to each player i its expected marginal contribution'\cite{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper.",,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
+kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise\cite{janzing2020feature}.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
+tree_shap,0.5,1,lundberg2018consistent,accurately compute the shap values using the structure of the tree model.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 saabas,0.75,1,-,explain tree based models by decomposing each prediction into bias and feature contribution components,https://github.com/andosa/treeinterpreter/,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/saabas.py,"""['tree_based']""","""['attribution','importance']""",True,True,False,False,True,False
 lime,0.5,1,ribeiro2016should,it explains the model locally by generating an interpretable model approximating the original one.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/lime.py,"""['model_agnostic']""","""['attribution','importance']""",True,True,False,True,True,True
 archipelago,1.0,1,tsang2020does,"separate the input features into sets. all features inside a set interact and there is no interaction outside a set
@@ -11,7 +11,7 @@ ArchAttribute: interaction attribution method
 + ArchDetect: a corresponding interaction detector,  to address the challenges of being interpretable, axiomatic, and scalable.
 Archipelago is named after its ability to provide explanations by isolating feature interactions, or feature “islands”.
 The inputs to Archipelago are a black-box model f and data instance x*, 
-its outputs are a set of interactions and individual features {I} as well as an attribution score φ(I) for each of the feature sets I.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/archipelago.py,"""['model_agnostic']""","""['interaction']""",False,False,True,True,True,True
+its outputs are a set of interactions and individual features {I} as well as an attribution score \phi(I) for each of the feature sets I.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/archipelago.py,"""['model_agnostic']""","""['interaction']""",False,False,True,True,True,True
 Difference,0.0,,,,,,,,,,,,,
 anova,0.75,0.75,,"Fisher (1921) also developed one of the foundations of statistical analysis called Analysis of Variance (ANOVA) including two-way ANOVA (Fisher, 1925),
 Multi-way ANOVA exists to detect interactions of higher-orders combinations, not just between pairs of features.
@@ -59,7 +59,7 @@ SAGE can be viewed as modified version of a permutation test:
 
 Instead of holding out one feature at a time, SAGE holds out larger subsets of features. (By only removing individual 
 features, permutation tests may erroneously assign low importance to features with good proxies.)
-SAGE draws held out features from their conditional distribution p(X_S¯ ∣ X_S =x_S ) 
+SAGE draws held out features from their conditional distribution p(X_S¯ | X_S =x_S )
 rather than their marginal distribution p(X_S¯). (Using the conditional distribution simulates a feature's absence,
 whereas using the marginal breaks feature dependencies and produces unlikely feature combinations.)
 src: https://iancovert.com/blog/understanding-shap-sage/  
@@ -69,7 +69,7 @@ The convergence of the algorithm depends on 2 parameters: `thres` and `gap`.
 The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/sage_explainer.py,"""['model_agnostic']""","""['importance']""",False,True,False,True,True,True
 Permutation Test,0.25,1,,"feature importance cited in covert2020understanding
 also ""Shuffle-based feature importance permutes the data of each feature to ascertain its importance
-in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,,,,,,,,,
+in the final prediction in comparison to its normal prediction (Fisher et al., 2018)."" see https://arxiv.org/pdf/2103.03103.pdf",,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,,,,,,,,
 Mean Importance,0.25,,,feature importance cited in covert2020understanding,,,,,,,,,,
 Feature Ablation,0.25,,,feature importance cited in covert2020understanding,,,,,,,,,,
 Univariate Predictors,0.25,,,feature importance cited in covert2020understanding,,,,,,,,,,
@@ -98,7 +98,7 @@ interactions, and the other that has the interaction of interest forcibly remove
 with this method is it exacerbates the slowness of individual testing methods which require many
 tests by forcing a complex model to be trained for each test.
 https://arxiv.org/pdf/2103.03103.pdf ",,,,,,,,,,
-permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,,,,True,True,False,True,True,True
+permutation,,1,-,Permutation explainer from shap,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,,,True,True,False,True,True,True
 partition,,1,lundberg2017unified,Partition SHAP approximates the Shapley values using a hierarchy of feature coalitions.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,,,True,True,False,True,True,True
 permutation_partition,,1,-,permutation partition explainer from shap,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,,,True,True,False,True,True,True
 tree_shap_approximation,,1,-,is a faster implementation of shap reserved for tree based models.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,,,True,True,False,False,True,False
