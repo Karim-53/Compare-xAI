@@ -47,7 +47,7 @@ Want to reproduce the results shown in [our paper][arxiv] ? Follow these instruc
 [//]: # (There is no specific requirements listed in `requirements.txt` you can run only a few tests and a few Explainer with a small set of packages. So just install what is needed on the go :&#41; )
 [//]: # (`requirements.txt` contains a good start)
 install the required packages using
-```
+```shell
 pip install -r requirements.txt
 ```
 
@@ -55,20 +55,20 @@ pip install -r requirements.txt
 
 Run the following command to explain the currently implemented tests using the currently implemented explainers.
 
-```
+```shell
 python reset_experiment.py
 ```
 The results are written in `data/02_experiment_output/results.csv`.
 Now run the following command to aggregate results in a more human-readable format.
-```
+```shell
 python src/aggregate_data.py
 ```
 This also generate an SQLite database used in https://karim-53.github.io/cxAI/
 `data/04_sql/database` aggregate all data: information about tests, explainers, papers, and results of all experiments.
 
-**Tip**: Reduce the list explainers by changing `valid_explainers` in `src/explainer.py`. Same for the tests, see `src/test.py`.
+**Tip**: Reduce the list of explainers to test by changing `valid_explainers` in `src/explainer.py`. Same for the tests, see `src/test.py`.
 
-## 2.3 Computing ressouces
+## 2.3 Computing resources
 Experiments were run over a normal computer (see [CPU-Z report](https://karim-53.github.io/cxai/CPU-Z.html)) without a GPU.
 
 Total execution time: 4h 18min 18sec
@@ -124,7 +124,7 @@ Let's consider 2 examples:
 
 *tree_shap* : portability=11 (low, i.e. can explain only a few models), comprehensibility=74.15% (good)
 
-It is the choice of the data scientist to use a general xAI with medium performance (like maple) or a specialized xAI algorithm with an explanation respecting a most of the known end-user requirements.
+It is the choice of the data scientist to use a general xAI with medium performance (like maple) or a specialized xAI algorithm with an explanation respecting most of the known end-user requirements.
 
 
 ### How to reproduce experiment ?
@@ -138,6 +138,11 @@ The source code was inspired from https://github.com/abacusai/xai-bench and http
 Please cite our work if you use code from this repo:
 
 ```bibtex
- 
+@article{belaid2022we,
+  title={Do We Need Another Explainable AI Method? Toward Unifying Post-hoc XAI Evaluation Methods into an Interactive and Multi-dimensional Benchmark},
+  author={Belaid, Mohamed Karim and H{\"u}llermeier, Eyke and Rabus, Maximilian and Krestel, Ralf},
+  journal={arXiv preprint arXiv:2207.14160},
+  year={2022}
+}
 ```
-[arxiv]: http://arxiv.org
+[arxiv]: https://arxiv.org/abs/2207.14160
