@@ -10,21 +10,26 @@ import copy
 from .explainer_superclass import Explainer
 
 
-class JointShapley(Explainer, name='joint shapley'):
+class JointShapley(Explainer, name='joint_shapley'):
     supported_models = ('model_agnostic')
-    #output_attribution = False
-    #output_importance = False
+    output_attribution = True
+    output_importance = True
     output_interaction = True
 
-    def __init__(self, trained_model, **kwargs):
+    def __init__(self, trained_model, predict_func = None, **kwargs):
         super().__init__()
         self.trained_model = trained_model
-        self.value_f = self.trained_model.predict
+        if predict_func is None:
+           self.value_f = self.trained_model.predict
+        else:
+            self.value_f = predict_func
 
 
         
 
-    def explain(self, dataset_to_explain, k = 2, num_iter = 300, verbose=True, **kwargs):
+    def explain(self, dataset_to_explain, k = 2, num_iter = 500, verbose=True, **kwargs):
+        if isinstance(dataset_to_explain, pd.DataFrame) is False:
+            dataset_to_explain = pd.DataFrame(dataset_to_explain)
         n_features = frozenset(list(dataset_to_explain.columns))
         #num_obs, n = dataset_to_explain.shape
         coalitions_to_k = list(get_powerset_to_k(n_features, k))
@@ -35,14 +40,14 @@ class JointShapley(Explainer, name='joint shapley'):
 
         for cln_n, cln in enumerate(coalitions_to_k):
             if verbose:
-               display(f"cln = {cln_n} / {len(coalitions_to_k)}")
+               display(f"cln = {cln_n + 1} / {len(coalitions_to_k)}")
             value_function = (
                 lambda cln: get_estimate_for_coalition(cln, num_iter, k, dataset_to_explain, self.value_f)
             )
             local_joint_shapleys.loc[:, [cln]] = value_function(cln).reshape(-1,1)
 
-        #self.attribution = local_joint_shapleys
-        #self.importance = np.abs(self.attribution).mean(axis=0)
+        self.attribution = calc_attribution(local_joint_shapleys, n_features)
+        self.importance = np.abs(self.attribution).mean(axis=0)
         self.interaction = local_joint_shapleys
 
 
@@ -132,6 +137,17 @@ def reduce_to_most_meaningful(local_js, to=10):
     global_js = global_js.sort_values(ascending=False)
     most_meaningful_coalitions = global_js.iloc[:to]
     return most_meaningful_coalitions.index
+
+def calc_attribution(local_js, features):
+    attribution_ls = []
+    for idx, row in local_js.iterrows():
+        temp_dict = {feature: 0.0 for feature in features}
+        for index in row.index:
+            for f in features:
+                if f in index:
+                    temp_dict[f'{f}'] += row[index]
+        attribution_ls.append(np.array(list(temp_dict.values())))
+    return np.stack(attribution_ls)
 
 
 
