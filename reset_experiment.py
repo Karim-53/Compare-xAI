@@ -98,9 +98,7 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
 
     # Init Explainer
     try:
-        arg = dict(**test.__dict__)  # todo try to solve this problem of attributes here and there...
-        arg.update(
-            **test_class.__dict__)  # todo delete from test_class.__dict__: '__module__', '__doc__', 'description_short', ', 'description', '__init__', 'score']) and keep name', 'ml_task', input_features
+        arg = dict(**{key: getattr(test, key) for key in dir(test) if key[:2] != '__'})
         _explainer = explainer_class(**arg)
     except UnsupportedModelException:
         print('UnsupportedModelException')
@@ -122,6 +120,7 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
                 exc_info = sys.exc_info()
                 traceback.print_exception(*exc_info)
                 print('Err while explaining')
+                time.sleep(.1)
                 return format_results()
             _explainer.check_explanation(test.dataset_to_explain)
     except TimeoutException as e:
