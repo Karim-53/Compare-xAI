@@ -22,7 +22,15 @@ class JointShapley(Explainer, name='joint_shapley'):
         if predict_func is None:
            self.value_f = self.trained_model.predict
         else:
-            self.value_f = predict_func
+            predict_func = predict_func
+
+        def predict_func_numpy(X):
+            if isinstance(X, pd.DataFrame):
+                return predict_func(X.values)
+            else:
+                return predict_func(X)
+
+        self.value_f = predict_func_numpy
 
 
         
@@ -45,7 +53,6 @@ class JointShapley(Explainer, name='joint_shapley'):
                 lambda cln: get_estimate_for_coalition(cln, num_iter, k, dataset_to_explain, self.value_f)
             )
             local_joint_shapleys.loc[:, [cln]] = value_function(cln).reshape(-1,1)
-
         self.attribution = calc_attribution(local_joint_shapleys, n_features)
         self.importance = np.abs(self.attribution).mean(axis=0)
         self.interaction = local_joint_shapleys
@@ -145,7 +152,10 @@ def calc_attribution(local_js, features):
         for index in row.index:
             for f in features:
                 if f in index:
-                    temp_dict[f'{f}'] += row[index]
+                    if isinstance(f, str):
+                       temp_dict[f'{f}'] += row[index]
+                    else:
+                        temp_dict[f] +=row[index]
         attribution_ls.append(np.array(list(temp_dict.values())))
     return np.stack(attribution_ls)
 
