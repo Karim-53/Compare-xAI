@@ -1,4 +1,4 @@
-source_paper_tag,Done (0 to 1),Method,Detail,Links,source_paper_bibliography,extra
+source_paper_tag,Done (0 to 1),Method,Detail,https://github.com/harris-chris/joint-shapley-values,"@article{harris2021joint,",extra
 paper tag from scholars,,,this row is a description of the columns,,,extra research we can not include in our repo that are intresting of xAI enthusiastic scientist
 lundberg2018consistent,0.6,TreeSHAP,"Original Paper of TreeSHAP. Compares Saaba to treeshap",,"@article{lundberg2018consistent,
   title={Consistent individualized feature attribution for tree ensembles},
@@ -31,8 +31,18 @@ Propose some new axioms",https://arxiv.org/pdf/1908.08474.pdf,"@inproceedings{su
 janzing2020feature,0.5,-,Critisize TreeShap given the problem of feature distribution,http://proceedings.mlr.press/v108/janzing20a/janzing20a.pdf,"@inproceedings{janzing2020feature,
   title={Feature relevance quantification in explainable AI: A causal problem},
   author={Janzing, Dominik and Minorics, Lenon and Bl{\""o}baum, Patrick},
-  booktitle={International Conference on artificial intelligence and statistics},
-  pages={2907--2916},
+  booktitle={International Conference on artificial intelligence and statistics},,,,,"@article{harris2021joint,,,,https://github.com/harris-chris/joint-shapley-values
+  title={Joint shapley values: a measure of joint feature importance},
+  author={Harris, Chris and Pymar, Richard and Rowat, Colin},
+  journal={arXiv preprint arXiv:2107.11357},
+  year={2021}
+}"
+  pages={2907--2916},,,,,"@article{harris2021joint,
+  title={Joint shapley values: a measure of joint feature importance},
+  author={Harris, Chris and Pymar, Richard and Rowat, Colin},
+  journal={arXiv preprint arXiv:2107.11357},
+  year={2021},,,,https://github.com/harris-chris/joint-shapley-values
+}",,,,,
   year={2020},
   organization={PMLR}
 }",
@@ -226,4 +236,11 @@ ghorbani2019interpretation,0,fragility,,,"@inproceedings{ghorbani2019interpretat
   number={01},
   pages={3681--3688},
   year={2019}
+}",
+harris2021joint,1,Joint Shapley,,,,
+,,,,,"@article{harris2021joint,
+  title={Joint shapley values: a measure of joint feature importance},
+  author={Harris, Chris and Pymar, Richard and Rowat, Colin},
+  journal={arXiv preprint arXiv:2107.11357},
+  year={2021}
 }",
