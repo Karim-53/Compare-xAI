@@ -1,0 +1,24 @@
+name: Run aggregate_data.py
+
+on: [push]
+
+jobs:
+  build:
+    runs on: ubuntu-latest
+    
+    
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content to github runner.
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-verson: 3.8
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "requirements.txt"
+      - name: run aggregate_data.py
+        run: |
+            python .src/aggregate_data.py
+      
