@@ -13,7 +13,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-verson: 3.8
+          python-version: 3.8
       - name: install python dependencies
         uses: py-actions/py-dependency-install@v4
         with:
