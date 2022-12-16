@@ -11,13 +11,8 @@ def importance_is_c_dummy(importance: list) -> float:
     if not is_ok(importance):
         return None
     print('importance_is_c_dummy', importance)
-    a = abs(importance[0])
     b = abs(importance[1])
     c = abs(importance[2])
-    #if c == 0. and b > 0. and a > 0. :
-    #    return 1.
-    #if b == 0. or b < c:
-    #    return 0.
     return round(1. - (min(b, c) / max(b, c)), 5)
 
 class CorrelatedFeatures(Test):
@@ -67,7 +62,7 @@ class CorrelatedFeatures(Test):
     def score(cls, importance=None, **kwargs):
         return {
             'importance_is_c_dummy': importance_is_c_dummy(importance=importance),
-            # todo add a test for attribution
+            #TODO add a test for attribution
         }
 
 class CorrelatedFeaturesInteraction(Test):
@@ -127,26 +122,21 @@ class CorrelatedFeaturesInteraction(Test):
     def score(cls, importance=None, **kwargs):
         return {
             'importance_is_c_dummy': importance_is_c_dummy(importance=importance),
-            # todo add a test for attribution
+            #TODO add a test for attribution
         }
 
 if __name__ == '__main__':
-    from src.utils import *
-    from explainers.shap_explainer import Shap, TreeShap, ExactShapleyValues
-    from explainers.joint_shapley import JointShapley
-    from explainers.saabas import Saabas
     import random
+
+    from src.utils import *
+    from explainers.shap_explainer import ExactShapleyValues
     
     np.random.seed(42)
     random.seed(42)
 
     test = CorrelatedFeatures()
     print(test.truth_to_explain, test.dataset_to_explain)
-    #test.df_train['prediction'] = test.trained_model.predict(test.X)
-    explainer = JointShapley(test.trained_model, test.trained_model.predict)
-    #explainer = ExactShapleyValues(test.predict_func, test.X)
+    explainer = ExactShapleyValues(test.predict_func, test.X)
     explainer.explain(test.dataset_to_explain)
     print(test.score(explainer.importance))
     print(test.df_train.drop_duplicates())
-    filename = './tmp/' + test.__class__.__name__ + '.png'
-    plot_tree(test.trained_model, filename)
