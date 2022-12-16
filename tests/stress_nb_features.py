@@ -36,14 +36,14 @@ trained_model.fit(X_train, y_train)
 
 input_features = vectorizer.get_feature_names_out()  # get_feature_names
 assert len(input_features) > 0, 'no token kept.'
-print(len(input_features), 'tokens')
+# print(len(input_features), 'tokens')
 
 dataset_to_explain = X_test  # pd.DataFrame(dataset_to_explain, columns=self.input_features)
 X = X_train
 X_reference = X[:100]
 
-print(len(dataset_to_explain), 'data points to explain')
-print(len(X_reference), 'reference points')
+# print(len(dataset_to_explain), 'data points to explain')
+# print(len(X_reference), 'reference points')
 
 my_token = 'best'  # also token 'love', 'bad', 'great' should be in the top 10
 assert my_token in input_features
