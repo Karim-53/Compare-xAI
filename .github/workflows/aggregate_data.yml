@@ -23,5 +23,6 @@ jobs:
       - name: run aggregate_data.py
         shell: bash
         run: |
+            pip install pyarrow
             python aggregate_data.py
       
