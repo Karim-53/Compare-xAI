@@ -14,6 +14,7 @@ valid_explainers = (
     Sage,
     Lime,
     Maple,
+    JointShapley,
     # Anova, # todo fix feature importance
 
     # Archipelago,  # todo after paper acceptance

@@ -11,5 +11,6 @@ from .shap_explainer import Shap, KernelShap, TreeShap, Permutation, Permutation
 from .shap_interaction import ShapInteraction
 from .shapley_taylor_interaction import ShapleyTaylorInteraction
 from .shapr import ShapR
+from .joint_shapley import JointShapley
 # from .breakdown import BreakDown  # need cpp14
 # from .l2x import L2X

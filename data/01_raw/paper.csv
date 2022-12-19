@@ -227,3 +227,9 @@ ghorbani2019interpretation,0,fragility,,,"@inproceedings{ghorbani2019interpretat
   pages={3681--3688},
   year={2019}
 }",
+harris2021joint,1,Joint Shapley,,https://github.com/harris-chris/joint-shapley-values,"@article{harris2021joint,
+  title={Joint shapley values: a measure of joint feature importance},
+  author={Harris, Chris and Pymar, Richard and Rowat, Colin},
+  journal={arXiv preprint arXiv:2107.11357},
+  year={2021}
+}",
