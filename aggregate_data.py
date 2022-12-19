@@ -185,10 +185,10 @@ if __name__ == "__main__":
 
     # For appendix
     ############################################################################################################
-    test = pd.read_csv('../data/01_raw/test.csv')
+    test = pd.read_csv('./data/01_raw/test.csv')
     test = test[test.is_shortlisted == 1]
     test = test[test.is_implemented == "1"]
-    test.to_csv('../data/03_experiment_output_aggregated/test.csv', index=False)
+    test.to_csv('./data/03_experiment_output_aggregated/test.csv', index=False)
 
     # supplementary material
     test_table = test[~test.test.str.contains('detect_interaction')].copy()
