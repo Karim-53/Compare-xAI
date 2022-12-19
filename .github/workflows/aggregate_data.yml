@@ -21,6 +21,8 @@ jobs:
         with:
           path: "requirements.txt"
       - name: run aggregate_data.py
+        shell: bash
         run: |
-            python src/aggregate_data.py
+            cd src
+            python aggregate_data.py
       
