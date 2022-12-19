@@ -23,6 +23,5 @@ jobs:
       - name: run aggregate_data.py
         shell: bash
         run: |
-            cd src
             python aggregate_data.py
       
