@@ -9,7 +9,9 @@ jobs:
     
     steps:
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner.
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+        with:
+          submodules: 'true'
       - name: setup python
         uses: actions/setup-python@v2
         with:
