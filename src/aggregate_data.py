@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from .io import load_results
-from .explainer import valid_explainers_dico
-from .export_sql import export_to_sql
+from src.io import load_results
+from src.explainer import valid_explainers_dico
+from src.export_sql import export_to_sql
 
 # todo delete supported_models and outputs columns
 # todo generate supported_models and outputs columns for the detailed view of an explainer
