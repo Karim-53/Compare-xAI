@@ -94,8 +94,8 @@ if __name__ == "__main__":
     cross_tab['tested_xai_output'] = cross_tab.subtest.apply(subtest_to_tested_xai_output)
     # print(cross_tab)
     print('writing files to /data/03_experiment_output_aggregated/ ...')
-    cross_tab.to_parquet('../data/03_experiment_output_aggregated/cross_tab.parquet')
-    cross_tab.to_csv('../data/03_experiment_output_aggregated/cross_tab.csv', index=False)
+    cross_tab.to_parquet('./data/03_experiment_output_aggregated/cross_tab.parquet')
+    cross_tab.to_csv('./data/03_experiment_output_aggregated/cross_tab.csv', index=False)
 
 
 
