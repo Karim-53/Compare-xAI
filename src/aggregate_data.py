@@ -62,10 +62,6 @@ def aggregate_supported_models(explainer: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    import sys
-    
-    sys.path.append("../")
-    
     result_df = load_results()
     lista = []
     for column_name, column in result_df.iteritems():
