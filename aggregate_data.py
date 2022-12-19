@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
 
     ############################################################################################################
-    explainer = pd.read_csv('../data/01_raw/explainer.csv')
+    explainer = pd.read_csv('./data/01_raw/explainer.csv')
     explainer.sort_values('explainer', inplace=True)
     # todo delete supported_models column from 01_raw/explainer.csv because we add it now
     # todo delete outputs column from 01_raw/explainer.csv because we add it now
@@ -154,8 +154,8 @@ if __name__ == "__main__":
     # print('todo required_input_train_function is set to 0')
     # explainer['required_input_train_function'] = 0
     print('writing explainer to /data/03_experiment_output_aggregated/ ...')
-    explainer.to_parquet('../data/03_experiment_output_aggregated/explainer.parquet')
-    explainer.to_csv('../data/03_experiment_output_aggregated/explainer.csv', index=False)
+    explainer.to_parquet('./data/03_experiment_output_aggregated/explainer.parquet')
+    explainer.to_csv('./data/03_experiment_output_aggregated/explainer.csv', index=False)
     export_to_sql()
     print('End')
 
