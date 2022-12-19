@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd 
 import random
 import sys
-from IPython.display import display, clear_output
+#from IPython.display import display, clear_output
 import copy
 
 from .explainer_superclass import Explainer
@@ -47,7 +47,7 @@ class JointShapley(Explainer, name='joint_shapley'):
 
         for cln_n, cln in enumerate(coalitions_to_k):
             if verbose:
-               display(f"cln = {cln_n + 1} / {len(coalitions_to_k)}")
+               print(f"cln = {cln_n + 1} / {len(coalitions_to_k)}")
             value_function = (
                 lambda cln: get_estimate_for_coalition(cln, num_iter, k, dataset_to_explain, self.value_f)
             )
