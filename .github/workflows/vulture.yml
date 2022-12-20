@@ -1,3 +1,4 @@
+name: Vulture (dead code)
 on: [push]
 
 jobs:
