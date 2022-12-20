@@ -10,7 +10,7 @@ from utils.lime.lime_text import *
 def generate_binary_perturbations(
         num_feat, num_samples=100, init_on=True, perturbed_features=None
 ):
-    if perturbed_features == None:
+    if perturbed_features is None:
         perturbed_features = {"indices": np.array(range(num_feat))}
     num_perturb = len(perturbed_features["indices"])
 
@@ -228,8 +228,8 @@ def generate_perturbation_dataset_graph(
 
     sum_v = 0
     counter = 0
-    locality_dict = dict()
-    locality_dict_rev = dict()
+    locality_dict = {}
+    locality_dict_rev = {}
     for i, v in enumerate(adj_cum[target_idx]):
         if v != 0:
             sum_v += v

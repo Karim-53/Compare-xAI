@@ -29,15 +29,12 @@ def append_extra_input(batch, extra_input_dic):
 
 
 def normalize_logit(contrib_logits, gt_label):
-    # [B, L]
-    if not args.class_score:
-        contrib_logits_bak = contrib_logits.clone()
-        contrib_logits_bak[:, gt_label] = -1000
-        second_max, _ = contrib_logits_bak.max(-1)
-        scores = contrib_logits[:, gt_label] - second_max
-    else:
-        scores = contrib_logits[:, gt_label]
-    return scores
+    if args.class_score:
+        return contrib_logits[:, gt_label]
+    contrib_logits_bak = contrib_logits.clone()
+    contrib_logits_bak[:, gt_label] = -1000
+    second_max, _ = contrib_logits_bak.max(-1)
+    return contrib_logits[:, gt_label] - second_max
 
 
 class Batch:
@@ -90,29 +87,28 @@ class ExplanationBase:
                 new_seq.append(inp[i])
             else:
                 new_seq.append(1)
-        new_seq = np.array(new_seq)
-        return new_seq
+        return np.array(new_seq)
 
     def get_ngram_mask_region(self, region, inp):
-        if not self.nb_unidirectional:
-            return [
+        return (
+            [(region[0], min(region[1] + self.nb_range, len(inp) - 1))]
+            if self.nb_unidirectional
+            else [
                 (
                     max(region[0] - self.nb_range, 0),
                     min(region[1] + self.nb_range, len(inp) - 1),
                 )
             ]
-        else:
-            return [(region[0], min(region[1] + self.nb_range, len(inp) - 1))]
+        )
 
     def explain_single(self, inp, inp_id, region, extra_input=None):
         pass
 
     def repr_result_word(self, inp, contribs):
         tokens = [self.vocab.itos[inp[i]] for i in range(len(inp))]
-        output_str = " ".join(
+        return " ".join(
             ["%s %.6f\t" % (tk, sc) for (tk, sc) in zip(tokens, contribs)]
         )
-        return output_str
 
     #     def explain_sst_word(self):
     #         f = open(self.output_path, 'w')
@@ -147,41 +143,40 @@ class ExplanationBase:
         return output_str
 
     def explain_sst(self):
-        f = open(self.output_path, "w")
-        all_contribs = []
-        cnt = 0
-        for batch_idx, batch in enumerate(self.iterator):
-            if batch_idx < self.batch_start:
-                continue
-            inp = batch.text.view(-1).cpu().numpy()
-            inp_id = batch.offset.item()
+        with open(self.output_path, "w") as f:
+            all_contribs = []
+            cnt = 0
+            for batch_idx, batch in enumerate(self.iterator):
+                if batch_idx < self.batch_start:
+                    continue
+                inp = batch.text.view(-1).cpu().numpy()
+                inp_id = batch.offset.item()
 
-            #             print(batch.offset, inp_id)
+                #             print(batch.offset, inp_id)
 
-            span2node, node2span = get_span_to_node_mapping(self.trees[inp_id])
-            spans = list(span2node.keys())
+                span2node, node2span = get_span_to_node_mapping(self.trees[inp_id])
+                spans = list(span2node.keys())
 
-            if args.no_subtrees:
-                spans = spans[-1:]
+                if args.no_subtrees:
+                    spans = spans[-1:]
 
-            contribs = []
+                contribs = []
 
-            for span in spans:
-                if type(span) is int:
-                    span = (span, span)
-                #                 print("inp", inp, inp.shape, inp_id, "span", span)
-                contrib = self.explain_single(inp, inp_id, span)
-                contribs.append(contrib)
-            all_contribs.append(contribs)
+                for span in spans:
+                    if type(span) is int:
+                        span = (span, span)
+                    #                 print("inp", inp, inp.shape, inp_id, "span", span)
+                    contrib = self.explain_single(inp, inp_id, span)
+                    contribs.append(contrib)
+                all_contribs.append(contribs)
 
-            s = self.repr_result_region(inp, spans, contribs)
-            f.write(s + "\n")
+                s = self.repr_result_region(inp, spans, contribs)
+                f.write(s + "\n")
 
-            print("finished %d" % batch_idx)
-            cnt += 1
-            if batch_idx == self.batch_stop - 1:
-                break
-        f.close()
+                print("finished %d" % batch_idx)
+                cnt += 1
+                if batch_idx == self.batch_stop - 1:
+                    break
         return all_contribs
 
 

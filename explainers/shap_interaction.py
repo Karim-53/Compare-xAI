@@ -67,20 +67,16 @@ class SiExplainer(InteractionExplainer):
 
             subsetsW = powerset(S)
 
-            set_indices = []
-            for W in subsetsW:
-                set_indices.append(tuple(set(W) | set(T)))
-
+            set_indices = [tuple(set(W) | set(T)) for W in subsetsW]
             scores_dict = self.batch_set_inference(
                 set_indices, self.baseline, self.input, include_context=False
             )
             scores = scores_dict["scores"]
 
-            att = 0
-            for i, W in enumerate(subsetsW):
-                w = len(W)
-                att += (-1) ** (w - s) * scores[set_indices[i]]
-
+            att = sum(
+                -(1 ** (len(W) - s)) * scores[set_indices[i]]
+                for i, W in enumerate(subsetsW)
+            )
             total_att += coef * att
 
         return total_att
@@ -131,7 +127,7 @@ class SiExplainer(InteractionExplainer):
                     Ss.append(S)
         elif main_effects:
             for i in range(num_features):
-                Ss.append(tuple([i]))
+                Ss.append((i, ))
 
         Z_set = set()
         S_T_Z_dict = {}
@@ -180,7 +176,7 @@ class SiExplainer(InteractionExplainer):
         elif main_effects:
             res = []
             for i in range(num_features):
-                S = tuple([i])
+                S = (i, )
                 att = collect_att(S, S_T_Z_dict, Z_score_dict, n)
                 res.append(att)
 

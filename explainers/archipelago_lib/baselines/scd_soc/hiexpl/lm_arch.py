@@ -56,7 +56,7 @@ class LSTMLanguageModel(nn.Module):
         hidden = hidden[0].repeat(1, sample_num, 1), hidden[1].repeat(
             1, sample_num, 1
         )  # [x, N, H]
-        for t in range(length):
+        for _ in range(length):
             output, hidden = self.encoder.rollout(
                 token_inp, hidden, direction=direction
             )
@@ -75,8 +75,7 @@ class LSTMLanguageModel(nn.Module):
             token_inp = token_inp.view(1, -1)
         if direction == "bw":
             outputs = list(reversed(outputs))
-        outputs = torch.stack(outputs)
-        return outputs
+        return torch.stack(outputs)
 
     def sample_n(self, method, batch, max_sample_length, sample_num):
         inp = batch.text

@@ -6,7 +6,7 @@ from utils.pretrained.model_gcn import *
 
 
 def get_graph_model(model_folder):
-    meta = torch.load(model_folder + "/gcn_cora.pt")
+    meta = torch.load(f"{model_folder}/gcn_cora.pt")
 
     n_hops = meta["n_hops"]
     n_nodes = meta["n_nodes"]
@@ -31,8 +31,7 @@ def convert_adj_to_da(adj_mat, make_undirected=False):
         x = adj_mat - diag
         adj_mat = x + x.t() + adj_mat
 
-    da_mat = torch.eye(len(adj_mat)).to(adj_mat.device) - adj_mat
-    return da_mat
+    return torch.eye(len(adj_mat)).to(adj_mat.device) - adj_mat
 
 
 def load_cora(data_folder, device):
@@ -42,18 +41,18 @@ def load_cora(data_folder, device):
     labels = np.empty((num_nodes, 1), dtype=np.int64)
     node_map = {}
     label_map = {}
-    with open(data_folder + "/cora.content") as fp:
+    with open(f"{data_folder}/cora.content") as fp:
         for i, line in enumerate(fp):
             info = line.strip().split()
             feat_data[i, :] = [float(_) for _ in info[1:-1]]
             node_map[info[0]] = i
-            if not info[-1] in label_map:
+            if info[-1] not in label_map:
                 label_map[info[-1]] = len(label_map)
             labels[i] = label_map[info[-1]]
 
     adj_lists = defaultdict(set)
-    with open(data_folder + "/cora.cites") as fp:
-        for i, line in enumerate(fp):
+    with open(f"{data_folder}/cora.cites") as fp:
+        for line in fp:
             info = line.strip().split()
             n1 = node_map[info[0]]
             n2 = node_map[info[1]]
@@ -76,7 +75,7 @@ def get_hops_to_target(target_idx, adj_mat, n_hops):
     seen_points = {target_idx}
     for j in range(1, n_hops + 2):
         adj_cum = copy.deepcopy(adj_mat)
-        for i in range(j - 1):
+        for _ in range(j - 1):
             adj_cum = torch.matmul(adj_cum, adj_mat)
         collect = {i for i, v in enumerate(adj_cum[target_idx]) if v != 0}
         ex_collect = collect - seen_points

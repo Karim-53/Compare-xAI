@@ -15,11 +15,11 @@ def integrated_gradients(
         baseline = 0 * inputs
     # scale inputs and compute gradients
     scaled_inputs = [
-        baseline + (float(i) / steps) * (inputs - baseline) for i in range(0, steps + 1)
+        baseline + (float(i) / steps) * (inputs - baseline)
+        for i in range(steps + 1)
     ]
     grads = get_gradients(
         scaled_inputs, model, target_label_idx, device, softmax=softmax
     )
     avg_grads = np.average(grads[:-1], axis=0)
-    integrated_grad = (inputs - baseline) * avg_grads
-    return integrated_grad
+    return (inputs - baseline) * avg_grads

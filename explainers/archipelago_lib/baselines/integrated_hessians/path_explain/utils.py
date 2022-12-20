@@ -23,8 +23,7 @@ def set_up_environment(mem_frac=None, visible_devices=None, min_log_level="3"):
         os.environ["CUDA_VISIBLE_DEVICES"] = visible_devices
 
     os.environ["TF_CPP_MIN_LOG_LEVEL"] = str(min_log_level)
-    gpus = tf.config.experimental.list_physical_devices("GPU")
-    if gpus:
+    if gpus := tf.config.experimental.list_physical_devices("GPU"):
         try:
             for gpu in gpus:
                 if mem_frac is not None:
@@ -63,11 +62,11 @@ def _find_sublist(super_list, sub_list):
     """
     A helper funcion to find the location of sub_lists in a super_list.
     """
-    indices = []
-    for i in range(len(super_list)):
-        if super_list[i: i + len(sub_list)] == sub_list:
-            indices.append([i + j for j in range(len(sub_list))])
-    return indices
+    return [
+        [i + j for j in range(len(sub_list))]
+        for i in range(len(super_list))
+        if super_list[i : i + len(sub_list)] == sub_list
+    ]
 
 
 def _find_step_increasing(index_list):

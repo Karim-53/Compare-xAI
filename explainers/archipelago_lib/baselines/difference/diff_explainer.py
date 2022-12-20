@@ -20,13 +20,13 @@ class DiffExplainer(Archipelago):
         Gets attributions of index sets by f(x*) - f(x'_{I} + x*_{\I})
         """
         if not set_indices:
-            return dict()
+            return {}
         scores = self.batch_set_inference(
             set_indices, self.input, self.baseline, include_context=True
         )
         ditch_scores = scores["scores"]
         input_score = scores["context_score"]
-        set_scores = {}
-        for index_tuple in ditch_scores:
-            set_scores[index_tuple] = input_score - ditch_scores[index_tuple]
-        return set_scores
+        return {
+            index_tuple: input_score - ditch_scores[index_tuple]
+            for index_tuple in ditch_scores
+        }

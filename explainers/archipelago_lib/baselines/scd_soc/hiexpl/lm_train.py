@@ -72,7 +72,7 @@ def do_train(model):
                     loss.item(), iterations
                 )
                 torch.save(model, snapshot_path)
-                for f in glob.glob(snapshot_prefix + "*"):
+                for f in glob.glob(f"{snapshot_prefix}*"):
                     if f != snapshot_path:
                         os.remove(f)
 
@@ -87,7 +87,7 @@ def do_train(model):
 
                 cnt, dev_loss = 0, 0
                 dev_fw_loss, dev_bw_loss = 0, 0
-                for dev_batch_idx, dev_batch in enumerate(dev_iter):
+                for dev_batch in dev_iter:
                     fw_loss, bw_loss = model(dev_batch)
                     loss = fw_loss + bw_loss
                     cnt += 1
@@ -116,14 +116,11 @@ def do_train(model):
                 if dev_loss < best_dev_nll:
                     best_dev_nll = dev_loss
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
-                    snapshot_path = (
-                            snapshot_prefix
-                            + "_devloss_{}_iter_{}_model.pt".format(dev_loss, iterations)
-                    )
+                    snapshot_path = f"{snapshot_prefix}_devloss_{dev_loss}_iter_{iterations}_model.pt"
 
                     # save model, delete previous 'best_snapshot' files
                     torch.save(model, snapshot_path)
-                    for f in glob.glob(snapshot_prefix + "*"):
+                    for f in glob.glob(f"{snapshot_prefix}*"):
                         if f != snapshot_path:
                             os.remove(f)
 

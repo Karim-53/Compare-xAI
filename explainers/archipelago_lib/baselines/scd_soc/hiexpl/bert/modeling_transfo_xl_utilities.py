@@ -52,7 +52,7 @@ class ProjectedAdaptiveLogSoftmax(nn.Module):
         self.out_projs = nn.ParameterList()
 
         if div_val == 1:
-            for i in range(len(self.cutoffs)):
+            for _ in range(len(self.cutoffs)):
                 if d_proj != d_embed:
                     self.out_projs.append(nn.Parameter(torch.Tensor(d_proj, d_embed)))
                 else:
@@ -72,17 +72,10 @@ class ProjectedAdaptiveLogSoftmax(nn.Module):
 
     def _compute_logit(self, hidden, weight, bias, proj):
         if proj is None:
-            logit = F.linear(hidden, weight, bias=bias)
-        else:
-            # if CUDA_MAJOR <= 9 and CUDA_MINOR <= 1:
-            proj_hid = F.linear(hidden, proj.t().contiguous())
-            logit = F.linear(proj_hid, weight, bias=bias)
-            # else:
-            #     logit = torch.einsum('bd,de,ev->bv', (hidden, proj, weight.t()))
-            #     if bias is not None:
-            #         logit = logit + bias
-
-        return logit
+            return F.linear(hidden, weight, bias=bias)
+        # if CUDA_MAJOR <= 9 and CUDA_MINOR <= 1:
+        proj_hid = F.linear(hidden, proj.t().contiguous())
+        return F.linear(proj_hid, weight, bias=bias)
 
     def forward(self, hidden, target=None, keep_order=False):
         """
@@ -347,9 +340,7 @@ def sample_logits(embedding, bias, labels, inputs, sampler):
             torch.einsum("lk,ijk->ijl", [sample_w, inputs]) + sample_b - samp_log_probs
     )
     sample_logits.masked_fill_(hit, -1e30)
-    logits = torch.cat([true_logits[:, :, None], sample_logits], -1)
-
-    return logits
+    return torch.cat([true_logits[:, :, None], sample_logits], -1)
 
 
 # class LogUniformSampler(object):
