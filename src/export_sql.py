@@ -26,7 +26,7 @@ def export_to_sql():
     print('connection.close()')
 
     import shutil
-    shutil.copyfile('./data/04_sql/database', '../../cxai/src/database')
+    #shutil.copyfile('./data/04_sql/database', '../../cxai/src/database')
 
     # verification
     print('Total execution time to run all experiments:', str(datetime.timedelta(seconds=int(cross_tab.time.sum()))), 'sec')
