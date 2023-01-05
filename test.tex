@@ -1,0 +1,68 @@
+\begin{description}
+
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/cough_and_fever.py}{cough\_and\_fever}] answers the following question: \emph{Can the xAI algorithm detect symmetric binary input features?}.
+The trained model's equation is [Cough AND Fever]*80.
+ The test utilize \textbf{XGBRegressor} model trained on \textbf{a synthetic uniform distribution} dataset (total size: 20000).
+ The test procedure is as follows: train a model such that its response to the two features is exactly the same. The xAI algorithm should detect symmetric features (equal values) and allocate them equal importance.
+ The score is calculated as follows: 1 if the xAI detects the two features are symmetric. 0 if the difference in importance is above one unit.
+ The test is classified in the \textbf{fidelity} category because it is a simple tree model that demonstrates inconsistencies in explanation \citep{lundberg2018consistent}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/cough_and_fever_10_90.py}{cough\_and\_fever\_10\_90}] answers the following question: \emph{Can the xAI algorithm detect that 'Cough' feature is more important than 'Fever'?}.
+The trained model's equation is [Cough AND Fever]*80 + [Cough]*10. Cough should be more important than Fever globally. Locally for the case (Fever = yes, Cough = yes) the feature attribution of Cough should be more important.
+ The test utilize \textbf{XGBRegressor} model trained on \textbf{a synthetic uniform distribution} dataset (total size: 20000).
+ The test procedure is as follows: train a model with two features with unequal impact on the model. The feature with a higher influence on the output should be detected as more important.
+ The score is calculated as follows: Return 1 if Cough is more important otherwise 0.
+ The test is classified in the \textbf{fidelity} category because it is a simple tree model that demonstrates inconsistencies in explanation due to the tree structure \citep{lundberg2018consistent}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/x0_plus_x1.py}{x0\_plus\_x1\_distrib\_non\_uniform\_stat\_indep}] answers the following question: \emph{Is the xAI able to explain the model correctly despite a non-uniform distribution of the data?}.
+The test demonstrates the effect of data distribution / causal inference.
+ The test utilize \textbf{XGBRegressor} model trained on \textbf{a non-uniform and statistically independent} dataset (total size: 10000).
+ The test procedure is as follows: Check if the explanation change when the distribution change. Check if non-uniform distributions affect the explanation.
+ The score is calculated as follows: returns 1 if the two binary features obtain the same importance.
+ The test is classified in the \textbf{stability} category because it assesses the impact of slightly changing the inputs \citep{janzing2020feature}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/x0_plus_x1.py}{x0\_plus\_x1\_distrib\_uniform\_stat\_dep}] answers the following question: \emph{Is the xAI able to explain the model correctly despite a statistically-dependent distribution of the data?}.
+The test demonstrates the effect of data distribution / causal inference. The example was given in both \citep{hooker2021unrestricted} and \citep{janzing2020feature}.
+ The test utilize \textbf{XGBRegressor} model trained on \textbf{a uniform and statistically dependent} dataset (total size: 10000).
+ The test procedure is as follows: Check if the explanation change when the distribution change. Check if statistically dependent distributions affect the explanation.
+ The score is calculated as follows: returns 1 if the two binary features obtain the same importance.
+ The test is classified in the \textbf{stability} category because it assesses the impact of slightly changing the inputs \citep{janzing2020feature}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/mnist.py}{mnist}] answers the following question: \emph{Is the xAI able to detect all dummy (constant and useless) pixels?}.
+The xAI algorithm should detect that important pixels are only in the center of the image.
+ The test utilize \textbf{an MLP} model trained on \textbf{the \href{https://www.openml.org/d/554}{MNIST}} dataset (total size: 70000).
+ The test procedure is as follows: simply train and explain the MLP model globally for every pixel.
+ The score is calculated as follows: Return the ratio of constant pixels detected as dummy divided by the true number of constant pixels.
+ The test is classified in the \textbf{stress} category because of the high number of input features. The test is adapted from \citep{covert2020understanding}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/fooling_perturbation_alg.py}{fooling\_perturbation\_alg}] answers the following question: \emph{Is the xAI affected by an adversarial attack against perturbation-based algorithms?}.
+Model-agnostic xAI algorithms that use feature perturbation methods might be vulnerable to this attack. The adversarial attack exploits a vulnerability to lower the feature importance of a specific feature. Setup: Let's begin by examining the COMPAS data set. This data set consists of defendant information from Broward Couty, Florida. Let's suppose that some adversary wants to mask biased or racist behavior on this data set.
+ The test utilize \textbf{a custom function} model trained on \textbf{the \href{https://github.com/propublica/compas-analysis/blob/master/compas-scores-two-years.csv}{COMPAS}} dataset (total size: 4629).
+ The test procedure is as follows: The xAI algorithms need to explain the following corrupted model (custom function): if the input is from the dataset then the output is from a biased model. if not then the output is from a fair model.
+ The score is calculated as follows: Return 1 if Race is the most important feature despite the adversarial attack. The score decreases while its rank decrease.
+ The test is classified in the \textbf{fragility} category because fragility includes all adversarial attacks \citep{ghorbani2019interpretation}.
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/dummy_axiom.py}{counterexample\_dummy\_axiom}] answers the following question: \emph{Is the xAI able to detect unused input features?}.
+This is a counter example used in literature to verify that SHAP CES does not satisfy the dummy axiom while BSHAP succeeds in this test.
+ The test utilize \textbf{a custom function} model trained on \textbf{a synthetic} dataset (total size: 20000).
+ The test procedure is as follows: Train a model with one extra feature B which is a dummy feature.
+ The score is calculated as follows: returns 1 if the dummy feature B obtains null importance.
+ The test is classified in the \textbf{simplicity} category because assigning an importance of zero to a dummy feature reflects the model behavior (Fidelity) but also helps the data scientist to quickly understand the model (Simplicity).
+
+
+\item[\href{https://github.com/Karim-53/Compare-xAI/tree/main/tests/a_and_b_or_c.py}{a\_and\_b\_or\_c}] answers the following question: \emph{Can the xAI algorithm detect that input feature 'A' is more important than 'B' or 'C'?}.
+This is a baseline test that the xAI should succeed in all cases. Model: A and (B or C). Goal: make sure that A is more important than B, C. Noise effect: even if the model output is not exactly equal to 1 we still expect the xai to give a correct answer.
+ The test utilize \textbf{XGBRegressor} model trained on \textbf{a synthetic} dataset (total size: 20000).
+ The test procedure is as follows: The model learns the following equation: A and (B or C). The explanation should prove that A is more important.
+ The score is calculated as follows: If A is the most important feature then return 1. If A is the 2nd most important feature then return 0.5 i.e. 1- (1 / nb of feature more important than A).  If A is the last one: return 0 (completely wrong).
+ The test is classified in the \textbf{fidelity} category because of the same reason as cough and fever 10-90: A's effect on the output is higher than B or C.
+
+\end{description}

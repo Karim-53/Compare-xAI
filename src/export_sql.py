@@ -3,23 +3,25 @@ import datetime
 import numpy as np
 import pandas as pd
 
+from src.utils import root
+
 
 def export_to_sql():
-    connection = db.connect('./data/04_sql/database')
+    connection = db.connect(root + '/data/04_sql/database')
 
-    cross_tab = pd.read_parquet('./data/03_experiment_output_aggregated/cross_tab.parquet')
+    cross_tab = pd.read_parquet(root + '/data/03_experiment_output_aggregated/cross_tab.parquet')
     cross_tab.loc[cross_tab.score.isna(), 'time'] = np.nan  # to not bias the average time per test
     cross_tab.to_sql('cross_tab', connection, if_exists='replace', index=False)
 
-    test = pd.read_csv('./data/01_raw/test.csv')
+    test = pd.read_csv(root + '/data/01_raw/test.csv')
     test.to_sql('test', connection, if_exists='replace', index=False)
 
-    explainer = pd.read_parquet('./data/03_experiment_output_aggregated/explainer.parquet')
+    explainer = pd.read_parquet(root + '/data/03_experiment_output_aggregated/explainer.parquet')
     # explainer.replace({True:1, False:0}, inplace=True)
     explainer = explainer.applymap(lambda x: int(x) if isinstance(x, bool) else x, na_action='ignore')
     explainer.to_sql('explainer', connection, if_exists='replace', index=False)
 
-    paper = pd.read_csv('./data/01_raw/paper.csv')
+    paper = pd.read_csv(root + '/data/01_raw/paper.csv')
     paper.to_sql('paper', connection, if_exists='replace', index=False)
 
     connection.close()

@@ -15,7 +15,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
       - name: install python dependencies
@@ -25,6 +25,5 @@ jobs:
       - name: run aggregate_data.py
         shell: bash
         run: |
-            pip install pyarrow
             python aggregate_data.py
       

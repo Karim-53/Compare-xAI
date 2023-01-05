@@ -16,6 +16,7 @@ pillow
 regex
 h5py
 nltk
+pyarrow
 
 # Other
 tqdm
