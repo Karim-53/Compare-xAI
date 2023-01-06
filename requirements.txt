@@ -2,6 +2,7 @@
 scikit-learn
 lime
 shap
+sage-importance
 xgboost
 # tensorflow
 # keras
@@ -16,6 +17,7 @@ pillow
 regex
 h5py
 nltk
+pyarrow
 
 # Other
 tqdm

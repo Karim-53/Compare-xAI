@@ -4,6 +4,7 @@ import pandas as pd
 from src.io import load_results
 from src.explainer import valid_explainers_dico
 from src.export_sql import export_to_sql
+from src.utils import root
 
 # todo delete supported_models and outputs columns
 # todo generate supported_models and outputs columns for the detailed view of an explainer
@@ -94,8 +95,8 @@ if __name__ == "__main__":
     cross_tab['tested_xai_output'] = cross_tab.subtest.apply(subtest_to_tested_xai_output)
     # print(cross_tab)
     print('writing files to /data/03_experiment_output_aggregated/ ...')
-    cross_tab.to_parquet('../data/03_experiment_output_aggregated/cross_tab.parquet')
-    cross_tab.to_csv('../data/03_experiment_output_aggregated/cross_tab.csv', index=False)
+    cross_tab.to_parquet(root + '/data/03_experiment_output_aggregated/cross_tab.parquet')
+    cross_tab.to_csv(root + '/data/03_experiment_output_aggregated/cross_tab.csv', index=False)
 
 
 
@@ -118,7 +119,7 @@ if __name__ == "__main__":
 
 
     ############################################################################################################
-    explainer = pd.read_csv('../data/01_raw/explainer.csv')
+    explainer = pd.read_csv(root + '/data/01_raw/explainer.csv')
     explainer.sort_values('explainer', inplace=True)
     # todo delete supported_models column from 01_raw/explainer.csv because we add it now
     # todo delete outputs column from 01_raw/explainer.csv because we add it now
@@ -154,8 +155,8 @@ if __name__ == "__main__":
     # print('todo required_input_train_function is set to 0')
     # explainer['required_input_train_function'] = 0
     print('writing explainer to /data/03_experiment_output_aggregated/ ...')
-    explainer.to_parquet('../data/03_experiment_output_aggregated/explainer.parquet')
-    explainer.to_csv('../data/03_experiment_output_aggregated/explainer.csv', index=False)
+    explainer.to_parquet(root + '/data/03_experiment_output_aggregated/explainer.parquet')
+    explainer.to_csv(root + '/data/03_experiment_output_aggregated/explainer.csv', index=False)
     export_to_sql()
     print('End')
 
@@ -185,10 +186,10 @@ if __name__ == "__main__":
 
     # For appendix
     ############################################################################################################
-    test = pd.read_csv('../data/01_raw/test.csv')
+    test = pd.read_csv(root + '/data/01_raw/test.csv')
     test = test[test.is_shortlisted == 1]
     test = test[test.is_implemented == "1"]
-    test.to_csv('../data/03_experiment_output_aggregated/test.csv', index=False)
+    test.to_csv(root + '/data/03_experiment_output_aggregated/test.csv', index=False)
 
     # supplementary material
     test_table = test[~test.test.str.contains('detect_interaction')].copy()
