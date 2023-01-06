@@ -1,0 +1,25 @@
+name: Run aggregate_data.py
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+        with:
+          submodules: 'recursive'
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - name: install python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "requirements.txt"
+      - name: run aggregate_data.py
+        shell: bash
+        run: |
+            python aggregate_data.py
+      
