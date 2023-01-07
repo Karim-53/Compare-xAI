@@ -1,10 +1,10 @@
 name: Typilus Type Annotation Suggestions
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   suggest:
@@ -14,7 +14,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so that typilus can access it.
     - uses: actions/checkout@v2
-    - uses: typilus/typilus-action@master
+    - uses: typilus/typilus-action@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MODEL_PATH: path/to/model.pkl.gz   # Optional: provide the path of a custom model instead of the pre-trained model.
