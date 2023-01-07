@@ -1,4 +1,3 @@
-name: Vulture (dead code)
 on: [push]
 
 jobs:
@@ -12,4 +11,4 @@ jobs:
         uses: anaynayak/python-vulture-action@v1.0
         id: vulture
         with:
-          vulture-args: --min-confidence 90
+          vulture-args: example --min-confidence 90
