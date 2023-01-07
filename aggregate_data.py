@@ -50,7 +50,7 @@ def aggregate_outputs(explainer: pd.DataFrame):
     return _df.apply(lambda x: bullet_point + bullet_point.join(x.dropna().values.tolist()), axis=1)
 
 
-def aggregate_supported_models(explainer: pd.DataFrame):
+def aggregate_supported_models(explainer):
     _df = pd.DataFrame()
     model_labels = {
         'model_agnostic': 'Any AI model (model agnostic xAI algorithms are independent of the AI implementation)',
