@@ -1,3 +1,4 @@
+# Source: https://github.com/marketplace/actions/typilus-suggest-python-type-annotations
 name: Typilus Type Annotation Suggestions
 
 # Controls when the action will run. Triggers the workflow on push or pull request
