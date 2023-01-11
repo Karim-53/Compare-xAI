@@ -19,11 +19,11 @@ class CircleNoise(Test):
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000
-    dataset_to_explain = None
+    dataset_to_explain = create_data_noise()
     trained_model = None
     predict_func = None # TODO: do I need this?
 
-    def __init__(self, **kwargs):
+    def __init__(self, truth_to_explain= pd.DataFrame({'x': [0], 'y': [-1.5]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_noise()
         self.trained_model = SVC(gamma='auto', probability=True)
         x_train = self.dataset_to_explain[['x', 'y']]
@@ -31,9 +31,11 @@ class CircleNoise(Test):
         self.trained_model.fit(x_train, y_train)
         self.predict_func = self.trained_model.predict
 
+        self.truth_to_explain = truth_to_explain
+
     @classmethod
-    def score(cls, counterfactuals, instance, **kwargs): # TODO: how do I tell the score the instance when I only give it the cfs from the explainer?
-        return {'1NN_score': get_f1_score(counterfactuals, cls.dataset_to_explain, instance)}
+    def score(cls, instance=pd.DataFrame({'x': [0], 'y': [-1.5], 'label': [0]}, index=[0]), counterfactual=None, **kwargs): # TODO: how do I tell the score the instance when I only give it the cfs from the explainer?
+        return {'1NN_score': get_f1_score(counterfactual, cls.dataset_to_explain, instance)}
 
 
 if __name__ == '__main__':

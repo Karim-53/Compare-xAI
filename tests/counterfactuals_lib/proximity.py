@@ -1,6 +1,7 @@
 from scipy import stats as st
 import pandas as pd
-import prepare_dataset as prep
+# import prepare_dataset as prep
+from tests.counterfactuals_lib import prepare_dataset as prep
 
 
 

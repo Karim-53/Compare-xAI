@@ -1,10 +1,10 @@
 import pandas as pd
-import abnormality as abno
-import generality as gene
-import obtainability as obta
-import proximity as prox
-import prepare_dataset as prep
-import moo
+from tests.counterfactuals_lib import abnormality as abno
+from tests.counterfactuals_lib import generality as gene
+from tests.counterfactuals_lib import obtainability as obta
+from tests.counterfactuals_lib import proximity as prox
+from tests.counterfactuals_lib import prepare_dataset as prep
+from tests.counterfactuals_lib import moo
 
 
 def get_random_cfs(df, length, target_class_name, target_class):

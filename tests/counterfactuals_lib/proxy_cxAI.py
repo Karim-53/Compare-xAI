@@ -1,16 +1,21 @@
 from statistics import mean, median, stdev
 from scipy.stats import sem
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-import get_counterfactuals.main_generic as main
+# import get_counterfactuals.main_generic as main
+import explainers.counterfactuals_lib.get_counterfactuals.main_generic as main
+
+
+
 # import get_counterfactuals.main_census as census
-import proximity as prox
+from tests.counterfactuals_lib import proximity as prox
+# import proximity as prox
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import time
-import moo
-import apply
+# import moo
+from tests.counterfactuals_lib import apply
 import json
 
 
@@ -413,12 +418,11 @@ def rounds_of_classifying(target_class, target_class_name, path, dataset_name, o
 
 
 def get_f1_score(counterfactuals, dataset, instance, target_class_name='label', target_class=1, k=100):
+    counterfactuals_df = pd.DataFrame(counterfactuals, columns=['x', 'y', target_class_name])
     dataset_copy = dataset.copy()
     dataset_closest = get_k_closest(dataset_copy, instance.iloc[0], target_class_name, target_class, k).reset_index().drop(['index'], axis='columns')
-
-    knn_my_metrics = pd.concat([counterfactuals.head(3), instance]).reset_index().drop(['index'], axis='columns')
+    knn_my_metrics = pd.concat([counterfactuals_df.head(3), instance]).reset_index().drop(['index'], axis='columns')
     _, _, f1_knn = classify_samples(knn_my_metrics, dataset_closest, target_class_name, dataset)
-
     return f1_knn
 
 if __name__ == '__main__':

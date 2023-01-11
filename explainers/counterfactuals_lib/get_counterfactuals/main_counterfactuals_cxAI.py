@@ -113,6 +113,8 @@ def get_counterfactuals(train_dataset, x_test, x_train, y_train, y_test, target_
 
 
 def get_counterfactuals_xAI(path_dataset, inst, target_class_name='label', number_of_cfs=100):
+    print('inst', inst)
+    print('path_dataset', path_dataset)
     train_dataset, x_test, x_train, y_train, y_test = get_train_test_datasets(target_class_name, path_dataset)
     _, cfs, _ = get_counterfactuals(train_dataset, x_test, x_train, y_train, y_test, target_class_name, specific_inst=inst, num_cfs=number_of_cfs)
     return cfs
