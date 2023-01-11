@@ -15,7 +15,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so that typilus can access it.
     - uses: actions/checkout@v2
-    - uses: typilus/typilus-action@main
+    - uses: typilus/typilus-action@v0.9
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MODEL_PATH: path/to/model.pkl.gz   # Optional: provide the path of a custom model instead of the pre-trained model.
