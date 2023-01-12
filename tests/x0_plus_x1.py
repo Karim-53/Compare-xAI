@@ -65,8 +65,7 @@ def _get_unifrom_stat_dep():
         Thus p(A and B) != p(A) * p(B)
     """
 
-    X = [[0, 0]] * 4500 + [[1, 1]] * 4500 + [[1, 0]] * 500 + [[0, 1]] * 500
-    return X
+    return [[0, 0]] * 4500 + [[1, 1]] * 4500 + [[1, 0]] * 500 + [[0, 1]] * 500
 
 
 class DistributionUniformStatDep(_X0PlusX1):
@@ -120,8 +119,12 @@ def _get_non_uniform_stat_indep(q=0.75):
 
     assert n_0_0 + n_0_1 + n_1_0 + n_1_1 == n, "just choose (p,q) and n so that the number of datapoints correspond to the probability"
 
-    X = [[0, 0]] * n_0_0 + [[1, 1]] * n_1_1 + [[1, 0]] * n_1_0 + [[0, 1]] * n_0_1
-    return X
+    return (
+        [[0, 0]] * n_0_0
+        + [[1, 1]] * n_1_1
+        + [[1, 0]] * n_1_0
+        + [[0, 1]] * n_0_1
+    )
 
 
 class DistributionNonUniformStatIndep(_X0PlusX1):
@@ -133,8 +136,6 @@ class DistributionNonUniformStatIndep(_X0PlusX1):
         super().__init__(self.X)
 
 
-if __name__ == "__main__":
-    pass
     # todo double check the tree
     # test = CoughAndFever()
     # test.df_train['prediction'] = test.trained_model.predict(test.X)
