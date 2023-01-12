@@ -1,6 +1,6 @@
 from scipy import stats as st
 import pandas as pd
-import prepare_dataset as prep
+from explainers.counterfactuals_lib import prepare_dataset as prep
 
 
 

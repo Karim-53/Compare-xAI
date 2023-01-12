@@ -1,10 +1,10 @@
 import pandas as pd
-import abnormality as abno
-import generality as gene
-import obtainability as obta
-import proximity as prox
-import prepare_dataset as prep
-import moo
+from explainers.counterfactuals_lib import abnormality as abno
+from explainers.counterfactuals_lib import generality as gene
+from explainers.counterfactuals_lib import obtainability as obta
+from explainers.counterfactuals_lib import proximity as prox
+from explainers.counterfactuals_lib import prepare_dataset as prep
+from explainers.counterfactuals_lib import moo
 
 
 def get_random_cfs(df, length, target_class_name, target_class):
@@ -12,7 +12,7 @@ def get_random_cfs(df, length, target_class_name, target_class):
     return df.sample(length, replace=True).reset_index().drop(['index'], axis='columns')
 
 
-def apply_all_metrics(dataframe, instance, dataframe_of_counterfactuals, target_class, target_class_name, ordering=False, metrics=['abnormality', 'generality', 'proximity', 'obtainability']) -> pd.DataFrame:
+def apply_all_metrics(dataframe, instance, dataframe_of_counterfactuals, target_class=1, target_class_name='label', ordering=False, metrics=['abnormality', 'generality', 'proximity', 'obtainability']) -> pd.DataFrame:
     """
     Apply all interpretability metrics metrics, returns:
     > dataframe_of_counterfactuals with additional columns representing my metrics

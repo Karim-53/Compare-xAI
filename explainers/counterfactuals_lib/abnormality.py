@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import prepare_dataset as prep
+from explainers.counterfactuals_lib import prepare_dataset as prep
 
 
 def compute_abnormality_column(some_series, dict_feature_occurrence, percentage=0):

@@ -1,20 +1,23 @@
 from explainers import *
+from explainers.dice import Dice, DiceHf  # TODO: why does it need this extra import?
 from src.utils import are_class_names_unique
 
 valid_explainers = (
-    Random,  # keep on top
-    Permutation,
-    PermutationPartition,
-    Partition,
-    TreeShapApproximation,
-    ExactShapleyValues,
-    TreeShap,
-    Saabas,
-    KernelShap,
-    Sage,
-    Lime,
-    Maple,
-    JointShapley,
+    # Random,  # keep on top
+    # Dice,
+    # DiceHf,
+    # Permutation,
+    # PermutationPartition,
+    # Partition,
+    # TreeShapApproximation,
+    # ExactShapleyValues,
+    # TreeShap,
+    # Saabas,
+    # KernelShap,
+    # Sage,
+    # Lime,
+    # Maple,
+    # JointShapley,
     # Anova, # todo fix feature importance
 
     # Archipelago,  # todo after paper acceptance
