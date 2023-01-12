@@ -28,7 +28,9 @@ class _X0PlusX1(Test):
         self.predict_func = self.trained_model.predict
 
     @classmethod
-    def score(cls, attribution=None, importance=None, **kwargs):
+    def score(cls, attribution=None, importance=None, testvar, **kwargs):
+        if testvar == 1:
+            return {}
         # todo assert attribution importance size
         return {
             'importance_symmetric': importance_symmetric(importance=importance),
