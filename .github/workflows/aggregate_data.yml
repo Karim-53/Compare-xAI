@@ -18,6 +18,7 @@ jobs:
         uses: py-actions/py-dependency-install@v4
         with:
           path: "requirements.txt"
+          # todo add caching to save time
       - name: run aggregate_data.py
         shell: bash
         run: |
