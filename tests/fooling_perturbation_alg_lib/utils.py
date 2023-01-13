@@ -6,8 +6,10 @@ import numpy as np
 
 root = ''
 for root_relative_dir in [r'./', r'../', r'../../', r'../../../']:
-    if all([pathlib.Path(os.path.abspath(root_relative_dir + subdir)).exists() for subdir in
-            ['explainers/', 'tests/']]):
+    if all(
+        pathlib.Path(os.path.abspath(root_relative_dir + subdir)).exists()
+        for subdir in ['explainers/', 'tests/']
+    ):
         root = os.path.abspath(root_relative_dir)
         break
 else:
@@ -84,8 +86,10 @@ def rank_features(explanation):
     """
 
     ordered_tuples = sorted(explanation, key=lambda x: abs(x[1]), reverse=True)
-    results = [tup[0] if tup[1] != 0 else ("Nothing shown", 0) for tup in ordered_tuples]
-    return results
+    return [
+        tup[0] if tup[1] != 0 else ("Nothing shown", 0)
+        for tup in ordered_tuples
+    ]
 
 
 def get_rank_map(ranks, to_consider):

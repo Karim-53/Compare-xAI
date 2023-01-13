@@ -42,7 +42,7 @@ def get_and_preprocess_compas_data(params):
 
     # make sure everything is lining up
     assert all((sens == 'African-American') == (X['race'] == PROTECTED_CLASS))
-    cols = [col for col in X]
+    cols = list(X)
 
     return X, y, cols
 
@@ -73,12 +73,9 @@ def get_and_preprocess_cc(params):
     X = X[X[y_col] != "?"]
     X[y_col] = X[y_col].values.astype('float32')
 
-    # just dump all x's that have missing values
-    cols_with_missing_values = []
-    for col in X:
-        if len(np.where(X[col].values == '?')[0]) >= 1:
-            cols_with_missing_values.append(col)
-
+    cols_with_missing_values = [
+        col for col in X if len(np.where(X[col].values == '?')[0]) >= 1
+    ]
     y = X[y_col]
     y_cutoff = np.percentile(y, high_violent_crimes_threshold)
     X = X.drop(
@@ -86,7 +83,7 @@ def get_and_preprocess_cc(params):
                                     'state numeric'] + [y_col], axis=1)
 
     # setup ys
-    cols = [c for c in X]
+    cols = list(X)
     y = np.array([NEGATIVE_OUTCOME if val > y_cutoff else POSITIVE_OUTCOME for val in y])
 
     return X, y, cols
@@ -117,6 +114,6 @@ def get_and_preprocess_german(params):
 
     y = np.array([POSITIVE_OUTCOME if p == 1 else NEGATIVE_OUTCOME for p in y.values])
 
-    return X, y, [c for c in X]
+    return X, y, list(X)
 
 
