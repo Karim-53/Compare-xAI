@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .utils import Params
-
+from .utils import Params, root
 
 def get_and_preprocess_compas_data(params):
     """Handle processing of COMPAS according to: https://github.com/propublica/compas-analysis
@@ -20,8 +19,8 @@ def get_and_preprocess_compas_data(params):
     POSITIVE_OUTCOME = params.positive_outcome
     NEGATIVE_OUTCOME = params.negative_outcome
 
-    compas_df = pd.read_csv(
-        r"C:\Inn\Github\Compare-xAI\tests\fooling_perturbation_alg_lib\data\compas-scores-two-years.csv", index_col=0)
+    path = root + "\\tests\\fooling_perturbation_alg_lib\\data\\compas-scores-two-years.csv"
+    compas_df = pd.read_csv(path, index_col=0)
     compas_df = compas_df.loc[(compas_df['days_b_screening_arrest'] <= 30) &
                               (compas_df['days_b_screening_arrest'] >= -30) &
                               (compas_df['is_recid'] != -1) &
@@ -119,3 +118,5 @@ def get_and_preprocess_german(params):
     y = np.array([POSITIVE_OUTCOME if p == 1 else NEGATIVE_OUTCOME for p in y.values])
 
     return X, y, [c for c in X]
+
+
