@@ -70,17 +70,3 @@ def get_proximity_score(dataframe, dataframe_of_counterfactuals, target_class, t
         scores.append(counterfactual_proximity)
     dataframe_of_counterfactuals['proximity'] = scores
     return dataframe_of_counterfactuals
-
-
-
-if __name__ == '__main__':
-    
-    target_class = '>50K'
-    target_class_name = 'income'
-
-    dataframe = prep.prepare_adult_data()
-    counterfactuals = dataframe.tail(n=500)
-    counterfactuals = counterfactuals.loc[counterfactuals[target_class_name] == target_class].reset_index().drop(['index'], axis=1)
-    dataframe = dataframe.head(n=4000)
-
-    print("get_proximity_score(dataframe,counterfactuals)\n", get_proximity_score(dataframe, counterfactuals, target_class, target_class_name))

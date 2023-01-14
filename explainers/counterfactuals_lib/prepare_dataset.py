@@ -9,7 +9,6 @@ from sklearn.utils import resample
 def prepare_adult_data() -> pd.DataFrame:
     # TODO: change it to standard dataset
     """ Prepare the adult dataset. """
-    # NOTE: some cells have question marks!
     df = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adult.csv")
     # df = df.head(10) # NOTE: comment this line out, gets just the first 100 rows just for trying things
     df = df.drop('educational-num', axis=1) # this is unnecessary already have the education level as a categorical value
@@ -26,20 +25,6 @@ def standardize_adult_data():
     df = prepare_adult_data()
     df['income'] = df['income'].replace({'<=50K': 0, '>50K':1})
     df.to_csv(r"C:\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\real_world_data\data\census.csv", index=False)
-
-
-# def balance_adult_data():
-#     df = prepare_adult_data()
-#     # print("\ndf\n", df)
-#     df['income'] = df['income'].replace({'<=50K': 0, '>50K':1})
-#     print("\ndf\n", df['income'].value_counts())
-#     df_majority = df[df['income']==0]
-#     df_minority = df[df['income']==1]
-#     df_majority_sampled = resample(df_majority, replace=False, n_samples=11208, random_state=123)
-#     df_balanced = pd.concat([df_majority_sampled, df_minority]).reset_index().drop(['index'], axis='columns')
-#     df_balanced.to_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adult_balanced.csv", index=False)
-
-
 
 
 def balance_dating_data():
@@ -133,7 +118,7 @@ def create_dating_data():
     # file:///C:/Users/simon/Downloads/speed-dating-data-key.pdf
     # https://www.openml.org/search?type=data&sort=runs&status=active&qualities.NumberOfClasses=%3D_2&id=40536
 
-    df = pd.read_csv(r"C:\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\Speed Dating Data.csv", encoding='cp1252')
+    df = pd.read_csv(r"Bachelor-Bench\code\datasets\Speed Dating Data.csv", encoding='cp1252')
     df = df[['gender', 'age', 'race', 'age_o', 'attr_o', 'sinc_o', 'intel_o', 'fun_o', 'amb_o', 'shar_o', 'race_o', 'field_cd', 'match']]
     print("\ndf\n", df)
     df = df.dropna()
@@ -188,14 +173,11 @@ def create_dating_data():
     
     print("\ndf.columns", df.columns)
     df = df.rename(columns={'field_cd': 'field_study', 'age_o': 'age_partner', 'attr_o': 'attractiveness', 'sinc_o': 'sincerity', 'intel_o': 'intelligence', 'fun_o': 'funny', 'amb_o': 'ambitious', 'shar_o': 'shared_interests', 'race_o': 'race_partner'})
-    # TODO: see how balance of data affects my knn accuracy
-    # TODO: which columns for obtainability?
 
-    # print("\ninfo\n", df.info())
     print("\ndescribe\n", df.describe())
     print("\ndf\n", df.tail(50))
 
-    df.to_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\dating_data_custom.csv", index=False)
+    df.to_csv(r"Bachelor-Bench\code\datasets\dating_data_custom.csv", index=False)
 
 
 def german_credit():
@@ -225,7 +207,6 @@ def adult():
 
 
 def iris_data():
-    # TODO: make iris dataset (see Bachelor-Bench\code\tryingThings\iris_dataset.py)
     pass
 
 

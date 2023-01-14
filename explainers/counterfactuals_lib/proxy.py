@@ -8,10 +8,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import time
-import moo
 import apply
-import json
 
 
 def get_closest_indices(dataframe, instance, mad, k=1):
@@ -231,11 +228,6 @@ def do_counterfactuals_at_once(df, inst, train_df, target_class_name, list_with_
     train_copy = train_df.copy()
     train_copy['type'] ='train'
 
-    # combined = pd.concat([train_copy, knn_copy]).reset_index()
-    # sns.scatterplot(x='x', y='y', data=combined, hue='type').set(title=tmp)
-    # plt.plot()
-    # plt.show()
-
 
 
 def get_new_row(name_of_dataset, features_varied, metrics_used, f1, number_cfs):
@@ -366,126 +358,3 @@ def rounds_of_classifying(target_class, target_class_name, path, dataset_name, o
     else: path_to_csv = []
     
     return path_to_csv, create_dict(f1_score_abno, f1_score_gene, f1_score_prox, f1_score_obta, f1_score_all, f1_score_dice, f1_score_rand, f1_score_dice_3)
-
-
-if __name__ == '__main__':
-
-    # TODO: try out new standardized adult dataset
-    # TODO: see how balanced datasets perform
-
-    # print("\nADM\n", )
-    # target_class = 1
-    # target_class_name = 'Chance of Admit'
-    # name_adm = 'Admission_tmp_ind'
-    # path_adm = r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adm_data_custom.csv"
-    # ordering_features_adm = {
-    #     'SOP': ['A', 'B', 'C', 'D', 'F'],
-    #     'LOR': ['A', 'B', 'C', 'D', 'F']
-    # }
-    # to_vary = ['GRE Score', 'TOEFL Score', 'University Rating', 'SOP', 'LOR',  'CGPA', 'Research']
-
-    # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=1, rounds=7, to_vary=['GRE Score', 'TOEFL Score', 'University Rating', 'SOP', 'LOR',  'CGPA', 'Research'])  # all
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['SOP', 'LOR'])                                                                        # just obtainability
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['GRE Score', 'TOEFL Score', 'University Rating', 'CGPA', 'Research'])                 # no obtainability
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['GRE Score', 'TOEFL Score',  'CGPA'])                                                 # only real numerical features
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['GRE Score', 'TOEFL Score', 'SOP', 'LOR'])                                            # same numer numerical as continous
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['GRE Score', 'TOEFL Score', 'University Rating', 'SOP', 'LOR',  'CGPA'])              # no particular reason
-    # # rounds_of_classifying(target_class, target_class_name, path_adm, name_adm, ordering_features_adm, reps=10, rounds=7, to_vary=['GRE Score', 'TOEFL Score', 'SOP', 'LOR',  'CGPA', 'Research'])                       # no particular reason
-
-
-    ####################################################################################################################
-    ####################################################################################################################
-
-
-    # print("\nDATING\n", )
-
-    # target_class_name = 'match'
-    # target_class = 1
-    # path_dating = r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\dating_data_custom.csv"
-    # ordering_features_dating = {
-    #     'attractiveness': ['slightly_below', 'below', 'average', 'sligthly_above', 'above']
-    # }
-    # # to_vary = ['gender', 'age', 'race', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study']
-
-    # rounds_of_classifying(target_class, target_class_name, path_dating, ordering_features_dating, reps=1, to_vary='all')
-
-
-
-    ####################################################################################################################
-    ####################################################################################################################
-
-
-    # print("\nADULT\n", )
-    # ordering_features_adult_data = {
-    #     "education": ['Preschool', '1st-4th', '5th-6th', '7th-8th', '9th', '10th', '11th', '12th', 'HS-grad', 'Prof-school', 'Assoc-acdm', 'Assoc-voc', 'Some-college', 'Bachelors',  'Masters', 'Doctorate']
-    # }
-    # # to_vary = ['age', 'workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'gender', 'hours-per-week', 'native-country']
-    # target_class_name_adult = 'income'
-    # target_class_adult = 1
-    # adult_name = 'adult_test'
-    # path_adult = r"C:\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adult_standard.csv"
-    # rounds_of_classifying(target_class_adult, target_class_name_adult, path_adult, adult_name, ordering_features_adult_data, reps=1, rounds=1, svc=False)
-
-
-    ######################################################################################################################
-    ######################################################################################################################
-
-
-    print("\nIRIS\n", )
-
-    target_class_name = 'label'
-    iris_name = 'Test_tmp_ind'
-    target_class = 1
-    path_iris = r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\toy_dataset_iris_3d.csv"
-    ordering_features_iris_3d = {"petal length": ['v', 's', 'p']}
-    # st = time.time()
-    # to_vary = ['sepal length', 'sepal width', 'petal length']
-
-    print(rounds_of_classifying(target_class, target_class_name, path_iris, iris_name, ordering_features_iris_3d, to_vary=['sepal length', 'sepal width', 'petal length'], reps=1, rounds=2, svc=False, k=10))
-    # rounds_of_classifying(target_class, target_class_name, path_iris, iris_name, ordering_features_iris_3d, to_vary=['sepal length', 'petal length'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_iris, iris_name, ordering_features_iris_3d, to_vary=['sepal width', 'petal length'], reps=10, rounds=10, svc=False)
-
-    # et = time.time()
-    # elapsed_time = et - st
-    # print('\nExecution time:', elapsed_time, 'seconds')
-
-
-    ######################################################################################################################
-    ######################################################################################################################
-
-
-    # print("\nDATING\n", )
-    # dating_name = 'Dating'
-    # target_class_name = 'match'
-    # target_class = 1
-    # path_dating = r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\dating_data_custom.csv"
-    # ordering_features_dating = {
-    #     'attractiveness': ['slightly_below', 'below', 'average', 'sligthly_above', 'above']
-    # }
-    # # to_vary = ['gender', 'age', 'race', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study']
-    # # fix dating maybe try balanced
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['gender', 'age', 'race', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study'], reps=1, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['gender', 'age', 'race', 'age_partner', 'attractiveness', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['age', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['gender', 'race', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['gender', 'age', 'race', 'age_partner', 'funny', 'ambitious', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['age', 'age_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating, to_vary=['attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-
-
-    # print("\nDATING Balanced\n", )
-    # dating_name = 'Dating balanced'
-    # target_class_name = 'match'
-    # target_class = 1
-    # path_dating = r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\dating_balanced.csv"
-    # ordering_features_dating = {
-    #     'attractiveness': ['slightly_below', 'below', 'average', 'sligthly_above', 'above']
-    # }
-    # # to_vary = ['gender', 'age', 'race', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study']
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['gender', 'age', 'race', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['gender', 'age', 'race', 'age_partner', 'attractiveness', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['age', 'age_partner', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests'], reps=10, rounds=10, svc=False)
-    # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['gender', 'race', 'attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['gender', 'age', 'race', 'age_partner', 'funny', 'ambitious', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['age', 'age_partner', 'field_study'], reps=10, rounds=10, svc=False)
-    # # rounds_of_classifying(target_class, target_class_name, path_dating, dating_name, ordering_features_dating,  to_vary=['attractiveness', 'sincerity', 'intelligence', 'funny', 'ambitious', 'shared_interests', 'race_partner', 'field_study'], reps=10, rounds=10, svc=False)

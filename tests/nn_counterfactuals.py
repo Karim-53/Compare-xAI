@@ -9,19 +9,19 @@ from tests.util import importance_symmetric, is_attribution_symmetric
 
 
 def create_data():
-    X, y = make_circles(n_samples=1000)
+    X, y = make_circles(n_samples=1000, random_state=1)
     df = pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
     return df
 
 
 def create_data_noise():
-    X, y = make_circles(n_samples=1000, factor=0.5, noise=0.1)
+    X, y = make_circles(n_samples=1000, factor=0.5, noise=0.1, random_state=1)
     df = pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
     return df
 
 
 def create_data_imbalanced(t=0):
-    X_1, y_1 = make_circles(n_samples=500, noise=0.05, factor=0.5)
+    X_1, y_1 = make_circles(n_samples=500, noise=0.05, factor=0.5, random_state=1)
     df_1 = pd.DataFrame(dict(x=X_1[:, 0], y=X_1[:, 1], label=y_1))
     X_2, y_2 = make_circles(n_samples=1000, noise=0.05, factor=0.5)
     df_2 = pd.DataFrame(dict(x=X_2[:, 0], y=X_2[:, 1], label=y_2))
@@ -31,7 +31,7 @@ def create_data_imbalanced(t=0):
 
 
 class Circle(Test):
-    name = "1NN Circle"
+    name = "1nn_circle"
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000
@@ -55,7 +55,7 @@ class Circle(Test):
 
 
 class CircleNoise(Test):
-    name = "1NN Circle Noise"
+    name = "1nn_circle_noise"
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000
@@ -79,7 +79,7 @@ class CircleNoise(Test):
 
 
 class CircleOutlier(Test):
-    name = "1NN Circle Outlier"
+    name = "1nn_circle_outlier"
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000
@@ -103,7 +103,7 @@ class CircleOutlier(Test):
 
 
 class CircleBigTarget(Test):
-    name = "1NN Circle Big Target"
+    name = "1nn_circle_big_target"
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000
@@ -127,7 +127,7 @@ class CircleBigTarget(Test):
 
 
 class CircleSmallTarget(Test):
-    name = "1NN Circle Small Target"
+    name = "1nn_circle_small_target"
     ml_task = 'classification'
     input_features = ['x', 'y']
     dataset_size = 1000

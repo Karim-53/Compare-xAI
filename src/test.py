@@ -1,24 +1,23 @@
 from src.utils import are_class_names_unique
 from tests import *
-from tests.nn_counterfactuals import Circle, CircleNoise, CircleOutlier, CircleBigTarget, CircleSmallTarget  # TODO: why extra line?
+from tests.nn_counterfactuals import Circle, CircleNoise, CircleOutlier, CircleBigTarget, CircleSmallTarget
 
 valid_tests = (
-    # CoughAndFever,
-    # CoughAndFever1090,
-    # CounterexampleDummyAxiom,
-    # AAndBOrC,
-    # DistributionNonUniformStatDep,
-    # DistributionUniformStatDep,
-    # DistributionNonUniformStatIndep,
-    # FoolingPerturbationAlg,
-    # Mnist,
-    # StressNbFeatures,
-
-    # Circle,
-    # CircleNoise,
-    # CircleOutlier,
-    # CircleBigTarget,
-    # CircleSmallTarget,
+    CoughAndFever,
+    CoughAndFever1090,
+    CounterexampleDummyAxiom,
+    AAndBOrC,
+    DistributionNonUniformStatDep,
+    DistributionUniformStatDep,
+    DistributionNonUniformStatIndep,
+    FoolingPerturbationAlg,
+    Mnist,
+    StressNbFeatures,
+    Circle,
+    CircleNoise,
+    CircleOutlier,
+    CircleBigTarget,
+    CircleSmallTarget,
 
     # Tests for interaction output: working but let's continue with it after acceptance
     # DetectInteraction0,

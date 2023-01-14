@@ -47,26 +47,3 @@ def scatter_pareto_combinations_metrics(dataframe, metrics, axs):
         else:
             j = 0
             i = i+1
-
-
-if __name__ == '__main__':
-
-    dataframe = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\iris_3d_with_metrics.csv")
-    # invert_column(dataframe,['abnormality', 'generality'])
-    metrics = ['abnormality', 'generality', 'proximity', 'obtainability']
-
-    # columns = ['abnormality', 'obtainability']
-    print("dataframe\n", dataframe)
-    print("\nnew_indices\n", new_order(dataframe, metrics, columns_to_invert=['abnormality', 'generality']))
-    # print("df_pareto\n", df_pareto)
-
-    # fig, axs = plt.subplots(3,2)
-
-    # scatter_pareto_combinations_metrics(dataframe, metrics, axs)
-
-    # fig.set_size_inches(9,11)
-    # plt.subplots_adjust(hspace=0.3)
-    # plt.savefig('pareto_iris_3d_big.pdf')
-
-    # fig.suptitle("Pareto front for 100 counterfactuals (iris dataset)")
-    # plt.show()

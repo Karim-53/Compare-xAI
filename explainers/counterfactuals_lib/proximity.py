@@ -49,7 +49,6 @@ def get_mean_closest_distance(dataframe, instance, k=3):
     dataframe[f'total_distance'] = dataframe[f'categorical_distance'] + dataframe[f'continous_distance']
     
     # distance_old = dataframe[f'total_distance'].min()
-
     distance = dataframe.nsmallest(k, f'total_distance')
     distance = distance[f'total_distance'].mean()
     all_columns = [f'{column}_distance'

@@ -96,36 +96,3 @@ def get_abnormality_score(dataframe, instance, dataframe_of_counterfactuals, tar
 
 NUMBER_OF_BINS      = 10
 ABNORMAL_THRESHOLD  = 0.05
-
-
-if __name__ == '__main__':
-
-    target_class = 1
-    target_class_name = 'label'
-    dataframe = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\toy_dataset_iris_3d.csv")
-    counterfactuals = dataframe.tail(n=10)
-    counterfactuals = counterfactuals.loc[counterfactuals[target_class_name] == target_class].reset_index().drop(['index'], axis=1)
-
-    instance = dataframe.iloc[[11]].reset_index().drop(['index'], axis=1)
-    dataframe = dataframe.head(n=130)
-
-    # print("\ndataframe\n", dataframe)
-    # print("\ncounterfactuals\n", counterfactuals)
-    # print("\ninstance\n", instance)
-
-    # make_object_category(dataframe,counterfactuals,instance)
-
-    # print("\ndataframe\n", dataframe)
-    # print("\ncounterfactuals\n", counterfactuals)
-    # print("\ninstance\n", instance)
-
-    
-    # print("\ndataframe.info()\n", dataframe['petal length'].cat.categories)
-    # print("\ncounterfactuals.info()\n", counterfactuals['petal length'].cat.categories)
-    # print("\ninstance.info()\n", instance['petal length'].cat.categories)
-
-
-    # print("\n\n\n", )
-    
-    df_abno = get_abnormality_score(dataframe, instance, counterfactuals, target_class, target_class_name)
-    # print("\ndf_abno\n", df_abno)

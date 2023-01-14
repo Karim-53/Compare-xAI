@@ -63,17 +63,3 @@ def get_generality_score(df, df_counterfactuals, target_class, target_class_name
     return df_counterfactuals
 
 NUMBER_OF_BINS = 10
-
-if __name__ == '__main__':
-    
-    print("\nIRIS\n", )
-
-    target_class_name = 'label'
-    target_class = 1
-    df = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\toy_dataset_iris_3d.csv")
-    
-    df_cf = df.tail(10)
-    df_cf = df_cf.loc[df_cf[target_class_name] == target_class].reset_index().drop(['index'], axis=1)
-    df = df.head(100)
-
-    print("\n\nget_generality_score\n\n", get_generality_score(df, df_cf, target_class, target_class_name))
