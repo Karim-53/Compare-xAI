@@ -20,15 +20,11 @@ class Dice(Explainer, name='DiCE'):
     output_counterfactual = True
 
     def __init__(self, dataset=None, **kwargs):
-        # TODO: make the structure more like shap explainer?
         super().__init__()
         self.dataset = dataset
 
     def explain(self, dataset_to_explain, truth_to_explain, **kwargs):  # NOTE: truth_to_explain is input instance
-        # print("here, instance:", truth_to_explain)
-        # print("get_counterfactuals_xAI(self.dataset, instance)", get_counterfactuals_xAI(self.dataset, truth_to_explain))
         self.counterfactual = get_dice_cxAI(dataset_to_explain, truth_to_explain, number_of_cfs=100).to_numpy()
-        # print("\nself.cfs\n", self.counterfactual)
 
 
 class DiceHf(Explainer, name='DiCE_HF'):
@@ -36,8 +32,6 @@ class DiceHf(Explainer, name='DiCE_HF'):
     output_counterfactual = True
 
     def __init__(self, dataset=None, **kwargs):
-        # NOTE: Do I need to give it the model here too? (model is created in explain(...))
-        # TODO: make the structure more like shap explainer?
         super().__init__()
         self.dataset = dataset
 
@@ -47,7 +41,6 @@ class DiceHf(Explainer, name='DiCE_HF'):
         _, cfs_optimized, _ = apply_all_metrics(dataset_to_explain, truth_to_explain, cfs_dice)
         cfs_optimized['label'] = 1
         self.counterfactual = cfs_optimized.drop(['abnormality', 'generality', 'proximity', 'obtainability'], axis='columns').to_numpy()
-
 
 
 if __name__ == '__main__':

@@ -37,7 +37,7 @@ class Circle(Test):
     dataset_size = 1000
     dataset_to_explain = create_data()
     trained_model = None
-    predict_func = None  # TODO: do I need this?
+    predict_func = None
 
     def __init__(self, truth_to_explain=pd.DataFrame({'x': [0], 'y': [-1]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_noise()
@@ -61,7 +61,7 @@ class CircleNoise(Test):
     dataset_size = 1000
     dataset_to_explain = create_data_noise()
     trained_model = None
-    predict_func = None  # TODO: do I need this?
+    predict_func = None
 
     def __init__(self, truth_to_explain= pd.DataFrame({'x': [0], 'y': [-1]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_noise()
@@ -85,7 +85,7 @@ class CircleOutlier(Test):
     dataset_size = 1000
     dataset_to_explain = create_data_noise()
     trained_model = None
-    predict_func = None  # TODO: do I need this?
+    predict_func = None
 
     def __init__(self, truth_to_explain= pd.DataFrame({'x': [0], 'y': [-1.5]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_noise()
@@ -109,7 +109,7 @@ class CircleBigTarget(Test):
     dataset_size = 1000
     dataset_to_explain = create_data_imbalanced()
     trained_model = None
-    predict_func = None  # TODO: do I need this?
+    predict_func = None
 
     def __init__(self, truth_to_explain= pd.DataFrame({'x': [0], 'y': [-1]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_imbalanced()
@@ -133,7 +133,7 @@ class CircleSmallTarget(Test):
     dataset_size = 1000
     dataset_to_explain = create_data_imbalanced(1)
     trained_model = None
-    predict_func = None  # TODO: do I need this?
+    predict_func = None
 
     def __init__(self, truth_to_explain= pd.DataFrame({'x': [0], 'y': [-1]}, index=[0]), **kwargs):
         self.dataset_to_explain = create_data_imbalanced(1)
@@ -149,12 +149,3 @@ class CircleSmallTarget(Test):
     def score(cls, instance=pd.DataFrame({'x': [0], 'y': [-1], 'label': [0]}, index=[0]), counterfactual=None, **kwargs): # TODO: how do I tell the score the instance when I only give it the cfs from the explainer?
         return {'1NN_score': get_f1_score(counterfactual, cls.dataset_to_explain, instance)}
 
-
-if __name__ == '__main__':
-    df = create_data_imbalanced(1)
-    print("counts\n", df['label'].value_counts())
-    # test = CircleNoise()
-    # print(test)
-    # out = {'x': [0], 'y': [-1.5]}
-    # outlier = pd.DataFrame(out, index=[0])
-    # print(test.predict_func(outlier))
