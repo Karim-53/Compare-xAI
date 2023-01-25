@@ -19,16 +19,13 @@ def supported_models_developed(supported_models):
 
 
 def _len(x):
-    if x is None:
-        return 0
-    return len(x)
+    return 0 if x is None else len(x)
 
 
 def get_specific_args(method, super_method) -> set:
     arg_spec = inspect.getfullargspec(method)
     args = arg_spec.args
-    len_default_args = _len(arg_spec.defaults)
-    if len_default_args:  # keep only required args
+    if len_default_args := _len(arg_spec.defaults):
         args = args[:-len_default_args]
     super_method_init_args = inspect.getfullargspec(super_method).args
     return set(args).difference(set(super_method_init_args))
@@ -102,12 +99,14 @@ class Explainer:
     def get_xai_output(cls):
         """ Check in general what is the output of the implemented xAi algorithm
         'feature importance', 'feature attribution', or 'pair interaction'"""
-        xai_output = []
-        for out, out_str in zip(['importance', 'attribution', 'interaction'],
-                                ['feature importance', 'feature attribution', 'pair interaction']):
-            if cls.__dict__.get(out, False):
-                xai_output.append(out_str)
-        return xai_output
+        return [
+            out_str
+            for out, out_str in zip(
+                ['importance', 'attribution', 'interaction'],
+                ['feature importance', 'feature attribution', 'pair interaction'],
+            )
+            if cls.__dict__.get(out, False)
+        ]
 
     @classmethod
     def get_specific_args_init(cls) -> set:
@@ -122,11 +121,11 @@ class Explainer:
 
     @classmethod
     def to_pandas(cls) -> pd.Series:  # todo add params include_dominance, include_results
-        d = {}
-        d['name'] = cls.name
-        d['supported_models'] = cls.supported_models
-
-        d['xai_s_output'] = cls.get_xai_output()
+        d = {
+            'name': cls.name,
+            'supported_models': cls.supported_models,
+            'xai_s_output': cls.get_xai_output(),
+        }
         d['.__init__() specific args'] = cls.get_specific_args_init()
         d['.explain() specific args'] = cls.get_specific_args_explain()
         d['description'] = cls.description
@@ -134,8 +133,7 @@ class Explainer:
         d['source_paper'] = cls.source_paper_bibliography
         d['source_code'] = cls.source_code
 
-        df = pd.Series(d, name=cls.name)
-        return df
+        return pd.Series(d, name=cls.name)
 
     def __str__(self) -> str:
         xai_output = self.get_xai_output()
@@ -179,9 +177,12 @@ xAI's output:\t\t {', '.join(xai_output)}
         for var_name, expected_shape in [['attribution', _shape], ['importance', (
                 _shape[1],)]]:  # todo self.interaction = np.random.randn(_shape[1], _shape[1])
             var = self.__dict__.get(var_name)
-            if var is not None and not isinstance(var, str):
-                if var.shape != expected_shape:  # todo also verify it is numpy
-                    print(f'{self.name} {var_name}: Wrong shape. received {var.shape}  should be {expected_shape}')
+            if (
+                var is not None
+                and not isinstance(var, str)
+                and var.shape != expected_shape
+            ):
+                print(f'{self.name} {var_name}: Wrong shape. received {var.shape}  should be {expected_shape}')
 
     # todo [after acceptance] think about how to sort explainer instances by name or expected execution time https://stackoverflow.com/questions/4010322/sort-a-list-of-class-instances-python
 
@@ -222,12 +223,11 @@ class InteractionExplainer:
         return input, baseline
 
     def verbose_iterable(self, iterable):
-        if self.verbose:
-            from tqdm import tqdm
-
-            return tqdm(iterable)
-        else:
+        if not self.verbose:
             return iterable
+        from tqdm import tqdm
+
+        return tqdm(iterable)
 
     def batch_set_inference(
             self, set_indices, context, insertion_target, include_context=False

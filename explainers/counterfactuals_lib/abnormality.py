@@ -8,8 +8,7 @@ def compute_abnormality_column(some_series, dict_feature_occurrence, percentage=
     compute the abnormality for a whole series' cells.
     """
     assert 0 not in list(some_series.map(dict_feature_occurrence).astype(float)), "Some occurence is 0."
-    scores = percentage/some_series.map(dict_feature_occurrence).astype(float)    
-    return scores
+    return percentage/some_series.map(dict_feature_occurrence).astype(float)
 
 
 def additive_smoothing(ser, a=1):
@@ -33,14 +32,24 @@ def get_feature_occurrence(dataframe, columns):
 
 def check_for_abnormality(dataframe, dataframe_of_counterfactuals, instance):
     """ Check for abnormality in categorical values. """
-    string_cols = [column for column in dataframe.columns if dataframe[column].dtype == 'object' or dataframe[column].dtype == 'category']
+    string_cols = [
+        column
+        for column in dataframe.columns
+        if dataframe[column].dtype in ['object', 'category']
+    ]
     dict_feature_occurrence = get_feature_occurrence(dataframe, string_cols)
     dataframe_of_counterfactuals['abnormality'] = 0
     for column in string_cols:
         feature_value = instance.iloc[0][column]
 
-        if feature_value in dict_feature_occurrence[column] and dict_feature_occurrence[column][feature_value] <= ABNORMAL_THRESHOLD:           
-            dataframe_of_counterfactuals['abnormality'] = dataframe_of_counterfactuals['abnormality'] + compute_abnormality_column(dataframe_of_counterfactuals[column], dict_feature_occurrence[column], dict_feature_occurrence[column][feature_value])
+        if feature_value in dict_feature_occurrence[column] and dict_feature_occurrence[column][feature_value] <= ABNORMAL_THRESHOLD:   
+            dataframe_of_counterfactuals[
+                'abnormality'
+            ] += compute_abnormality_column(
+                dataframe_of_counterfactuals[column],
+                dict_feature_occurrence[column],
+                dict_feature_occurrence[column][feature_value],
+            )
         elif feature_value not in dict_feature_occurrence[column]:
             dataframe_of_counterfactuals['abnormality'] = dataframe_of_counterfactuals['abnormality'] + compute_abnormality_column(dataframe_of_counterfactuals[column], dict_feature_occurrence[column])
     return dataframe_of_counterfactuals['abnormality']
@@ -50,15 +59,18 @@ def bin_continous_values(df, df_1, instance):
     """ Bin all the dataframes to get only categorical values. """
     len_df = len(df.index)
     df_combined = pd.concat([df, df_1, instance], ignore_index=True)
-    numeric_cols = [column
-        for column in df_combined.columns 
-        if df_combined[column].dtype != 'object' and df_combined[column].dtype != 'category'
+    numeric_cols = [
+        column
+        for column in df_combined.columns
+        if df_combined[column].dtype not in ['object', 'category']
     ]
-    for i in range(len(numeric_cols)):
-        min_value = df_combined[numeric_cols[i]].min(axis=0)
-        max_value = df_combined[numeric_cols[i]].max(axis=0)
+    for numeric_col in numeric_cols:
+        min_value = df_combined[numeric_col].min(axis=0)
+        max_value = df_combined[numeric_col].max(axis=0)
         bins = np.linspace(min_value, max_value, NUMBER_OF_BINS)
-        df_combined[numeric_cols[i]] = pd.cut(df_combined[numeric_cols[i]], bins=bins, include_lowest=True)
+        df_combined[numeric_col] = pd.cut(
+            df_combined[numeric_col], bins=bins, include_lowest=True
+        )
     df_binned = df_combined.iloc[:len_df].reset_index().drop(['index'], axis=1)
     df_1_binned = df_combined.iloc[len_df:-1].reset_index().drop(['index'], axis=1)
     instance_binned = df_combined.iloc[[-1]].reset_index().drop(['index'], axis=1)

@@ -56,13 +56,13 @@ def prepare_test_data():
 
 def prepare_test_data_cf():
     test_data = {'cont': [2.0, 3.0, 4.0], 'cat': ['good', 'bad', 'medium'], 'target':[1,1,1]}
-    df = pd.DataFrame(data=test_data)
-    return df
+    return pd.DataFrame(data=test_data)
 
 
 def prepare_toy_data() -> pd.DataFrame:
-    df = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\toy_dataset_copy.csv")
-    return df
+    return pd.read_csv(
+        r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\toy_dataset_copy.csv"
+    )
 
 
 def create_adm_data():
@@ -109,8 +109,9 @@ def create_adm_data():
 
 
 def get_adm_data_custom():
-    df = pd.read_csv(r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adm_data_custom.csv")
-    return df
+    return pd.read_csv(
+        r"\Users\simon\OneDrive\Desktop\thesis\Bachelor-Bench\code\datasets\adm_data_custom.csv"
+    )
 
 
 def create_dating_data():
@@ -224,11 +225,12 @@ def bin_continous_values(df, num_bins=10):
     Bin all the dataframes to get only categorical values.
     Helper function 
     """
-    numeric_cols = [column
-        for column in df.columns 
-        if df[column].dtype != 'object' and df[column].dtype != 'category'
+    numeric_cols = [
+        column
+        for column in df.columns
+        if df[column].dtype not in ['object', 'category']
     ]
-    for i in range(int(len(numeric_cols)/2)):
+    for i in range(len(numeric_cols) // 2):
         min_value = df[numeric_cols[i]].min(axis=0)
         max_value = df[numeric_cols[i]].max(axis=0)
         bins = np.linspace(min_value, max_value, num_bins)
@@ -238,9 +240,10 @@ def bin_continous_values(df, num_bins=10):
 
 def bins_to_ordinal(df):
     """ Helper function """
-    cat_columns = [column
-        for column in df.columns 
-        if df[column].dtype == 'object' or df[column].dtype == 'category'
+    cat_columns = [
+        column
+        for column in df.columns
+        if df[column].dtype in ['object', 'category']
     ]
 
     for column in cat_columns:
@@ -253,7 +256,7 @@ def unit_test_high_number_features():
 
     df = pd.DataFrame()
     for i in range(feat):
-        name = 'x_'+str(i)
+        name = f'x_{str(i)}'
         df[name] = X[:,i]
     df.insert(feat, 'label', y)
 

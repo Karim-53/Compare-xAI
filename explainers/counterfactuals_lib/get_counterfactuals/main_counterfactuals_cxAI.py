@@ -25,7 +25,7 @@ def create_model(x_train, y_train, svc=True):
     numerical = [
         column
         for column in x_train.columns
-        if x_train[column].dtype != 'object' and x_train[column].dtype != 'category'
+        if x_train[column].dtype not in ['object', 'category']
     ]
     categorical = x_train.columns.difference(numerical)
     categorical_transformer = Pipeline(steps=[('onehot', OneHotEncoder(handle_unknown='ignore'))])
@@ -34,8 +34,7 @@ def create_model(x_train, y_train, svc=True):
     else:   clf = Pipeline(steps=[('preprocessor', transformations), ('classifier', RandomForestClassifier())])
     if categorical.empty:
         clf=SVC(gamma='auto', probability=True)
-    model = clf.fit(x_train, y_train)
-    return model
+    return clf.fit(x_train, y_train)
 
 
 def get_train_test_datasets(target_class_name, path_to_dataset):
@@ -59,16 +58,14 @@ def get_counterfactuals(train_dataset, x_test, x_train, y_train, y_test, target_
     numerical = [
         column
         for column in x_train.columns
-        if x_train[column].dtype != 'object' and x_train[column].dtype != 'category'
+        if x_train[column].dtype not in ['object', 'category']
     ]
     d = dice_ml.Data(dataframe=train_dataset, continuous_features=numerical, outcome_name=target_class_name)
     model = create_model(x_train, y_train, svc=model_is_svc)
 
     m = dice_ml.Model(model=model, backend="sklearn")
     exp = dice_ml.Dice(d, m, method=generation_method)
-    not_target_class = 0
-    if not target_class: not_target_class = 1
-
+    not_target_class = 0 if target_class else 1
     cfs = exp.generate_counterfactuals(specific_inst,
                                     total_CFs=num_cfs,
                                     desired_class=target_class,

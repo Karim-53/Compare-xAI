@@ -11,8 +11,7 @@ from src.utils import get_importance, TimeoutException
 
 def create_data_noise():
     X, y = make_circles(n_samples=1000, factor=0.5, noise=0.1)
-    df = pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
-    return df
+    return pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
 
 
 class Dice(Explainer, name='DiCE'):

@@ -24,8 +24,8 @@ def get_f1(x_test, y_test, model):
 def create_model(x_train, y_train, svc=True):
     numerical = [
         column
-        for column in x_train.columns 
-        if x_train[column].dtype != 'object' and x_train[column].dtype != 'category'
+        for column in x_train.columns
+        if x_train[column].dtype not in ['object', 'category']
     ]
     categorical = x_train.columns.difference(numerical)
     categorical_transformer = Pipeline(steps=[('onehot', OneHotEncoder(handle_unknown='ignore'))])
@@ -34,8 +34,7 @@ def create_model(x_train, y_train, svc=True):
     else:   clf = Pipeline(steps=[('preprocessor', transformations), ('classifier', RandomForestClassifier())])
     if categorical.empty: 
         clf=SVC(gamma='auto', probability=True)
-    model = clf.fit(x_train, y_train)
-    return model
+    return clf.fit(x_train, y_train)
 
 
 def get_train_test_datasets(target_class_name, path_to_dataset):
@@ -59,8 +58,8 @@ def get_counterfactuals(train_dataset, x_test, x_train, y_train, y_test, target_
     # Construct a data object for DiCE. Since continuous and discrete features have different ways of perturbation, we need to specify the names of the continuous features. DiCE also requires the name of the output variable that the ML model will predict.
     numerical = [
         column
-        for column in x_train.columns 
-        if x_train[column].dtype != 'object' and x_train[column].dtype != 'category'
+        for column in x_train.columns
+        if x_train[column].dtype not in ['object', 'category']
     ]
     d = dice_ml.Data(dataframe=train_dataset, continuous_features=numerical, outcome_name=target_class_name)
     if len(model_exists)>0: model = pickle.load(open(model_exists, 'rb'))
@@ -70,12 +69,10 @@ def get_counterfactuals(train_dataset, x_test, x_train, y_train, y_test, target_
     m = dice_ml.Model(model=model, backend="sklearn")
     # Using method=random for generating CFs
     exp = dice_ml.Dice(d, m, method=generation_method)
-    not_target_class = 0
-    if not target_class: not_target_class = 1
-
     if specific_inst.empty:
         x_test_undesired = x_test.copy()
         x_test_undesired[target_class_name] = model.predict(x_test_undesired)
+        not_target_class = 0 if target_class else 1
         x_test_undesired = x_test_undesired.where(x_test_undesired[target_class_name]==not_target_class).dropna().reset_index().drop([target_class_name,'index'], axis='columns')
         assert inst<len(x_test_undesired), "instance is out of bounds"
         print("\nlen(x_test_undesired)\n", len(x_test_undesired))

@@ -16,8 +16,9 @@ def get_pareto(dataframe, columns):
     """ Get pareto front of dataframe. """
     objective_columns = dataframe.columns.get_indexer(columns)
     nondominated = pareto.eps_sort([list(dataframe.itertuples(False))], objective_columns)
-    df_pareto = pd.DataFrame.from_records(nondominated, columns=list(dataframe.columns.values))
-    return df_pareto
+    return pd.DataFrame.from_records(
+        nondominated, columns=list(dataframe.columns.values)
+    )
 
 
 def new_order(dataframe, columns, columns_to_invert=[]) -> pd.DataFrame:

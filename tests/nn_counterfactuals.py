@@ -11,38 +11,50 @@ def get_closest_indices(dataframe, instance, mad, k=1):
     numeric_cols = [
         column
         for column in dataframe.columns
-        if dataframe[column].dtype != 'object' and dataframe[column].dtype != 'category'
+        if dataframe[column].dtype not in ['object', 'category']
     ]
     string_cols = [
         column
         for column in dataframe.columns
-        if dataframe[column].dtype == 'object' or dataframe[column].dtype == 'category'
+        if dataframe[column].dtype in ['object', 'category']
     ]
     all_columns = []
-    [all_columns.append("cat") if dataframe[column].dtype == 'object' or dataframe[
-        column].dtype == 'category' else all_columns.append("cont") for column in dataframe.columns]
+    [
+        all_columns.append("cat")
+        if dataframe[column].dtype in ['object', 'category']
+        else all_columns.append("cont")
+        for column in dataframe.columns
+    ]
 
-    dataframe[f'categorical_distance'] = 0.
+    dataframe['categorical_distance'] = 0.
 
     if string_cols:
         for column in string_cols:
             dataframe[f'{column}_distance'] = (dataframe[f'{column}'] != instance[column]).astype('float')
-            dataframe[f'categorical_distance'] = dataframe[f'categorical_distance'] + dataframe[f'{column}_distance']
-        dataframe[f'categorical_distance'] = dataframe[f'categorical_distance'] / len(string_cols)
+            dataframe['categorical_distance'] += dataframe[f'{column}_distance']
+        dataframe['categorical_distance'] = dataframe[
+            'categorical_distance'
+        ] / len(string_cols)
 
-    dataframe[f'continous_distance'] = 0.
+    dataframe['continous_distance'] = 0.
     if numeric_cols:
         index = 0
         for column in numeric_cols:
             mad[index] = mad[index] if mad[index] != 0 else 1
             dataframe[f'{column}_distance'] = (abs(dataframe[column] - instance[column])) / mad[index]
-            dataframe[f'continous_distance'] = dataframe[f'continous_distance'] + dataframe[f'{column}_distance']
+            dataframe['continous_distance'] += dataframe[f'{column}_distance']
             index = index + 1
-        dataframe[f'continous_distance'] = dataframe[f'continous_distance'] / len(numeric_cols)
+        dataframe['continous_distance'] = dataframe[
+            'continous_distance'
+        ] / len(numeric_cols)
 
-    dataframe[f'total_distance'] = dataframe[f'categorical_distance'] + dataframe[f'continous_distance']
+    dataframe['total_distance'] = (
+        dataframe['categorical_distance'] + dataframe['continous_distance']
+    )
 
-    index_smallest_distance = dataframe.nsmallest(k, f'total_distance').index.tolist()
+    index_smallest_distance = dataframe.nsmallest(
+        k, 'total_distance'
+    ).index.tolist()
     all_columns = [f'{column}_distance'
                    for column in string_cols + numeric_cols + ['categorical', 'continous', 'total']
                    ]
@@ -62,7 +74,7 @@ def knn_classify(dataframe, samples, to_predict, df_mad):
     numeric_cols = [
         column
         for column in samples.columns
-        if samples[column].dtype != 'object' and samples[column].dtype != 'category'
+        if samples[column].dtype not in ['object', 'category']
     ]
     mad = get_mad_values(df_mad[numeric_cols])
     for i in range(len(samples.index)):
@@ -86,11 +98,9 @@ def classify_samples(dataframe_og, samples_og, to_predict, complete_train):
 
 def get_mad_values(df):
     """ Takes a dataframe as input and returns median absolute deviation of columns as list. """
-    mad_values = [
-        st.median_abs_deviation(df[column].tolist())
-        for column in df.columns
+    return [
+        st.median_abs_deviation(df[column].tolist()) for column in df.columns
     ]
-    return mad_values
 
 
 def get_k_closest(dataframe, instance, target_class_name, target_class, k=100):
@@ -98,45 +108,55 @@ def get_k_closest(dataframe, instance, target_class_name, target_class, k=100):
     numeric_cols = [
         column
         for column in dataframe.columns
-        if dataframe[column].dtype != 'object' and dataframe[column].dtype != 'category'
+        if dataframe[column].dtype not in ['object', 'category']
     ]
     string_cols = [
         column
         for column in dataframe.columns
-        if dataframe[column].dtype == 'object' or dataframe[column].dtype == 'category'
+        if dataframe[column].dtype in ['object', 'category']
     ]
     if target_class_name in numeric_cols: numeric_cols.remove(target_class_name)
     if target_class_name in string_cols: string_cols.remove(target_class_name)
     mad = get_mad_values(dataframe[numeric_cols])
     all_columns = []
-    [all_columns.append("cat") if dataframe[column].dtype == 'object' or dataframe[
-        column].dtype == 'category' else all_columns.append("cont") for column in dataframe.columns]
+    [
+        all_columns.append("cat")
+        if dataframe[column].dtype in ['object', 'category']
+        else all_columns.append("cont")
+        for column in dataframe.columns
+    ]
 
-    dataframe[f'categorical_distance'] = 0.
+    dataframe['categorical_distance'] = 0.
     if string_cols:
         for column in string_cols:
             dataframe[f'{column}_distance'] = (dataframe[f'{column}'] != instance[column]).astype('float')
-            dataframe[f'categorical_distance'] = dataframe[f'categorical_distance'] + dataframe[f'{column}_distance']
-        dataframe[f'categorical_distance'] = dataframe[f'categorical_distance'] / len(string_cols)
+            dataframe['categorical_distance'] += dataframe[f'{column}_distance']
+        dataframe['categorical_distance'] = dataframe[
+            'categorical_distance'
+        ] / len(string_cols)
 
-    dataframe[f'continous_distance'] = 0.
+    dataframe['continous_distance'] = 0.
     if numeric_cols:
         index = 0
         for column in numeric_cols:
             mad[index] = mad[index] if mad[index] != 0 else 1
             dataframe[f'{column}_distance'] = (abs(dataframe[column] - instance[column])) / mad[index]
-            dataframe[f'continous_distance'] = dataframe[f'continous_distance'] + dataframe[f'{column}_distance']
+            dataframe['continous_distance'] += dataframe[f'{column}_distance']
             index = index + 1
-        dataframe[f'continous_distance'] = dataframe[f'continous_distance'] / len(numeric_cols)
+        dataframe['continous_distance'] = dataframe[
+            'continous_distance'
+        ] / len(numeric_cols)
 
-    dataframe[f'total_distance'] = dataframe[f'categorical_distance'] + dataframe[f'continous_distance']
+    dataframe['total_distance'] = (
+        dataframe['categorical_distance'] + dataframe['continous_distance']
+    )
 
     df_target = dataframe.copy()
     df_target = df_target.loc[df_target[target_class_name] == target_class]
-    df_target = df_target.nsmallest(k, f'total_distance')
+    df_target = df_target.nsmallest(k, 'total_distance')
     df_original = dataframe.copy()
     df_original = df_original.loc[df_original[target_class_name] != target_class]
-    df_original = df_original.nsmallest(k, f'total_distance')
+    df_original = df_original.nsmallest(k, 'total_distance')
     df = pd.concat([df_original, df_target], ignore_index=True)
 
     all_columns = [f'{column}_distance'
@@ -158,14 +178,12 @@ def get_f1_score(counterfactuals, dataset, instance, target_class_name='label', 
 
 def create_data():
     X, y = make_circles(n_samples=1000, random_state=1)
-    df = pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
-    return df
+    return pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
 
 
 def create_data_noise():
     X, y = make_circles(n_samples=1000, factor=0.5, noise=0.1, random_state=1)
-    df = pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
-    return df
+    return pd.DataFrame(dict(x=X[:, 0], y=X[:, 1], label=y))
 
 
 def create_data_imbalanced(t=0):
@@ -174,8 +192,7 @@ def create_data_imbalanced(t=0):
     X_2, y_2 = make_circles(n_samples=1000, noise=0.05, factor=0.5)
     df_2 = pd.DataFrame(dict(x=X_2[:, 0], y=X_2[:, 1], label=y_2))
     df_2 = df_2.drop(df_2[df_2.label == t].index)
-    df_3 = pd.concat([df_1, df_2], ignore_index=True)
-    return df_3
+    return pd.concat([df_1, df_2], ignore_index=True)
 
 
 class Circle(Test):

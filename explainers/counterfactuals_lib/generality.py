@@ -7,15 +7,18 @@ def bin_continous_values(df, df_target, instance):
     """ Bin all the dataframes to get only categorical values. """
     len_df = len(df.index)
     df_combined = pd.concat([df, df_target, instance], ignore_index=True)
-    numeric_cols = [column 
-        for column in df_combined.columns 
-        if df_combined[column].dtype != 'object' and df_combined[column].dtype != 'category'
+    numeric_cols = [
+        column
+        for column in df_combined.columns
+        if df_combined[column].dtype not in ['object', 'category']
     ]
-    for i in range(len(numeric_cols)):
-        min_value = df_combined[numeric_cols[i]].min(axis=0)
-        max_value = df_combined[numeric_cols[i]].max(axis=0)
+    for numeric_col in numeric_cols:
+        min_value = df_combined[numeric_col].min(axis=0)
+        max_value = df_combined[numeric_col].max(axis=0)
         bins = np.linspace(min_value, max_value, NUMBER_OF_BINS)
-        df_combined[numeric_cols[i]] = pd.cut(df_combined[numeric_cols[i]], bins=bins, include_lowest=True)
+        df_combined[numeric_col] = pd.cut(
+            df_combined[numeric_col], bins=bins, include_lowest=True
+        )
 
     df_binned = df_combined.iloc[:len_df].reset_index().drop(['index'], axis=1)
     df_target_binned = df_combined.iloc[len_df:-1].reset_index().drop(['index'], axis=1)
@@ -26,8 +29,7 @@ def bin_continous_values(df, df_target, instance):
 def entropy(column):
     """ Compute entropy of a pandas series. """
     probability_counts = column.value_counts()/sum(column.value_counts().values) # NOTE:might not need to divide by 'sum(column.value_counts().values)'
-    entropy_column = st.entropy(probability_counts)
-    return entropy_column
+    return st.entropy(probability_counts)
 
 
 def generality_score_column(column, column_target, value):
@@ -38,8 +40,9 @@ def generality_score_column(column, column_target, value):
     column_target_without_feature = entropy(column_target[column_target != value])
 
     if abs(column_with_feature - column_without_feature) == 0: return 0
-    generality = abs(column_target_with_feature - column_target_without_feature)-abs(column_with_feature - column_without_feature)
-    return generality
+    return abs(
+        column_target_with_feature - column_target_without_feature
+    ) - abs(column_with_feature - column_without_feature)
 
 
 def generality_score_instance(df, df_target, instance,target_class_name):
@@ -48,7 +51,12 @@ def generality_score_instance(df, df_target, instance,target_class_name):
     df = df.drop([target_class_name], axis=1)
     instance = instance.drop([target_class_name], axis=1)
     df, df_target, instance = bin_continous_values(df, df_target, instance)
-    return sum([generality_score_column(df[column], df_target[column], instance.iloc[0][column]) for column in df.columns])
+    return sum(
+        generality_score_column(
+            df[column], df_target[column], instance.iloc[0][column]
+        )
+        for column in df.columns
+    )
 
 
 def get_generality_score(df, df_counterfactuals, target_class, target_class_name) -> pd.DataFrame:
