@@ -53,11 +53,13 @@ class Explainer:
     output_importance = False
     output_attribution = False
     output_interaction = False
+    output_counterfactual = False
 
     # xAI output
     importance: np.array = None
     attribution: np.ndarray = None
     interaction: np.ndarray = None
+    counterfactual: np.ndarray = None
 
     supported_model_model_agnostic: bool
     supported_model_tree_based: bool

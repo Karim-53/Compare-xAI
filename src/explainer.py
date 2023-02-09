@@ -1,4 +1,5 @@
 from explainers import *
+from explainers.dice import Dice, DiceHf  # TODO: why does it need this extra import?
 from src.utils import are_class_names_unique
 
 valid_explainers = (
@@ -15,6 +16,8 @@ valid_explainers = (
     Lime,
     Maple,
     JointShapley,
+    Dice,
+    DiceHf,
     # Anova, # todo fix feature importance
 
     # Archipelago,  # todo after paper acceptance

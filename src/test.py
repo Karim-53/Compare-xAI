@@ -1,5 +1,6 @@
 from src.utils import are_class_names_unique
 from tests import *
+from tests.nn_counterfactuals import Circle, CircleNoise, CircleOutlier, CircleBigTarget, CircleSmallTarget
 
 valid_tests = (
     CoughAndFever,
@@ -12,6 +13,11 @@ valid_tests = (
     FoolingPerturbationAlg,
     Mnist,
     StressNbFeatures,
+    Circle,
+    CircleNoise,
+    CircleOutlier,
+    CircleBigTarget,
+    CircleSmallTarget,
 
     # Tests for interaction output: working but let's continue with it after acceptance
     # DetectInteraction0,

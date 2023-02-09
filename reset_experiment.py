@@ -63,7 +63,7 @@ def append_empty_row(result_df, name):
 
 def compatible(test_class, explainer_class):
     """ test if the xai generate the kind of explanation required by the test """
-    for explanation in ['importance', 'attribution', 'interaction']:
+    for explanation in ['importance', 'attribution', 'interaction', 'counterfactual']:
         is_explanation_required_by_test = explanation in inspect.getfullargspec(test_class.score).args
         if_explainer_able_to_provide_it = explainer_class.__dict__.get(f'output_{explanation}', False)
         if is_explanation_required_by_test and if_explainer_able_to_provide_it:
@@ -128,7 +128,7 @@ def run_experiment(test_class: Type[Test], explainer_class: Type[Explainer]):
         execution_time = TIME_LIMIT
 
     # Score the output
-    arg = {key: not_string(_explainer.__dict__.get(key)) for key in ['attribution', 'importance', 'interaction']}
+    arg = {key: not_string(_explainer.__dict__.get(key)) for key in ['attribution', 'importance', 'interaction', 'counterfactual']}
     score = test.score(**arg)
     return format_results(score=score, time=execution_time)
 
