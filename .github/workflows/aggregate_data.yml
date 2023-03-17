@@ -11,13 +11,14 @@ jobs:
         with:
           submodules: 'recursive'
       - name: setup python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
       - name: install python dependencies
         uses: py-actions/py-dependency-install@v4
         with:
           path: "requirements.txt"
+          # todo add caching to save time
       - name: run aggregate_data.py
         shell: bash
         run: |

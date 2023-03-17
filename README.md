@@ -7,7 +7,7 @@
 
 See our [NeurIPS paper][arxiv] (under review).
 
-You can check directly the benchmark results at https://karim-53.github.io/cxAI/
+You can check directly the benchmark results at https://karim-53.github.io/cxai/
 
 
 # Table of Content
@@ -63,7 +63,7 @@ Now run the following command to aggregate results in a more human-readable form
 ```shell
 python src/aggregate_data.py
 ```
-This also generate an SQLite database used in https://karim-53.github.io/cxAI/
+This also generate an SQLite database used in https://karim-53.github.io/cxai/
 `data/04_sql/database` aggregate all data: information about tests, explainers, papers, and results of all experiments.
 
 **Tip**: Reduce the list of explainers to test by changing `valid_explainers` in `src/explainer.py`. Same for the tests, see `src/test.py`.
