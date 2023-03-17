@@ -30,17 +30,17 @@ class CorrelatedFeatures(Test):
         def predict_func(input_features):
             """ input should be a 2d array [data points, args] """
             if isinstance(input_features,pd.DataFrame):
-                return input_features['b'] + input_features['c'] + input_features['a']
+                return input_features['a'] + input_features['b']
             if isinstance(input_features,np.ndarray):
-                return input_features[:, 1] + input_features[:,2] + input_features[:, 0]
+                return input_features[:, 0] + input_features[:, 1] 
             if isinstance(input_features,list):
                 if isinstance(input_features[0], list):
-                    return [row[1] + row[2] + row[0] for row in input_features]
+                    return [row[0] + row[1] for row in input_features]
                 else:
-                    return input_features[1] + input_features[2] + input_features[0]
+                    return input_features[0] + input_features[1]
             else:
                 print('predict_func', input_features, type(input_features))
-                return input_features[1] + input_features[2] + input_features[0]
+                return input_features[0] + input_features[1]
 
         truth_to_explain = predict_func(dataset_to_explain)
         self.truth_to_explain = pd.DataFrame(truth_to_explain, columns=['target'])
@@ -140,3 +140,5 @@ if __name__ == '__main__':
     explainer.explain(test.dataset_to_explain)
     print(test.score(explainer.importance))
     print(test.df_train.drop_duplicates())
+    #print the image of the trained regression tree
+    test.trained_model.plot_tree()
