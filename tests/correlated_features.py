@@ -18,7 +18,7 @@ class CorrelatedFeatures(Test):
     # https://crossminds.ai/video/problems-with-shapley-value-based-explanations-as-feature-importance-measures-606f4961072e523d7b7811fc/
     name = 'correlated_features'
     ml_task = 'regression'
-    description = """Features b and c are perfectly correlated. Explainer should output high importance for only one feature """
+    description = """Features b and c are perfectly correlated. But the model do not use feature c. Explainer should output high importance for only one feature """
     input_features = ['a', 'b', 'c']
     dataset_size = 20000
 
