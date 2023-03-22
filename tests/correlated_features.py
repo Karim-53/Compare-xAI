@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
-
-from .test_superclass import Test
-from .util import is_ok
+from tests.test_superclass import Test
+from tests.util import is_ok
 
 
 def importance_is_c_dummy(importance: list) -> float:
