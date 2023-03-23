@@ -66,6 +66,8 @@ class CorrelatedFeatures(Test):
 
 if __name__ == '__main__':
     import random
+    from xgboost import plot_tree
+    import matplotlib.pyplot as plt
 
     from src.utils import *
     from explainers.shap_explainer import ExactShapleyValues
@@ -80,4 +82,5 @@ if __name__ == '__main__':
     print(test.score(explainer.importance))
     print(test.df_train.drop_duplicates())
     #print the image of the trained regression tree
-    test.trained_model.plot_tree()
+    plot_tree(test.trained_model)
+    plt.show()
