@@ -76,11 +76,13 @@ if __name__ == '__main__':
     random.seed(42)
 
     test = CorrelatedFeatures()
-    print(test.truth_to_explain, test.dataset_to_explain)
-    explainer = ExactShapleyValues(test.predict_func, test.X)
-    explainer.explain(test.dataset_to_explain)
-    print(test.score(explainer.importance))
-    print(test.df_train.drop_duplicates())
+    # print(test.truth_to_explain, test.dataset_to_explain)
+    # explainer = ExactShapleyValues(test.predict_func, test.X)
+    # explainer.explain(test.dataset_to_explain)
+    # print(test.score(explainer.importance))
+    # print(test.df_train.drop_duplicates())
     #print the image of the trained regression tree
-    plot_tree(test.trained_model)
+
+    filename = './tmp/' + test.__class__.__name__ + '.png'
+    plot_tree(test.trained_model, filename)
     plt.show()
