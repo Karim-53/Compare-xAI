@@ -12,6 +12,7 @@ valid_tests = (
     FoolingPerturbationAlg,
     Mnist,
     StressNbFeatures,
+    CorrelatedFeatures,
 
     # Tests for interaction output: working but let's continue with it after acceptance
     # DetectInteraction0,
