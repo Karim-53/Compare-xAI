@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from .utils import Params, root
+from utils import Params
+from src.utils import root
 
 def get_and_preprocess_compas_data(params):
     """Handle processing of COMPAS according to: https://github.com/propublica/compas-analysis
