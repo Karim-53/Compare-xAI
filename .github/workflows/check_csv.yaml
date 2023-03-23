@@ -22,5 +22,5 @@ jobs:
       - name: check csv
         shell: bash
         run: |
-            python .github/workflows/check_csv.py
+            python check_csv.py
       
