@@ -1,6 +1,7 @@
 import pandas as pd
 from src.utils import root
 
+
 def test(root):
   try:
     for path in Path(constants.root).rglob('*.csv'):
