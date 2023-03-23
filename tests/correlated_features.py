@@ -31,22 +31,22 @@ class CorrelatedFeatures(Test):
             if isinstance(input_features,pd.DataFrame):
                 return input_features['a'] + input_features['b']
             if isinstance(input_features,np.ndarray):
-                return input_features[:, 0] + input_features[:, 1] 
+                return input_features[:, 0] + input_features[:, 1]
             if isinstance(input_features,list):
-                if isinstance(input_features[0], list):
-                    return [row[0] + row[1] for row in input_features]
-                else:
-                    return input_features[0] + input_features[1]
-            else:
-                print('predict_func', input_features, type(input_features))
-                return input_features[0] + input_features[1]
+                return (
+                    [row[0] + row[1] for row in input_features]
+                    if isinstance(input_features[0], list)
+                    else input_features[0] + input_features[1]
+                )
+            print('predict_func', input_features, type(input_features))
+            return input_features[0] + input_features[1]
 
         truth_to_explain = predict_func(dataset_to_explain)
         self.truth_to_explain = pd.DataFrame(truth_to_explain, columns=['target'])
         n = self.dataset_size // len(self.truth_to_explain)
-        X = dataset_to_explain * n  
+        X = dataset_to_explain * n
         self.df_train = pd.DataFrame(X, columns=self.input_features)
-        self.df_reference = self.df_train  
+        self.df_reference = self.df_train
         self.df_train['target'] = truth_to_explain * n
 
         self.trained_model = XGBRegressor(objective='reg:squarederror', n_estimators=1, max_depth=3, random_state=0,
