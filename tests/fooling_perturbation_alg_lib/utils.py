@@ -75,8 +75,10 @@ def rank_features(explanation):
     """
 
     ordered_tuples = sorted(explanation, key=lambda x: abs(x[1]), reverse=True)
-    results = [tup[0] if tup[1] != 0 else ("Nothing shown", 0) for tup in ordered_tuples]
-    return results
+    return [
+        tup[0] if tup[1] != 0 else ("Nothing shown", 0)
+        for tup in ordered_tuples
+    ]
 
 
 def get_rank_map(ranks, to_consider):
