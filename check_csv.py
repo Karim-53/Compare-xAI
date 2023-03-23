@@ -1,5 +1,5 @@
 import pandas as pd
-from src.utils.import root
+from src.utils import root
 
 def test(root):
   try:
