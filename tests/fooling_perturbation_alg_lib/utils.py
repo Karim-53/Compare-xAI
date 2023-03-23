@@ -4,15 +4,6 @@ import pathlib
 
 import numpy as np
 
-root = ''
-for root_relative_dir in [r'./', r'../', r'../../', r'../../../']:
-    if all([pathlib.Path(os.path.abspath(root_relative_dir + subdir)).exists() for subdir in
-            ['explainers/', 'tests/']]):
-        root = os.path.abspath(root_relative_dir)
-        break
-else:
-    print('Unable to find the root dir')
-
 class Params():
     """Parameters object taken from: https://github.com/cs230-stanford/cs230-code-examples/blob/master/pytorch/nlp/utils.py
     
