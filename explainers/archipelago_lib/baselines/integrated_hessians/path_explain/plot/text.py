@@ -38,10 +38,7 @@ def text_plot(
         interaction_matrix = interaction_matrix.copy()
         np.fill_diagonal(interaction_matrix, 0.0)
 
-    figsize = (0.1, 0.1)
-    if include_legend:
-        figsize = (10, 2)
-
+    figsize = (10, 2) if include_legend else (0.1, 0.1)
     fig = plt.figure(figsize=figsize)
     axis = fig.gca()
     plt.axis("off")
@@ -83,13 +80,13 @@ def text_plot(
         text = plt.text(
             x=0.0,
             y=y_pos,
-            s="{}".format(word),
+            s=f"{word}",
             backgroundcolor=color,
             fontsize=fontsize,
             transform=axis_transform,
             fontweight=fontweight,
             zorder=zorder,
-            **kwargs
+            **kwargs,
         )
         text.draw(fig.canvas.get_renderer())
         ex = text.get_window_extent()
@@ -105,7 +102,7 @@ def text_plot(
             text = plt.text(
                 x=0.0,
                 y=0.2,
-                s="{}".format(word),
+                s=f"{word}",
                 backgroundcolor=color,
                 fontsize=16,
                 transform=axis_transform,
@@ -191,16 +188,8 @@ def matrix_interaction_plot(
         for j in range(interaction_matrix.shape[1]):
             if i == j:
                 continue
-            if interaction_matrix[i, j] > color_threshold:
-                color = "black"
-            else:
-                color = "white"
-
-            if i > j:
-                text = "{},\n{}".format(tokens[j], tokens[i])
-            else:
-                text = "{},\n{}".format(tokens[i], tokens[j])
-
+            color = "black" if interaction_matrix[i, j] > color_threshold else "white"
+            text = f"{tokens[j]},\n{tokens[i]}" if i > j else f"{tokens[i]},\n{tokens[j]}"
             text = axis.text(
                 j, i, text, ha="center", va="center", color=color, fontsize=12
             )
@@ -256,9 +245,7 @@ def bar_interaction_plot(
     interaction_values = []
     for index in pair_indices[::-1]:
         token_labels.append(
-            "{}, {} ({}, {})".format(
-                tokens[index[0]], tokens[index[1]], index[0], index[1]
-            )
+            f"{tokens[index[0]]}, {tokens[index[1]]} ({index[0]}, {index[1]})"
         )
         interaction_values.append(interaction_matrix[index[0], index[1]])
 
@@ -267,11 +254,7 @@ def bar_interaction_plot(
     bounds = np.max(np.abs(interaction_matrix))
     normalizer = mpl.colors.Normalize(vmin=-bounds, vmax=bounds)
 
-    if "cmap" in kwargs:
-        cmap = kwargs["cmap"]
-    else:
-        cmap = colors.maroon_white_aqua()
-
+    cmap = kwargs["cmap"] if "cmap" in kwargs else colors.maroon_white_aqua()
     axis.barh(
         np.arange(top_k),
         interaction_values,

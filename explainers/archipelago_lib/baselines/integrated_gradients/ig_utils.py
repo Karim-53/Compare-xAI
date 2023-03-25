@@ -17,5 +17,4 @@ def get_gradients(scaled_inputs, model, target_label_idx, device, softmax=False)
         output.backward()
         grad = torch_input.grad.detach().cpu().numpy()
         grads.append(grad)
-    grads = np.concatenate(grads)
-    return grads
+    return np.concatenate(grads)

@@ -32,14 +32,13 @@ class Anova(Explainer, name='anova'):
         X_train = Xs["train"]
         Y_train = Ys["train"]
 
-        data = {}
-        data['y'] = Y_train.squeeze()
+        data = {'y': Y_train.squeeze()}
         st = ''
-        for i in range(0, X_train.shape[1]):
-            data['X' + str(i)] = X_train[:, i]
-            st += '+X' + str(i)
-        st = "(" + st[1:] + ")"
-        formula = 'y ~ ' + st + ":" + st
+        for i in range(X_train.shape[1]):
+            data[f'X{str(i)}'] = X_train[:, i]
+            st += f'+X{str(i)}'
+        st = f"({st[1:]})"
+        formula = f'y ~ {st}:{st}'
 
         import statsmodels.api as sm
         from statsmodels.formula.api import ols

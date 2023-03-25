@@ -26,9 +26,7 @@ import _thread
 
 
 def not_string(e):
-    if isinstance(e, str):
-        return None
-    return e
+    return None if isinstance(e, str) else e
 
 
 @contextmanager
@@ -38,7 +36,7 @@ def time_limit(seconds, msg=''):
     try:
         yield
     except KeyboardInterrupt:
-        raise TimeoutException("Timed out for operation {}".format(msg))
+        raise TimeoutException(f"Timed out for operation {msg}")
     finally:
         # if the action ends in specified time, timer is canceled
         timer.cancel()
@@ -68,8 +66,7 @@ def compatible(test_class, explainer_class):
         if_explainer_able_to_provide_it = explainer_class.__dict__.get(f'output_{explanation}', False)
         if is_explanation_required_by_test and if_explainer_able_to_provide_it:
             return True
-    else:
-        return False
+    return False
 
 
 TIME_LIMIT = 3*60*60  # seconds  # todo [before submission] increase # src https://stackoverflow.com/questions/366682/how-to-limit-execution-time-of-a-function-call

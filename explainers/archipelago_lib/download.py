@@ -26,9 +26,7 @@ def download_file_from_google_drive(id, destination):
     session = requests.Session()
 
     response = session.get(URL, params={"id": id}, stream=True)
-    token = get_confirm_token(response)
-
-    if token:
+    if token := get_confirm_token(response):
         params = {"id": id, "confirm": token}
         response = session.get(URL, params=params, stream=True)
 
@@ -36,11 +34,14 @@ def download_file_from_google_drive(id, destination):
 
 
 def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            return value
-
-    return None
+    return next(
+        (
+            value
+            for key, value in response.cookies.items()
+            if key.startswith("download_warning")
+        ),
+        None,
+    )
 
 
 def save_response_content(response, destination):
@@ -93,12 +94,12 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-quick_demo = args.quick_demo
 demos = args.demos
 experiments = args.experiments
 download_all = args.all
 downloads_folder = args.downloads_folder
 
+quick_demo = args.quick_demo
 all_options = [quick_demo, demos, experiments, download_all]
 
 if not any(all_options):
@@ -143,24 +144,20 @@ subfolders = next(os.walk(downloads_folder))[1]
 for key in keys:
     if key in pretrained_model_ids:
         file_id = pretrained_model_ids[key]
-        dest_id = "pretrained_" + key
+        dest_id = f"pretrained_{key}"
     elif key in data_ids:
         file_id = data_ids[key]
-        dest_id = key + "_data"
+        dest_id = f"{key}_data"
     else:
         raise ValueError
 
     if dest_id in subfolders:
         print(
-            "Found "
-            + dest_id
-            + "/ already in "
-            + downloads_folder
-            + "/. Skipping download for it."
+            f"Found {dest_id}/ already in {downloads_folder}/. Skipping download for it."
         )
         continue
 
-    destination = downloads_folder + "/" + dest_id + ".zip"
+    destination = f"{downloads_folder}/{dest_id}.zip"
     download_file_from_google_drive(file_id, destination)
 
     shutil.unpack_archive(destination, downloads_folder)

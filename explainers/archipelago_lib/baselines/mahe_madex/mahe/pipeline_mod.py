@@ -21,9 +21,7 @@ class TextClassificationPipeline(Pipeline):
     """
 
     def __call__(self, *args, **kwargs):
-        outputs = super().__call__(*args, **kwargs)
-        #         scores = np.exp(outputs) / np.exp(outputs).sum(-1)
-        return outputs  # [{"label": self.model.config.id2label[item.argmax()], "score": item.max()} for item in scores]
+        return super().__call__(*args, **kwargs)
 
 
 # Register all the supported task here
@@ -67,9 +65,7 @@ def pipeline(
     # Retrieve the task
     if task not in SUPPORTED_TASKS:
         raise KeyError(
-            "Unknown task {}, available tasks are {}".format(
-                task, list(SUPPORTED_TASKS.keys())
-            )
+            f"Unknown task {task}, available tasks are {list(SUPPORTED_TASKS.keys())}"
         )
 
     framework = "pt"  # get_framework(model)

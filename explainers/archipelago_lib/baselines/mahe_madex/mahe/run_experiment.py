@@ -71,7 +71,7 @@ mlp_gpu = args.mlp_gpu
 if mlp_gpu < 0:
     mlp_device = torch.device("cpu")
 else:
-    mlp_device = torch.device("cuda:" + str(mlp_gpu))
+    mlp_device = torch.device(f"cuda:{str(mlp_gpu)}")
 
 
 def par_experiment(progress_id, index, preprocess_dict, num_trials):
@@ -150,7 +150,7 @@ def get_model_and_data(experiment, device, model_selector):
         else:
             model_folder = "../../1. madex/utils/pretrained"
             sys.path.insert(0, model_folder)
-            model = get_text_model(model_folder + "/sentiment_lstm.pt").to(device)
+            model = get_text_model(f"{model_folder}/sentiment_lstm.pt").to(device)
         vectorizer = get_vectorizer()
         train_iter, dev_iter, test_iter = get_sst(device)
 
@@ -165,7 +165,11 @@ def get_model_and_data(experiment, device, model_selector):
         #         base_path = "/meladyfs/newyork/datasets/imagenet14/test"
         base_path = "/home/mtsang/test"
         test_data = sorted(
-            [base_path + "/" + f for f in os.listdir(base_path) if f.endswith(".JPEG")]
+            [
+                f"{base_path}/{f}"
+                for f in os.listdir(base_path)
+                if f.endswith(".JPEG")
+            ]
         )
 
     elif experiment == "graph":
@@ -186,11 +190,11 @@ def get_model_and_data(experiment, device, model_selector):
 def run():
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
-    save_path = save_folder + "/" + out_file
+    save_path = f"{save_folder}/{out_file}"
 
     multiprocessing.set_start_method("spawn", force=True)
 
-    device = torch.device("cuda:" + str(gpu))
+    device = torch.device(f"cuda:{str(gpu)}")
 
     model, test_data, vectorizer, misc = get_model_and_data(
         experiment, device, model_selector

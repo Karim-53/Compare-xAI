@@ -35,7 +35,7 @@ class JointShapley(Explainer, name='joint_shapley'):
         
 
     def explain(self, dataset_to_explain, k = 2, num_iter = 500, verbose=True, **kwargs):
-        if isinstance(dataset_to_explain, pd.DataFrame) is False:
+        if not isinstance(dataset_to_explain, pd.DataFrame):
             dataset_to_explain = pd.DataFrame(dataset_to_explain)
         n_features = frozenset(list(dataset_to_explain.columns))
         #num_obs, n = dataset_to_explain.shape
@@ -107,7 +107,7 @@ def get_estimate_for_coalition(
 ) -> float:
     x_labels = list(X.columns)
     estimates = []
-    for itr in range(0, num_iterations):
+    for _ in range(num_iterations):
         rand_seq = random.sample(list(X.index), len(X.index))
         Z = X.loc[rand_seq]
         clns_up_to_t, clns_up_to_incl_t, clns_arrived = get_coalition_arrivals(t_cln, x_labels, k)

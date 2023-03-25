@@ -41,12 +41,12 @@ class CDForTransformer(ExplanationBaseForTransformer):
                 input_mask.to(self.gpu),
                 segment_ids.to(self.gpu),
             )
-        if not args.task == "tacred":
-            score = predict_and_explain_wrapper_unbatched(
+        return (
+            predict_and_explain_wrapper_unbatched(
                 self.model, input_ids, segment_ids, input_mask, region
             )
-        else:
-            score = predict_and_explain_wrapper_unbatched(
+            if args.task != "tacred"
+            else predict_and_explain_wrapper_unbatched(
                 self.model,
                 input_ids,
                 segment_ids,
@@ -55,7 +55,7 @@ class CDForTransformer(ExplanationBaseForTransformer):
                 normalizer=normalize_logit,
                 label=label,
             )
-        return score
+        )
 
 
 class SCDForTransformer(SOCForTransformer):
@@ -90,7 +90,7 @@ class SCDForTransformer(SOCForTransformer):
             ):
                 inp_lm[i] = self.tokenizer.vocab["[PAD]"]
 
-        if not args.task == "tacred":
+        if args.task != "tacred":
             inp_th = (
                 torch.from_numpy(
                     bert_id_to_lm_id(
@@ -192,7 +192,7 @@ class SCDForTransformer(SOCForTransformer):
         if self.nb_method == "ngram":
             mask_regions = self.get_ngram_mask_region(region, inp_flatten)
         else:
-            raise NotImplementedError("unknown method %s" % self.nb_method)
+            raise NotImplementedError(f"unknown method {self.nb_method}")
 
         total_len = int(inp_mask_flatten.sum())
         span_len = region[1] - region[0] + 1
@@ -209,12 +209,12 @@ class SCDForTransformer(SOCForTransformer):
                 input_mask.to(self.gpu),
                 segment_ids.to(self.gpu),
             )
-        if not args.task == "tacred":
-            score = predict_and_explain_wrapper_unbatched(
+        return (
+            predict_and_explain_wrapper_unbatched(
                 self.model, input_ids, segment_ids, input_mask, region
             )
-        else:
-            score = predict_and_explain_wrapper_unbatched(
+            if args.task != "tacred"
+            else predict_and_explain_wrapper_unbatched(
                 self.model,
                 input_ids,
                 segment_ids,
@@ -223,4 +223,4 @@ class SCDForTransformer(SOCForTransformer):
                 normalizer=normalize_logit,
                 label=label,
             )
-        return score
+        )

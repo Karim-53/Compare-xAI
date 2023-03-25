@@ -33,19 +33,16 @@ class StiExplainer(InteractionExplainer):
         """
         subsetsW = powerset(S)
 
-        set_indices = []
-        for W in subsetsW:
-            set_indices.append(tuple(set(W) | set(T)))
-
+        set_indices = [tuple(set(W) | set(T)) for W in subsetsW]
         scores_dict = self.batch_set_inference(
             set_indices, self.baseline, self.input, include_context=False
         )
         scores = scores_dict["scores"]
 
         att = 0
+        s = len(S)
         for i, W in enumerate(subsetsW):
             w = len(W)
-            s = len(S)
             att += (-1) ** (w - s) * scores[set_indices[i]]
 
         return att
@@ -86,10 +83,10 @@ class StiExplainer(InteractionExplainer):
                     Ss.append(S)
         elif main_effects:
             for i in range(num_features):
-                Ss.append(tuple([i]))
+                Ss.append((i, ))
 
         Z_set = set()
-        S_T_Z_dict = dict()
+        S_T_Z_dict = {}
         for S in Ss:
             subsetsW = powerset(S)
             S_T_Z_dict[S] = {}
@@ -100,10 +97,7 @@ class StiExplainer(InteractionExplainer):
                 ordering = np.random.permutation(list(range(num_features)))
                 ordering_dict = {ordering[i]: i for i in range(len(ordering))}
 
-                if len(S) == max_order:
-                    T = subset_before(S, ordering, ordering_dict)
-                else:
-                    T = []
+                T = subset_before(S, ordering, ordering_dict) if len(S) == max_order else []
                 T = tuple(T)
 
                 S_T_Z_dict[S][T] = []
@@ -136,7 +130,7 @@ class StiExplainer(InteractionExplainer):
         elif main_effects:
             res = []
             for i in range(num_features):
-                S = tuple([i])
+                S = (i, )
                 att = collect_att(S, S_T_Z_dict, Z_score_dict, num_features)
                 res.append(att)
             return np.array(res)

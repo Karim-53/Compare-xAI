@@ -30,7 +30,9 @@ def compact_layer(layers):
             score1, score2 = entry1[3], entry2[3]
             start1, stop1 = entry1[2] - len(entry1[1]) + 1, entry1[2]
             start2, stop2 = entry2[2] - len(entry2[1]) + 1, entry2[2]
-            if (stop2 - start2) - (stop1 - start1) == 1 and not score1 * score2 < 0:
+            if (stop2 - start2) - (
+                stop1 - start1
+            ) == 1 and score1 * score2 >= 0:
                 continue
         compact_layers[idx] = layer
         idx += 1
@@ -54,9 +56,8 @@ def plot_score_array(layers, score_array, sent_words):
     # ax.set_yticks(np.arange(len(y_ticks)))
     # ax.set_yticklabels(y_ticks)
     rgba = im.cmap(im.norm(im.get_array()))
-    cnt = 0
     if layers is not None:
-        for idx, i in enumerate(sorted(layers.keys())):
+        for cnt, i in enumerate(sorted(layers.keys())):
             for entry in layers[i]:
                 start, stop = entry[2] - len(entry[1]) + 1, entry[2]
                 for j in range(start, stop + 1):
@@ -70,7 +71,6 @@ def plot_score_array(layers, score_array, sent_words):
                         fontsize=11 if len(sent_words[j]) < 10 else 8,
                         color=color,
                     )
-            cnt += 1
     else:
         for i in range(score_array.shape[0]):
             for j in range(score_array.shape[1]):
@@ -114,7 +114,6 @@ def draw_tree_from_line(s, tree_s):
             entry = (layer, words, word_offset, score)
             word_offset += 1
             sent_words.append(words[0])
-            stack.append(entry)
         else:
             len_sum, max_layer = 0, -1
             while len_sum < len(words):
@@ -124,8 +123,7 @@ def draw_tree_from_line(s, tree_s):
                 stack.pop(-1)
             layer = max_layer + 1
             entry = (layer, words, word_offset - 1, score)
-            stack.append(entry)
-
+        stack.append(entry)
         if layer not in layers:
             layers[layer] = []
         layers[layer].append(entry)
@@ -150,32 +148,27 @@ def draw_tree_from_line(s, tree_s):
 def visualize_tree(result_path, model_name, method_name, tree_path):
     f = open(result_path)
     f2 = open(tree_path)
-    os.makedirs("figs/fig{}_{}".format(model_name, method_name), exist_ok=True)
+    os.makedirs(f"figs/fig{model_name}_{method_name}", exist_ok=True)
     for i, (line, tree_str) in enumerate(zip(f.readlines(), f2.readlines())):
         im, score_array = draw_tree_from_line(line, tree_str)
-        plt.savefig(
-            "figs/fig{}_{}/{}".format(model_name, method_name, i), bbox_inches="tight"
-        )
+        plt.savefig(f"figs/fig{model_name}_{method_name}/{i}", bbox_inches="tight")
         plt.close()
 
 
 def visualize_tab(tab_file_dir, model_name, method_name):
     f = open(tab_file_dir, "rb")
     data = pickle.load(f)
-    os.makedirs("figs/{}_{}".format(model_name, method_name), exist_ok=True)
+    os.makedirs(f"figs/{model_name}_{method_name}", exist_ok=True)
     for i, entry in enumerate(data):
         sent_words = entry["text"].split()
         score_array = entry["tab"]
-        label_name = entry["label"]
         if score_array.ndim == 1:
             score_array = score_array.reshape(1, -1)
         if score_array.shape[1] <= 400:
             im = plot_score_array(None, score_array, sent_words)
+            label_name = entry["label"]
             plt.title(label_name)
-            plt.savefig(
-                "figs/fig{}_{}/{}".format(model_name, method_name, i),
-                bbox_inches="tight",
-            )
+            plt.savefig(f"figs/fig{model_name}_{method_name}/{i}", bbox_inches="tight")
             plt.close()
 
 
@@ -190,7 +183,7 @@ if __name__ == "__main__":
              "if true, --file should be .txt",
         action="store_true",
     )
-    parser.add_argument("--gt_tree_path", default=".data/sst/trees/%s.txt" % "test")
+    parser.add_argument("--gt_tree_path", default='.data/sst/trees/test.txt')
     args = parser.parse_args()
     if not args.use_gt_trees:
         visualize_tab(args.file, args.model, args.method)

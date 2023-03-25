@@ -101,13 +101,9 @@ class LimeBase(object):
                 nonzero = coefs.T[i].nonzero()[0]
                 if len(nonzero) <= num_features:
                     break
-            used_features = nonzero
-            return used_features
+            return nonzero
         elif method == "auto":
-            if num_features <= 6:
-                n_method = "forward_selection"
-            else:
-                n_method = "highest_weights"
+            n_method = "forward_selection" if num_features <= 6 else "highest_weights"
             return self.feature_selection(data, labels, weights, num_features, n_method)
 
     def explain_instance_with_data(
