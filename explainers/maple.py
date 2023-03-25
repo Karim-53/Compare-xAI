@@ -248,8 +248,8 @@ class MAPLE:
                 lr_model = Ridge(alpha=regularization)
                 lr_model.fit(X_train_p, MR_train, weights)
                 lr_predictions[i] = lr_model.predict(X_val_p[i].reshape(1, -1))
-
-            rmse_curr = np.sqrt(mean_squared_error(lr_predictions, MR_val))
+            
+            rmse_curr = np.sqrt(mean_squared_error(lr_predictions.astype(float), MR_val.astype(float)))
 
             if rmse_curr < rmse_best:
                 rmse_best = rmse_curr

@@ -1,4 +1,5 @@
 import pandas as pd
+import sage
 
 from explainers.explainer_superclass import Explainer
 
@@ -44,7 +45,6 @@ The algorithm can be trapped in a potential infinite loop if we do not fine tune
         # self.input_names = input_names
         # Set up an imputer to handle missing features
         reference_max_len = min(16, len(X_reference))  # 512 was the default value but I for faster results we use 16
-        import sage
         imputer = sage.MarginalImputer(
             predict_func if predict_func is not None else trained_model,
             # it can convert some models into their predict_func :)
