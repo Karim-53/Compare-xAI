@@ -1,0 +1,23 @@
+name: Run Check CSV
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+        with:
+          submodules: 'recursive'
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+          cache: 'pip'
+      - run: pip install pandas
+      - name: check csv
+        shell: bash
+        run: |
+            python check_csv.py
+      
