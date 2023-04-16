@@ -157,7 +157,6 @@ if __name__ == "__main__":
         explainer_to_html(explainer_df_with_results)
 
     for explainer_class in valid_explainers:
-        # 'https://karim-53.github.io/Compare-xAI/explainers/'
         url = explainer_class.name + '.htm'
         print(f'<a href="{url}">{explainer_class.name}</a><br>')
     print('End')

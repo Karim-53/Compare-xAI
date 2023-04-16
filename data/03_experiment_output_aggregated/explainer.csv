@@ -71,7 +71,7 @@ RBShap: Random Baseline Shapley,0.25,to implement,sundararajan2020many,"BShap th
 SCD: Sampling Contextual Decomposition,0.0,,,,,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
-SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shapr.py,"
+SHAPR,0.25,to implement,,implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,Compare-xAI/blob/main/explainers/shapr.py,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
 SOC: Sampling Occlusion,0.0,,,,,,"
@@ -100,17 +100,17 @@ Multi-way ANOVA exists to detect interactions of higher-orders combinations, not
 A significant problem with individual testing methods is that they require an exponentially growing number of
 tests as the desired interaction order increases. Not only is this approach intractable, but also has a high
 chance of generating false positives or a high false discovery rate (Benjamini and Hochberg, 1995) that arises
-from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf",,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/anova.py,"
+from multiple testing. see https://arxiv.org/pdf/2103.03103.pdf",,Compare-xAI/blob/main/explainers/anova.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,,9.80180549621582
-archipelago,1.0,1,tsang2020does,"separate the input features into sets. all features inside a set interact, and there is no interaction outside a set. ArchAttribute is an interaction attribution method. ArchDetect is the corresponding interaction detector.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/archipelago.py,"
+archipelago,1.0,1,tsang2020does,"separate the input features into sets. all features inside a set interact, and there is no interaction outside a set. ArchAttribute is an interaction attribution method. ArchDetect is the corresponding interaction detector.",https://github.com/mtsang/archipelago/blob/main/experiments/1.%20archdetect/1.%20synthetic_performance.ipynb,Compare-xAI/blob/main/explainers/archipelago.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,,0.22278923988342286
-baseline_random,1.0,1,liu2021synthetic,Output a random explanation. It is not a real explainer. It helps measure the baseline score and processing time.,created,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/explainer_superclass.py,"
+baseline_random,1.0,1,liu2021synthetic,Output a random explanation. It is not a real explainer. It helps measure the baseline score and processing time.,created,Compare-xAI/blob/main/explainers/explainer_superclass.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -121,14 +121,14 @@ baseline_random,1.0,1,liu2021synthetic,Output a random explanation. It is not a 
 breakdown,0.25,to implement,staniak2018explanations,approximate the shapley values (see https://christophm.github.io/interpretable-ml-book/shapley.html#software-and-alternatives-4= ) implemented in liu2021synthetic see https://github.com/abacusai/xai-bench,,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
-exact_shapley_values,1.0,1,shapley1953quota,"is a permutation-based xAI algorithm following a game theory approach: Iteratively Order the features randomly, then add them to the input one at a time following this order, and calculate their expected marginal contribution \citep{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper.",https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+exact_shapley_values,1.0,1,shapley1953quota,"is a permutation-based xAI algorithm following a game theory approach: Iteratively Order the features randomly, then add them to the input one at a time following this order, and calculate their expected marginal contribution \citep{sundararajan2020many}. The output is unique given a set of constrains defined in the original paper.",https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature importance (global explanation)",False,True,False,True,True,True,"
 			 - A reference dataset (input only)
 			 - The model's predict function",False,False,False,True,False,True,False,False,831.0754036536583
-kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise \citep{janzing2020feature}.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a constant noise \citep{janzing2020feature}.,https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -136,7 +136,7 @@ kernel_shap,0.75,1,lundberg2017unified,it approximates the Shapley values with a
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
 			 - A reference dataset (input only)
 			 - The model's predict function",False,False,False,True,False,True,False,False,328.41066462853377
-lime,0.5,1,ribeiro2016should,it explains the model locally by generating an interpretable model approximating the original one.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/lime.py,"
+lime,0.5,1,ribeiro2016should,it explains the model locally by generating an interpretable model approximating the original one.,,Compare-xAI/blob/main/explainers/lime.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -149,7 +149,7 @@ lime,0.5,1,ribeiro2016should,it explains the model locally by generating an inte
 lofo f importance,,,,,to implement. it retrain the model   https://github.com/aerdem4/lofo-importance,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
-maple,0.75,1,plumb2018model,is a supervised neighborhood approach that combines ideas from local linear models and ensembles of decision trees \citep{plumb2018model}.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/maple.py,"
+maple,0.75,1,plumb2018model,is a supervised neighborhood approach that combines ideas from local linear models and ensembles of decision trees \citep{plumb2018model}.,,Compare-xAI/blob/main/explainers/maple.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -166,10 +166,10 @@ from features to common hidden units as a way to automatically detect which feat
 dependencies on one another. Later work Tsang et al. (2020a) uses NID to train a new network with
 additional ‘cross-features’ from the detected interactions to actually boost the deep networks performance. Given the popularity of deep learning, the prospect of improving deep networks’ performance
 through understanding feature interactions warrants further investigation into this re-emerging topic
-of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf ",,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/neural_interaction_detection.py,"
+of feature interactions. see https://arxiv.org/pdf/2103.03103.pdf ",,Compare-xAI/blob/main/explainers/neural_interaction_detection.py,"
 			 - Neural networks","
 			 - Feature interaction (local explanation)",False,False,True,False,False,True,,,,,,,,,,
-partition,,1,lundberg2017unified,Partition SHAP approximates the Shapley values using a hierarchy of feature coalitions.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+partition,,1,lundberg2017unified,Partition SHAP approximates the Shapley values using a hierarchy of feature coalitions.,https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -177,7 +177,7 @@ partition,,1,lundberg2017unified,Partition SHAP approximates the Shapley values 
 			 - Feature attribution (local explanation)",True,True,False,True,True,True,"
 			 - A reference dataset (input only)
 			 - The model's predict function",False,False,False,True,False,True,False,False,4.789775069554647
-permutation,,1,-,is a shuffle-based feature importance. It permutes the input data and compares it to the normal prediction,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+permutation,,1,-,is a shuffle-based feature importance. It permutes the input data and compares it to the normal prediction,https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -186,7 +186,7 @@ permutation,,1,-,is a shuffle-based feature importance. It permutes the input da
 			 - input_features
 			 - The model's predict function
 			 - A reference dataset (input only)",False,False,False,True,True,True,False,False,20.17956856580881
-permutation_partition,,1,-,is a combination of permutation and partition algorithm from shap.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+permutation_partition,,1,-,is a combination of permutation and partition algorithm from shap.,https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -195,13 +195,13 @@ permutation_partition,,1,-,is a combination of permutation and partition algorit
 			 - input_features
 			 - The model's predict function
 			 - A reference dataset (input only)",False,False,False,True,True,True,False,False,19.93779864678016
-saabas,0.75,1,-,explain tree based models by decomposing each prediction into bias and feature contribution components,https://github.com/andosa/treeinterpreter/,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/saabas.py,"
+saabas,0.75,1,-,explain tree based models by decomposing each prediction into bias and feature contribution components,https://github.com/andosa/treeinterpreter/,Compare-xAI/blob/main/explainers/saabas.py,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
 			 - AI model's structure",False,True,False,False,False,False,False,False,0.015613335829514723
 sage,1.0,1,covert2020understanding,"Compute feature importance based on Shapley value but faster. The features that are most critical for the model to make good predictions will have large importance and only features that make the model's performance worse will have negative values.
-Disadvantage: The convergence of the algorithm depends on 2 parameters: `thres` and `gap`. The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/sage_explainer.py,"
+Disadvantage: The convergence of the algorithm depends on 2 parameters: `thres` and `gap`. The algorithm can be trapped in a potential infinite loop if we do not fine tune them.",https://github.com/iancovert/sage,Compare-xAI/blob/main/explainers/sage_explainer.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -215,12 +215,12 @@ shap is enable to explain dummy features correctly (one hot encoding),,to implem
 shap wrong local explanation,,to implement,,,see fig 1  in https://arxiv.org/pdf/2106.14648.pdf,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
-shap_interaction,0.75,1,owen1972multilinear,SI: Shapley Interaction Index.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_interaction.py,"
+shap_interaction,0.75,1,owen1972multilinear,SI: Shapley Interaction Index.,,Compare-xAI/blob/main/explainers/shap_interaction.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
 			 - Feature interaction (local explanation)",False,False,True,True,True,True,,,,,,,,,,33.944657754898074
-shapley_taylor_interaction,0.75,1,sundararajan2020shapley,STI: Shapley Taylor Interaction Index.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shapley_taylor_interaction.py,"
+shapley_taylor_interaction,0.75,1,sundararajan2020shapley,STI: Shapley Taylor Interaction Index.,,Compare-xAI/blob/main/explainers/shapley_taylor_interaction.py,"
 			 - Any AI model (model agnostic xAI algorithms are independent of the AI implementation)
 			 - Tree-based ML
 			 - Neural networks","
@@ -228,13 +228,13 @@ shapley_taylor_interaction,0.75,1,sundararajan2020shapley,STI: Shapley Taylor In
 todo,,0,,,https://arxiv.org/pdf/2006.04750.pdf,,"
 			 - ","
 			 - ",,,,,,,,,,,,,,,,
-tree_shap,0.5,1,lundberg2018consistent,accurately compute the shap values using the structure of the tree model.,,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+tree_shap,0.5,1,lundberg2018consistent,accurately compute the shap values using the structure of the tree model.,,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"
 			 - AI model's structure
 			 - A reference dataset (input only)",False,True,False,False,False,True,False,False,0.012661475401658278
-tree_shap_approximation,,1,-,is a faster implementation of shap reserved for tree based models.,https://github.com/slundberg/shap,https://github.com/Karim-53/Compare-xAI/blob/main/explainers/shap_explainer.py,"
+tree_shap_approximation,,1,-,is a faster implementation of shap reserved for tree based models.,https://github.com/slundberg/shap,Compare-xAI/blob/main/explainers/shap_explainer.py,"
 			 - Tree-based ML","
 			 - Feature importance (global explanation)
 			 - Feature attribution (local explanation)",True,True,False,False,True,False,"

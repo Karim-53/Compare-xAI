@@ -7,7 +7,6 @@
 
 See our [NeurIPS paper][arxiv] (under review).
 
-You can check directly the benchmark results at https://karim-53.github.io/cxai/
 
 
 # Table of Content
@@ -63,13 +62,12 @@ Now run the following command to aggregate results in a more human-readable form
 ```shell
 python src/aggregate_data.py
 ```
-This also generate an SQLite database used in https://karim-53.github.io/cxai/
 `data/04_sql/database` aggregate all data: information about tests, explainers, papers, and results of all experiments.
 
 **Tip**: Reduce the list of explainers to test by changing `valid_explainers` in `src/explainer.py`. Same for the tests, see `src/test.py`.
 
 ## 2.3 Computing resources
-Experiments were run over a normal computer (see [CPU-Z report](https://karim-53.github.io/cxai/CPU-Z.html)) without a GPU.
+Experiments were run over a normal computer (see CPU-Z report) without a GPU.
 
 Total execution time: 4h 18min 18sec
 
@@ -129,7 +127,7 @@ It is the choice of the data scientist to use a general xAI with medium performa
 
 ### How to reproduce experiment ?
 
-The full original code is made available in this repo. Plus you can find a summary of the experiment setup in https://github.com/Karim-53/Compare-xAI/blob/main/data/03_experiment_output_aggregated/test.csv
+The full original code is made available in this repo. Plus you can find a summary of the experiment setup in Compare-xAI/blob/main/data/03_experiment_output_aggregated/test.csv
  
 ## Reference
 The source code was inspired from https://github.com/abacusai/xai-bench and https://github.com/mtsang/archipelago
@@ -138,11 +136,6 @@ The source code was inspired from https://github.com/abacusai/xai-bench and http
 Please cite our work if you use code from this repo:
 
 ```bibtex
-@article{belaid2022we,
-  title={Do We Need Another Explainable AI Method? Toward Unifying Post-hoc XAI Evaluation Methods into an Interactive and Multi-dimensional Benchmark},
-  author={Belaid, Mohamed Karim and H{\"u}llermeier, Eyke and Rabus, Maximilian and Krestel, Ralf},
-  journal={arXiv preprint arXiv:2207.14160},
-  year={2022}
-}
+
 ```
 [arxiv]: https://arxiv.org/abs/2207.14160
