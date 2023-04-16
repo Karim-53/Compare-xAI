@@ -5,8 +5,6 @@
 
 `Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different tests. 
 
-See our [NeurIPS paper][arxiv] (under review).
-
 
 
 # Table of Content
