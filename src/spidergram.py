@@ -8,11 +8,19 @@ data = {
     'Fidelity': [48, 73, 73, 73, 50, 73, 60, 100, 100, 66, 82, 33, 42],
     'Fragility': [6, 56, 56, 56, 100, 56, 100, 100, 56, 100, 100, 56, 48],
     'Stability': [11, 99, 99, 99, 74, 99, 99, 73, 99, 93, 99, 100, 98],
-    'Stress': [50, 55, 55, 50, np.nan, np.nan, np.nan, np.nan, 100, 100, 100, 55, np.nan]
+    'Stress': [50, 55, 55, 50, np.nan, np.nan, np.nan, np.nan, 100, 100, 100, 55, np.nan],
     # 'Time per Test': [0.0075, 9, 12, 7, 0.0057, 1906, 0.0004, 0.0012, 121, 18, 259, 56, 1947],
-    # 'Completed Tests': [11, 11, 11, 11, 8, 11, 8, 8, 10, 9, 10, 11, 11]
+    'Portability': [11, 11, 11, 11, 8, 11, 8, 8, 10, 9, 10, 11, 11]
 }
 df = pd.DataFrame(data).fillna(0)
+df['Portability'] = df['Portability']/df['Portability'].max()*100
+
+# df['Time per Test'] = df['Time per Test']/df['Time per Test'].max()*100
+
+
+# Set the default palette to one with at least 13 colors
+import seaborn as sns
+sns.set_palette("tab20", 13)
 
 # Number of variables we're plotting.
 num_vars = len(df.columns) - 1
@@ -26,7 +34,7 @@ angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 angles += angles[:1]
 
 # ax = plt.subplot(polar=True)
-fig, ax = plt.subplots(subplot_kw=dict(polar=True))
+fig, ax = plt.subplots(figsize=(8,5), subplot_kw=dict(polar=True))
 
 # Helper function to plot each xAI method on the spider chart.
 def add_to_spider_chart(ax, angles, data_row, color):
@@ -79,12 +87,13 @@ from math import pi
 #     ax.fill(angles, values, 'b', alpha=0.1)
 
 # Add legend
-plt.legend(loc='upper right', bbox_to_anchor=(2.1, 1.))
+# plt.legend(loc='upper right', bbox_to_anchor=(2.1, 1.))
+plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncols=4)
 plt.tight_layout(w_pad=5)
 
 
 # plt.title('Box plot of test status per xAI algorithm.')
 
+plt.savefig('spider.pdf', bbox_inches="tight")
+plt.savefig('spider.png', bbox_inches="tight")
 plt.show()
-# plt.savefig('boxplot.pdf', bbox_inches="tight")
-# plt.savefig('boxplot.png', bbox_inches="tight")
