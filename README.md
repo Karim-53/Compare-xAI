@@ -1,13 +1,29 @@
 <p align="center"><img src="img/banner/banner.png"  /></p>
 
-[![Python Version](https://img.shields.io/badge/python-v3.8.3-blue)]()
+<p align="center">
+  <b>A unified benchmark to evaluate and compare Explainable AI (xAI) methods — through functional tests, not vibes.</b>
+</p>
 
+<p align="center">
+  <a href="https://karim-53.github.io/cxai/"><img alt="Live benchmark" src="https://img.shields.io/badge/live-benchmark-brightgreen"></a>
+  <a href="https://arxiv.org/abs/2207.14160"><img alt="Paper" src="https://img.shields.io/badge/paper-arXiv%3A2207.14160-b31b1b"></a>
+  <img alt="Python Version" src="https://img.shields.io/badge/python-3.8+-blue">
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-green"></a>
+</p>
 
-`Compare-xAI` is a library for benchmarking feature attribution / feature importance Explainable AI techniques using different tests. 
+`Compare-xAI` benchmarks feature-attribution / feature-importance explainability methods (SHAP, LIME, MAPLE, Archipelago, and more) against a curated battery of **functional unit tests**. Each test encodes one concrete end-user expectation, so instead of trusting an explainer blindly you get a reproducible, evidence-based comparison of which method to use, and when.
 
-See our [NeurIPS paper][arxiv] (under review).
+### 🔎 Explore the results
 
-You can check directly the benchmark results at https://karim-53.github.io/cxai/
+**➡️ Interactive benchmark: [karim-53.github.io/cxai](https://karim-53.github.io/cxai/)** — sort explainers by comprehensibility, portability, and runtime.
+
+<p align="center"><img src="img/paper/benchmark.png" width="720" /></p>
+
+### ✨ Highlights
+- 🧪 **Functional testing for ML** — black-box tests that each verify a single, human-understandable requirement of an explanation.
+- 📊 **3 comparable metrics** — Comprehensibility, Portability, and Average execution time (see [FAQ](#which-metrics-are-used-to-evaluate-an-xai-algorithm)).
+- 🧩 **Extensible** — add a new explainer or a new test in ~4 steps (see [Contributing](#3-contributing)).
+- 🔁 **Fully reproducible** — all data, results, and an SQLite export shipped in `data/`; the whole suite runs on a CPU in ~4h.
 
 
 # Table of Content
