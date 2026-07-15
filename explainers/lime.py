@@ -39,7 +39,7 @@ class LimeTabular:
         self.explainer = lime.lime_tabular.LimeTabularExplainer(data, mode=mode,
                                                                 kernel_width=kernel_width * np.sqrt(data.shape[-1]))
 
-        out = self.model(data[0:1])
+        out = self.model(data[:1])
         if len(out.shape) == 1:
             self.out_dim = 1
             self.flat_out = True
@@ -51,7 +51,7 @@ class LimeTabular:
 
                 self.model = pred
         else:
-            self.out_dim = self.model(data[0:1]).shape[1]
+            self.out_dim = self.model(data[:1]).shape[1]
             self.flat_out = False
 
     def attributions(self, X, nsamples=5000, num_features=None):
@@ -60,7 +60,7 @@ class LimeTabular:
         if str(type(X)).endswith("pandas.core.frame.DataFrame'>"):
             X = X.values
 
-        out = [np.zeros(X.shape) for j in range(self.out_dim)]
+        out = [np.zeros(X.shape) for _ in range(self.out_dim)]
         for i in tqdm(range(X.shape[0])):
             exp = self.explainer.explain_instance(
                 X[i], self.model, labels=range(self.out_dim), num_features=num_features

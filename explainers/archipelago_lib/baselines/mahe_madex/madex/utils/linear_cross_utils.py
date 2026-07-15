@@ -66,8 +66,6 @@ def fit_linear_cross_models(
     active_interaction_list = []
     hierarchical_interaction_attributions = []
     active_interactions = []
-    prediction_scores = []
-
     break_out = False
 
     ## Build univariate gam
@@ -82,8 +80,7 @@ def fit_linear_cross_models(
     Xs_base = copy.deepcopy(Xs)
 
     prediction_score = r_sq
-    prediction_scores.append(r_sq_test)
-
+    prediction_scores = [r_sq_test]
     best_score = prediction_score
 
     univariate_attributions = (univariates, clf.coef_[0])
@@ -137,26 +134,26 @@ def fit_linear_cross_models(
         prediction_score = r_sq
 
         performance_improvement = prediction_score > best_score
-        if (not stopping) or (
-                stopping
-                and (performance_improvement or patience_counter < hierarchy_patience)
+        if (
+            stopping
+            and not performance_improvement
+            and patience_counter >= hierarchy_patience
         ):
-            interaction_attributions = []
-            for inter_i, inter in enumerate(active_interactions2):
-                w = clf.coef_[0, inter_i + n_features]
-                interaction_attributions.append((inter, w))
-            hierarchical_interaction_attributions.append(interaction_attributions)
-            prediction_scores.append(r_sq_test)
-
-            if stopping:
-                if performance_improvement:
-                    patience_counter = 0
-                    best_score = prediction_score
-                else:
-                    patience_counter += 1
-        else:
             break
 
+        interaction_attributions = [
+            (inter, clf.coef_[0, inter_i + n_features])
+            for inter_i, inter in enumerate(active_interactions2)
+        ]
+        hierarchical_interaction_attributions.append(interaction_attributions)
+        prediction_scores.append(r_sq_test)
+
+        if stopping:
+            if performance_improvement:
+                patience_counter = 0
+                best_score = prediction_score
+            else:
+                patience_counter += 1
         if flat:
             return interaction_attributions, univariate_attributions, prediction_score
 

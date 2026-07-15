@@ -57,7 +57,7 @@ class MapleExplainer:
         if str(type(X)).endswith("pandas.core.frame.DataFrame'>"):
             X = X.values
 
-        out = [np.zeros(X.shape) for j in range(self.out_dim)]
+        out = [np.zeros(X.shape) for _ in range(self.out_dim)]
         for i in tqdm(range(X.shape[0])):
             exp = self.explainer.explain(X[i])["coefs"]
             out[0][i, :] = exp[1:]
@@ -113,12 +113,12 @@ class TreeMapleExplainer:
         self.data = data
         self.data_mean = self.data.mean(0)
 
-        out = self.model.predict(data[0:1])
+        out = self.model.predict(data[:1])
         if len(out.shape) == 1:
             self.out_dim = 1
             self.flat_out = True
         else:
-            self.out_dim = self.model.predict(data[0:1]).shape[1]
+            self.out_dim = self.model.predict(data[:1]).shape[1]
             self.flat_out = False
 
         # _, X_valid, _, y_valid = train_test_split(data, self.model.predict(data), test_size=0.2, random_state=0)
@@ -137,7 +137,7 @@ class TreeMapleExplainer:
         if str(type(X)).endswith("pandas.core.frame.DataFrame'>"):
             X = X.values
 
-        out = [np.zeros(X.shape) for j in range(self.out_dim)]
+        out = [np.zeros(X.shape) for _ in range(self.out_dim)]
         for i in range(X.shape[0]):
             exp = self.explainer.explain(X[i])["coefs"]
             out[0][i, :] = exp[1:]
@@ -286,17 +286,12 @@ class MAPLE:
         # Get the model coeficients
         coefs = np.zeros(self.num_features + 1)
         coefs[0] = lr_model.intercept_
-        coefs[np.sort(mostImpFeats[0: self.retain]) + 1] = lr_model.coef_
+        coefs[np.sort(mostImpFeats[:self.retain]) + 1] = lr_model.coef_
 
         # Get the prediction at this point
         prediction = lr_model.predict(x_p.reshape(1, -1))
 
-        out = {}
-        out["weights"] = weights
-        out["coefs"] = coefs
-        out["pred"] = prediction
-
-        return out
+        return {"weights": weights, "coefs": coefs, "pred": prediction}
 
     def predict(self, X):
         n = X.shape[0]
@@ -362,7 +357,6 @@ class Maple(Explainer, name='maple'):
             #     is_tree = True  # Unfortunately it is not working :(  # todo [after submission] investigate TreeMapleExplainer
         except:
             print('Maple: enable to detect if the model is a tree or not. Suppose it is not a tree...')
-            pass
         if is_tree:
             self.explainer = TreeMapleExplainer(self.trained_model, self.X, **kwargs)
         else:

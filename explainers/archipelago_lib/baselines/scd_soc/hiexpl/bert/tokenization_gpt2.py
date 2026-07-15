@@ -113,30 +113,18 @@ class GPT2Tokenizer(object):
             resolved_merges_file = cached_path(merges_file, cache_dir=cache_dir)
         except EnvironmentError:
             logger.error(
-                "Model name '{}' was not found in model name list ({}). "
-                "We assumed '{}' was a path or url but couldn't find files {} and {} "
-                "at this path or url.".format(
-                    pretrained_model_name_or_path,
-                    ", ".join(PRETRAINED_VOCAB_ARCHIVE_MAP.keys()),
-                    pretrained_model_name_or_path,
-                    vocab_file,
-                    merges_file,
-                )
+                f"""Model name '{pretrained_model_name_or_path}' was not found in model name list ({", ".join(PRETRAINED_VOCAB_ARCHIVE_MAP.keys())}). We assumed '{pretrained_model_name_or_path}' was a path or url but couldn't find files {vocab_file} and {merges_file} at this path or url."""
             )
             return None
         if resolved_vocab_file == vocab_file and resolved_merges_file == merges_file:
-            logger.info("loading vocabulary file {}".format(vocab_file))
-            logger.info("loading merges file {}".format(merges_file))
+            logger.info(f"loading vocabulary file {vocab_file}")
+            logger.info(f"loading merges file {merges_file}")
         else:
             logger.info(
-                "loading vocabulary file {} from cache at {}".format(
-                    vocab_file, resolved_vocab_file
-                )
+                f"loading vocabulary file {vocab_file} from cache at {resolved_vocab_file}"
             )
             logger.info(
-                "loading merges file {} from cache at {}".format(
-                    merges_file, resolved_merges_file
-                )
+                f"loading merges file {merges_file} from cache at {resolved_merges_file}"
             )
         if (
                 pretrained_model_name_or_path
@@ -148,9 +136,7 @@ class GPT2Tokenizer(object):
                 pretrained_model_name_or_path
             ]
             kwargs["max_len"] = min(kwargs.get("max_len", int(1e12)), max_len)
-        # Instantiate tokenizer.
-        tokenizer = cls(resolved_vocab_file, resolved_merges_file, *inputs, **kwargs)
-        return tokenizer
+        return cls(resolved_vocab_file, resolved_merges_file, *inputs, **kwargs)
 
     def __init__(self, vocab_file, merges_file, errors="replace", max_len=None):
         self.max_len = max_len if max_len is not None else int(1e12)
@@ -222,17 +208,12 @@ class GPT2Tokenizer(object):
             )
         if len(bpe_tokens) > self.max_len:
             logger.warning(
-                "Token indices sequence length is longer than the specified maximum "
-                " sequence length for this OpenAI GPT-2 model ({} > {}). Running this"
-                " sequence through the model will result in indexing errors".format(
-                    len(bpe_tokens), self.max_len
-                )
+                f"Token indices sequence length is longer than the specified maximum  sequence length for this OpenAI GPT-2 model ({len(bpe_tokens)} > {self.max_len}). Running this sequence through the model will result in indexing errors"
             )
         return bpe_tokens
 
     def decode(self, tokens):
         text = "".join([self.decoder[token] for token in tokens])
-        text = bytearray([self.byte_decoder[c] for c in text]).decode(
+        return bytearray([self.byte_decoder[c] for c in text]).decode(
             "utf-8", errors=self.errors
         )
-        return text

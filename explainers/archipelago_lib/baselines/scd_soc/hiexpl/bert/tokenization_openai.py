@@ -102,30 +102,18 @@ class OpenAIGPTTokenizer(object):
             resolved_merges_file = cached_path(merges_file, cache_dir=cache_dir)
         except EnvironmentError:
             logger.error(
-                "Model name '{}' was not found in model name list ({}). "
-                "We assumed '{}' was a path or url but couldn't find files {} and {} "
-                "at this path or url.".format(
-                    pretrained_model_name_or_path,
-                    ", ".join(PRETRAINED_VOCAB_ARCHIVE_MAP.keys()),
-                    pretrained_model_name_or_path,
-                    vocab_file,
-                    merges_file,
-                )
+                f"""Model name '{pretrained_model_name_or_path}' was not found in model name list ({", ".join(PRETRAINED_VOCAB_ARCHIVE_MAP.keys())}). We assumed '{pretrained_model_name_or_path}' was a path or url but couldn't find files {vocab_file} and {merges_file} at this path or url."""
             )
             return None
         if resolved_vocab_file == vocab_file and resolved_merges_file == merges_file:
-            logger.info("loading vocabulary file {}".format(vocab_file))
-            logger.info("loading merges file {}".format(merges_file))
+            logger.info(f"loading vocabulary file {vocab_file}")
+            logger.info(f"loading merges file {merges_file}")
         else:
             logger.info(
-                "loading vocabulary file {} from cache at {}".format(
-                    vocab_file, resolved_vocab_file
-                )
+                f"loading vocabulary file {vocab_file} from cache at {resolved_vocab_file}"
             )
             logger.info(
-                "loading merges file {} from cache at {}".format(
-                    merges_file, resolved_merges_file
-                )
+                f"loading merges file {merges_file} from cache at {resolved_merges_file}"
             )
         if (
                 pretrained_model_name_or_path
@@ -137,9 +125,7 @@ class OpenAIGPTTokenizer(object):
                 pretrained_model_name_or_path
             ]
             kwargs["max_len"] = min(kwargs.get("max_len", int(1e12)), max_len)
-        # Instantiate tokenizer.
-        tokenizer = cls(resolved_vocab_file, resolved_merges_file, *inputs, **kwargs)
-        return tokenizer
+        return cls(resolved_vocab_file, resolved_merges_file, *inputs, **kwargs)
 
     def __init__(self, vocab_file, merges_file, special_tokens=None, max_len=None):
         try:
@@ -179,23 +165,23 @@ class OpenAIGPTTokenizer(object):
             self.special_tokens = {}
             self.special_tokens_decoder = {}
             return
-        self.special_tokens = dict(
-            (tok, len(self.encoder) + i) for i, tok in enumerate(special_tokens)
-        )
+        self.special_tokens = {
+            tok: len(self.encoder) + i for i, tok in enumerate(special_tokens)
+        }
         self.special_tokens_decoder = {v: k for k, v in self.special_tokens.items()}
         if self.fix_text is None:
             # Using BERT's BasicTokenizer: we can update the tokenizer
             self.nlp.never_split = special_tokens
-        logger.info("Special tokens {}".format(self.special_tokens))
+        logger.info(f"Special tokens {self.special_tokens}")
 
     def bpe(self, token):
-        word = tuple(token[:-1]) + (token[-1] + "</w>",)
+        word = tuple(token[:-1]) + (f"{token[-1]}</w>", )
         if token in self.cache:
             return self.cache[token]
         pairs = get_pairs(word)
 
         if not pairs:
-            return token + "</w>"
+            return f"{token}</w>"
 
         while True:
             bigram = min(pairs, key=lambda pair: self.bpe_ranks.get(pair, float("inf")))
@@ -238,14 +224,12 @@ class OpenAIGPTTokenizer(object):
             # Using BERT's BasicTokenizer
             text = self.nlp.tokenize(text)
             for token in text:
-                split_tokens.extend([t for t in self.bpe(token).split(" ")])
+                split_tokens.extend(list(self.bpe(token).split(" ")))
         else:
             # Using SpaCy & ftfy (original tokenization process of OpenAI GPT)
             text = self.nlp(text_standardize(self.fix_text(text)))
             for token in text:
-                split_tokens.extend(
-                    [t for t in self.bpe(token.text.lower()).split(" ")]
-                )
+                split_tokens.extend(list(self.bpe(token.text.lower()).split(" ")))
         return split_tokens
 
     def convert_tokens_to_ids(self, tokens):
@@ -265,11 +249,7 @@ class OpenAIGPTTokenizer(object):
                 ids.append(self.encoder.get(token, 0))
         if len(ids) > self.max_len:
             logger.warning(
-                "Token indices sequence length is longer than the specified maximum "
-                " sequence length for this OpenAI GPT model ({} > {}). Running this"
-                " sequence through the model will result in indexing errors".format(
-                    len(ids), self.max_len
-                )
+                f"Token indices sequence length is longer than the specified maximum  sequence length for this OpenAI GPT model ({len(ids)} > {self.max_len}). Running this sequence through the model will result in indexing errors"
             )
         return ids
 

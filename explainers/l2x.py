@@ -49,7 +49,7 @@ def create_rank(scores, k):
     scores = abs(scores)
     n, d = scores.shape
     ranks = []
-    for i, score in enumerate(scores):
+    for score in scores:
         # Random permutation to avoid bias due to equal weights.
         idx = np.random.permutation(d)
         permutated_weights = score[idx]
@@ -57,7 +57,7 @@ def create_rank(scores, k):
         rank = permutated_rank[np.argsort(idx)]
 
         ranks.append(rank)
-    print("n: {}, d: {}, scores: {}, ranks: {}".format(n, d, scores[0:4], ranks[0:4]))
+    print(f"n: {n}, d: {d}, scores: {scores[:4]}, ranks: {ranks[:4]}")
     return np.array(ranks)
 
 
@@ -131,7 +131,7 @@ class Sample_Concrete(Layer):
 
 
 def get_filepath():
-    currentLogs = glob.glob(f"results/saved_models/*-L2X.hdf5")
+    currentLogs = glob.glob("results/saved_models/*-L2X.hdf5")
     numList = [0]
     for i in currentLogs:
         i = os.path.splitext(i)[0]
@@ -314,8 +314,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     median_ranks, exp_time, train_time = L2X(datatype=args.datatype, train=args.train)
-    output = "datatype:{}, mean:{}, sd:{}, train time:{}s, explain time:{}s \n".format(
-        args.datatype, np.mean(median_ranks), np.std(median_ranks), train_time, exp_time
-    )
+    output = f"datatype:{args.datatype}, mean:{np.mean(median_ranks)}, sd:{np.std(median_ranks)}, train time:{train_time}s, explain time:{exp_time}s \n"
 
     print(output)

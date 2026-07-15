@@ -9,7 +9,7 @@ args = get_args()
 
 def CD_gpu(batch, model, intervals, hist_states, gpu):
     # if task is tacred, then the word vecs is more complicated
-    if not args.task == "tacred":
+    if args.task != "tacred":
         word_vecs = model.embed(batch.text)[:, 0]
         lstm_module = model.lstm
     else:
@@ -188,7 +188,7 @@ def torch_mul(param, h):
 
 
 def get_lstm_states(batch, model, gpu):
-    if not args.task == "tacred":
+    if args.task != "tacred":
         word_vecs = model.embed(batch.text)
         lstm_module = model.lstm
     else:
@@ -253,7 +253,7 @@ def get_lstm_states(batch, model, gpu):
         prev_h = h
         prev_c = c
 
-    states = {
+    return {
         "i": i_states,
         "g": g_states,
         "f": f_states,
@@ -265,8 +265,6 @@ def get_lstm_states(batch, model, gpu):
         "temp_c": temp_c_states,
         "tanhc": tanhc_states,
     }
-
-    return states
 
 
 def decomp_activation_two_with_states(a, b, activation, states, state_key, t):

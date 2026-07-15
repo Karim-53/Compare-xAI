@@ -82,7 +82,7 @@ def do_train():
             answer = model(batch)
 
             # calculate accuracy of predictions in the current batch
-            label = batch.label if not config.use_gpu else batch.label.cuda()
+            label = batch.label.cuda() if config.use_gpu else batch.label
             n_correct += (
                     torch.max(answer, 1)[1].view(label.size()).data == label.data
             ).sum()
@@ -107,7 +107,7 @@ def do_train():
                 )
                 )
                 torch.save(model.state_dict(), snapshot_path)
-                for f in glob.glob(snapshot_prefix + "*"):
+                for f in glob.glob(f"{snapshot_prefix}*"):
                     if f != snapshot_path:
                         os.remove(f)
 
@@ -124,11 +124,7 @@ def do_train():
                 with torch.no_grad():
                     for dev_batch_idx, dev_batch in enumerate(dev_iter):
                         answer = model(dev_batch)
-                        dev_label = (
-                            dev_batch.label
-                            if not config.use_gpu
-                            else dev_batch.label.cuda()
-                        )
+                        dev_label = dev_batch.label.cuda() if config.use_gpu else dev_batch.label
                         pred = torch.max(answer, 1)[1]
                         n_dev_correct += (
                                 pred.view(dev_label.size()).data == dev_label.data
@@ -161,23 +157,18 @@ def do_train():
                 if dev_acc > best_dev_acc:
                     best_dev_acc = dev_acc
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
-                    snapshot_path = (
-                            snapshot_prefix
-                            + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
-                        dev_acc, dev_loss.item(), iterations
-                    )
-                    )
+                    snapshot_path = f"{snapshot_prefix}_devacc_{dev_acc}_devloss_{dev_loss.item()}_iter_{iterations}_model.pt"
 
                     # save model, delete previous 'best_snapshot' files
                     torch.save(model.state_dict(), snapshot_path)
-                    for f in glob.glob(snapshot_prefix + "*"):
+                    for f in glob.glob(f"{snapshot_prefix}*"):
                         if f != snapshot_path:
                             os.remove(f)
 
-                # if iterations > 15000 and dev_acc < prev_dev_acc:
-                #    args.lr *= 0.9
-                #    change_lr(opt, args.lr)
-                #    prev_dev_acc = dev_acc
+                            # if iterations > 15000 and dev_acc < prev_dev_acc:
+                            #    args.lr *= 0.9
+                            #    change_lr(opt, args.lr)
+                            #    prev_dev_acc = dev_acc
             elif iterations % args.log_every == 0:
                 # print progress message
                 print(
@@ -208,7 +199,7 @@ def do_test():
         answer = model(batch)
 
         # calculate accuracy of predictions in the current batch
-        label = batch.label if not config.use_gpu else batch.label.cuda()
+        label = batch.label.cuda() if config.use_gpu else batch.label
         n_correct += (
                 torch.max(answer, 1)[1].view(label.size()).data == label.data
         ).sum()

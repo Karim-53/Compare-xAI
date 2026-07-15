@@ -49,9 +49,7 @@ class PathExplainerTorch(object):
         sample_indices = np.random.choice(
             baseline.shape[0], size=number_to_draw, replace=replace
         )
-        ref_tensor = baseline[sample_indices, :]
-
-        return ref_tensor
+        return baseline[sample_indices, :]
 
     def _get_samples_input(self, input_tensor, baseline, num_samples, use_expectation):
         """
@@ -107,7 +105,7 @@ class PathExplainerTorch(object):
             scaled_inputs = [
                 reference_tensor
                 + (float(i) / num_samples) * (input_expand - reference_tensor)
-                for i in range(0, num_samples + 1)
+                for i in range(num_samples + 1)
             ]
             samples_input = torch.cat(scaled_inputs, dim=1)
 
@@ -118,8 +116,7 @@ class PathExplainerTorch(object):
 
     def _get_samples_delta(self, input_tensor, reference_tensor):
         input_expand_mult = input_tensor.unsqueeze(1)
-        sd = input_expand_mult - reference_tensor
-        return sd
+        return input_expand_mult - reference_tensor
 
     def _get_grads(self, samples_input, output_indices=None):
 
@@ -203,9 +200,7 @@ class PathExplainerTorch(object):
         )
         grad_tensor = self._get_grads(samples_input, output_indices)
         mult_grads = samples_delta * grad_tensor
-        attributions = mult_grads.mean(1)
-
-        return attributions
+        return mult_grads.mean(1)
 
     def interactions(
             self,
@@ -270,16 +265,8 @@ class PathExplainerTorch(object):
 
         ig_tensor = torch.zeros(samples_input.shape).float()
 
-        if use_expectation:
-            loop_num = inner_loop_nsamples
-        else:
-            loop_num = inner_loop_nsamples + 1
-
-        if verbose:
-            iterable = tqdm(range(loop_num))
-        else:
-            iterable = range(loop_num)
-
+        loop_num = inner_loop_nsamples if use_expectation else inner_loop_nsamples + 1
+        iterable = tqdm(range(loop_num)) if verbose else range(loop_num)
         for i in iterable:
 
             particular_slice = samples_input[:, i]
@@ -314,6 +301,4 @@ class PathExplainerTorch(object):
             interaction_tensor = interaction_mult_tensor * samples_delta
         else:
             interaction_tensor = interaction_mult_tensor * samples_delta.unsqueeze(2)
-        interactions = interaction_tensor.mean(1)
-
-        return interactions
+        return interaction_tensor.mean(1)

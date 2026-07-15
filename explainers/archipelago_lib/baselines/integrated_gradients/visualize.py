@@ -28,8 +28,7 @@ def linear_transform(
     transformed = (1 - low) * (np.abs(attributions) - e) / (m - e) + low
     transformed *= np.sign(attributions)
     transformed *= transformed >= low
-    transformed = np.clip(transformed, 0.0, 1.0)
-    return transformed
+    return np.clip(transformed, 0.0, 1.0)
 
 
 def compute_threshold_by_top_percentage(
@@ -44,10 +43,10 @@ def compute_threshold_by_top_percentage(
     sorted_attributions = np.sort(np.abs(flat_attributions))[::-1]
     cum_sum = 100.0 * np.cumsum(sorted_attributions) / attribution_sum
     threshold_idx = np.where(cum_sum >= percentage)[0][0]
-    threshold = sorted_attributions[threshold_idx]
     if plot_distribution:
         raise NotImplementedError
-    return threshold
+    else:
+        return sorted_attributions[threshold_idx]
 
 
 def polarity_function(attributions, polarity):

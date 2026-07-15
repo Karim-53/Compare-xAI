@@ -78,7 +78,7 @@ class SCDForLSTM(SOCForLSTM):
             config,
             pad_idx,
         )
-        self.sample_num = config.sample_n if not args.cd_pad else 1
+        self.sample_num = 1 if args.cd_pad else config.sample_n
 
     def get_states(self, inp, x_regions, nb_regions, extra_input):
         # suppose only have one x_region and one nb_region
@@ -153,9 +153,7 @@ class SCDForLSTM(SOCForLSTM):
 
         if extra_input is not None:
             append_extra_input(batch, extra_input)
-        all_states = get_lstm_states(batch, self.model, self.gpu)
-
-        return all_states
+        return get_lstm_states(batch, self.model, self.gpu)
 
     def explain_single(self, inp, inp_id, region, extra_input=None):
         """
@@ -170,7 +168,7 @@ class SCDForLSTM(SOCForLSTM):
         elif self.nb_method == "ngram":
             mask_regions = self.get_ngram_mask_region(region, inp)
         else:
-            raise NotImplementedError("unknown method %s" % self.nb_method)
+            raise NotImplementedError(f"unknown method {self.nb_method}")
         with torch.no_grad():
             if self.sample_num > 0:
                 states = self.get_states(inp, [region], mask_regions, extra_input)

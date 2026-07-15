@@ -21,8 +21,7 @@ from utils.reader import (
 def get_args_exp():
     parser = argparse.ArgumentParser()
     parser.add_argument("--method")
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 args = get_args()
@@ -33,7 +32,7 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(seed)
     torch.manual_seed(seed)
 
-    if args.task == "sst" or args.task == "sst_async":
+    if args.task in ["sst", "sst_async"]:
         (
             text_field,
             length_field,
@@ -73,21 +72,20 @@ if __name__ == "__main__":
     iter_map = {"train": train_iter, "dev": dev_iter, "test": test_iter}
     if args.task == "sst":
         tree_path = ".data/sst/trees/%s.txt"
-    elif args.task == "yelp":
-        tree_path = ".data/yelp_review_polarity_csv/%s.csv"
     elif args.task == "tacred":
         tree_path = ".data/TACRED/data/json/%s.json"
+        args.label_vocab = label_field.vocab
+
+    elif args.task == "yelp":
+        tree_path = ".data/yelp_review_polarity_csv/%s.csv"
     else:
         raise ValueError
 
-    if args.task == "tacred":
-        args.label_vocab = label_field.vocab
-
-    args.n_embed = len(text_field.vocab)
     args.d_out = 2 if args.task in ["sst", "yelp"] else len(label_field.vocab)
     args.n_cells = args.n_layers
     args.use_gpu = args.gpu >= 0
 
+    args.n_embed = len(text_field.vocab)
     if args.explain_model == "lstm":
         cls = {"sst": LSTMSentiment, "yelp": LSTMMeanSentiment, "tacred": LSTMMeanRE}
         model = cls[args.task](args)
@@ -111,9 +109,8 @@ if __name__ == "__main__":
                 tree_path=tree_path % args.dataset,
                 config=args,
                 vocab=text_field.vocab,
-                output_path="outputs/"
-                            + args.task
-                            + "/soc_results/soc%s.txt" % args.exp_name,
+                output_path=f"outputs/{args.task}"
+                + f"/soc_results/soc{args.exp_name}.txt",
             )
         elif args.method == "scd":
             lm_model = torch.load(
@@ -129,17 +126,16 @@ if __name__ == "__main__":
                 tree_path=tree_path % args.dataset,
                 config=args,
                 vocab=text_field.vocab,
-                output_path="outputs/"
-                            + args.task
-                            + "/scd_results/scd%s.txt" % args.exp_name,
+                output_path=f"outputs/{args.task}"
+                + f"/scd_results/scd{args.exp_name}.txt",
             )
         else:
             raise ValueError("unknown method")
     elif args.explain_model == "bert":
         CONFIG_NAME = "bert_config.json"
         WEIGHTS_NAME = "pytorch_model.bin"
-        output_model_file = os.path.join("bert/%s" % args.resume_snapshot, WEIGHTS_NAME)
-        output_config_file = os.path.join("bert/%s" % args.resume_snapshot, CONFIG_NAME)
+        output_model_file = os.path.join(f"bert/{args.resume_snapshot}", WEIGHTS_NAME)
+        output_config_file = os.path.join(f"bert/{args.resume_snapshot}", CONFIG_NAME)
         # Load a trained model and config that you have fine-tuned
         config = BertConfig(output_config_file)
         model = BertForSequenceClassification(
@@ -160,9 +156,8 @@ if __name__ == "__main__":
                 model,
                 lm_model,
                 tree_path=tree_path % args.dataset,
-                output_path="outputs/"
-                            + args.task
-                            + "/soc_bert_results/soc%s.txt" % args.exp_name,
+                output_path=f"outputs/{args.task}"
+                + f"/soc_bert_results/soc{args.exp_name}.txt",
                 config=args,
                 vocab=text_field.vocab,
             )
@@ -177,9 +172,8 @@ if __name__ == "__main__":
                 model,
                 lm_model,
                 tree_path=tree_path % args.dataset,
-                output_path="outputs/"
-                            + args.task
-                            + "/scd_bert_results/scd%s.txt" % args.exp_name,
+                output_path=f"outputs/{args.task}"
+                + f"/scd_bert_results/scd{args.exp_name}.txt",
                 config=args,
                 vocab=text_field.vocab,
             )

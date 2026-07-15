@@ -20,7 +20,7 @@ args = get_args()
 
 def convert_examples_to_features_sst(examples, max_seq_length, tokenizer):
     features = []
-    for (ex_index, example) in enumerate(examples):
+    for example in examples:
         tokens_a = example.text
         mapping = example.mapping
         if len(tokens_a) > max_seq_length - 2:
@@ -59,10 +59,8 @@ def convert_examples_to_features_sst(examples, max_seq_length, tokenizer):
 
 def bert_id_to_lm_id(arr, bert_tokenizer, lm_vocab):
     tmp_tokens = bert_tokenizer.convert_ids_to_tokens(arr)
-    tokens = []
     conv_dict = {"[UNK]": "<unk>", "[PAD]": "<pad>"}
-    for w in tmp_tokens:
-        tokens.append(conv_dict.get(w, w))
+    tokens = [conv_dict.get(w, w) for w in tmp_tokens]
     lm_ids = [lm_vocab.stoi.get(token, 0) for token in tokens]
     return np.array(lm_ids, dtype=np.int32)
 
@@ -71,16 +69,10 @@ def lm_id_to_bert_id(arr, bert_tokenizer, lm_vocab):
     #     print(arr, arr.shape, len(lm_vocab.itos))
     tmp_tokens = []
     for x in arr.tolist():
-        if x >= len(lm_vocab.itos):
-            tmp_token = "UNKUWN"
-        else:
-            tmp_token = lm_vocab.itos[x]
+        tmp_token = "UNKUWN" if x >= len(lm_vocab.itos) else lm_vocab.itos[x]
         tmp_tokens.append(tmp_token)
-    #     tmp_tokens = [lm_vocab.itos[x] for x in arr.tolist()]
-    tokens = []
     conv_dict = {"<unk>": "[UNK]", "<pad>": "[PAD]"}
-    for w in tmp_tokens:
-        tokens.append(conv_dict.get(w, w))
+    tokens = [conv_dict.get(w, w) for w in tmp_tokens]
     bert_ids = bert_tokenizer.convert_tokens_to_ids(tokens)
     return np.array(bert_ids, dtype=np.int32)
 
@@ -92,11 +84,11 @@ def get_data_iterator_bert(
         eval_examples = get_examples_sst(
             tree_path, train_lm=False, bert_tokenizer=tokenizer
         )
-    elif args.task == "yelp":
-        eval_examples = get_examples_yelp(tree_path, False, tokenizer)
     elif args.task == "tacred":
         eval_examples = get_examples_tacred(tree_path, False, tokenizer)
         label_vocab = pickle.load(open("vocab/vocab_tacred_bert.pkl.relation", "rb"))
+    elif args.task == "yelp":
+        eval_examples = get_examples_yelp(tree_path, False, tokenizer)
     else:
         raise ValueError
     eval_features = convert_examples_to_features_sst(
@@ -129,8 +121,7 @@ def get_data_iterator_bert(
     )
     # Run prediction for full data
     eval_sampler = SequentialSampler(eval_data)
-    eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=batch_size)
-    return eval_dataloader
+    return DataLoader(eval_data, sampler=eval_sampler, batch_size=batch_size)
 
 
 class ExplanationBaseForTransformer(ExplanationBase):
@@ -200,7 +191,7 @@ class ExplanationBaseForTransformer(ExplanationBase):
         else:
             return (
                 [(max(1, region[0]), min(region[1] + self.nb_range, idx - 2))]
-                if not args.task == "tacred"
+                if args.task != "tacred"
                 else [(max(0, region[0]), min(region[1] + self.nb_range, idx - 1))]
             )
 
@@ -285,7 +276,7 @@ class ExplanationBaseForTransformer(ExplanationBase):
         comp_scores_list = [{0: score_orig}]
 
         # iterate
-        for step in range(num_iters):
+        for _ in range(num_iters):
             # find connected components for regions
             comps = np.copy(measure.label(mask_list[-1], background=0, connectivity=1))
 
@@ -358,160 +349,154 @@ class ExplanationBaseForTransformer(ExplanationBase):
         return left, right
 
     def explain_sst(self):
-        f = open(self.output_path, "w")
-        all_contribs = []
-        cnt = 0
-        for batch_idx, (
-                input_ids,
-                input_mask,
-                segment_ids,
-                label_ids,
-                offsets,
-                mappings,
-        ) in enumerate(self.iterator):
-            if batch_idx < self.batch_start:
-                continue
+        with open(self.output_path, "w") as f:
+            all_contribs = []
+            cnt = 0
+            for batch_idx, (
+                    input_ids,
+                    input_mask,
+                    segment_ids,
+                    label_ids,
+                    offsets,
+                    mappings,
+            ) in enumerate(self.iterator):
+                if batch_idx < self.batch_start:
+                    continue
 
-            inp = input_ids.view(-1).cpu().numpy()
-            inp_id = offsets.item()
-            mappings = mappings.view(-1).cpu().numpy()
-            span2node, node2span = get_span_to_node_mapping(self.trees[inp_id])
-            spans = list(span2node.keys())
-            repr_spans = []
-            contribs = []
-            for span in spans:
-                if type(span) is int:
-                    span = (span, span)
-                bert_span = (
-                    self.map_lm_to_bert_token(span[0], mappings)[0],
-                    self.map_lm_to_bert_token(span[1], mappings)[1],
-                )
-                # add 1 to spans since transformer inputs has [CLS]
-                repr_spans.append(bert_span)
-                bert_span = (bert_span[0] + 1, bert_span[1] + 1)
-                contrib = self.explain_single_transformer(
-                    input_ids, input_mask, segment_ids, bert_span
-                )
-                contribs.append(contrib)
-            all_contribs.append(contribs)
+                inp = input_ids.view(-1).cpu().numpy()
+                inp_id = offsets.item()
+                mappings = mappings.view(-1).cpu().numpy()
+                span2node, node2span = get_span_to_node_mapping(self.trees[inp_id])
+                spans = list(span2node.keys())
+                repr_spans = []
+                contribs = []
+                for span in spans:
+                    if type(span) is int:
+                        span = (span, span)
+                    bert_span = (
+                        self.map_lm_to_bert_token(span[0], mappings)[0],
+                        self.map_lm_to_bert_token(span[1], mappings)[1],
+                    )
+                    # add 1 to spans since transformer inputs has [CLS]
+                    repr_spans.append(bert_span)
+                    bert_span = (bert_span[0] + 1, bert_span[1] + 1)
+                    contrib = self.explain_single_transformer(
+                        input_ids, input_mask, segment_ids, bert_span
+                    )
+                    contribs.append(contrib)
+                all_contribs.append(contribs)
 
-            s = self.repr_result_region(inp, repr_spans, contribs)
-            f.write(s + "\n")
-            f.flush()
+                s = self.repr_result_region(inp, repr_spans, contribs)
+                f.write(s + "\n")
+                f.flush()
 
-            print("finished %d" % batch_idx)
-            cnt += 1
-            if batch_idx == self.batch_stop - 1:
-                break
-        f.close()
+                print("finished %d" % batch_idx)
+                cnt += 1
+                if batch_idx == self.batch_stop - 1:
+                    break
         return all_contribs
 
     def explain_agg(self, dataset):
-        f = open(self.output_path, "wb")
-        all_tabs = []
+        with open(self.output_path, "wb") as f:
+            all_tabs = []
 
-        for batch_idx, (
-                input_ids,
-                input_mask,
-                segment_ids,
-                label_ids,
-                offsets,
-                mappings,
-        ) in enumerate(self.iterator):
-            if batch_idx < self.batch_start:
-                continue
-            # get prediction
-            if label_ids.item() == 0:
-                continue
-            logits = self.model(input_ids.cuda(), input_mask.cuda(), segment_ids.cuda())
-            _, pred = logits.max(-1)
-            if pred.item() != label_ids.item():
-                continue
-
-            inp = input_ids.view(-1).cpu().numpy()
-
-            lists = self.agglomerate(
-                (input_ids, input_mask, segment_ids),
-                percentile_include=90,
-                method="cd",
-                sweep_dim=1,
-                dataset=dataset,
-                num_iters=10,
-                label=label_ids.item(),
-            )
-            lists = collapse_tree(lists)
-            seq_len = lists["scores_list"][0].shape[0]
-            data = lists_to_tabs(lists, seq_len)
-            text = " ".join(self.tokenizer.convert_ids_to_tokens(inp)[:seq_len])
-            label_name = self.label_vocab.itos[label_ids.item()]
-            all_tabs.append({"tab": data, "text": text, "label": label_name})
-            print("finished %d" % batch_idx)
-
-            if batch_idx >= self.batch_stop - 1:
-                break
-        pickle.dump(all_tabs, f)
-        f.close()
-        return all_tabs
-
-    def explain_token(self, dataset):
-        f = open(self.output_path, "w")
-        all_contribs = []
-        cnt = 0
-        for batch_idx, (
-                input_ids,
-                input_mask,
-                segment_ids,
-                label_ids,
-                offsets,
-                mappings,
-        ) in enumerate(self.iterator):
-            if batch_idx < self.batch_start:
-                continue
-            if args.task == "tacred":
+            for batch_idx, (
+                    input_ids,
+                    input_mask,
+                    segment_ids,
+                    label_ids,
+                    offsets,
+                    mappings,
+            ) in enumerate(self.iterator):
+                if batch_idx < self.batch_start:
+                    continue
+                # get prediction
                 if label_ids.item() == 0:
                     continue
-                logits = self.model(
-                    input_ids.cuda(), input_mask.cuda(), segment_ids.cuda()
-                )
+                logits = self.model(input_ids.cuda(), input_mask.cuda(), segment_ids.cuda())
                 _, pred = logits.max(-1)
                 if pred.item() != label_ids.item():
                     continue
 
-            inp = input_ids.view(-1).cpu().numpy()
-            inp_id = offsets.item()
-            mappings = mappings.view(-1).cpu().numpy()
+                inp = input_ids.view(-1).cpu().numpy()
 
-            if 0 in inp.tolist():
-                length = inp.tolist().index(0)  # [PAD]
-            else:
-                length = len(inp)
-            repr_spans = []
-            contribs = []
-            for span in range(length - 2):
-                if type(span) is int:
-                    span = (span, span)
-                # bert_span = self.map_lm_to_bert_token(span[0], mappings)[0], self.map_lm_to_bert_token(span[1], mappings)[1]
-                bert_span = span
-                # add 1 to spans since transformer inputs has [CLS]
-                repr_spans.append(bert_span)
-                # if not args.task == 'tacred':
-                bert_span = (bert_span[0] + 1, bert_span[1] + 1)
-                contrib = self.explain_single_transformer(
-                    input_ids, input_mask, segment_ids, bert_span, label_ids.item()
+                lists = self.agglomerate(
+                    (input_ids, input_mask, segment_ids),
+                    percentile_include=90,
+                    method="cd",
+                    sweep_dim=1,
+                    dataset=dataset,
+                    num_iters=10,
+                    label=label_ids.item(),
                 )
-                contribs.append(contrib)
-            all_contribs.append(contribs)
+                lists = collapse_tree(lists)
+                seq_len = lists["scores_list"][0].shape[0]
+                data = lists_to_tabs(lists, seq_len)
+                text = " ".join(self.tokenizer.convert_ids_to_tokens(inp)[:seq_len])
+                label_name = self.label_vocab.itos[label_ids.item()]
+                all_tabs.append({"tab": data, "text": text, "label": label_name})
+                print("finished %d" % batch_idx)
 
-            s = self.repr_result_region(
-                inp, repr_spans, contribs, label=label_ids.item()
-            )
-            f.write(s + "\n")
+                if batch_idx >= self.batch_stop - 1:
+                    break
+            pickle.dump(all_tabs, f)
+        return all_tabs
 
-            print("finished %d" % batch_idx)
-            cnt += 1
-            if batch_idx == self.batch_stop - 1:
-                break
-        f.close()
+    def explain_token(self, dataset):
+        with open(self.output_path, "w") as f:
+            all_contribs = []
+            cnt = 0
+            for     batch_idx, (
+                    input_ids,
+                    input_mask,
+                    segment_ids,
+                    label_ids,
+                    offsets,
+                    mappings,
+            ) in enumerate(self.iterator):
+                if batch_idx < self.batch_start:
+                    continue
+                if args.task == "tacred":
+                    if label_ids.item() == 0:
+                        continue
+                    logits = self.model(
+                        input_ids.cuda(), input_mask.cuda(), segment_ids.cuda()
+                    )
+                    _, pred = logits.max(-1)
+                    if pred.item() != label_ids.item():
+                        continue
+
+                inp = input_ids.view(-1).cpu().numpy()
+                inp_id = offsets.item()
+                mappings = mappings.view(-1).cpu().numpy()
+
+                length = inp.tolist().index(0) if 0 in inp.tolist() else len(inp)
+                repr_spans = []
+                contribs = []
+                for span in range(length - 2):
+                    if type(span) is int:
+                        span = (span, span)
+                    # bert_span = self.map_lm_to_bert_token(span[0], mappings)[0], self.map_lm_to_bert_token(span[1], mappings)[1]
+                    bert_span = span
+                    # add 1 to spans since transformer inputs has [CLS]
+                    repr_spans.append(bert_span)
+                    # if not args.task == 'tacred':
+                    bert_span = (bert_span[0] + 1, bert_span[1] + 1)
+                    contrib = self.explain_single_transformer(
+                        input_ids, input_mask, segment_ids, bert_span, label_ids.item()
+                    )
+                    contribs.append(contrib)
+                all_contribs.append(contribs)
+
+                s = self.repr_result_region(
+                    inp, repr_spans, contribs, label=label_ids.item()
+                )
+                f.write(s + "\n")
+
+                print("finished %d" % batch_idx)
+                cnt += 1
+                if batch_idx == self.batch_stop - 1:
+                    break
         return all_contribs
 
     def map_lm_to_bert_span(self, span, mappings):
@@ -525,10 +510,11 @@ class ExplanationBaseForTransformer(ExplanationBase):
 
     def repr_result_region(self, inp, spans, contribs, label=None):
         tokens = self.tokenizer.convert_ids_to_tokens(inp)
-        outputs = []
         assert len(spans) == len(contribs)
-        for span, contrib in zip(spans, contribs):
-            outputs.append((" ".join(tokens[span[0] + 1: span[1] + 2]), contrib))
+        outputs = [
+            (" ".join(tokens[span[0] + 1 : span[1] + 2]), contrib)
+            for span, contrib in zip(spans, contribs)
+        ]
         output_str = " ".join(["%s %.6f\t" % (x, y) for x, y in outputs])
         if (
                 label is not None
@@ -551,7 +537,7 @@ class ExplanationBaseForTransformer(ExplanationBase):
             )
             input_mask = torch.ones_like(inp).long().view(1, -1)
             segment_ids = torch.zeros_like(inp).view(1, -1).to(self.gpu).long()
-            spans = [(x, x) for x in range(0, len(inp_word_id) - 2)]
+            spans = [(x, x) for x in range(len(inp_word_id) - 2)]
 
             contribs = []
             for span in spans:
@@ -591,10 +577,7 @@ class SOCForTransformer(ExplanationBaseForTransformer):
         self.feasible_bert_ids = self.get_feasible_bert_ids()
 
     def get_feasible_bert_ids(self):
-        s = set()
-        for w in self.vocab.stoi:
-            s.add(self.tokenizer.vocab.get(w, -1))
-        return s
+        return {self.tokenizer.vocab.get(w, -1) for w in self.vocab.stoi}
 
     def get_data_iterator(self):
         return get_data_iterator_bert(
@@ -675,10 +658,9 @@ class SOCForTransformer(ExplanationBaseForTransformer):
             for i in range(len(filled_inp)):
                 if not x_region[0] <= i <= x_region[1]:
                     filled_ex.append(filled_inp[i])
-                    mask_ex.append(inp_mask[i])
                 else:
                     filled_ex.append(self.tokenizer.vocab["[PAD]"])
-                    mask_ex.append(inp_mask[i])
+                mask_ex.append(inp_mask[i])
             filled_ex = np.array(filled_ex, dtype=np.int32)
             mask_ex = np.array(mask_ex, dtype=np.int32)
             inp_ex.append(filled_ex)
@@ -751,7 +733,7 @@ class SOCForTransformer(ExplanationBaseForTransformer):
         if self.nb_method == "ngram":
             mask_regions = self.get_ngram_mask_region(region, inp_flatten)
         else:
-            raise NotImplementedError("unknown method %s" % self.nb_method)
+            raise NotImplementedError(f"unknown method {self.nb_method}")
 
         score = self.score(
             inp_flatten, inp_mask_flatten, segment_ids, [region], mask_regions, label

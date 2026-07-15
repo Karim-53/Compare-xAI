@@ -25,7 +25,7 @@ class BreakDown:
         self.data = df_reference
         if isinstance(self.data, pd.DataFrame):
             self.data = self.data.to_numpy()
-        self.colnames = input_names if input_names else [str(i) for i in range(self.dim)]
+        self.colnames = input_names or [str(i) for i in range(self.dim)]
 
     def _transform_observation(self, observation):
         if observation.ndim < 2:
@@ -92,11 +92,11 @@ class BreakDown:
 
         baseline_yhat = np.mean(self.trained_model.predict(data))
 
-        open_variables = blist(range(0, data.shape[1]))
+        open_variables = blist(range(data.shape[1]))
         important_variables = deque()
         important_yhats = {}
 
-        for i in range(0, data.shape[1]):
+        for i in range(data.shape[1]):
             yhats = {}
             yhats_diff = np.repeat(-float('inf'), data.shape[1])
 
@@ -124,11 +124,11 @@ class BreakDown:
 
         target_yhat = self.trained_model.predict(observation)
 
-        open_variables = blist(range(0, data.shape[1]))
+        open_variables = blist(range(data.shape[1]))
         important_variables = deque()
         important_yhats = {}
 
-        for i in range(0, data.shape[1]):
+        for i in range(data.shape[1]):
             yhats = {}
             yhats_diff = np.repeat(float('inf'), data.shape[1])
 

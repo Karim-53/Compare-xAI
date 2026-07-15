@@ -93,8 +93,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
             )
             attribution_array.append(batch_attributions)
         attribution_array = np.concatenate(attribution_array, axis=0)
-        attributions = np.mean(attribution_array, axis=0)
-        return attributions
+        return np.mean(attribution_array, axis=0)
 
     def attributions(
             self,
@@ -291,24 +290,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
 
         #             print("BH" ,tf.reduce_sum(batch_hessian, axis=2))
 
-        if interaction_index is not None:
-            pass
-        #             print("bd 0", batch_difference.shape)
-
-        #             batch_difference = batch_difference[tuple([slice(None)] + \
-        #                                                                  interaction_index)]
-        #             batch_difference = tf.expand_dims(batch_difference, axis=1)
-
-        #             print("bd a", batch_difference.shape)
-
-        #             print("bd1", batch_difference.shape)
-
-        #             print("BD", tf.reduce_sum(batch_difference, axis=2))
-
-        #             for _ in range(len(batch_input.shape) - 1):
-        #                 batch_difference = tf.expand_dims(batch_difference, axis=-1)
-        #             print("bd b", batch_difference.shape)
-        else:
+        if interaction_index is None:
             batch_difference = tf.expand_dims(batch_difference, axis=1)
         #             print("bd1", batch_difference.shape)
 
@@ -333,18 +315,12 @@ class EmbeddingExplainerTF(PathExplainerTF):
             # The -1's are because we squashed a batch dimension and the first embedding dimension.
 
             hessian_embedding_axis = len(batch_input.shape) + self.embedding_axis - 2
-            batch_interactions = tf.reduce_sum(
-                batch_interactions, axis=hessian_embedding_axis
-            )
-        ################################
         else:
             hessian_embedding_axis = len(batch_input.shape) + self.embedding_axis - 3
 
-            #             print("bi", batch_interactions.shape)
-            batch_interactions = tf.reduce_sum(
-                batch_interactions, axis=hessian_embedding_axis
-            )
-
+        batch_interactions = tf.reduce_sum(
+            batch_interactions, axis=hessian_embedding_axis
+        )
         return batch_interactions
 
     def _single_interaction(
@@ -411,8 +387,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
             #             print("BA mat", batch_attributions)
             attribution_array.append(batch_attributions)
         attribution_array = np.concatenate(attribution_array, axis=0)
-        attributions = np.mean(attribution_array, axis=0)
-        return attributions
+        return np.mean(attribution_array, axis=0)
 
     def interactions(
             self,
@@ -537,7 +512,7 @@ class EmbeddingExplainerTF(PathExplainerTF):
         Args:
             inputs: Inputs to the model
         """
-        return self.model(inputs[0:1], attention_mask[0:1])
+        return self.model(inputs[:1], attention_mask[:1])
 
     def _init_array(
             self,

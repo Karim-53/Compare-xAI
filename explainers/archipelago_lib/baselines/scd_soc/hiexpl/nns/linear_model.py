@@ -65,9 +65,7 @@ class BOWRegressionMulti(nn.Module):
             bow.append(v)
         bow = torch.stack(bow)  # [B, V]
         bow = bow.to(self.gpu)
-        score = self.weight(bow)  # [B, C]
-        # loss = self.loss(score, batch.label.unsqueeze(-1))
-        return score
+        return self.weight(bow)
 
     def get_label_coefficient(self, class_idx_or_name, word_idx):
         if type(class_idx_or_name) is str:
@@ -89,10 +87,7 @@ class BOWRegressionMulti(nn.Module):
 
 
 def do_train():
-    if args.task != "tacred":
-        criterion = nn.BCELoss()
-    else:
-        criterion = nn.CrossEntropyLoss()
+    criterion = nn.BCELoss() if args.task != "tacred" else nn.CrossEntropyLoss()
     opt = O.Adam(filter(lambda x: x.requires_grad, model.parameters()))
 
     iterations = 0
@@ -122,6 +117,8 @@ def do_train():
             break
         train_iter.init_epoch()
         n_correct, n_total = 0, 0
+        # calculate loss of the network output with respect to training labels
+        train_acc = 0
         for batch_idx, batch in enumerate(train_iter):
             # switch model to training mode, clear gradient accumulators
             model.train()
@@ -133,8 +130,6 @@ def do_train():
             # forward pass
             answer = model(batch)
 
-            # calculate loss of the network output with respect to training labels
-            train_acc = 0
             if args.task != "tacred":
                 batch.label = batch.label.float()
             loss = criterion(answer, batch.label.to(args.gpu))
@@ -153,7 +148,7 @@ def do_train():
                 )
                 )
                 torch.save(model, snapshot_path)
-                for f in glob.glob(snapshot_prefix + "*"):
+                for f in glob.glob(f"{snapshot_prefix}*"):
                     if f != snapshot_path:
                         os.remove(f)
 
@@ -169,11 +164,7 @@ def do_train():
                 truth_dev, pred_dev = [], []
                 for dev_batch_idx, dev_batch in enumerate(dev_iter):
                     answer = model(dev_batch)
-                    dev_label = (
-                        dev_batch.label
-                        if not config.use_gpu
-                        else dev_batch.label.cuda()
-                    )
+                    dev_label = dev_batch.label.cuda() if config.use_gpu else dev_batch.label
                     if args.task != "tacred":
                         pred = (answer > 0.5).long()
                     else:
@@ -213,16 +204,11 @@ def do_train():
                     best_dev_acc = dev_acc
                     best_dev_loss = avg_dev_loss
                     snapshot_prefix = os.path.join(args.save_path, "best_snapshot")
-                    snapshot_path = (
-                            snapshot_prefix
-                            + "_devacc_{}_devloss_{}_iter_{}_model.pt".format(
-                        dev_acc, dev_loss.item(), iterations
-                    )
-                    )
+                    snapshot_path = f"{snapshot_prefix}_devacc_{dev_acc}_devloss_{dev_loss.item()}_iter_{iterations}_model.pt"
 
                     # save model, delete previous 'best_snapshot' files
                     torch.save(model, snapshot_path)
-                    for f in glob.glob(snapshot_prefix + "*"):
+                    for f in glob.glob(f"{snapshot_prefix}*"):
                         if f != snapshot_path:
                             os.remove(f)
 

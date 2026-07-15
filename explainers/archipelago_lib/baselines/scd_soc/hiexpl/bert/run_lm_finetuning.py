@@ -123,11 +123,9 @@ class BERTDataset(Dataset):
     def __getitem__(self, item):
         cur_id = self.sample_counter
         self.sample_counter += 1
-        if not self.on_memory:
-            # after one epoch we start again from beginning of file
-            if cur_id != 0 and (cur_id % len(self) == 0):
-                self.file.close()
-                self.file = open(self.corpus_path, "r", encoding=self.encoding)
+        if not self.on_memory and cur_id != 0 and (cur_id % len(self) == 0):
+            self.file.close()
+            self.file = open(self.corpus_path, "r", encoding=self.encoding)
 
         t1, t2, is_next_label = self.random_sent(item)
 
@@ -145,15 +143,13 @@ class BERTDataset(Dataset):
             cur_example, self.seq_len, self.tokenizer
         )
 
-        cur_tensors = (
+        return (
             torch.tensor(cur_features.input_ids),
             torch.tensor(cur_features.input_mask),
             torch.tensor(cur_features.segment_ids),
             torch.tensor(cur_features.lm_label_ids),
             torch.tensor(cur_features.is_next),
         )
-
-        return cur_tensors
 
     def random_sent(self, index):
         """
@@ -224,9 +220,7 @@ class BERTDataset(Dataset):
                 rand_doc = self.all_docs[rand_doc_idx]
                 line = rand_doc[random.randrange(len(rand_doc))]
             else:
-                rand_index = random.randint(
-                    1, self.corpus_lines if self.corpus_lines < 1000 else 1000
-                )
+                rand_index = random.randint(1, min(self.corpus_lines, 1000))
                 # pick random line
                 for _ in range(rand_index):
                     line = self.get_next_line()
@@ -314,9 +308,7 @@ def random_word(tokens, tokenizer, mask_token=True):
             except KeyError:
                 # For unknown words (should not occur with BPE vocab)
                 output_label.append(tokenizer.vocab["[UNK]"])
-                logger.warning(
-                    "Cannot find token '{}' in vocab. Using [UNK] insetad".format(token)
-                )
+                logger.warning(f"Cannot find token '{token}' in vocab. Using [UNK] insetad")
         else:
             # no masking token (will be ignored by loss function later)
             output_label.append(-1)
@@ -347,28 +339,8 @@ def convert_example_to_features(example, max_seq_length, tokenizer):
     # concatenate lm labels and account for CLS, SEP, SEP
     lm_label_ids = [-1] + t1_label + [-1] + t2_label + [-1]
 
-    # The convention in BERT is:
-    # (a) For sequence pairs:
-    #  tokens:   [CLS] is this jack ##son ##ville ? [SEP] no it is not . [SEP]
-    #  type_ids: 0   0  0    0    0     0       0 0    1  1  1  1   1 1
-    # (b) For single sequences:
-    #  tokens:   [CLS] the dog is hairy . [SEP]
-    #  type_ids: 0   0   0   0  0     0 0
-    #
-    # Where "type_ids" are used to indicate whether this is the first
-    # sequence or the second sequence. The embedding vectors for `type=0` and
-    # `type=1` were learned during pre-training and are added to the wordpiece
-    # embedding vector (and position vector). This is not *strictly* necessary
-    # since the [SEP] token unambigiously separates the sequences, but it makes
-    # it easier for the model to learn the concept of sequences.
-    #
-    # For classification tasks, the first vector (corresponding to [CLS]) is
-    # used as as the "sentence vector". Note that this only makes sense because
-    # the entire model is fine-tuned.
-    tokens = []
-    segment_ids = []
-    tokens.append("[CLS]")
-    segment_ids.append(0)
+    tokens = ["[CLS]"]
+    segment_ids = [0]
     for token in tokens_a:
         tokens.append(token)
         segment_ids.append(0)
@@ -402,22 +374,21 @@ def convert_example_to_features(example, max_seq_length, tokenizer):
 
     if example.guid < 5:
         logger.info("*** Example ***")
-        logger.info("guid: %s" % (example.guid))
-        logger.info("tokens: %s" % " ".join([str(x) for x in tokens]))
-        logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-        logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-        logger.info("segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-        logger.info("LM label: %s " % (lm_label_ids))
-        logger.info("Is next sentence label: %s " % (example.is_next))
+        logger.info(f"guid: {example.guid}")
+        logger.info(f'tokens: {" ".join([str(x) for x in tokens])}')
+        logger.info(f'input_ids: {" ".join([str(x) for x in input_ids])}')
+        logger.info(f'input_mask: {" ".join([str(x) for x in input_mask])}')
+        logger.info(f'segment_ids: {" ".join([str(x) for x in segment_ids])}')
+        logger.info(f"LM label: {lm_label_ids} ")
+        logger.info(f"Is next sentence label: {example.is_next} ")
 
-    features = InputFeatures(
+    return InputFeatures(
         input_ids=input_ids,
         input_mask=input_mask,
         segment_ids=segment_ids,
         lm_label_ids=lm_label_ids,
         is_next=example.is_next,
     )
-    return features
 
 
 def main():

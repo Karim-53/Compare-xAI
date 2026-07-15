@@ -77,11 +77,7 @@ class PathExplainerTF(Explainer):
                 if output_index is not None:
                     batch_predictions = batch_predictions[:, output_index]
             batch_gradients = tape.gradient(batch_predictions, batch_interpolated)
-            ########################
-
-            batch_attributions = batch_gradients * batch_difference
-            return batch_attributions
-
+            return batch_gradients * batch_difference
         batch_alpha, batch_beta = batch_alphas
         batch_difference = batch_input - batch_baseline
         batch_interpolated_beta = (
@@ -145,10 +141,7 @@ class PathExplainerTF(Explainer):
         else:
             for _ in range(len(batch_input.shape) - 1):
                 batch_difference = tf.expand_dims(batch_difference, axis=1)
-        ########################
-
-        batch_interactions = batch_hessian * batch_difference
-        return batch_interactions
+        return batch_hessian * batch_difference
 
     def _sample_baseline(self, baseline, number_to_draw, use_expectation):
         """
@@ -170,12 +163,11 @@ class PathExplainerTF(Explainer):
             sample_indices = np.random.choice(
                 baseline.shape[0], size=number_to_draw, replace=replace
             )
-            sampled_baseline = tf.gather(baseline, sample_indices)
+            return tf.gather(baseline, sample_indices)
         else:
             reps = np.ones(len(baseline.shape)).astype(int)
             reps[0] = number_to_draw
-            sampled_baseline = np.tile(baseline, reps)
-        return sampled_baseline
+            return np.tile(baseline, reps)
 
     def _sample_alphas(self, num_samples, use_expectation, use_product=False):
         """
@@ -191,49 +183,46 @@ class PathExplainerTF(Explainer):
         #         use_product = False
         #         print(use_product)
         if use_expectation:
-            if use_product:
-                alpha = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(
-                    np.float32
-                )
-                beta = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(
-                    np.float32
-                )
-                return alpha, beta
-            else:
+            if not use_product:
                 return np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(
                     np.float32
                 )
+            alpha = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(
+                np.float32
+            )
+            beta = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(
+                np.float32
+            )
+            return alpha, beta
+        elif use_product:
+            sqrt_samples = np.ceil(np.sqrt(num_samples)).astype(int)
+            spaced_points = np.linspace(
+                start=0.0, stop=1.0, num=sqrt_samples, endpoint=True
+            ).astype(np.float32)
+
+            num_drawn = sqrt_samples * sqrt_samples
+            slice_indices = np.round(
+                np.linspace(
+                    start=0.0, stop=num_drawn - 1, num=num_samples, endpoint=True
+                )
+            ).astype(int)
+
+            ones_map = np.ones(sqrt_samples).astype(np.float32)
+            beta = np.outer(spaced_points, ones_map).flatten()
+            beta = beta[slice_indices]
+
+            alpha = np.outer(ones_map, spaced_points).flatten()
+            alpha = alpha[slice_indices]
+            #                 alpha = np.linspace(start=0.0,
+            #                                    stop=1.0,
+            #                                    num=num_samples,
+            #                                    endpoint=True).astype(np.float32)
+            #                 beta = alpha
+            return alpha, beta
         else:
-            if use_product:
-                sqrt_samples = np.ceil(np.sqrt(num_samples)).astype(int)
-                spaced_points = np.linspace(
-                    start=0.0, stop=1.0, num=sqrt_samples, endpoint=True
-                ).astype(np.float32)
-
-                num_drawn = sqrt_samples * sqrt_samples
-                slice_indices = np.round(
-                    np.linspace(
-                        start=0.0, stop=num_drawn - 1, num=num_samples, endpoint=True
-                    )
-                ).astype(int)
-
-                ones_map = np.ones(sqrt_samples).astype(np.float32)
-                beta = np.outer(spaced_points, ones_map).flatten()
-                beta = beta[slice_indices]
-
-                alpha = np.outer(ones_map, spaced_points).flatten()
-                alpha = alpha[slice_indices]
-                #                 alpha = np.linspace(start=0.0,
-                #                                    stop=1.0,
-                #                                    num=num_samples,
-                #                                    endpoint=True).astype(np.float32)
-                #                 beta = alpha
-                return alpha, beta
-            else:
-                alpha = np.linspace(
-                    start=0.0, stop=1.0, num=num_samples, endpoint=True
-                ).astype(np.float32)
-                return alpha
+            return np.linspace(
+                start=0.0, stop=1.0, num=num_samples, endpoint=True
+            ).astype(np.float32)
 
     def _single_attribution(
             self,
@@ -288,8 +277,7 @@ class PathExplainerTF(Explainer):
             )
             attribution_array.append(batch_attributions)
         attribution_array = np.concatenate(attribution_array, axis=0)
-        attributions = np.mean(attribution_array, axis=0)
-        return attributions
+        return np.mean(attribution_array, axis=0)
 
     def _get_test_output(self, inputs):
         """
@@ -300,7 +288,7 @@ class PathExplainerTF(Explainer):
         Args:
             inputs: Inputs to the model
         """
-        return self.model(inputs[0:1])
+        return self.model(inputs[:1])
 
     def _init_array(
             self, inputs, output_indices, interaction_index=None, as_interactions=False
@@ -488,8 +476,7 @@ class PathExplainerTF(Explainer):
             )
             attribution_array.append(batch_attributions)
         attribution_array = np.concatenate(attribution_array, axis=0)
-        attributions = np.mean(attribution_array, axis=0)
-        return attributions
+        return np.mean(attribution_array, axis=0)
 
     def _clean_index(self, interaction_index):
         """

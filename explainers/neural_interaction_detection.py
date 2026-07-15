@@ -80,11 +80,9 @@ def interpret_interactions_from_weights(w_input, w_later, get_main_effects=False
             interaction_strength = (min(candidate_weights)) * (np.sum(w_later[:, i]))
             interaction_strengths[interaction_tup] += interaction_strength
 
-    interaction_ranking = sorted(
+    return sorted(
         interaction_strengths.items(), key=operator.itemgetter(1), reverse=True
     )
-
-    return interaction_ranking
 
 
 def interpret_pairwise_interactions(w_input, w_later):
@@ -126,7 +124,7 @@ def get_second_order_grad(model, x, device):
     grads = autograd.grad(y, x, create_graph=True)[0].squeeze()
 
     grad_list = []
-    for j, grad in enumerate(grads):
+    for grad in grads:
         grad2 = autograd.grad(grad, x, retain_graph=True)[0].squeeze()
         grad_list.append(grad2)
 
@@ -138,12 +136,9 @@ def run_NID(weights, pairwise=False):
     w_input, w_later = preprocess_weights(weights)
 
     if pairwise:
-        interaction_ranking_pruned = interpret_pairwise_interactions(w_input, w_later)
-    else:
-        interaction_ranking = interpret_interactions_from_weights(w_input, w_later)
-        interaction_ranking_pruned = prune_redundant_interactions(interaction_ranking)
-
-    return interaction_ranking_pruned
+        return interpret_pairwise_interactions(w_input, w_later)
+    interaction_ranking = interpret_interactions_from_weights(w_input, w_later)
+    return prune_redundant_interactions(interaction_ranking)
 
 
 def run_gradient_NID(mlp, x, grad_gpu):
@@ -152,7 +147,7 @@ def run_gradient_NID(mlp, x, grad_gpu):
     if grad_gpu == -1:
         device = torch.device("cpu")
     else:
-        device = torch.device("cuda:" + str(grad_gpu))
+        device = torch.device(f"cuda:{str(grad_gpu)}")
 
     mlp = mlp.to(device)
 
@@ -164,12 +159,8 @@ def run_gradient_NID(mlp, x, grad_gpu):
     inter_scores = []
 
     for j in range(inter_matrix.shape[0]):
-        for i in range(j):
-            inter_scores.append(((i, j), inter_matrix[i, j]))
-
-    inter_ranking = sorted(inter_scores, key=lambda x: -x[1])
-
-    return inter_ranking
+        inter_scores.extend(((i, j), inter_matrix[i, j]) for i in range(j))
+    return sorted(inter_scores, key=lambda x: -x[1])
 
 
 def prune_redundant_interactions(interaction_ranking, max_interactions=100):
@@ -240,11 +231,11 @@ def detect_interactions(
 
     if detector == "GradientNID":
         act_func = nn.Softplus()
-        if l1_const == None:
+        if l1_const is None:
             l1_const = 0
     else:
         act_func = nn.ReLU()
-        if l1_const == None:
+        if l1_const is None:
             l1_const = 1e-4
 
     mlp = MLP(feats.shape[1], arch, add_linear=add_linear, act_func=act_func).to(device)

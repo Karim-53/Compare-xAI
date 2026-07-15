@@ -21,9 +21,9 @@ def _get_bounds(arr):
     if vmin == vmax:
         vmin = np.nanpercentile(arr, 1)
         vmax = np.nanpercentile(arr, 99)
-        if vmin == vmax:
-            vmin = np.min(arr)
-            vmax = np.max(arr)
+    if vmin == vmax:
+        vmin = np.min(arr)
+        vmax = np.max(arr)
     return vmin, vmax
 
 
@@ -34,20 +34,18 @@ def _clean_input(feature_index, color_by, feature_names, attributions):
     if not isinstance(feature_index, int):
         if feature_names is None:
             raise ValueError(
-                "Provided argument feature_index {} was ".format(feature_index)
-                + "not an integer but feature_names was not specified."
+                f"Provided argument feature_index {feature_index} was not an integer but feature_names was not specified."
             )
         feature_index = feature_names.index(feature_index)
     if color_by and not isinstance(color_by, int):
         if feature_names is None:
             raise ValueError(
-                "Provided argument color_by {} was ".format(color_by)
-                + "not an integer but feature_names was not specified."
+                f"Provided argument color_by {color_by} was not an integer but feature_names was not specified."
             )
         color_by = feature_names.index(color_by)
 
     if feature_names is None:
-        feature_names = ["Feature {}".format(i) for i in range(attributions.shape[1])]
+        feature_names = [f"Feature {i}" for i in range(attributions.shape[1])]
 
     return feature_index, color_by, feature_names
 
@@ -107,8 +105,8 @@ def scatter_plot(
         feature_index, color_by, feature_names, attributions
     )
 
-    x_name = "Value of {}".format(feature_names[feature_index])
-    y_name = "Attribution to {}".format(feature_names[feature_index])
+    x_name = f"Value of {feature_names[feature_index]}"
+    y_name = f"Attribution to {feature_names[feature_index]}"
     data_df = pd.DataFrame(
         {
             x_name: feature_values[:, feature_index],
@@ -118,7 +116,7 @@ def scatter_plot(
 
     color_name = None
     if color_by is not None:
-        color_name = "Value of {}".format(feature_names[color_by])
+        color_name = f"Value of {feature_names[color_by]}"
         color_column = feature_values[:, color_by]
         vmin, vmax = _get_bounds(color_column)
         color_column = np.clip(color_column, vmin, vmax)
@@ -138,10 +136,8 @@ def scatter_plot(
                     + interactions[:, color_by, feature_index]
             )
 
-        inter_name = "Interaction between {} and {}".format(
-            feature_names[feature_index], feature_names[color_by]
-        )
-        main_name = "Main effect of {} ".format(feature_names[feature_index])
+        inter_name = f"Interaction between {feature_names[feature_index]} and {feature_names[color_by]}"
+        main_name = f"Main effect of {feature_names[feature_index]} "
         inter_df = pd.DataFrame(
             {
                 x_name: feature_values[:, feature_index],
@@ -166,15 +162,14 @@ def scatter_plot(
                 np.random.randn(feature_values.shape[0]) * np.std(data_df[y_name]) * 0.05
         )
 
-    if color_by is not None:
-        if plot_main:
-            fig, axs = plt.subplots(1, 3, figsize=(3 * figsize + 1, figsize), dpi=dpi)
-        else:
-            fig, axs = plt.subplots(1, 2, figsize=(2 * figsize + 1, figsize), dpi=dpi)
-    else:
+    if color_by is None:
         fig, axis = plt.subplots(1, 1, figsize=(figsize, figsize), dpi=dpi)
         axs = [axis]
 
+    elif plot_main:
+        fig, axs = plt.subplots(1, 3, figsize=(3 * figsize + 1, figsize), dpi=dpi)
+    else:
+        fig, axs = plt.subplots(1, 2, figsize=(2 * figsize + 1, figsize), dpi=dpi)
     x_limits, y_limits = _get_shared_limits(
         data_df[x_name], data_df[y_name], scale_x_ind, scale_y_ind
     )
@@ -207,7 +202,7 @@ def scatter_plot(
         _color_bar(fig, vmin, vmax, color_name, **kwargs)
         fig.subplots_adjust(wspace=0.27)
 
-    fig.suptitle("Attributions to {}".format(feature_names[feature_index]), fontsize=18)
+    fig.suptitle(f"Attributions to {feature_names[feature_index]}", fontsize=18)
 
     return fig, axs
 

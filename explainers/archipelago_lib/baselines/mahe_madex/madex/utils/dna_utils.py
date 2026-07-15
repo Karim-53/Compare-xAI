@@ -52,8 +52,7 @@ def generate_random_dna_sequence_with_CACGTG(length=36, seed=None):
     for i in np.random.randint(0, 4, (length)):
         seq += nucleotides[i]
     i = np.random.randint(0, length - len(ebox))
-    seq = seq[:i] + ebox + seq[i + len(ebox):]
-    return seq
+    return seq[:i] + ebox + seq[i + len(ebox):]
 
 
 def encode_dna_onehot(seq):

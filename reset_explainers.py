@@ -37,11 +37,11 @@ def linkify(text, maxlinklength=256):
 
         if len(text) > maxlinklength:
             halflength = maxlinklength / 2
-            text = text[0:halflength] + '...' + text[len(text) - halflength:]
+            text = text[:halflength] + '...' + text[len(text) - halflength:]
 
         return '<a class="comurl" href="' + url + '" target="_blank" rel="nofollow">' + text + '<img class="imglink" src="./images/linkout.png"></a>'
 
-    if text != None and text != '':
+    if text not in [None, '']:
         return _urlfinderregex.sub(replacewithlink, text)
     else:
         return ''

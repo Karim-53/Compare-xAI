@@ -32,11 +32,7 @@ class TextDomainMapper:
         if positions:
             exp = [
                 (
-                    "%s_%s"
-                    % (
-                        self.indexed_string.word(x[0]),
-                        "-".join(map(str, self.indexed_string.string_position(x[0]))),
-                    ),
+                    f'{self.indexed_string.word(x[0])}_{"-".join(map(str, self.indexed_string.string_position(x[0])))}',
                     x[1],
                 )
                 for x in exp
@@ -80,7 +76,7 @@ class TextDomainMapper:
             )
         )
         all_occurrences = [(x[0], int(x[1]), x[2]) for x in all_occurrences]
-        ret = """
+        return """
             %s.show_raw_text(%s, %d, %s, %s, %s);
             """ % (
             exp_object_name,
@@ -90,7 +86,6 @@ class TextDomainMapper:
             div_name,
             json.dumps(opacity),
         )
-        return ret
 
 
 class IndexedString(object):
@@ -108,9 +103,9 @@ class IndexedString(object):
                  according to position.
         """
         self.raw = raw_string
-        self.as_list = re.split(r"(%s)|$" % split_expression, self.raw)
+        self.as_list = re.split(f"({split_expression})|$", self.raw)
         self.as_np = np.array(self.as_list)
-        non_word = re.compile(r"(%s)|$" % split_expression).match
+        non_word = re.compile(f"({split_expression})|$").match
         self.string_start = np.hstack(
             ([0], np.cumsum([len(x) for x in self.as_np[:-1]]))
         )
@@ -171,14 +166,16 @@ class IndexedString(object):
         """
         mask = np.ones(self.as_np.shape[0], dtype="bool")
         mask[self.__get_idxs(words_to_remove)] = False
-        if not self.bow:
-            return "".join(
+        return (
+            "".join([self.as_list[v] for v in mask.nonzero()[0]])
+            if self.bow
+            else "".join(
                 [
                     self.as_list[i] if mask[i] else "UNKWORDZ"
                     for i in range(mask.shape[0])
                 ]
             )
-        return "".join([self.as_list[v] for v in mask.nonzero()[0]])
+        )
 
     def __get_idxs(self, words):
         """Returns indexes to appropriate words."""

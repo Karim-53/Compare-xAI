@@ -35,10 +35,10 @@ def unigram_linear_pearson(filename):
             items = entry.strip().split(" ")
             if len(items) > 2:
                 continue
-            score = float(items[1])
             word = items[0]
             if word in vocab.stoi:
                 coeff = -model.get_coefficient(vocab.stoi[word])
+                score = float(items[1])
                 out.append(score)
                 truth.append(coeff)
                 scores_dict[word].append(score)
@@ -108,10 +108,10 @@ def unigram_linear_pearson_multiclass(filename):
             items = entry.strip().split(" ")
             if len(items) > 2:
                 continue
-            score = float(items[1])
             word = items[0]
             if word in vocab.stoi:
                 coeff = model.get_label_coefficient(class_name, vocab.stoi[word])
+                score = float(items[1])
                 out.append(score)
                 truth.append(coeff)
                 scores_dict[word].append(score)
@@ -124,7 +124,7 @@ def unigram_linear_pearson_multiclass(filename):
 
 def unigram_linear_pearson_bert_tree(filename, dataset="dev"):
     f = open(filename)
-    f2 = open(".data/sst/trees/%s.txt" % dataset)
+    f2 = open(f".data/sst/trees/{dataset}.txt")
     model = torch.load(args.bow_snapshot, map_location="cpu")
     vocab = load_vocab(VOCAB)
     out, truth = [], []
@@ -200,7 +200,7 @@ def token2key(words):
 def load_txt_to_dict_hashed(filename):
     f = open(filename)
     dic = {}
-    for line in f.readlines():
+    for line in f:
         tup = line.lower().strip().split("|")
         if len(tup) != 2:
             continue
@@ -212,7 +212,7 @@ def load_txt_to_dict_hashed(filename):
 def load_txt_to_dict(filename):
     f = open(filename)
     dic = {}
-    for line in f.readlines():
+    for line in f:
         tup = line.lower().strip().split("|")
         if len(tup) != 2:
             continue
@@ -222,7 +222,7 @@ def load_txt_to_dict(filename):
 
 def phrase_gt_pearson(filename, dataset="dev"):
     f = open(filename)
-    f2 = open(".data/sst/trees/%s.txt" % dataset)
+    f2 = open(f".data/sst/trees/{dataset}.txt")
     f3 = open("ground_truth.tmp", "w")
     dict_path, label_path = (
         ".data/sst_raw/dictionary.txt",
@@ -246,7 +246,6 @@ def phrase_gt_pearson(filename, dataset="dev"):
         l = line.strip().split("\t")
         for entry in l:
             items = entry.strip().split(" ")
-            score = float(items[-1])
             if BERT:
                 key = "".join(items[:-1]).replace(" ", "").replace("##", "")
             else:
@@ -254,6 +253,7 @@ def phrase_gt_pearson(filename, dataset="dev"):
             if key in phrase2id:
                 phrase_id = phrase2id[key]
                 gt_score = float(id2label[phrase_id])
+                score = float(items[-1])
                 out.append(score)
                 truth.append(gt_score)
 
@@ -289,28 +289,27 @@ def run_multiple(path):
     template = path
     nb_ranges, hists = [1, 2, 3, 4], [5, 10, 20]
     postfix = ".bert" if BERT else ""
-    f = open(
+    with open(
         "analysis/%s_%s"
         % (TASK, template.split("/")[-1].replace("{", "").replace("}", "") + postfix),
         "w",
-    )
-    writer = csv.writer(f, delimiter="\t")
-    for nb_range in nb_ranges:
-        for h in hists:
-            print(nb_range, h)
-            path = template.format(**{"nb": nb_range, "h": h})
-            if BERT and TASK == "sst":
-                word_score = unigram_linear_pearson_bert_tree(path, dataset="test")
-            elif TASK == "tacred":
-                word_score = unigram_linear_pearson_multiclass(path)
-            else:
-                word_score = unigram_linear_pearson(path)
-            if TASK == "sst":
-                _, _, phrase_score, _ = phrase_gt_pearson(path, dataset="test")
-            else:
-                phrase_score = 0
-            writer.writerow([nb_range, h, word_score, phrase_score])
-    f.close()
+    ) as f:
+        writer = csv.writer(f, delimiter="\t")
+        for nb_range in nb_ranges:
+            for h in hists:
+                print(nb_range, h)
+                path = template.format(**{"nb": nb_range, "h": h})
+                if BERT and TASK == "sst":
+                    word_score = unigram_linear_pearson_bert_tree(path, dataset="test")
+                elif TASK == "tacred":
+                    word_score = unigram_linear_pearson_multiclass(path)
+                else:
+                    word_score = unigram_linear_pearson(path)
+                if TASK == "sst":
+                    _, _, phrase_score, _ = phrase_gt_pearson(path, dataset="test")
+                else:
+                    phrase_score = 0
+                writer.writerow([nb_range, h, word_score, phrase_score])
 
 
 if __name__ == "__main__":
@@ -320,34 +319,30 @@ if __name__ == "__main__":
     DATASET = "test"
     path = args.eval_file
     BERT = "bert" in path
-    TASK = ""
-
-    for possible_task in ["sst", "yelp", "tacred"]:
-        if possible_task in path:
-            TASK = possible_task
-            break
+    TASK = next(
+        (
+            possible_task
+            for possible_task in ["sst", "yelp", "tacred"]
+            if possible_task in path
+        ),
+        "",
+    )
     VOCAB = None
 
     if TASK == "sst":
         args.bow_snapshot = get_best_snapshot("models/sst_bow")
         VOCAB = "vocab/vocab_sst.pkl"
-    elif TASK == "yelp":
-        args.bow_snapshot = get_best_snapshot("models/yelp_bow")
-        VOCAB = "vocab/vocab_yelp.pkl"
     elif TASK == "tacred":
         args.bow_snapshot = get_best_snapshot("models/tacred_bow")
         VOCAB = "vocab/vocab_tacred.pkl"
-    if BERT:
-        if TASK == "sst":
-            unigram_linear_pearson_bert_tree(path, DATASET)
-        elif TASK == "yelp":
-            unigram_linear_pearson(path)
-        else:
-            unigram_linear_pearson_multiclass(path)
+    elif TASK == "yelp":
+        args.bow_snapshot = get_best_snapshot("models/yelp_bow")
+        VOCAB = "vocab/vocab_yelp.pkl"
+    if BERT and TASK == "sst":
+        unigram_linear_pearson_bert_tree(path, DATASET)
+    elif BERT and TASK == "yelp" or not BERT and TASK in ["sst", "yelp"]:
+        unigram_linear_pearson(path)
     else:
-        if TASK in ["sst", "yelp"]:
-            unigram_linear_pearson(path)
-        else:
-            unigram_linear_pearson_multiclass(path)
+        unigram_linear_pearson_multiclass(path)
     if TASK == "sst":
         out1, _, _, _ = phrase_gt_pearson(path, dataset=DATASET)

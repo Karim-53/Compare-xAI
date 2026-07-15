@@ -138,24 +138,23 @@ def get_prediction(model, sentences, tokenizer, device):
     X = prepare_huggingface_data(sentences, tokenizer)
     for key in X:
         X[key] = torch.from_numpy(X[key]).to(device)
-    preds = model(
+    return model(
         X["input_ids"], X["token_type_ids"].long(), X["attention_mask"].long()
     )
-    return preds
 
 
 def explain_sentence(sentence, algo, tokenizer, spans=None):
     X = prepare_huggingface_data([sentence], tokenizer)
 
     for key in X:
-        X[key] = torch.from_numpy(X[key]).to(torch.device("cuda:" + str(algo.gpu)))
+        X[key] = torch.from_numpy(X[key]).to(torch.device(f"cuda:{str(algo.gpu)}"))
 
     inp = X["input_ids"]
     segment_ids = X["token_type_ids"].long()
     input_mask = X["attention_mask"].long()
 
     if spans is None:
-        spans = [(x, x) for x in range(0, inp.shape[1] - 2)]
+        spans = [(x, x) for x in range(inp.shape[1] - 2)]
 
     contribs = {}
     for span in spans:

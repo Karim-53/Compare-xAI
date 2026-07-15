@@ -16,7 +16,7 @@ def powerset(iterable):
 
 
 def shapley_kernel(M, s):
-    if s == 0 or s == M:
+    if s in [0, M]:
         return 10000  # approximation of inf with some large weight
     return (M - 1) / (scipy.special.binom(M, s) * s * (M - s))
 
@@ -27,8 +27,7 @@ def get_weights(X_data, s, x, sigma=0.4):
         "ji,ji->j", np.dot(x[s] - X_data[:, s], sample_cov_s), x[s] - X_data[:, s]
     )
     D_s = np.sqrt(D_s / len(s))
-    w_s = np.exp(-np.square(D_s) / (2 * (sigma ** 2)))
-    return w_s
+    return np.exp(-np.square(D_s) / (2 * (sigma ** 2)))
 
 
 def get_weighted_mean(w_s, s, f, x, reference):
@@ -73,5 +72,4 @@ class ShapR:
         for idx, x in tqdm(enumerate(x.values)):
             phi[idx] = kernel_shapr(self.f, x, self.X, self.M, self.sigma)
         self.expected_values = phi[:, -1]
-        shap_values = phi[:, :-1]
-        return shap_values
+        return phi[:, :-1]

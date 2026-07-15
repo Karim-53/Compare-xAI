@@ -27,7 +27,7 @@ def split_words(word_ids, sort=True):
     word_ids2 = []
     for word in word_ids:
         w = [x for x in word[0].split("_") if x]
-        word_ids2.append(("_".join(w[0:-1]), int(w[-1])))
+        word_ids2.append(("_".join(w[:-1]), int(w[-1])))
 
     if sort:
         word_ids2.sort(key=lambda x: x[1])
@@ -46,8 +46,7 @@ class TextClassificationPipelineMod(Pipeline):
     """
 
     def __call__(self, *args, **kwargs):
-        outputs = super().__call__(*args, **kwargs)
-        return outputs
+        return super().__call__(*args, **kwargs)
 
 
 def pipeline(
@@ -86,9 +85,7 @@ def pipeline(
     # Retrieve the task
     if task not in SUPPORTED_TASKS:
         raise KeyError(
-            "Unknown task {}, available tasks are {}".format(
-                task, list(SUPPORTED_TASKS.keys())
-            )
+            f"Unknown task {task}, available tasks are {list(SUPPORTED_TASKS.keys())}"
         )
 
     framework = "pt"  # get_framework(model)

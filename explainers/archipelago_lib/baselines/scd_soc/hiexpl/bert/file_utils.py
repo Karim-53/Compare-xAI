@@ -55,7 +55,7 @@ def url_to_filename(url, etag=None):
     if etag:
         etag_bytes = etag.encode("utf-8")
         etag_hash = sha256(etag_bytes)
-        filename += "." + etag_hash.hexdigest()
+        filename += f".{etag_hash.hexdigest()}"
 
     return filename
 
@@ -72,11 +72,11 @@ def filename_to_url(filename, cache_dir=None):
 
     cache_path = os.path.join(cache_dir, filename)
     if not os.path.exists(cache_path):
-        raise EnvironmentError("file {} not found".format(cache_path))
+        raise EnvironmentError(f"file {cache_path} not found")
 
-    meta_path = cache_path + ".json"
+    meta_path = f"{cache_path}.json"
     if not os.path.exists(meta_path):
-        raise EnvironmentError("file {} not found".format(meta_path))
+        raise EnvironmentError(f"file {meta_path} not found")
 
     with open(meta_path, encoding="utf-8") as meta_file:
         metadata = json.load(meta_file)
@@ -110,11 +110,11 @@ def cached_path(url_or_filename, cache_dir=None):
         return url_or_filename
     elif parsed.scheme == "":
         # File, but it doesn't exist.
-        raise EnvironmentError("file {} not found".format(url_or_filename))
+        raise EnvironmentError(f"file {url_or_filename} not found")
     else:
         # Something unknown
         raise ValueError(
-            "unable to parse {} as a URL or as a local path".format(url_or_filename)
+            f"unable to parse {url_or_filename} as a URL or as a local path"
         )
 
 
@@ -122,7 +122,7 @@ def split_s3_path(url):
     """Split a full s3 path into the bucket name and path."""
     parsed = urlparse(url)
     if not parsed.netloc or not parsed.path:
-        raise ValueError("bad s3 path {}".format(url))
+        raise ValueError(f"bad s3 path {url}")
     bucket_name = parsed.netloc
     s3_path = parsed.path
     # Remove '/' at beginning of path.
@@ -206,22 +206,17 @@ def get_from_cache(url, cache_dir=None):
             response = requests.head(url, allow_redirects=True)
             if response.status_code != 200:
                 raise IOError(
-                    "HEAD request failed for url {} with status code {}".format(
-                        url, response.status_code
-                    )
+                    f"HEAD request failed for url {url} with status code {response.status_code}"
                 )
             etag = response.headers.get("ETag")
             if not os.path.isfile(etag_file_path):
                 etag_dict = {}
             else:
-                f = open(etag_file_path, "r")
-                etag_dict = json.load(f)
-                f.close()
-            f = open(etag_file_path, "w")
-            etag_dict[url] = etag
-            json.dump(etag_dict, f)
-            f.close()
-
+                with open(etag_file_path, "r") as f:
+                    etag_dict = json.load(f)
+            with open(etag_file_path, "w") as f:
+                etag_dict[url] = etag
+                json.dump(etag_dict, f)
     filename = url_to_filename(url, etag)
 
     # get cache path to put the file
@@ -250,7 +245,7 @@ def get_from_cache(url, cache_dir=None):
 
             logger.info("creating metadata file for %s", cache_path)
             meta = {"url": url, "etag": etag}
-            meta_path = cache_path + ".json"
+            meta_path = f"{cache_path}.json"
             with open(meta_path, "w", encoding="utf-8") as meta_file:
                 json.dump(meta, meta_file)
 

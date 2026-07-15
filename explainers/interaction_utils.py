@@ -14,20 +14,14 @@ def powerset(iterable):
 
 
 def random_subset(s):
-    out = []
-    for el in s:
-        # random coin flip
-        if random.randint(0, 1) == 0:
-            out.append(el)
+    out = [el for el in s if random.randint(0, 1) == 0]
     return tuple(out)
 
 
 def gen_data_samples(model, input_value=1, base_value=-1, p=40, n=30000, seed=None):
     if seed is not None:
         np.random.seed(seed)
-    X = []
-    for i in range(n):
-        X.append(np.random.choice([input_value, base_value], p))
+    X = [np.random.choice([input_value, base_value], p) for _ in range(n)]
     X = np.stack(X)
 
     Y = model(X).squeeze()
@@ -210,9 +204,5 @@ def get_sample_weights(Xs, kernel_width=0.25, enable=True, **kwargs):
     for k in Xs:
         if k == "scaler":
             continue
-        if enable:
-            Wd[k] = kernel(Dd[k])
-        else:
-            Wd[k] = np.ones(Xs[k].shape[0])
-
+        Wd[k] = kernel(Dd[k]) if enable else np.ones(Xs[k].shape[0])
     return Wd

@@ -110,7 +110,7 @@ class Additive_MLP(nn.Module):
             for grouping in input_groupings
         ]
         for i in range(len(input_groupings)):
-            setattr(self, "_" + name + "_" + str(i), mlp_list[i])
+            setattr(self, f"_{name}_{str(i)}", mlp_list[i])
         return mlp_list
 
     def forward_additive_MLP(self, x, input_groupings, mlps, inter_coef_react=[]):
@@ -124,24 +124,22 @@ class Additive_MLP(nn.Module):
             # grouping2 = np.array([g - 1 for g in grouping])
             else:
                 forwarded_mlps.append(mlp(x[:, grouping]))
-        forwarded_mlp = sum(forwarded_mlps)
-        return forwarded_mlp
+        return sum(forwarded_mlps)
 
     def freeze_univariates(self):
         self.frozen_params = True
         for name, param in self.named_parameters():
-            if name is not "bias":
-                if name.startswith("_uni_") or not name.startswith("_inter_"):
-                    param.requires_grad = False  # Freeze
+            if name is not "bias" and (
+                name.startswith("_uni_") or not name.startswith("_inter_")
+            ):
+                param.requires_grad = False  # Freeze
 
     def update_interactions(self, interactions, hidden_units=[], shift=False):
         if shift:
-            self.interactions = []
-            for inter in interactions:
-                self.interactions.append(inter - 1)
+            self.interactions = [inter - 1 for inter in interactions]
         else:
             self.interactions = interactions
-        inter_hidden_units = hidden_units if hidden_units else self.hidden_units
+        inter_hidden_units = hidden_units or self.hidden_units
         # self.bias.data.fill_(0.0)
         # print(self.interactions, inter_hidden_units)
 

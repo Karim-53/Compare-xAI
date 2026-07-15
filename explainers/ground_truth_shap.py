@@ -13,7 +13,7 @@ def powerset(iterable):
 
 
 def shapley_kernel(M, s):
-    if s == 0 or s == M:
+    if s in [0, M]:
         return 1000000  # approximation of inf with some large weight
     return (M - 1) / (scipy.special.binom(M, s) * s * (M - s))
 

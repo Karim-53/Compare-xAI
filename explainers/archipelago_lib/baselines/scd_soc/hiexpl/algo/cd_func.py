@@ -131,10 +131,7 @@ def evaluate_predictions(snapshot_file):
 
 
 def is_in_intervals(idx, intervals):
-    for interval in intervals:
-        if interval[0] <= idx <= interval[1]:
-            return True
-    return False
+    return any(interval[0] <= idx <= interval[1] for interval in intervals)
 
 
 def partition_bias(rel, irrel, bias):
@@ -144,7 +141,7 @@ def partition_bias(rel, irrel, bias):
 
 
 def CD(batch, model, intervals):
-    if not args.task == "tacred":
+    if args.task != "tacred":
         word_vecs = model.embed(batch.text)[:, 0]
         lstm_module = model.lstm
     else:

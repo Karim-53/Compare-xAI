@@ -30,11 +30,11 @@ def score(key, prediction, verbose=False):
 
         if gold == NO_RELATION and guess == NO_RELATION:
             pass
-        elif gold == NO_RELATION and guess != NO_RELATION:
+        elif gold == NO_RELATION:
             guessed_by_relation[guess] += 1
-        elif gold != NO_RELATION and guess == NO_RELATION:
+        elif guess == NO_RELATION:
             gold_by_relation[gold] += 1
-        elif gold != NO_RELATION and guess != NO_RELATION:
+        else:
             guessed_by_relation[guess] += 1
             gold_by_relation[gold] += 1
             if gold == guess:

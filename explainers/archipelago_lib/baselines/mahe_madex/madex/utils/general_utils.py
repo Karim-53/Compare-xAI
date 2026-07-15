@@ -56,15 +56,14 @@ def merge_overlapping_sets(
             prev_sets = list(inter_sets)
             for A in inter_sets:
                 for B in inter_sets_merged:
-                    if A != B:
-                        if overlap_coef(A, B) >= overlap_thresh:
-                            inter_sets_merged.append(
-                                tuple(sorted(set(A) | set(B)))
-                            )  # merge
-                            if A in inter_sets_merged:
-                                inter_sets_merged.remove(A)
-                            if B in inter_sets_merged:
-                                inter_sets_merged.remove(B)
+                    if A != B and overlap_coef(A, B) >= overlap_thresh:
+                        inter_sets_merged.append(
+                            tuple(sorted(set(A) | set(B)))
+                        )  # merge
+                        if A in inter_sets_merged:
+                            inter_sets_merged.remove(A)
+                        if B in inter_sets_merged:
+                            inter_sets_merged.remove(B)
 
             inter_sets = list(set(inter_sets_merged))
         return inter_sets
@@ -78,9 +77,10 @@ def merge_overlapping_sets(
             cur_score = scores[i]
             rel_gain = (cur_score - best_score) / best_score
             inter_sets_temp, _ = zip(*interaction_atts[i - 1])
-            if num_features is not None:
-                if any(len(inter) == num_features for inter in inter_sets_temp):
-                    break
+            if num_features is not None and any(
+                len(inter) == num_features for inter in inter_sets_temp
+            ):
+                break
             if rel_gain > rel_gain_threshold:
                 best_score = cur_score
                 inter_sets = inter_sets_temp

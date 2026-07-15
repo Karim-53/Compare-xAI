@@ -19,10 +19,10 @@ def _get_jitter_array(feature_values, select_attributions):
         select_attributions: see summary_plot
     """
     jitter_array = np.zeros(feature_values.shape)
+    nbins = 100
     for i in range(select_attributions.shape[1]):
         feature_attr = select_attributions[:, i]
         num_samples = feature_attr.shape[0]
-        nbins = 100
         quant = np.round(
             nbins
             * (feature_attr - np.min(feature_attr))
@@ -56,19 +56,18 @@ def _get_jitter_df(
     """
     if interactions is None:
         jitter_array = _get_jitter_array(feature_values, select_attributions)
-        jitter_df = pd.DataFrame(jitter_array)
+        return pd.DataFrame(jitter_array)
     else:
         if interactions.shape == attributions.shape:
             select_interactions = interactions[:, feature_order]
+        elif interaction_feature is None:
+            raise ValueError(
+                "Argument interaction was specified "
+                + "but argument interaction_feature was not."
+            )
         else:
-            if interaction_feature is None:
-                raise ValueError(
-                    "Argument interaction was specified "
-                    + "but argument interaction_feature was not."
-                )
             select_interactions = interactions[:, feature_order, interaction_feature]
-        jitter_df = pd.DataFrame(select_interactions)
-    return jitter_df
+        return pd.DataFrame(select_interactions)
 
 
 def summary_plot(
@@ -121,7 +120,7 @@ def summary_plot(
     feature_order = max_order[::-1][:plot_top_k]
 
     if feature_names is None:
-        feature_names = ["Feature {}".format(i) for i in range(feature_values.shape[1])]
+        feature_names = [f"Feature {i}" for i in range(feature_values.shape[1])]
 
     feature_values = feature_values[:, feature_order]
     select_attributions = attributions[:, feature_order]
@@ -141,7 +140,7 @@ def summary_plot(
     standardized_feature_values = np.clip(standardized_feature_values, vmin, vmax)
 
     attribution_names = [
-        "Attribution to {}".format(feature_names[i]) for i in range(len(feature_names))
+        f"Attribution to {feature_names[i]}" for i in range(len(feature_names))
     ]
     feature_df = pd.DataFrame(standardized_feature_values)
     attribution_df = pd.DataFrame(select_attributions)
